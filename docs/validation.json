@@ -1,0 +1,23 @@
+{
+  "environment_pytest": {
+    "passed": 146,
+    "subtests_passed": 802
+  },
+  "native_replay": {
+    "passed": 32,
+    "expected": 32,
+    "tasks": 8
+  },
+  "openenv_validation": "PASS",
+  "darwin_tests": {
+    "passed": 80,
+    "skipped": 3,
+    "failed": 0
+  },
+  "model_calibration": "not_run",
+  "official_score": null,
+  "submission": "not_sent",
+  "limitations": [
+    "Runtime correctness and optimizer unit tests do not establish model improvement."
+  ]
+}

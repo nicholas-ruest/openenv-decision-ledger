@@ -39,7 +39,11 @@ jobs:
           tags: ghcr.io/nicholas-ruest/openenv-decision-ledger:v1
       - name: Export public task dataset
         working-directory: integrations/openenv-arena
-        run: python -m scripts.export_dataset --destination ../../dataset --seeds 16 --tasks-json tasks.json
+        run: python -m scripts.export_dataset ../../dataset --seeds 16 --tasks-json tasks.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dataset-export
+          path: dataset
   anonymous-replay:
     needs: build
     runs-on: ubuntu-latest
