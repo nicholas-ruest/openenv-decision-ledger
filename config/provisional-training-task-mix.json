@@ -1,0 +1,37 @@
+{
+  "status": "provisional_not_approved_for_training",
+  "runtime_image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:6a656cac9bb519eecc5c34cccb3d296dbc3b2e29e615a5d6af422d0ee08e6a7b",
+  "training_candidates": [
+    "software_change-d2",
+    "industrial_schedule-d2",
+    "science_calibration-d2",
+    "security_triage-d2",
+    "finance_ledger-d3"
+  ],
+  "evaluation_anchors": [
+    "office_reconciliation-d3",
+    "math_route-d3",
+    "media_timeline-d3"
+  ],
+  "thinking_requested": "on",
+  "full_solve_metric": "reward == 1",
+  "selection_basis": "Prior d2 baseline showed reward variation in four families; finance d3 screen showed 3/4 full solves and one partial reward. Other d3 screens remained 4/4 with zero observed variation.",
+  "fresh_screen": {
+    "seed_base": 850000,
+    "episodes_per_task": 4,
+    "global_token_reservation_limit": 500000
+  },
+  "readiness_requirements": [
+    "Fresh-seed reward variation with correct successes and failures separated from provider errors",
+    "Exact task-manifest native validation on pinned image",
+    "Completed search decision and any applicable confirmation gate",
+    "Validated private training adapter and separately approved GPU quote"
+  ],
+  "limitations": [
+    "Preliminary small-sample task selection, not confirmed training readiness",
+    "Different-seed calibration reward variation does not prove within-prompt GRPO rollout variance",
+    "No trained-model result or private Arena evaluation"
+  ],
+  "training_launch_enabled": false,
+  "arena_submission_enabled": false
+}
