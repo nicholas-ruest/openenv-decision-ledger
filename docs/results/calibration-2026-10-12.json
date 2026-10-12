@@ -1,0 +1,46 @@
+{
+  "snapshot_utc": "2026-10-12T19:39:46.301248+00:00",
+  "evidence_kind": "untrained_model_proxy_calibration",
+  "model": "Qwen/Qwen3.8-27B",
+  "provider": "HF router, pinned DeepInfra",
+  "difficulty": 1,
+  "seed_base": 830000,
+  "results": {
+    "on": {
+      "unique_episodes": 32,
+      "full_solves": 29,
+      "provider_or_interface_failures": 0
+    },
+    "off": {
+      "unique_episodes": 32,
+      "full_solves": 1,
+      "provider_or_interface_failures": 19
+    }
+  },
+  "paired": {
+    "matched_cases": 32,
+    "on_only_solved": 28,
+    "off_only_solved": 0
+  },
+  "source_files": [
+    {
+      "name": "d1-thinking-on-interrupted.jsonl",
+      "sha256": "d70aea674e0b06dfad5fa110b0e3d73b5552cbe458bd9a9986653d4d9a79be03"
+    },
+    {
+      "name": "d1-thinking-on.jsonl",
+      "sha256": "d8df26e3fa90115b5b0fc38eb079867de8243581576a9a3cbdba9ef199b63f63"
+    },
+    {
+      "name": "d1-thinking-off.jsonl",
+      "sha256": "18a255587f9da464171db023d3e91d658d718d5558bcab52f66ac9503b1129c0"
+    }
+  ],
+  "limitations": [
+    "Provider checkpoint identity and requested thinking behavior not independently attested",
+    "No model training, private Arena evaluation, or top-10 evidence",
+    "One interrupted family was replayed after desktop restart; case IDs deduplicated by family and seed",
+    "Partial reward never counted as a full solve"
+  ],
+  "submission": "not_sent"
+}
