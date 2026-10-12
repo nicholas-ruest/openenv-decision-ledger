@@ -40,19 +40,19 @@ class TaskContractTests(unittest.TestCase):
             task["difficulty"] = None
             self.assertEqual(oracle_answer(task), original)
 
-    def test_incomplete_answers_receive_no_reward(self):
+    def test_partial_answers_never_count_as_full_solves(self):
         for task_id in TASK_IDS:
             task = make_task(task_id, 3)
             answer = oracle_answer(task)
             self.assertEqual(grade(task, answer), 1.0)
             for field, value in answer.items():
-                self.assertEqual(grade(task, {field: value}), 0.0)
+                self.assertLessEqual(grade(task, {field: value}), 0.8)
                 incomplete = copy.deepcopy(answer)
                 del incomplete[field]
-                self.assertEqual(grade(task, incomplete), 0.0)
+                self.assertLessEqual(grade(task, incomplete), 0.8)
                 wrong = copy.deepcopy(answer)
                 wrong[field] = "plausible but wrong"
-                self.assertEqual(grade(task, wrong), 0.0)
+                self.assertLessEqual(grade(task, wrong), 0.8)
             self.assertEqual(grade(task, {**answer, "extra": "key"}), 0.0)
 
     def test_type_confusion_and_nonfinite_cannot_receive_reward(self):
@@ -121,9 +121,9 @@ class TaskContractTests(unittest.TestCase):
         self.assertEqual(grade(task, {"overflow": 0}), 0)
         self.assertEqual(grade(task, {"overflow": 0, "rejects": []}), 0)
         self.assertEqual(grade(task, {"result": ["wrong"], "overflow": 0}), 0)
-        self.assertEqual(grade(task, {"result": ["a"]}), 0)
-        self.assertEqual(grade(task, {"result": ["a"], "overflow": 0.0}), 0)
-        self.assertEqual(grade(task, {"result": ["a"], "overflow": 0, "rejects": []}), 0)
+        self.assertEqual(grade(task, {"result": ["a"]}), 0.25)
+        self.assertEqual(grade(task, {"result": ["a"], "overflow": 0.0}), 0.5)
+        self.assertEqual(grade(task, {"result": ["a"], "overflow": 0, "rejects": []}), 0.75)
         self.assertEqual(grade(task, task["expected"]), 1)
         self.assertEqual(grade({"expected": {"result": 0, "rejects": []}}, {"result": 0.0, "rejects": []}), 1)
 

@@ -10,7 +10,7 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PYTHON_BIN="${ARENA_PYTHON:-$REPO_ROOT/.venv/bin/python}"
 RUN_ROOT="${ARENA_RUN_ROOT:-$REPO_ROOT/runs/manual}"
 cd "$REPO_ROOT/vendor/metaharness/integrations/openenv-arena-darwin"
-node --experimental-strip-types run-darwin.mjs --work-root "$RUN_ROOT"   --generations 2 --children 3 --concurrency 1 --seed-base 700000   --attempts 8 --confirm-attempts 32 --max-total-new-cells 120 --   --env-dir "$REPO_ROOT/integrations/openenv-arena" --python "$PYTHON_BIN"   --tokenizer-json "$ARENA_TOKENIZER_JSON" --base-url "$ARENA_MODEL_BASE_URL"   --model "$ARENA_MODEL_ID" --model-revision "$ARENA_MODEL_REVISION"   --cache-dir "$RUN_ROOT/cache" --concurrency 2
+node --experimental-strip-types run-darwin.mjs --work-root "$RUN_ROOT"   --generations 2 --children 3 --concurrency 1 --seed-base 700000   --attempts 8 --confirm-attempts 32 --max-total-new-cells 120 --   --env-dir "$REPO_ROOT/integrations/openenv-arena" --python "$PYTHON_BIN"   --tokenizer-json "$ARENA_TOKENIZER_JSON" --base-url "$ARENA_MODEL_BASE_URL"   --model "$ARENA_MODEL_ID" --model-revision "$ARENA_MODEL_REVISION" --thinking "${ARENA_THINKING:-off}"   --cache-dir "$RUN_ROOT/cache" --concurrency 2
 # Use the upstream signed Flywheel gate on confirmation reports before promotion.
 # This script never submits, posts, rents a GPU or schedules future work.
 

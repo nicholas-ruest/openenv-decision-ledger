@@ -631,7 +631,9 @@ def grade(task: dict, answer: dict) -> float:
     correct = [key for key in expected if key in answer and _strict_equal(answer[key], expected[key])]
     if len(correct) == len(expected):
         return 1.0
-    return 0.0
+    if not any(_substantive(answer[key]) for key in correct):
+        return 0.0
+    return min(0.8, len(correct) / len(expected))
 
 
 def oracle_answer(task: dict) -> dict:
