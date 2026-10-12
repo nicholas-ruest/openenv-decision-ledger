@@ -1,0 +1,4 @@
+[submodule "vendor/metaharness"]
+	path = vendor/metaharness
+	url = https://github.com/ruvnet/metaharness.git
+	branch = feat/openenv-arena
