@@ -5,6 +5,12 @@
   "tokenizer_sha256": "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3",
   "thinking_requested": "off",
   "provider_model_revision_verified": false,
-  "live_calibration_status": "blocked_missing_inference_credential",
-  "real_promotion": "not_authorized_by_synthetic_data"
+  "live_calibration_status": "blocked_no_huggingface_inference_credits",
+  "real_promotion": "not_authorized_by_synthetic_data",
+  "credential_status": "inference_only_key_saved_in_ruos_write_only_vault",
+  "credential_identity_verified": true,
+  "credential_account": "GlobalBusinessAdvisors",
+  "router_probe_http_status": 402,
+  "router_probe_reason": "No remaining inference credits",
+  "paid_compute_provisioned": false
 }
