@@ -1,0 +1,14 @@
+{
+  "registry": "ghcr.io",
+  "repository": "nicholas-ruest/openenv-decision-ledger",
+  "index_digest": "sha256:a7dd3d61bd2f0b23f5dc493ca470c74f0adc13d45c0a4b4b3030916c333ab6a8",
+  "amd64_digest": "sha256:85841739b0619118e7aa8ea5e6d0a33d5b2d268ea15bc8aa206435aa16d79a8d",
+  "compressed_layer_bytes": 208005640,
+  "layer_count": 10,
+  "architecture": "amd64",
+  "os": "linux",
+  "exposed_ports": {
+    "8000/tcp": {}
+  },
+  "anonymous_manifest_access": true
+}

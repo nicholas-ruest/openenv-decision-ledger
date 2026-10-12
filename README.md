@@ -27,5 +27,7 @@ Use Python 3.12 and Node >=22.15. Clone with --recurse-submodules.
 The GitHub Actions workflow tests, builds linux/amd64, publishes to GHCR, and replays the anonymously pulled digest in a separate job.
 
 ## Status
-Not submitted. No official score. Public publication and target-model calibration must pass before review.
+Public source, GHCR image and HF dataset are published. Anonymous image validation and all 32 runtime controls passed in CI. Not submitted; no official score. Darwin's synthetic wiring run passed, but real target-model calibration is blocked on inference access. See docs/validation.json for the full upstream Flywheel portability failures. The tokenless baseline request is in config/submission-request.json and has not been sent.
 See [attribution](THIRD_PARTY.md) and [provenance](config/provenance.json).
+
+For HF-router calibration, configure HF_TOKEN privately through ruOS secrets, install requirements-calibration.lock in the calibration venv, and invoke scripts/hf-darwin.py explicitly. It passes the credential only in the process environment. Hosted-model checkpoint identity and thinking behavior remain unverified; these measurements are a calibration proxy, not an Arena score.

@@ -1,0 +1,15 @@
+{
+  "repo": "GlobalBusinessAdvisors/openenv-decision-ledger",
+  "revision": "9bdb2bc27096396f000ee14967d2e8e5d4c0f0eb",
+  "public": true,
+  "gated": false,
+  "files": [
+    ".gitattributes",
+    "LICENSE",
+    "README.md",
+    "THIRD_PARTY.md",
+    "environment-source.zip",
+    "manifest.json",
+    "tasks.jsonl"
+  ]
+}
