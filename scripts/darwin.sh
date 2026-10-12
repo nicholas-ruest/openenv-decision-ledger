@@ -14,6 +14,6 @@ node --experimental-strip-types run-darwin.mjs --work-root "$RUN_ROOT"   --gener
 # Use the upstream signed Flywheel gate on confirmation reports before promotion.
 # This script never submits, posts, rents a GPU or schedules future work.
 
-"$PYTHON_BIN" -c 'import json,sys; r=json.load(open(sys.argv[1])); assert r.get("evidence")=="evaluator_scorecards" and r.get("confirmation",{}).get("status")=="measured", "Real target-model confirmation is required"' "$RUN_ROOT/reports/darwin-run.json"
+"$PYTHON_BIN" -c 'import json,sys; r=json.load(open(sys.argv[1])); sys.exit(0 if r.get("evidence")=="evaluator_scorecards" and r.get("confirmation",{}).get("status")=="measured" else "Real target-model confirmation is required")' "$RUN_ROOT/reports/darwin-run.json"
 node --experimental-strip-types gate.mjs --run "$RUN_ROOT/reports/darwin-run.json" --out "$RUN_ROOT/promotion-receipt.json"
 node --experimental-strip-types gate.mjs --verify "$RUN_ROOT/promotion-receipt.json" --key-dir "$DARWIN_GATE_KEY_DIR"
