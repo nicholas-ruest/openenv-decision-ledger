@@ -31,7 +31,7 @@
     {
       "task_id": "software_change-d2",
       "seed": 860000,
-      "read_observation_sha256": "5843f8cdcace9a5b6b2437de5aaac36a922051f93754683126022b3f85325d09",
+      "read_observation_sha256": "5843f8cdcace9a5b2a123321277247b1dcfcddca0d65d68ac2373c83a949b841",
       "rewards": [
         1,
         1,
@@ -45,7 +45,7 @@
     {
       "task_id": "software_change-d2",
       "seed": 860100,
-      "read_observation_sha256": "6025c78603f1448393e73648b368335a21b23bd5e028c97a8310c0cd144dbe57",
+      "read_observation_sha256": "6025c78603f1448394f78a6b7e87c915857f297bb2687e61a4eaea0027945afa",
       "rewards": [
         1,
         1,
@@ -59,7 +59,7 @@
     {
       "task_id": "finance_ledger-d3",
       "seed": 860000,
-      "read_observation_sha256": "d0cdffd36e9ef59396d90346547924864dd0f8d0d78bb047231048759702b41d",
+      "read_observation_sha256": "d0cdffd36e9ef593e54edbb2aff35964ce233eb32bf1b8a59abe310d432c79f3",
       "rewards": [
         1,
         1,
@@ -73,7 +73,7 @@
     {
       "task_id": "finance_ledger-d3",
       "seed": 860100,
-      "read_observation_sha256": "f8ff54ed45b5cdc4f4a36571d2466bebf9e41c1a3f8e30fc6a410fa82743fdde",
+      "read_observation_sha256": "f8ff54ed45b5cdc46097b0b38fc2057053bb587b8e634d229029a09733ff3034",
       "rewards": [
         1,
         1,
@@ -136,5 +136,9 @@
     "Provider checkpoint identity and effective thinking mode are not independently attested.",
     "No validated training launcher, backward-pass memory smoke, checkpoint save/load test or GPU quote exists yet.",
     "No paid training, GPU rental, purchase, Arena submission or unconfirmed merge is authorized."
-  ]
+  ],
+  "evidence_correction": {
+    "verified_at": "2026-10-13T01:07:00Z",
+    "note": "Recomputed full read-observation hashes directly from raw trajectories; previous report contained incorrect hash suffixes. Group identity checks and measured rewards are unchanged."
+  }
 }
