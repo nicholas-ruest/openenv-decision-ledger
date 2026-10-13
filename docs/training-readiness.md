@@ -2,7 +2,7 @@
 
 Status: CPU preparation preflight passed on October 12, 2026. No GPU rental, target model training or Arena submission authorized.
 
-The native JSON-action adapter and locked preparation launcher now pass nine tests, a real TRL optimizer step on a tiny diagnostic model, and exact checkpoint save/reload. See [private training preflight](private-training-preflight.md) and [sanitized evidence](results/training-cpu-preflight-2026-10-12.json). The diagnostic uses scripted off-policy actions; it establishes software integration only. The target paid launcher, model loading, GPU memory and billing/rental cleanup remain unvalidated and locked.
+The native JSON-action adapter and locked preparation launcher now pass nine tests, real TRL optimizer steps on tiny GPT-2 and target-family Qwen3.5/LoRA diagnostic models, and exact checkpoint save/reload. See [private training preflight](private-training-preflight.md), [generic CPU evidence](results/training-cpu-preflight-2026-10-12.json), and [target-architecture CPU evidence](results/qwen-architecture-cpu-preflight-2026-10-12.json). These diagnostics use scripted off-policy actions; they establish software integration only. The target paid launcher, 27B model loading, GPU memory and billing/rental cleanup remain unvalidated and locked.
 
 Before launch, finish Darwin and select a fresh-seed-confirmed/Flywheel-approved candidate or document a no-improvement baseline decision. Freeze the source revision, public image digest, task mix, reward implementation, tokenizer, model checkpoint and inference settings. Anonymous native protocol replay must pass on that exact image.
 

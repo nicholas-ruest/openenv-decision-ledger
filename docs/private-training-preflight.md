@@ -29,10 +29,21 @@ protocol, not verified equivalence to Arena's production chat wrapper. Thinking
 mode prefills `<think>` and requires a completed `</think>` before parsing JSON.
 Compatibility with the eventual pinned Qwen checkpoint still requires testing.
 
+A second diagnostic now also passes with the target's advertised architecture,
+`Qwen3_5ForConditionalGeneration`. The public Qwen3.8-27B metadata is pinned at
+revision `1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0`; only its metadata was read.
+The diagnostic constructs a tiny two-layer model with both linear and full
+attention, applies LoRA r4/alpha8 to all linear modules, and executes the same
+native adapter through real TRL. One optimizer step changed 15 parameter tensors,
+and adapter checkpoint reload was exactly equal. The production GPU kernels,
+27B weights, full-size memory footprint and actual target tokenizer were not
+used in that diagnostic. Reference PyTorch attention kernels ran on CPU.
+
 The provisional preparation configuration reserves disjoint train seeds
 900000–900127, validation seeds 910000–910031, and final-test seeds 920000–920063.
-It currently includes only software d2, sets `task_mix_confirmed=false`, and
-leaves target checkpoint/tokenizer and GPU validation unset. The read-only plan
+It currently includes only software d2, sets `task_mix_confirmed=false`, records
+the proposed public model revision and tokenizer hash, and leaves local target
+checkpoint and GPU validation unset. The read-only plan
 reports these blockers. `--execute` fails before loading a target model or
 connecting to any service.
 
