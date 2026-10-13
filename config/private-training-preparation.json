@@ -1,0 +1,13 @@
+{
+  "runtime_source_revision": "088f6e035cb9696ce1128a643ed5a85d21e22144",
+  "environment_source_sha256": "d15540b12193fe5c1fbf9b43ed2f88cc469c302f15658d8295c5998f08472d93",
+  "task_source_sha256": "94bb0a0636f7d5a0770b9543991cc8f8a0be093200c5f6f0b8d7b2b9ac444cd6",
+  "task_ids": ["software_change-d2"],
+  "task_mix_confirmed": false,
+  "target_hardware_smoke_verified": false,
+  "train_seeds": {"start": 900000, "count": 128},
+  "validation_seeds": {"start": 910000, "count": 32},
+  "test_seeds": {"start": 920000, "count": 64},
+  "num_generations": 4,
+  "thinking": true
+}
