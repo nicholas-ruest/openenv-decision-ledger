@@ -1,6 +1,8 @@
 # Private training readiness
 
-Status: preparation only; no GPU rental, training launch or Arena submission authorized.
+Status: CPU preparation preflight passed on October 12, 2026. No GPU rental, target model training or Arena submission authorized.
+
+The native JSON-action adapter and locked preparation launcher now pass nine tests, a real TRL optimizer step on a tiny diagnostic model, and exact checkpoint save/reload. See [private training preflight](private-training-preflight.md) and [sanitized evidence](results/training-cpu-preflight-2026-10-12.json). The diagnostic uses scripted off-policy actions; it establishes software integration only. The target paid launcher, model loading, GPU memory and billing/rental cleanup remain unvalidated and locked.
 
 Before launch, finish Darwin and select a fresh-seed-confirmed/Flywheel-approved candidate or document a no-improvement baseline decision. Freeze the source revision, public image digest, task mix, reward implementation, tokenizer, model checkpoint and inference settings. Anonymous native protocol replay must pass on that exact image.
 
@@ -14,4 +16,5 @@ Evaluate base and trained checkpoints on the same untouched test seeds and ident
 
 Existing spending authorization: USD50 total for inference/calibration. Separate GPU approval remains required. Arena submission is prohibited until the user reviews the exact request and gives explicit approval.
 
-References: https://huggingface.co/docs/trl/openenv and https://huggingface.co/docs/trl/grpo_trainer . This document is a readiness plan, not a tested training launcher.
+References: https://huggingface.co/docs/trl/openenv and https://huggingface.co/docs/trl/grpo_trainer . This document remains a target-training readiness plan. The locked CPU preparation launcher is tested; target 27B paid execution is not implemented or approved.
+
