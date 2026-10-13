@@ -15,3 +15,7 @@ cd "$REPO_ROOT"
   --config config/private-training-preparation.json \
   --runtime-root integrations/openenv-arena \
   --output "${TRAINING_SMOKE_OUTPUT:?Set a new output directory}"
+"$TRAINING_PYTHON" -m training.launcher --cpu-smoke --architecture qwen3_5 \
+  --config config/private-training-preparation.json \
+  --runtime-root integrations/openenv-arena \
+  --output "${TRAINING_SMOKE_OUTPUT}-qwen"

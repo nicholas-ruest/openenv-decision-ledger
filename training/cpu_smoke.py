@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 
 
-def tiny_components(corpus: list[str]):
+def tiny_components(corpus: list[str], architecture: str = "gpt2"):
     import torch
     from tokenizers import Tokenizer, decoders, models, pre_tokenizers, trainers
     from transformers import GPT2Config, GPT2LMHeadModel, PreTrainedTokenizerFast
@@ -33,19 +33,42 @@ def tiny_components(corpus: list[str]):
         "+ m['content'] + '<|im_end|>\\n' }}{% endfor %}"
         "{% if add_generation_prompt %}{{ '<|im_start|>assistant\\n' }}{% endif %}"
     )
-    model = GPT2LMHeadModel(GPT2Config(
-        vocab_size=len(tokenizer), n_positions=4096, n_ctx=4096,
-        n_embd=16, n_layer=1, n_head=2, resid_pdrop=0,
-        embd_pdrop=0, attn_pdrop=0, eos_token_id=tokenizer.eos_token_id,
-        pad_token_id=tokenizer.pad_token_id, bos_token_id=None,
-    ))
+    if architecture == "gpt2":
+        model = GPT2LMHeadModel(GPT2Config(
+            vocab_size=len(tokenizer), n_positions=4096, n_ctx=4096,
+            n_embd=16, n_layer=1, n_head=2, resid_pdrop=0,
+            embd_pdrop=0, attn_pdrop=0, eos_token_id=tokenizer.eos_token_id,
+            pad_token_id=tokenizer.pad_token_id, bos_token_id=None,
+        ))
+    elif architecture == "qwen3_5":
+        from transformers import Qwen3_5Config, Qwen3_5ForConditionalGeneration
+        model = Qwen3_5ForConditionalGeneration(Qwen3_5Config(
+            text_config={
+                "vocab_size": len(tokenizer), "hidden_size": 32,
+                "intermediate_size": 64, "num_hidden_layers": 2,
+                "num_attention_heads": 2, "num_key_value_heads": 1,
+                "head_dim": 16, "linear_key_head_dim": 8,
+                "linear_value_head_dim": 8, "linear_num_key_heads": 2,
+                "linear_num_value_heads": 2,
+                "layer_types": ["linear_attention", "full_attention"],
+                "max_position_embeddings": 4096,
+                "eos_token_id": tokenizer.eos_token_id,
+                "pad_token_id": tokenizer.pad_token_id,
+                "rope_parameters": {"rope_type": "default", "rope_theta": 10000.0,
+                                    "mrope_section": [2, 3, 3]},
+            },
+            vision_config={"depth": 1, "hidden_size": 32, "intermediate_size": 64,
+                           "num_heads": 2, "out_hidden_size": 32,
+                           "patch_size": 2, "spatial_merge_size": 2},
+        ))
+    else:
+        raise ValueError("Unsupported CPU smoke architecture")
     return model, tokenizer
 
 
-def run_cpu_smoke(output: Path) -> dict:
+def run_cpu_smoke(output: Path, architecture: str = "gpt2") -> dict:
     import torch
     from datasets import Dataset
-    from transformers import GPT2LMHeadModel
     from trl import GRPOConfig, GRPOTrainer
 
     from arena_env.environment import ArenaAction, ArenaEnvironment
@@ -64,7 +87,15 @@ def run_cpu_smoke(output: Path) -> dict:
     env = ArenaEnvironment()
     reset = env.reset(task_id=task_id, seed=seed).model_dump_json()
     read = env.step(ArenaAction(op="read", path="*")).model_dump_json()
-    model, tokenizer = tiny_components([reset, read, *actions])
+    model, tokenizer = tiny_components([reset, read, *actions], architecture)
+    model_class = type(model)
+    base_for_reload = copy.deepcopy(model) if architecture == "qwen3_5" else None
+    if architecture == "qwen3_5":
+        from peft import LoraConfig, get_peft_model
+        model = get_peft_model(model, LoraConfig(
+            r=4, lora_alpha=8, target_modules="all-linear", lora_dropout=0,
+            task_type="CAUSAL_LM",
+        ))
     before = {name: value.detach().clone() for name, value in model.named_parameters()}
 
     def scripted(input_ids, occurrence, turn, allowance):
@@ -103,7 +134,11 @@ def run_cpu_smoke(output: Path) -> dict:
         raise RuntimeError(f"Native diagnostic rewards changed: {rewards}")
     checkpoint = output / "checkpoint"
     trainer.save_model(str(checkpoint))
-    loaded = GPT2LMHeadModel.from_pretrained(checkpoint, local_files_only=True)
+    if base_for_reload is not None:
+        from peft import PeftModel
+        loaded = PeftModel.from_pretrained(base_for_reload, checkpoint, is_trainable=True)
+    else:
+        loaded = model_class.from_pretrained(checkpoint, local_files_only=True)
     for key, value in model.state_dict().items():
         if not torch.equal(value.cpu(), loaded.state_dict()[key]):
             raise RuntimeError("Checkpoint reload differs")
@@ -115,6 +150,7 @@ def run_cpu_smoke(output: Path) -> dict:
         raise RuntimeError("Generation exceeded its token budget")
     report = {
         "status": "passed", "device": "cpu", "downloaded_model": False,
+        "architecture": architecture, "lora": architecture == "qwen3_5",
         "diagnostic_fixture": True, "on_policy_learning_claim": False,
         "target_model_training": False, "target_gpu_memory_verified": False,
         "trl_optimizer_steps": train_output.global_step,

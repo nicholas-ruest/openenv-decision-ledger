@@ -18,6 +18,7 @@ def main(argv=None) -> int:
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--runtime-root", type=Path, required=True)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--architecture", choices=["gpt2", "qwen3_5"], default="gpt2")
     args = parser.parse_args(argv)
     config = TrainingConfig.model_validate_json(args.config.read_text())
     verify_runtime(config, args.runtime_root)
@@ -44,7 +45,7 @@ def main(argv=None) -> int:
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
     os.environ["WANDB_DISABLED"] = "true"
     from training.cpu_smoke import run_cpu_smoke
-    print(json.dumps(run_cpu_smoke(args.output), indent=2))
+    print(json.dumps(run_cpu_smoke(args.output, args.architecture), indent=2))
     return 0
 
 
