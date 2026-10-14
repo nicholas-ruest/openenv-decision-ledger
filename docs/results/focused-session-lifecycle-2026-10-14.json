@@ -54,7 +54,8 @@
   "ci": {
     "run_id": 38531255336,
     "url": "https://github.com/nicholas-ruest/openenv-decision-ledger/actions/runs/38531255336",
-    "last_observed": "in_progress"
+    "last_observed": "completed",
+    "conclusion": "success"
   },
   "new_paid_inference_calls": 0,
   "gpu_jobs_created": 0,
