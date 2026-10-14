@@ -28,8 +28,9 @@
   },
   "cpu_ci": {
     "run": 38535226407,
-    "status": "in_progress",
-    "url": "https://github.com/nicholas-ruest/openenv-decision-ledger/actions/runs/38535226407"
+    "status": "completed",
+    "url": "https://github.com/nicholas-ruest/openenv-decision-ledger/actions/runs/38535226407",
+    "conclusion": "success"
   },
   "limits": [
     "Docker is not installed on ruOS; packaging build is running in standard GitHub CI",
