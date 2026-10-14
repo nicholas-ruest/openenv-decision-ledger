@@ -1,6 +1,10 @@
 # Private training readiness
 
-Status: CPU preparation preflight passed on October 12, 2026. No GPU rental, target model training or Arena submission authorized.
+Status: preparation resumed October 14, 2026 with a software_change-d2-only pilot. Multi-category balance is not required for this pilot. Offline cohort validation passed all224 native positive/empty controls across128 training,32 validation and64 untouched test instances, with deterministic resets and no public-input collisions. These are oracle controls, not model solves. Focused signal confirmation and production launcher preparation continue.
+
+Darwin finished with failed baseline confirmation and no promotion receipt; retain the existing runtime. The earlier confirmation plan was structurally underpowered (8 paired blocks versus13 required at candidateBudget7). Do not restart that recipe or weaken its gate. A focused pilot readiness screen is separate from environment-knob promotion.
+
+CPU preparation preflight passed on October 12, 2026. No GPU rental, target model training or Arena submission authorized.
 
 The native JSON-action adapter and locked preparation launcher now pass nine tests, real TRL optimizer steps on tiny GPT-2 and target-family Qwen3.5/LoRA diagnostic models, and exact checkpoint save/reload. See [private training preflight](private-training-preflight.md), [generic CPU evidence](results/training-cpu-preflight-2026-10-12.json), and [target-architecture CPU evidence](results/qwen-architecture-cpu-preflight-2026-10-12.json). These diagnostics use scripted off-policy actions; they establish software integration only. The target paid launcher, 27B model loading, GPU memory and billing/rental cleanup remain unvalidated and locked.
 
