@@ -59,15 +59,19 @@ def bounded_worker(argv: list[str], *, cwd: Path, seconds: float, grace: float =
 
 ALLOWED = {"adapter_config.json", "adapter_model.safetensors", "config.json",
            "generation_config.json", "tokenizer.json", "tokenizer_config.json",
-           "special_tokens_map.json", "vocab.json", "merges.txt", "added_tokens.json"}
+           "special_tokens_map.json", "vocab.json", "merges.txt", "added_tokens.json", "chat_template.jinja"}
 
 
 def export_checkpoint(checkpoint: Path, archive: Path) -> dict:
     if checkpoint.is_symlink() or not checkpoint.is_dir():
         raise ValueError("Regular checkpoint directory required")
-    files = sorted(checkpoint.iterdir())
-    if not files or any(p.is_symlink() or not p.is_file() or p.name not in ALLOWED for p in files):
+    entries = sorted(checkpoint.iterdir())
+    # Trainer emits a pickle of its arguments and PEFT emits a model card.
+    # Neither is necessary for reload; exclude both without reading them.
+    excluded = {"training_args.bin", "README.md"}
+    if not entries or any(p.is_symlink() or not p.is_file() or p.name not in ALLOWED | excluded for p in entries):
         raise ValueError("Checkpoint contains an unapproved artifact")
+    files = [p for p in entries if p.name in ALLOWED]
     if not (checkpoint / "adapter_model.safetensors").is_file():
         raise ValueError("LoRA weights missing")
     if archive.exists() or archive.is_symlink():
@@ -83,5 +87,6 @@ def export_checkpoint(checkpoint: Path, archive: Path) -> dict:
         temporary.rename(archive)
     finally:
         temporary.unlink(missing_ok=True)
-    return {"files": manifest, "archive_sha256": hashlib.sha256(archive.read_bytes()).hexdigest(),
+    return {"files": manifest, "excluded_metadata": [p.name for p in entries if p.name in excluded],
+            "archive_sha256": hashlib.sha256(archive.read_bytes()).hexdigest(),
             "export_scope": "local allowlisted LoRA checkpoint; no Hub upload"}

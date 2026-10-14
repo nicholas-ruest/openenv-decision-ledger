@@ -40,10 +40,12 @@ def test_export_contains_only_checkpoint_and_rejects_extra_or_symlink(tmp_path):
     checkpoint = tmp_path / "checkpoint"
     checkpoint.mkdir()
     (checkpoint / "adapter_model.safetensors").write_bytes(b"fixture")
+    (checkpoint / "training_args.bin").write_bytes(b"excluded fixture metadata")
     result = export_checkpoint(checkpoint, tmp_path / "export.tar.gz")
     with tarfile.open(tmp_path / "export.tar.gz") as bundle:
         assert bundle.getnames() == ["checkpoint/adapter_model.safetensors"]
     assert len(result["archive_sha256"]) == 64
+    assert result["excluded_metadata"] == ["training_args.bin"]
     (checkpoint / "credential.env").write_text("fixture")
     with pytest.raises(ValueError, match="unapproved"):
         export_checkpoint(checkpoint, tmp_path / "other.tar.gz")
