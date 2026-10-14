@@ -30,9 +30,11 @@ jobs:
         run: |
           export TRAINING_PYTHON="$(command -v python)"
           bash scripts/training-preflight.sh
+          PYTHONPATH=integrations/openenv-arena python -m pytest tests/training --basetemp="${{ runner.temp }}/focused-session-tests" -q
       - uses: actions/upload-artifact@v4
         with:
           name: training-cpu-preflight-report
           path: |
             ${{ runner.temp }}/training-cpu-smoke/report.json
             ${{ runner.temp }}/training-cpu-smoke-qwen/report.json
+            ${{ runner.temp }}/focused-session-tests/**/session/report.json

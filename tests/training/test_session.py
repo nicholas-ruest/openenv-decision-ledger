@@ -12,7 +12,8 @@ from training.cpu_smoke import tiny_components
 from training.session import dataset_for, main, run_session
 
 
-def test_focused_session_real_optimizer_reload_and_export(tmp_path):
+@pytest.mark.parametrize("failure", [None, "deadline", "failure"])
+def test_focused_session_real_optimizer_reload_and_export(tmp_path, failure):
     import torch
     torch.set_num_threads(2)
     config = TrainingConfig.model_validate_json(Path("config/private-training-preparation.json").read_text())
@@ -29,13 +30,21 @@ def test_focused_session_real_optimizer_reload_and_export(tmp_path):
     bundle = tiny_components([reset, read, *actions], "qwen3_5")
     tokenizer = bundle[1]
     def sample(ids, occurrence, turn, allowance):
+        if occurrence == 2 and failure:
+            if failure == "deadline":
+                raise TimeoutError("diagnostic deadline fixture")
+            raise RuntimeError("diagnostic worker failure fixture")
         action = '{"op":"read","path":"*"}' if turn == 0 else actions[occurrence % 4]
         return encode(tokenizer, action + "<|im_end|>")
     report = run_session(config, Path("integrations/openenv-arena"), tmp_path / "session",
                          bundle=bundle, sampler=sample, diagnostic=True)
-    assert report["status"] == "completed" and report["optimizer_steps"] == 1
-    assert report["adapter_changed"] and report["reload_equal"]
-    assert len(report["audit"]) == 4
+    if failure:
+        assert report["status"] == ("interrupted" if failure == "deadline" else "failed")
+        assert report["optimizer_steps"] == 0 and not report["adapter_changed"]
+    else:
+        assert report["status"] == "completed" and report["optimizer_steps"] == 1
+        assert report["adapter_changed"] and len(report["audit"]) == 4
+    assert report["reload_equal"]
     assert (tmp_path / "session/checkpoint.tar.gz").is_file()
     assert report["target_model_training"] is False
 
