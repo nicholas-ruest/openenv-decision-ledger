@@ -1,0 +1,141 @@
+"""Focused local GRPO/LoRA session. CLI paid execution stays locked."""
+from __future__ import annotations
+
+import argparse
+import copy
+import hashlib
+import json
+import os
+import time
+from pathlib import Path
+
+from training.config import TrainingConfig, checkpoint_tree_sha256, verify_runtime
+from training.lifecycle import export_checkpoint
+
+
+def dataset_for(config):
+    from datasets import Dataset
+    if config.task_ids != ["software_change-d2"]:
+        raise ValueError("Focused session accepts one software task only")
+    return Dataset.from_dict({"prompt": [[{"role": "user", "content": json.dumps({
+        "task_id": config.task_ids[0], "seed": seed})}] for seed in config.train_seeds.seeds()]})
+
+
+def load_target(config):
+    """Local pinned weights only. Never resolves Hub credentials or downloads."""
+    import torch
+    from transformers import AutoModelForImageTextToText, AutoTokenizer
+    path = Path(config.model_path or "")
+    if not config.model_path or not path.is_dir():
+        raise ValueError("Frozen local checkpoint required")
+    if checkpoint_tree_sha256(path) != config.model_tree_sha256:
+        raise ValueError("Checkpoint tree changed")
+    if hashlib.sha256((path / "tokenizer.json").read_bytes()).hexdigest() != config.tokenizer_sha256:
+        raise ValueError("Tokenizer changed")
+    metadata = json.loads((path / "config.json").read_text())
+    if metadata.get("model_type") != "qwen3_5":
+        raise ValueError("Unexpected target architecture")
+    model = AutoModelForImageTextToText.from_pretrained(
+        path, local_files_only=True, trust_remote_code=False, dtype=torch.bfloat16,
+        attn_implementation="eager")
+    tokenizer = AutoTokenizer.from_pretrained(path, local_files_only=True,
+                                              trust_remote_code=False, padding_side="left")
+    if tokenizer.pad_token_id is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    return model, tokenizer
+
+
+def adapter_digest(model):
+    from peft import get_peft_model_state_dict
+    h = hashlib.sha256()
+    for name, tensor in sorted(get_peft_model_state_dict(model).items()):
+        h.update(name.encode())
+        h.update(str(tensor.shape).encode())
+        h.update(tensor.detach().cpu().contiguous().view(-1).view(__import__("torch").uint8).numpy().tobytes())
+    return h.hexdigest()
+
+
+def run_session(config, runtime, output, *, bundle=None, sampler=None, diagnostic=False):
+    """Same trainer/save/reload/export path for the diagnostic and future target."""
+    import torch
+    from peft import LoraConfig, PeftModel, get_peft_model
+    from transformers import TrainerCallback
+    from trl import GRPOConfig, GRPOTrainer
+    from training.adapter import JsonArenaRollout, RolloutLimits, native_reward
+
+    verify_runtime(config, runtime)
+    if diagnostic:
+        if bundle is None or sampler is None:
+            raise ValueError("Offline diagnostic requires explicit tiny-model fixtures")
+    else:
+        if bundle is not None or sampler is not None or config.blockers():
+            raise ValueError("Frozen confirmed target configuration required")
+        if not torch.cuda.is_available() or torch.cuda.device_count() != 1:
+            raise ValueError("One CUDA GPU required")
+        if not torch.cuda.is_bf16_supported():
+            raise ValueError("BF16 support required")
+        bundle = load_target(config)
+    output.mkdir(parents=True, exist_ok=False)
+    base, tokenizer = bundle
+    base_for_reload = copy.deepcopy(base) if diagnostic else None
+    model = get_peft_model(base, LoraConfig(r=4 if diagnostic else 16,
+                                           lora_alpha=8 if diagnostic else 32, lora_dropout=0,
+                                           target_modules="all-linear", task_type="CAUSAL_LM"))
+    before = adapter_digest(model)
+    deadline = time.monotonic() + config.max_wall_seconds
+
+    class Deadline(TrainerCallback):
+        def on_step_begin(self, args, state, control, **kwargs):
+            if time.monotonic() >= deadline:
+                raise TimeoutError("Local session deadline reached")
+
+    rollout = JsonArenaRollout(tokenizer, RolloutLimits(
+        max_steps=config.max_steps, completion_tokens=config.max_completion_tokens,
+        context_tokens=config.max_context_tokens, temperature=config.temperature,
+        thinking=config.thinking), deadline=deadline, sampler=sampler)
+    trainer = GRPOTrainer(model=model, processing_class=tokenizer,
+        reward_funcs=native_reward, rollout_func=rollout, train_dataset=dataset_for(config),
+        callbacks=[Deadline()], args=GRPOConfig(
+            output_dir=str(output / "trainer"), use_cpu=diagnostic, bf16=not diagnostic, fp16=False,
+            max_steps=config.max_optimizer_steps, num_generations=config.num_generations,
+            per_device_train_batch_size=1, gradient_accumulation_steps=config.num_generations,
+            max_completion_length=config.max_completion_tokens,
+            learning_rate=config.learning_rate, gradient_checkpointing=not diagnostic,
+            optim="adamw_torch", beta=0, loss_type="dapo", report_to="none",
+            save_strategy="no", logging_steps=1, disable_tqdm=True,
+            remove_unused_columns=False, use_vllm=False))
+    status, error = "completed", None
+    try:
+        trainer.train()
+    except Exception as exc:
+        status, error = "interrupted" if isinstance(exc, TimeoutError) else "failed", type(exc).__name__
+    # Export recovery state on failure as well; never label it trained success.
+    checkpoint = output / "checkpoint"
+    trainer.save_model(str(checkpoint))
+    tokenizer.save_pretrained(checkpoint)
+    # Reload uses CPU RAM; avoid allocating a second base on the training GPU.
+    if base_for_reload is None:
+        base_for_reload, _ = load_target(config)
+    loaded = PeftModel.from_pretrained(base_for_reload, checkpoint, local_files_only=True)
+    equal = adapter_digest(model) == adapter_digest(loaded)
+    if not equal:
+        raise ValueError("Saved adapter reload differs")
+    report = {"status": status, "error_type": error, "diagnostic_fixture": diagnostic,
+        "target_model_training": not diagnostic, "optimizer_steps": trainer.state.global_step,
+        "adapter_changed": before != adapter_digest(model), "reload_equal": equal,
+        "audit": rollout.audit, "export": export_checkpoint(checkpoint, output / "checkpoint.tar.gz"),
+        "provider_billing_stopped": None, "gpu_fit_verified": False,
+        "limitation": "Private wrapper/proxy; GPU fit and provider billing are separate measured prerequisites."}
+    (output / "report.json").write_text(json.dumps(report, indent=2) + "\n")
+    return report
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--execute", action="store_true", required=True)
+    parser.parse_args()
+    raise SystemExit("Paid execution remains locked; no model loaded or provider contacted")
+
+
+if __name__ == "__main__":
+    main()
