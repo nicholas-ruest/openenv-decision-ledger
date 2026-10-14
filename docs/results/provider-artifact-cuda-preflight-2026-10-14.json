@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-14T08:28:00Z",
+  "checked_at": "2026-10-14T08:55:00Z",
   "source_revision": "8deef148ef0d1308260de29010adbaffdc03e0aa",
   "category": "software_change-d2",
   "offline_tests": {
@@ -19,12 +19,13 @@
   "cuda_packaging": {
     "base_image": "python:3.12-slim@sha256:2b4f19dae3a777dfc3b76730bda1e82e1f66ab2a2686fa93ca78edbfb4f04ffe",
     "torch": "2.10.0+cu128",
-    "cuda_dependencies": "pinned from official torch wheel metadata; proposed lock awaiting build",
+    "cuda_dependencies": "Pinned CUDA12.8 dependency lock built successfully; container offline CPU tests passed.",
     "build_run": 38535226449,
-    "build_status": "in_progress",
+    "build_status": "completed",
     "build_url": "https://github.com/nicholas-ruest/openenv-decision-ledger/actions/runs/38535226449",
     "test_mode": "No GPU, no network during tests, read-only container with temporary test output",
-    "publishes_image": false
+    "publishes_image": false,
+    "build_conclusion": "success"
   },
   "cpu_ci": {
     "run": 38535226407,
