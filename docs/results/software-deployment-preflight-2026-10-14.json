@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-14",
+  "source_revision": "edab9df4108ca55522660a847ec5a552be3db73a",
+  "task_ids": [
+    "software_change-d2"
+  ],
+  "offline_tests": {
+    "passed": 44,
+    "log_sha256": "3dbd08e4d43082db19ed7faa23ac60f1a11c98b0eea7d32f2c780cb706270d6b"
+  },
+  "implemented": [
+    "Explicit namespace and immutable model/image binding",
+    "SDK Volume revision and read-only input/output configuration",
+    "Job timeout, no retries, reserved cleanup interval and advisory compute allowance",
+    "CPU mounted-input validation and checkpoint/tokenizer drift rejection",
+    "Complete target command arguments, with paid CLI rejecting before any file read or model import"
+  ],
+  "provider_api_calls": 0,
+  "new_model_inference_calls": 0,
+  "paid_jobs_created": 0,
+  "execution_enabled": false,
+  "training_ready": false,
+  "remaining": [
+    "Publish trainer image and verify anonymous digest retrieval",
+    "Freeze real mounted checkpoint and input configuration; verify existing durable output bucket",
+    "Review GPU phase budget, account permissions and actual storage pricing",
+    "Run budgeted target hardware preflight after approval",
+    "Confirm focused training signal and compare untrained/trained model on held-out seeds"
+  ],
+  "limitations": [
+    "Tests use local and mocked volume/provider fixtures",
+    "44 offline tests are not 27B training or evidence of learning",
+    "No training/validation/test seed was used for model preparation inference",
+    "HF billing page redirects under API token authentication; existing inference balance/spend remains unreconciled, so no new inference calls authorized by this report",
+    "Higher Darwin fitness was a reward-variation proxy; prior failed confirmation still retains baseline"
+  ]
+}
