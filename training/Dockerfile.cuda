@@ -7,6 +7,7 @@ COPY training/requirements-cuda.lock /app/requirements-cuda.lock
 RUN pip install --no-cache-dir -r requirements-cuda.lock && pip check && useradd --uid 10001 --create-home arena
 COPY training /app/training
 COPY config/private-training-preparation.json /app/config/private-training-preparation.json
+COPY config/target-model-manifest.json /app/config/target-model-manifest.json
 COPY integrations/openenv-arena/arena_env /app/arena_env
 COPY integrations/openenv-arena/arena_env /app/integrations/openenv-arena/arena_env
 COPY tests/training /app/tests/training

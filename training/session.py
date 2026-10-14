@@ -28,8 +28,8 @@ def load_target(config):
     path = Path(config.model_path or "")
     if not config.model_path or not path.is_dir():
         raise ValueError("Frozen local checkpoint required")
-    if checkpoint_tree_sha256(path) != config.model_tree_sha256:
-        raise ValueError("Checkpoint tree changed")
+    from training.checkpoint_manifest import verify_checkpoint
+    verify_checkpoint(config, path)
     if hashlib.sha256((path / "tokenizer.json").read_bytes()).hexdigest() != config.tokenizer_sha256:
         raise ValueError("Tokenizer changed")
     metadata = json.loads((path / "config.json").read_text())

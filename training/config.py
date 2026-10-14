@@ -24,6 +24,8 @@ class TrainingConfig(BaseModel):
     model_path: str | None = None
     model_revision: str | None = None
     model_tree_sha256: str | None = None
+    model_manifest_path: str | None = None
+    model_manifest_sha256: str | None = None
     tokenizer_sha256: str | None = None
     task_ids: list[str]
     task_mix_confirmed: bool = False
@@ -60,8 +62,8 @@ class TrainingConfig(BaseModel):
             issues.append("task_mix_unconfirmed")
         if not self.target_hardware_smoke_verified:
             issues.append("target_gpu_smoke_unverified")
-        if not all((self.model_path, self.model_revision,
-                    self.model_tree_sha256, self.tokenizer_sha256)):
+        weights_bound = self.model_tree_sha256 or (self.model_manifest_path and self.model_manifest_sha256)
+        if not all((self.model_path, self.model_revision, weights_bound, self.tokenizer_sha256)):
             issues.append("model_checkpoint_and_tokenizer_not_frozen")
         return issues
 

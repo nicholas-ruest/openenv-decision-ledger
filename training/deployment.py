@@ -70,7 +70,8 @@ def deployment_preview(spec: Deployment, config: TrainingConfig):
         "output_bucket_unverified": spec.output_bucket_attested,
         "gpu_budget_unapproved": spec.gpu_budget_approved,
     }.items() if not attested]
-    if not all((config.model_tree_sha256, config.tokenizer_sha256)):
+    weights_bound = config.model_tree_sha256 or (config.model_manifest_path and config.model_manifest_sha256)
+    if not all((weights_bound, config.tokenizer_sha256)):
         blockers.append("checkpoint_tree_not_frozen")
     if spec.phase == "pilot":
         blockers.extend(config.blockers())
@@ -105,7 +106,7 @@ def deployment_preview(spec: Deployment, config: TrainingConfig):
 
 def validate_session_inputs(config, runtime_root, model_root, artifact_root):
     """CPU-only input binding; does not import Torch or load weights."""
-    from training.config import checkpoint_tree_sha256
+    from training.checkpoint_manifest import verify_checkpoint
     import hashlib
     verify_runtime(config, runtime_root)
     for path in (model_root, artifact_root):
@@ -113,8 +114,7 @@ def validate_session_inputs(config, runtime_root, model_root, artifact_root):
             raise ValueError("Existing regular mounted roots required")
     if config.model_path != str(model_root):
         raise ValueError("Configuration model path differs from mounted root")
-    if not config.model_tree_sha256 or checkpoint_tree_sha256(model_root) != config.model_tree_sha256:
-        raise ValueError("Frozen checkpoint hash differs")
+    verify_checkpoint(config, model_root)
     if hashlib.sha256((model_root / "tokenizer.json").read_bytes()).hexdigest() != config.tokenizer_sha256:
         raise ValueError("Frozen tokenizer hash differs")
     return {"runtime_verified": True, "checkpoint_tree_verified": True,
