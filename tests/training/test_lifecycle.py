@@ -33,6 +33,10 @@ def test_deadline_kills_forked_descendant_without_losing_artifact(tmp_path):
     assert (tmp_path / "recovery").exists()
     pid = int((tmp_path / "child").read_text())
     stat = Path(f"/proc/{pid}/stat")
+    # SIGKILL delivery to the descendant is asynchronous with parent wait().
+    until = time.monotonic() + 1
+    while stat.exists() and stat.read_text().split()[2] != "Z" and time.monotonic() < until:
+        time.sleep(0.01)
     assert not stat.exists() or stat.read_text().split()[2] == "Z"
 
 
