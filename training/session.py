@@ -155,12 +155,29 @@ def run_session(config, runtime, output, *, bundle=None, sampler=None, diagnosti
     return report
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument("--execute", action="store_true", required=True)
-    parser.parse_args()
-    raise SystemExit("Paid execution remains locked; no model loaded or provider contacted")
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument("--execute", action="store_true")
+    mode.add_argument("--validate-inputs", action="store_true")
+    parser.add_argument("--config", type=Path)
+    parser.add_argument("--runtime-root", type=Path)
+    parser.add_argument("--model-root", type=Path)
+    parser.add_argument("--artifact-root", type=Path)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--phase", choices=["hardware_preflight", "pilot"], default="hardware_preflight")
+    args = parser.parse_args(argv)
+    if args.execute:
+        # This precedes all file reads, environment credential lookups and model imports.
+        raise SystemExit("Paid execution remains locked; no model loaded or provider contacted")
+    if not all((args.config, args.runtime_root, args.model_root, args.artifact_root)):
+        parser.error("--validate-inputs requires configuration and all mounted roots")
+    from training.deployment import validate_session_inputs
+    config = TrainingConfig.model_validate_json(args.config.read_text())
+    report = validate_session_inputs(config, args.runtime_root, args.model_root, args.artifact_root)
+    print(json.dumps(report, indent=2))
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
