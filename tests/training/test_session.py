@@ -9,7 +9,7 @@ from arena_env.tasks import make_task, oracle_answer
 from training.adapter import encode
 from training.config import TrainingConfig, SeedRange
 from training.cpu_smoke import tiny_components
-from training.session import dataset_for, main, run_session
+from training.session import dataset_for, main, run_session, phase_config
 
 
 @pytest.mark.parametrize("failure", [None, "deadline", "failure"])
@@ -36,8 +36,11 @@ def test_focused_session_real_optimizer_reload_and_export(tmp_path, failure):
             raise RuntimeError("diagnostic worker failure fixture")
         action = '{"op":"read","path":"*"}' if turn == 0 else actions[occurrence % 4]
         return encode(tokenizer, action + "<|im_end|>")
+    mount = tmp_path / "mount-fixture"
+    mount.mkdir()
     report = run_session(config, Path("integrations/openenv-arena"), tmp_path / "session",
-                         bundle=bundle, sampler=sample, diagnostic=True)
+                         bundle=bundle, sampler=sample, diagnostic=True,
+                         artifact_root=mount, volume_attested=True)
     if failure:
         assert report["status"] == ("interrupted" if failure == "deadline" else "failed")
         assert report["optimizer_steps"] == 0 and not report["adapter_changed"]
@@ -47,9 +50,23 @@ def test_focused_session_real_optimizer_reload_and_export(tmp_path, failure):
     assert report["reload_equal"]
     assert (tmp_path / "session/checkpoint.tar.gz").is_file()
     assert report["target_model_training"] is False
+    assert report["mounted_export"]["copy_verified"]
+    assert report["mounted_export"]["local_mount_fixture"]
 
 
 def test_paid_cli_is_locked_before_model_load(monkeypatch):
     monkeypatch.setattr("sys.argv", ["session", "--execute"])
     with pytest.raises(SystemExit, match="locked"):
         main()
+
+
+def test_hardware_phase_is_separate_and_not_circular():
+    config = TrainingConfig.model_validate_json(Path("config/private-training-preparation.json").read_text())
+    hardware = phase_config(config, "hardware_preflight")
+    assert hardware.max_optimizer_steps == 1
+    assert hardware.train_seeds.start == 970000
+    assert config.train_seeds.start == 900000
+    assert hardware.task_mix_confirmed is False
+    assert hardware.target_hardware_smoke_verified is False
+    with pytest.raises(ValueError):
+        phase_config(config, "unknown")

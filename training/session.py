@@ -55,7 +55,19 @@ def adapter_digest(model):
     return h.hexdigest()
 
 
-def run_session(config, runtime, output, *, bundle=None, sampler=None, diagnostic=False):
+def phase_config(config, phase):
+    if phase not in {"hardware_preflight", "pilot"}:
+        raise ValueError("Unknown focused training phase")
+    if phase == "hardware_preflight":
+        # Diagnostic instances do not consume training/validation/test seeds.
+        from training.config import SeedRange
+        return config.model_copy(update={"train_seeds": SeedRange(start=970000, count=1),
+                                         "max_optimizer_steps": 1})
+    return config
+
+
+def run_session(config, runtime, output, *, bundle=None, sampler=None, diagnostic=False,
+                phase="pilot", artifact_root=None, volume_attested=False):
     """Same trainer/save/reload/export path for the diagnostic and future target."""
     import torch
     from peft import LoraConfig, PeftModel, get_peft_model
@@ -64,11 +76,18 @@ def run_session(config, runtime, output, *, bundle=None, sampler=None, diagnosti
     from training.adapter import JsonArenaRollout, RolloutLimits, native_reward
 
     verify_runtime(config, runtime)
+    config = phase_config(config, phase)
     if diagnostic:
         if bundle is None or sampler is None:
             raise ValueError("Offline diagnostic requires explicit tiny-model fixtures")
     else:
-        if bundle is not None or sampler is not None or config.blockers():
+        if artifact_root is None or not volume_attested:
+            raise ValueError("Independently attested durable output volume required")
+        blockers = config.blockers()
+        if phase == "hardware_preflight":
+            blockers = [x for x in blockers if x not in {
+                "task_mix_unconfirmed", "target_gpu_smoke_unverified"}]
+        if bundle is not None or sampler is not None or blockers:
             raise ValueError("Frozen confirmed target configuration required")
         if not torch.cuda.is_available() or torch.cuda.device_count() != 1:
             raise ValueError("One CUDA GPU required")
@@ -120,12 +139,18 @@ def run_session(config, runtime, output, *, bundle=None, sampler=None, diagnosti
     equal = adapter_digest(model) == adapter_digest(loaded)
     if not equal:
         raise ValueError("Saved adapter reload differs")
-    report = {"status": status, "error_type": error, "diagnostic_fixture": diagnostic,
-        "target_model_training": not diagnostic, "optimizer_steps": trainer.state.global_step,
+    report = {"status": status, "phase": phase, "error_type": error, "diagnostic_fixture": diagnostic,
+        "target_model_training": not diagnostic and trainer.state.global_step > 0,
+        "optimizer_steps": trainer.state.global_step,
         "adapter_changed": before != adapter_digest(model), "reload_equal": equal,
         "audit": rollout.audit, "export": export_checkpoint(checkpoint, output / "checkpoint.tar.gz"),
         "provider_billing_stopped": None, "gpu_fit_verified": False,
         "limitation": "Private wrapper/proxy; GPU fit and provider billing are separate measured prerequisites."}
+    if artifact_root is not None:
+        from training.artifact_store import publish_archive
+        report["mounted_export"] = publish_archive(output / "checkpoint.tar.gz",
+            artifact_root, output.name, volume_attested=volume_attested)
+        report["mounted_export"]["local_mount_fixture"] = diagnostic
     (output / "report.json").write_text(json.dumps(report, indent=2) + "\n")
     return report
 

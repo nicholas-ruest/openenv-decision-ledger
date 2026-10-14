@@ -1,0 +1,33 @@
+name: Training CUDA packaging preflight
+on:
+  pull_request:
+    paths:
+      - 'training/**'
+      - 'tests/training/**'
+      - '.github/workflows/training-cuda-build.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cuda-package-no-gpu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Build pinned CUDA package without GPU or model weights
+        run: docker build -f training/Dockerfile.cuda -t decision-ledger-training-cuda:preflight .
+      - name: Test the CUDA wheel image offline on CPU
+        run: |
+          docker run --rm --network none --read-only --tmpfs /tmp:rw,size=2g decision-ledger-training-cuda:preflight python -m pytest tests/training -q --basetemp=/tmp/tests
+      - name: Record image and installed package evidence
+        run: |
+          mkdir -p "$RUNNER_TEMP/cuda-package-evidence"
+          docker image inspect decision-ledger-training-cuda:preflight --format '{{.Id}}' > "$RUNNER_TEMP/cuda-package-evidence/local-image-id.txt"
+          docker run --rm --network none decision-ledger-training-cuda:preflight python -c 'import json,torch,importlib.metadata as m; print(json.dumps({"torch":torch.__version__,"cuda_build":torch.version.cuda,"cuda_available":torch.cuda.is_available(),"gpu_fit_verified":False,"target_weights_downloaded":False,"packages":{d.metadata["Name"]:d.version for d in m.distributions()}},sort_keys=True))' > "$RUNNER_TEMP/cuda-package-evidence/packages.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cuda-package-evidence-no-gpu
+          retention-days: 1
+          path: '${{ runner.temp }}/cuda-package-evidence/'
