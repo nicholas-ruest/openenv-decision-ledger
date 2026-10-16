@@ -4,7 +4,7 @@ Eight procedural domains, independent reference solvers, bounded virtual-file to
 
 ## Runtime
 Python/OpenEnv is the Arena protocol adapter. MetaHarness TypeScript is the development-time optimization layer. The submitted container requires no secrets, external model endpoint, database or GPU.
-Actions list files, read bounded virtual records, and submit one answer. A fully correct answer earns 1; any incomplete or incorrect answer earns 0.
+Actions list files, read bounded virtual records, and submit one answer. A fully correct answer earns 1. The local v2 candidate restores upstream partial reward, capped at 0.8 and requiring a substantive correct component. Empty/no-op answers earn 0; only reward 1 counts as a full solve. The published v1 image retains its original binary reward.
 
 ## Task coverage
 Software dependency/test planning; industrial scheduling; sensor calibration; office reconciliation; finance ledger reconstruction; graph routing; security triage; media timeline verification. Three difficulty levels per family give 24 candidate cells, not 24 independent capabilities.
@@ -27,7 +27,4 @@ Use Python 3.12 and Node >=22.15. Clone with --recurse-submodules.
 The GitHub Actions workflow tests, builds linux/amd64, publishes to GHCR, and replays the anonymously pulled digest in a separate job.
 
 ## Status
-Public source, GHCR image and HF dataset are published. Anonymous image validation and all 32 runtime controls passed in CI. Not submitted; no official score. Darwin's synthetic wiring run passed, but real target-model calibration is blocked by exhausted Hugging Face inference credits (HTTP 402); an inference-only credential is saved in ruOS. See docs/validation.json for the full upstream Flywheel portability failures. The tokenless baseline request is in config/submission-request.json and has not been sent.
-See [attribution](THIRD_PARTY.md) and [provenance](config/provenance.json).
-
-For HF-router calibration, configure HF_TOKEN privately through ruOS secrets, install requirements-calibration.lock in the calibration venv, and invoke scripts/hf-darwin.py explicitly. It passes the credential only in the process environment. Hosted-model checkpoint identity and thinking behavior remain unverified; these measurements are a calibration proxy, not an Arena score.
+Public v1 assets remain available; no submission or official score. Local v2 repairs hosted JSON actions, pins DeepInfra routing, and restores upstream substantive component rewards. Calibration is funded within the authorized USD50 cap. Candidate source is published for review through the GitHub connector; the v2 image must be independently validated before training. See docs/calibration-recovery.json and docs/component-diagnostic.json. The existing config/submission-request.json is a v1 draft and has not been sent.

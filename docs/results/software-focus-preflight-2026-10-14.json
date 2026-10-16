@@ -1,0 +1,36 @@
+{
+  "checked_at": "2026-10-14T07:14:00Z",
+  "source_revision": "2653b7fe7258c24dcdb47ac0475ed92ec1a2e94b",
+  "task_id": "software_change-d2",
+  "unique_instances": 224,
+  "splits": {
+    "train": {
+      "start": 900000,
+      "count": 128
+    },
+    "validation": {
+      "start": 910000,
+      "count": 32
+    },
+    "test": {
+      "start": 920000,
+      "count": 64
+    }
+  },
+  "native_positive_and_empty_controls": "passed for all224",
+  "deterministic_resets": true,
+  "no_public_instance_collisions": true,
+  "report_sha256": "68ea9c2079fcae2d63adf14d3d92cbb44050d19a60d08afb15ec319037642914",
+  "model_calls": 0,
+  "training_started": false,
+  "model_improvement": null,
+  "focus_decision": "One software category; multi-category balance is not a pilot prerequisite.",
+  "signal_status": "Only one of two previous software prompts had same-prompt variance; broader focused signal confirmation remains outstanding.",
+  "paid_gpu_execution_authorized": false,
+  "remaining": [
+    "Verify focused within-prompt signal under matched settings with reconciled authorized inference spend.",
+    "Implement production launcher, deadline/billing controls and export/reload paths, tested offline.",
+    "Obtain separately authorized hardware preflight/training budget; no hardware fit claim until measured."
+  ],
+  "ruv_board203": "Two identical office/software recipes scored4/40 and2/40; no method-improvement claim. Training reward is not ranking evidence."
+}

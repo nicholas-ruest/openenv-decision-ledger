@@ -39,7 +39,7 @@ jobs:
           context: integrations/openenv-arena
           platforms: linux/amd64
           push: true
-          tags: ghcr.io/nicholas-ruest/openenv-decision-ledger:v1
+          tags: ghcr.io/nicholas-ruest/openenv-decision-ledger:v2-${{ github.sha }}
       - name: Export public task dataset
         working-directory: integrations/openenv-arena
         run: python -m scripts.export_dataset ../../dataset --seeds 16 --tasks-json tasks.json

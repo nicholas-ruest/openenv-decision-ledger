@@ -1,0 +1,55 @@
+{
+  "kind": "darwin_confirmation_power_preflight",
+  "version": 1,
+  "checked_at": "2026-10-13T02:39:00Z",
+  "status": "structurally_underpowered_final_confirmation_pending",
+  "source": {
+    "repository": "ruvnet/metaharness",
+    "revision": "b8c3d38de41203faf633ef6dceb8452a4727b0ea",
+    "power": "integrations/openenv-arena-darwin/lib/confirm.mjs",
+    "gate": "integrations/openenv-arena-darwin/gate.mjs",
+    "launcher": "scripts/darwin.sh"
+  },
+  "observed_search": {
+    "evaluated_candidates": 7,
+    "selected_variant": "g1_v2",
+    "changed_families": [
+      "finance_ledger"
+    ],
+    "baseline_full_solves": 53,
+    "candidate_full_solves": 52,
+    "cases_per_scorecard": 64,
+    "scope": "search only; fitness measures reward variation rather than trained model improvement"
+  },
+  "frozen_gate": {
+    "alpha": 0.05,
+    "lambda": 0.5,
+    "candidate_budget_default": 7,
+    "effective_alpha": 0.0071428571428571435,
+    "threshold": 140
+  },
+  "confirmation_plan": {
+    "attempts_per_changed_family": 32,
+    "episodes_per_block": 4,
+    "changed_families": 1,
+    "maximum_paired_blocks": 8,
+    "maximum_e_value": 25.62890625,
+    "required_informative_blocks": 13,
+    "theoretical_minimum_attempts": 52
+  },
+  "decision": {
+    "can_promote_under_current_plan": false,
+    "claim": "A mathematical upper bound from the pinned gate source, not a completed measured gate decision or a signed receipt.",
+    "baseline_retained": true,
+    "gate_relaxed": false,
+    "new_inference_launched": false,
+    "training_ready": false
+  },
+  "limitations": [
+    "Final confirmation scorecards and signed receipt were not available at the last successful ruOS read at 2026-10-13T02:26:58Z.",
+    "Further read-only ruOS calls timed out waiting for another desktop task; desktop heartbeat remained fresh.",
+    "Raw replay files do not establish complete baseline/candidate results and must not be merged into a final score.",
+    "Thirteen blocks is only a best-case lower bound; real evidence may require more, and no additional experiment is queued.",
+    "Balanced task mix and production GPU launcher/hardware/billing validation remain incomplete. No paid target training or Arena submission occurred."
+  ]
+}

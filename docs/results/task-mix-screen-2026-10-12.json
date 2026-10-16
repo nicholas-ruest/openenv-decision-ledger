@@ -1,0 +1,178 @@
+{
+  "observed_at": "2026-10-12T22:53:32Z",
+  "status": "screening_completed_training_not_ready",
+  "evidence_kind": "proxy_calibration_not_training",
+  "runtime_source_revision": "088f6e035cb9696ce1128a643ed5a85d21e22144",
+  "amd64_image_digest": "sha256:6a656cac9bb519eecc5c34cccb3d296dbc3b2e29e615a5d6af422d0ee08e6a7b",
+  "requested_thinking": true,
+  "thinking_verified": false,
+  "provider": "HF Router pinned DeepInfra",
+  "selected_checkpoint_verified": false,
+  "harder_screen": {
+    "seed_base": 840000,
+    "attempts_per_family": 4,
+    "sha256": "c0f87f7a5c2b38586a645862daa62bc2efdfb79656df5493d6040b1fd5f151e7",
+    "families": [
+      {
+        "task_id": "office_reconciliation-d3",
+        "full_solves": 4,
+        "rewards": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "reward_std": 0
+      },
+      {
+        "task_id": "finance_ledger-d3",
+        "full_solves": 3,
+        "rewards": [
+          1,
+          0.5,
+          1,
+          1
+        ],
+        "reward_std": 0.21650635094610965
+      },
+      {
+        "task_id": "math_route-d3",
+        "full_solves": 4,
+        "rewards": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "reward_std": 0
+      },
+      {
+        "task_id": "media_timeline-d3",
+        "full_solves": 4,
+        "rewards": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "reward_std": 0
+      }
+    ],
+    "failures": {},
+    "reservation_units": 306997,
+    "provider_reported_tokens": 115275
+  },
+  "fresh_screen": {
+    "seed_base": 850000,
+    "attempts_per_family": 4,
+    "sha256": "59966bd5c8eda097b87879093437619d4016cf9c118abc7326dcb908c5fcd0e1",
+    "full_solves": 14,
+    "unique_cases": 20,
+    "families": [
+      {
+        "task_id": "software_change-d2",
+        "full_solves": 2,
+        "rewards": [
+          0.75,
+          1,
+          1,
+          0.75
+        ],
+        "reward_std": 0.125
+      },
+      {
+        "task_id": "industrial_schedule-d2",
+        "full_solves": 0,
+        "rewards": [
+          0,
+          0,
+          0.25,
+          0
+        ],
+        "reward_std": 0.10825317547305482
+      },
+      {
+        "task_id": "science_calibration-d2",
+        "full_solves": 4,
+        "rewards": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "reward_std": 0
+      },
+      {
+        "task_id": "security_triage-d2",
+        "full_solves": 4,
+        "rewards": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "reward_std": 0
+      },
+      {
+        "task_id": "finance_ledger-d3",
+        "full_solves": 4,
+        "rewards": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "reward_std": 0
+      }
+    ],
+    "failures": {},
+    "reservation_units": 413032,
+    "provider_reported_tokens": 162980
+  },
+  "decision": {
+    "software": "Mixed full and partial rewards replicated on disjoint seeds; retain for same-prompt screening.",
+    "finance": "Earlier mixed reward did not replicate as mixed in fresh four cases; remains provisional.",
+    "scheduling": "Zero full solves in fresh sample; partial credit alone does not meet success-and-variance criterion.",
+    "science_security": "All four fresh cases solved; earlier variance not replicated here.",
+    "office_math_media": "All four harder d3 cases solved; use as evaluation anchors, not evidence of learning signal.",
+    "training_ready": false,
+    "promotion": false
+  },
+  "active_search": {
+    "work_root": "runs/provenance-fixed-darwin-20261012",
+    "archive_entries": 1,
+    "rerun_baseline_full_solves": 53,
+    "unique_cases": 64,
+    "previous_baseline_full_solves": 54,
+    "final_report_exists": false,
+    "signed_promotion_receipt_exists": false,
+    "conclusion": "Active candidate evaluation; no demonstrated improvement."
+  },
+  "same_prompt_screen": {
+    "work_root": "runs/same-prompt-screen-20261012",
+    "status": "running",
+    "initial_pid": 9167,
+    "tasks": [
+      "software_change-d2",
+      "finance_ledger-d3"
+    ],
+    "prompt_seeds": [
+      860000,
+      860100
+    ],
+    "rollouts_per_prompt": 4,
+    "total_rollouts": 16,
+    "total_unique_prompts": 4,
+    "total_reservation_ceiling": 500000,
+    "temperature": 0.7,
+    "smoke_check": "Four identical native reset observations per task passed; runner source hash pinned; original runtime and active Darwin source unchanged."
+  },
+  "limitations": [
+    "Four cases per family is screening, not a generalization estimate.",
+    "Different-seed reward variance does not establish within-prompt GRPO rollout variance.",
+    "Provider checkpoint and effective thinking mode are not independently attested.",
+    "Native 32/32 controls prove interface/reward behavior, not model improvement.",
+    "Training launcher and GPU memory/backward/checkpoint smoke have not been validated.",
+    "No paid training, GPU rental, additional credit purchase, Arena submission or unconfirmed merge authorized."
+  ]
+}

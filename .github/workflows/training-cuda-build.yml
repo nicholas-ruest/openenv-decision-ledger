@@ -1,0 +1,80 @@
+name: Training CUDA packaging preflight
+on:
+  pull_request:
+    paths:
+      - 'training/**'
+      - 'tests/training/**'
+      - '.github/workflows/training-cuda-build.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cuda-package-no-gpu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      public_image: ${{ steps.publish.outputs.public_image }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Build pinned CUDA package without GPU or model weights
+        run: docker build -f training/Dockerfile.cuda -t decision-ledger-training-cuda:preflight .
+      - name: Test the CUDA wheel image offline on CPU
+        run: |
+          docker run --rm --network none --read-only --tmpfs /tmp:rw,size=2g decision-ledger-training-cuda:preflight python -m pytest tests/training -q --basetemp=/tmp/tests
+      - name: Record image and installed package evidence
+        run: |
+          mkdir -p "$RUNNER_TEMP/cuda-package-evidence"
+          docker image inspect decision-ledger-training-cuda:preflight --format '{{.Id}}' > "$RUNNER_TEMP/cuda-package-evidence/local-image-id.txt"
+          docker run --rm --network none decision-ledger-training-cuda:preflight python -c 'import json,torch,importlib.metadata as m; print(json.dumps({"torch":torch.__version__,"cuda_build":torch.version.cuda,"cuda_available":torch.cuda.is_available(),"gpu_fit_verified":False,"target_weights_downloaded":False,"packages":{d.metadata["Name"]:d.version for d in m.distributions()}},sort_keys=True))' > "$RUNNER_TEMP/cuda-package-evidence/packages.json"
+      - uses: docker/login-action@v3
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'candidate/decision-ledger-v2'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish tested trainer under an exclusive source tag
+        id: publish
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'candidate/decision-ledger-v2'
+        env:
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          TRAINER_TAG="ghcr.io/nicholas-ruest/openenv-decision-ledger:training-preflight-$SOURCE_SHA"
+          docker tag decision-ledger-training-cuda:preflight "$TRAINER_TAG"
+          docker push "$TRAINER_TAG"
+          PINNED_IMAGE=$(docker image inspect "$TRAINER_TAG" --format '{{index .RepoDigests 0}}')
+          echo "public_image=$PINNED_IMAGE" >> "$GITHUB_OUTPUT"
+          echo "$PINNED_IMAGE" > "$RUNNER_TEMP/cuda-package-evidence/published-image.txt"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cuda-package-evidence-no-gpu
+          retention-days: 1
+          path: '${{ runner.temp }}/cuda-package-evidence/'
+  anonymous-trainer-replay:
+    needs: cuda-package-no-gpu
+    if: needs.cuda-package-no-gpu.outputs.public_image != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    env:
+      PINNED_IMAGE: ${{ needs.cuda-package-no-gpu.outputs.public_image }}
+    steps:
+      - name: Pull the exact trainer digest with an empty registry configuration
+        run: |
+          export DOCKER_CONFIG=$(mktemp -d)
+          docker pull "$PINNED_IMAGE"
+          docker run --rm --network none --read-only --tmpfs /tmp:rw,size=2g "$PINNED_IMAGE" python -m pytest tests/training -q --basetemp=/tmp/tests
+          mkdir -p "$RUNNER_TEMP/anonymous-trainer-evidence"
+          echo "$PINNED_IMAGE" > "$RUNNER_TEMP/anonymous-trainer-evidence/image.txt"
+          docker run --rm --network none "$PINNED_IMAGE" python -c 'import json,torch; print(json.dumps({"torch":torch.__version__,"cuda_build":torch.version.cuda,"cuda_available":torch.cuda.is_available(),"gpu_fit_verified":False,"weights_downloaded":False,"paid_execution_enabled":False}))' > "$RUNNER_TEMP/anonymous-trainer-evidence/runtime.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: anonymous-trainer-evidence-no-gpu
+          retention-days: 1
+          path: '${{ runner.temp }}/anonymous-trainer-evidence/'

@@ -1,0 +1,110 @@
+{
+  "status": "provisional_not_authorized_not_launch_ready",
+  "checked_at": "2026-10-13T02:24:00Z",
+  "currency": "USD",
+  "sources": [
+    "https://huggingface.co/api/jobs/hardware",
+    "https://huggingface.co/docs/hub/jobs-pricing",
+    "https://huggingface.co/docs/hub/jobs-configuration"
+  ],
+  "preferred_provider": "Hugging Face Jobs",
+  "hardware_options": [
+    {
+      "flavor": "h200",
+      "gpu_count": 1,
+      "gpu_memory_gb": 141,
+      "host_ram_gb": 256,
+      "ephemeral_storage_gb": 3000,
+      "price_micro_usd_per_minute": 83333,
+      "published_hourly_usd": 5,
+      "reason": "Preferred first full-size preflight for memory margin; fit is not verified."
+    },
+    {
+      "flavor": "a100-large",
+      "gpu_count": 1,
+      "gpu_memory_gb": 80,
+      "host_ram_gb": 142,
+      "ephemeral_storage_gb": 1000,
+      "price_micro_usd_per_minute": 41667,
+      "published_hourly_usd": 2.5,
+      "reason": "Lower-price alternative only after memory compatibility is measured."
+    }
+  ],
+  "proposed_phases": [
+    {
+      "name": "hardware_preflight",
+      "maximum_billable_minutes": 60,
+      "estimated_compute_ceiling_usd": 5,
+      "checks": [
+        "Pinned 27B model/tokenizer loading",
+        "One native rollout group",
+        "Backward/optimizer memory",
+        "Adapter checkpoint save/reload"
+      ],
+      "on_failure": "Exit; no automatic retry or longer run."
+    },
+    {
+      "name": "initial_lora_pilot",
+      "maximum_billable_minutes": 240,
+      "estimated_compute_ceiling_usd": 20,
+      "preconditions": [
+        "Supported task-mix decision",
+        "Hardware preflight passed",
+        "User-approved pilot budget"
+      ]
+    },
+    {
+      "name": "paired_holdout_evaluation",
+      "maximum_billable_minutes": 60,
+      "estimated_compute_ceiling_usd": 5,
+      "checks": [
+        "Base and trained checkpoint, same untouched seeds and inference settings",
+        "Binary full-solves and failure types separately"
+      ]
+    }
+  ],
+  "proposed_h200_compute_ceiling_usd": 30,
+  "tuning_proposal": {
+    "model": "Qwen/Qwen3.8-27B",
+    "revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+    "architecture": "Qwen3_5ForConditionalGeneration",
+    "mode": "LoRA private proxy, not full-weight Arena replication",
+    "base_precision": "bfloat16",
+    "lora_rank": 16,
+    "lora_alpha": 32,
+    "rollout_engine": "Local Transformers policy generation; no hosted inference replay",
+    "num_generations": 4,
+    "microbatch_size": 1,
+    "gradient_accumulation_steps": 4,
+    "gradient_checkpointing": true,
+    "completion_tokens": 8192,
+    "context_tokens": 16384,
+    "temperature": 0.7,
+    "thinking": "Explicit private ChatML prefill; production equivalence unverified"
+  },
+  "billing_controls_required": [
+    "Provider-enforced timeout for every job",
+    "Recheck live hardware rate immediately before any approved launch",
+    "No exposed ports",
+    "No concurrent jobs, auto-retries, schedules or automatic recharge",
+    "Stop billing on failure or completion; retain small checkpoint/report artifacts before job exit"
+  ],
+  "blockers": [
+    "Darwin final confirmation and signed gate still pending",
+    "Final training task mix not confirmed",
+    "CUDA runtime/image/dependency lock not built or tested",
+    "Target paid launcher and artifact-export/billing controls remain unimplemented",
+    "Full-size GPU fit and throughput unmeasured",
+    "Jobs create/manage and artifact-write permissions must be configured privately after authorization",
+    "Output retention/storage cost not yet quoted"
+  ],
+  "limitations": [
+    "USD30 is a first bounded COMPUTE proposal, not an all-in quote or a complete improvement campaign.",
+    "No account credit balance, GPU availability, tax or output-storage cost is asserted here.",
+    "A tiny CPU diagnostic cannot validate 27B GPU memory or model improvement.",
+    "No top10 result is predicted by this hardware proposal."
+  ],
+  "spending_authorized": false,
+  "job_created": false,
+  "arena_submission_authorized": false
+}

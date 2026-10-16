@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import { probeServer } from '../vendor/metaharness/integrations/openenv-arena-darwin/lib/provenance.mjs';
+const response = (data) => async () => ({ ok: true, json: async () => ({ data }) });
+const base = 'https://router.huggingface.co/v1';
+const model = { id: 'target', root: 'checkpoint-a', max_model_len: 16384 };
+const a = await probeServer(base, 'test', 'target', { fetchImpl: response([model]) });
+const b = await probeServer(base, 'test', 'target', { fetchImpl: response([model, { id: 'unrelated' }]) });
+assert.equal(a.serverSha, b.serverSha);
+const c = await probeServer(base, 'test', 'target', { fetchImpl: response([{ ...model, root: 'checkpoint-b' }]) });
+assert.notEqual(a.serverSha, c.serverSha);
+const d = await probeServer(base, 'test', 'target', { fetchImpl: response([{ ...model, max_model_len: 8192 }]) });
+assert.notEqual(a.serverSha, d.serverSha);
+await assert.rejects(probeServer(base, 'test', 'target', { fetchImpl: response([{ id: 'unrelated' }]) }), /model_not_served/);
+console.log('PASS: unrelated catalog drift stable; selected root/context/removal fail closed.');
