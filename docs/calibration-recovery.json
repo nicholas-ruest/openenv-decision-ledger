@@ -1,0 +1,70 @@
+{
+  "status": "darwin_fresh_archive_reusing_cached_cells",
+  "previous_live_run": {
+    "episodes": 112,
+    "darwin_generations": 2,
+    "variants": 6,
+    "improvement": false
+  },
+  "upstream_review": {
+    "branch": "feat/openenv-arena",
+    "latest_reviewed_commit": "36db9a71",
+    "gist": "https://gist.github.com/ruvnet/00fb40aeabb35a893f140597e2695c1d",
+    "endpoint": "self-hosted qwen38, publisher-reported vLLM 0.31.0",
+    "strict_action_validation": true
+  },
+  "changes": [
+    "Explicit action-instance read/submit examples in calibration system prompt; native verifier unchanged",
+    "Provider JSON object response mode enabled in proxy calibration; no native runtime or reward change"
+  ],
+  "verification": {
+    "pytest": 146,
+    "subtests": 802
+  },
+  "spending": {
+    "authorization_usd": 50,
+    "credits_purchased_usd": 20,
+    "displayed_balance_usd": 19.82,
+    "automatic_recharge": false,
+    "displayed_usage_usd": 0.18
+  },
+  "limitations": [
+    "Hosted checkpoint identity and thinking mode unverified",
+    "Calibration prompt differs from upstream and does not establish hidden benchmark gains",
+    "JSON response constraint differs from unverified Arena serving settings; resulting scores are proxy evidence only"
+  ],
+  "submission": "on_hold",
+  "smoke": {
+    "finance_ledger_d2": {
+      "attempts": 4,
+      "valid_read_and_submit": 4,
+      "solved": 0,
+      "format_failures": 0
+    },
+    "interpretation": "Interface repair only; no demonstrated model improvement"
+  },
+  "reward_candidate": "Restored Ruv upstream substantive-component partial rewards; full solved metric remains reward==1",
+  "routing": "HF request pinned to :deepinfra; checkpoint identity unverified",
+  "json_darwin_outcome": "Baseline aborted on incomplete provider-error cell; no candidate promoted",
+  "v2_canary": {
+    "episodes": 4,
+    "full_solves": 1,
+    "provider_failures": 0
+  },
+  "publication": "candidate/decision-ledger-v2 branch; image validation pending",
+  "v2_results": {
+    "baseline_episodes": 64,
+    "full_solves": 1,
+    "partial": 27,
+    "all_recorded_episodes": 104,
+    "no_interface_provider_failures": true,
+    "darwin_improvement": false,
+    "confirmation": "skipped",
+    "promoted": false
+  },
+  "next_runs": [
+    "thinking-darwin-20261012",
+    "learning-matrix-20261012: d1 on/off same seeds, 500000 token reservation ceiling each"
+  ],
+  "resume_correction": "Existing work-root archives cannot be resumed directly; fresh run thinking-finish-20261012 shares the preserved cache."
+}

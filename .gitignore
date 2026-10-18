@@ -6,3 +6,6 @@ node_modules/
 runs/
 *.token
 dataset/
+
+.claude-flow/
+.swarm/

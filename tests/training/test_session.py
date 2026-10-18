@@ -1,0 +1,72 @@
+import copy
+import json
+from pathlib import Path
+
+import pytest
+
+from arena_env.environment import ArenaAction, ArenaEnvironment
+from arena_env.tasks import make_task, oracle_answer
+from training.adapter import encode
+from training.config import TrainingConfig, SeedRange
+from training.cpu_smoke import tiny_components
+from training.session import dataset_for, main, run_session, phase_config
+
+
+@pytest.mark.parametrize("failure", [None, "deadline", "failure"])
+def test_focused_session_real_optimizer_reload_and_export(tmp_path, failure):
+    import torch
+    torch.set_num_threads(2)
+    config = TrainingConfig.model_validate_json(Path("config/private-training-preparation.json").read_text())
+    config = config.model_copy(update={"train_seeds": SeedRange(start=950000, count=1),
+        "max_steps": 2, "max_completion_tokens": 512, "max_context_tokens": 4096,
+        "max_optimizer_steps": 1, "learning_rate": 0.001, "thinking": False})
+    expected = oracle_answer(make_task("software_change", 950000, 2))
+    partial = copy.deepcopy(expected)
+    partial.pop("build_order")
+    actions = [json.dumps({"op": "submit", "answer": x}) for x in [expected, partial, {}, expected]]
+    env = ArenaEnvironment()
+    reset = env.reset(task_id="software_change-d2", seed=950000).model_dump_json()
+    read = env.step(ArenaAction(op="read", path="*")).model_dump_json()
+    bundle = tiny_components([reset, read, *actions], "qwen3_5")
+    tokenizer = bundle[1]
+    def sample(ids, occurrence, turn, allowance):
+        if occurrence == 2 and failure:
+            if failure == "deadline":
+                raise TimeoutError("diagnostic deadline fixture")
+            raise RuntimeError("diagnostic worker failure fixture")
+        action = '{"op":"read","path":"*"}' if turn == 0 else actions[occurrence % 4]
+        return encode(tokenizer, action + "<|im_end|>")
+    mount = tmp_path / "mount-fixture"
+    mount.mkdir()
+    report = run_session(config, Path("integrations/openenv-arena"), tmp_path / "session",
+                         bundle=bundle, sampler=sample, diagnostic=True,
+                         artifact_root=mount, volume_attested=True)
+    if failure:
+        assert report["status"] == ("interrupted" if failure == "deadline" else "failed")
+        assert report["optimizer_steps"] == 0 and not report["adapter_changed"]
+    else:
+        assert report["status"] == "completed" and report["optimizer_steps"] == 1
+        assert report["adapter_changed"] and len(report["audit"]) == 4
+    assert report["reload_equal"]
+    assert (tmp_path / "session/checkpoint.tar.gz").is_file()
+    assert report["target_model_training"] is False
+    assert report["mounted_export"]["copy_verified"]
+    assert report["mounted_export"]["local_mount_fixture"]
+
+
+def test_paid_cli_is_locked_before_model_load(monkeypatch):
+    monkeypatch.setattr("sys.argv", ["session", "--execute"])
+    with pytest.raises(SystemExit, match="locked"):
+        main()
+
+
+def test_hardware_phase_is_separate_and_not_circular():
+    config = TrainingConfig.model_validate_json(Path("config/private-training-preparation.json").read_text())
+    hardware = phase_config(config, "hardware_preflight")
+    assert hardware.max_optimizer_steps == 1
+    assert hardware.train_seeds.start == 970000
+    assert config.train_seeds.start == 900000
+    assert hardware.task_mix_confirmed is False
+    assert hardware.target_hardware_smoke_verified is False
+    with pytest.raises(ValueError):
+        phase_config(config, "unknown")

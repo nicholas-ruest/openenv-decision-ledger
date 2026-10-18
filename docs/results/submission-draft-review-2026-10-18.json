@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-18",
+  "status": "draft_for_human_review_not_submitted",
+  "request": "config/submission-request.json",
+  "submission_id": "decision-ledger-software-d2-20261018",
+  "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:6a656cac9bb519eecc5c34cccb3d296dbc3b2e29e615a5d6af422d0ee08e6a7b",
+  "tasks": [
+    "software_change-d2"
+  ],
+  "checks": {
+    "current_arena_guide_read": true,
+    "message_board_read": true,
+    "arena_connected": true,
+    "anonymous_manifest_http": 200,
+    "schema_matches_frozen_runtime_source": true,
+    "dataset_public": true,
+    "dataset_ungated": true
+  },
+  "prior_image_validation": "https://github.com/nicholas-ruest/openenv-decision-ledger/actions/runs/38306298345",
+  "limitations": [
+    "No new Docker server replay performed on Oct18; native image replay is the prior successful CI result",
+    "No confirmed trained-model improvement or top10 evidence",
+    "Private GPU rehearsal is optional; Arena automatically trains an admitted environment",
+    "Existing public dataset includes the broader task catalog; this request selects software_change-d2 only"
+  ],
+  "approval": {
+    "required_before_post": true,
+    "top10_condition_still_in_force": true,
+    "approval_received": false
+  },
+  "arena_submission_sent": false,
+  "runtime_modified": false
+}

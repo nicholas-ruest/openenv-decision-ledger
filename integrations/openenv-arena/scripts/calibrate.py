@@ -229,7 +229,7 @@ def run_episode(args, family, attempt, token, counter, global_budget, limits, op
     base_family, difficulty, params = parse_task_id(native_id)
     reset = env.reset(task_id=native_id, seed=seed)
     messages = [
-        {"role": "system", "content": "Solve the task with the available tools. Each reply must be exactly one JSON action object, with no markdown. Action schema: " + json.dumps(ArenaAction.model_json_schema())},
+        {"role": "system", "content": 'You operate a virtual file environment. Respond with one ACTION INSTANCE, not a JSON schema. First read the files using {"op":"read","path":"*"}. After receiving their contents, solve the task and respond {"op":"submit","answer":{...}} with the actual required answer. Never output schema definitions. Do not use markdown. The following schema describes valid actions; it is not your response: ' + json.dumps(ArenaAction.model_json_schema())},
         {"role": "user", "content": reset.model_dump_json()},
     ]
     start, reward, failure, calls = time.monotonic(), 0.0, None, 0
@@ -266,7 +266,7 @@ def run_episode(args, family, attempt, token, counter, global_budget, limits, op
                   "prompt_reservation": prompt_reservation, "reservation": reservation,
                   "prompt_count_method": counter.mode, "context_serialization": "canonical JSON messages without provider chat template"}
         provider_metrics.append(metric)
-        payload = {"model": args.model, "messages": messages, "temperature": 0.7, "max_tokens": allowance}
+        payload = {"model": (args.model + ":deepinfra") if args.base_url.rstrip("/") == "https://router.huggingface.co/v1" else args.model, "messages": messages, "temperature": 0.7, "max_tokens": allowance, "response_format": {"type": "json_object"}}
         if template_kwargs is not None:
             payload["chat_template_kwargs"] = template_kwargs
         try:
@@ -275,6 +275,7 @@ def run_episode(args, family, attempt, token, counter, global_budget, limits, op
             timeout = isinstance(error, (TimeoutError, socket.timeout)) or isinstance(error, urllib.error.URLError) and isinstance(error.reason, (TimeoutError, socket.timeout))
             failure = "request_timeout" if timeout else "provider_request_failed"
             metric["request_failure"] = failure
+            metric["http_status"] = error.code if isinstance(error, urllib.error.HTTPError) else None
             break
         try:
             metric.update(metric_for(reply))
