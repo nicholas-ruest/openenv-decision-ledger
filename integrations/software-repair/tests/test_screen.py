@@ -43,6 +43,20 @@ def test_reservations_are_persistent_not_refunded_and_once_only(tmp_path):
     assert len(budget.ledger.read_text().splitlines()) == 1
 
 
+@pytest.mark.parametrize("hours", [-1, 3])
+def test_each_call_refuses_an_observation_that_expires_after_construction(tmp_path, monkeypatch, hours):
+    budget = screen.DollarReservations(receipt(tmp_path))
+    later = datetime.now(timezone.utc) + timedelta(hours=hours)
+    class Clock:
+        @staticmethod
+        def now(zone):
+            return later
+    monkeypatch.setattr(screen, "datetime", Clock)
+    with pytest.raises(ValueError, match="billing observation expired"):
+        budget.reserve("late-call", 1000, 1000, {"input": 1, "output": 3})
+    assert budget.ledger.read_text() == ""
+
+
 def test_default_plan_cannot_contact_provider(monkeypatch, capsys):
     monkeypatch.setattr(screen, "quote", lambda *a: pytest.fail("default contacted provider"))
     assert screen.main([]) == 0

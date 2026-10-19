@@ -83,6 +83,7 @@ class DollarReservations:
         if not 0 <= age <= 7200 or not 0 < cap <= 2 or prior + cap > total or cap > balance:
             raise ValueError("fresh reconciled existing inference allocation required")
         self.cap, self.local_lock = cap, threading.Lock()
+        self.checked_at = checked
         self.ledger = self.path.with_suffix(".reservations.jsonl")
 
     def reserve(self, label, prompt_bound, generated_bound, prices):
@@ -91,6 +92,9 @@ class DollarReservations:
         amount *= Decimal("1.10")  # Extra margin; still a quote reservation, not invoice proof.
         with self.local_lock, self.ledger.open("a+") as stream:
             fcntl.flock(stream.fileno(), fcntl.LOCK_EX)
+            age = (datetime.now(timezone.utc) - self.checked_at).total_seconds()
+            if not 0 <= age <= 7200:
+                raise ValueError("billing observation expired")
             stream.seek(0)
             rows = [json.loads(line) for line in stream if line.strip()]
             if any(row["label"] == label for row in rows):
@@ -140,6 +144,9 @@ def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadlin
         except Exception as exc:
             if isinstance(exc, ValueError) and str(exc) == "screen reservation cap exhausted":
                 row["failure"] = "screen_reservation_cap_exhausted"
+                stop.set()
+            elif isinstance(exc, ValueError) and str(exc) == "billing observation expired":
+                row["failure"] = "billing_observation_expired"
                 stop.set()
             elif isinstance(exc, ValueError) and str(exc) == "selected metadata or quote changed":
                 row["failure"] = "selected_provenance_changed"

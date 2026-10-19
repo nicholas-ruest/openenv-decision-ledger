@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-19",
+  "source_core": "2095ab1cabc82d867eae83f342d49319233a6420",
+  "task_id": "software_repair-release-d1",
+  "contract": "Dependency/cycle planning plus budget-constrained regression-suite selection, prioritized by uncovered buildable modules, cost, suite count, sorted suite IDs.",
+  "independent_oracles": {
+    "graph": "DFS oracle vs closure fixture",
+    "test_selection": "combinations oracle vs bitmask fixture"
+  },
+  "oracle_cases": 432,
+  "seed_range": [
+    1010000,
+    1010011
+  ],
+  "initial_hidden_passes_of_30": [
+    9,
+    7,
+    9,
+    14,
+    15,
+    5,
+    8,
+    17,
+    6,
+    7,
+    10,
+    9
+  ],
+  "initial_execution_errors": 0,
+  "reference_source_bytes": 3135,
+  "reference_peak_steps": 13627,
+  "existing_step_limit": 80000,
+  "resource_limits_changed": false,
+  "scripted_partial_patch_controls": true,
+  "scripted_controls_are_model_solves": false,
+  "screen_groups": [
+    1010000,
+    1010100
+  ],
+  "samples_per_prompt": 4,
+  "planned_disjoint_confirmation_groups": [
+    1011000,
+    1011100
+  ],
+  "model_screen_started": false,
+  "default_eight_task_mix_changed": false,
+  "diagnostic_exported_for_training": false,
+  "is_training": false,
+  "ranking_improvement": null,
+  "limitations": [
+    "Local fixtures establish contract and reward behavior, not model learning signal.",
+    "Provider checkpoint/thinking and Arena wrapper equivalence remain unattested.",
+    "No Arena submission or candidate promotion."
+  ],
+  "offline_core_tests_passed": 195,
+  "offline_core_test_seconds": 101.99,
+  "core_test_scope": "source_core; CI will retest the published source including per-call billing freshness guard"
+}
