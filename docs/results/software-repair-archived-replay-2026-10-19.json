@@ -1,0 +1,12 @@
+{
+  "source_revision": "c95e6fe79e44c9b1514fd59e186a0a70ac424858",
+  "archived_probe_revision": "f3f90654e54132f361eb6c739edf4d017d67a10e",
+  "replayed_prompt_groups": 2,
+  "replayed_rollouts": 4,
+  "matched_transitions": 20,
+  "same_case_success_feedback_bytes": {
+    "verbose": 3892,
+    "compact": 379
+  },
+  "new_inference_calls": 0
+}

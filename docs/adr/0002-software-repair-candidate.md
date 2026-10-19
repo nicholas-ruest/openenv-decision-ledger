@@ -80,3 +80,43 @@ automatic promotion, merge or Arena POST is part of these offline gates.
 Any next submission requires explicit approval of its exact request. A public
 dataset card/export must describe this candidate before that submission; the
 existing dataset remains the first-run baseline until such an update is made.
+
+## October19 proxy outcomes and final review status
+
+| Screen | Unique prompts | Samples | Full solves | Failures |
+| --- | ---: | ---: | ---: | ---: |
+| Basic families |4|16|16|0|
+| Harder families, six-action proxy |4|8|3|5|
+| Compact feedback, twelve-action fresh plan prompts |2|4|3|1|
+
+The five harder-screen failures were two tool-budget endings, two episode
+budget endings and one provider timeout. The follow-up failure was a provider
+timeout. Do not turn those zero rewards into genuine wrong answers or useful
+GRPO variance: every valid completed sample earned full reward. The three
+screens differ in tasks/seeds/runtime and must not be pooled as a benchmark
+or interpreted as a paired improvement estimate. Thinking was requested but
+not attested; production wrapper/checkpoint equivalence remains unknown.
+
+Successful-test feedback now reports case statuses without repeating all
+inputs/answers; at most two failed examples retain details. On the same saved
+plan fixture, success content fell from3892 to379 bytes. All visible examples
+remain in the readable test file. This is a payload measurement, not a model
+performance effect. The proxy now permits all12 environment actions.
+
+A final lexical-loop guard rejects break/continue outside a lexical loop,
+including helper calls from inside another function's loop. Source
+`c95e6fe79e44c9b1514fd59e186a0a70ac424858` passed109 tests. Replaying all20 saved
+action transitions from the four follow-up rollouts reproduced observations
+exactly; this replay adds no independent model samples.
+
+The default eight harder task IDs remain provisional. They are an exploratory
+software curriculum, not a confirmed productive GRPO mix or a promoted
+Darwin winner. There is no second Arena training/evaluation result. The exact
+image-bound request is published for review and is not sent automatically.
+Each Arena submission still requires explicit human approval. No private GPU
+rental or additional credit purchase is needed or authorized by this record.
+
+Evidence: [basic screen](../results/software-repair-basic-screen-2026-10-19.json),
+[hard screen](../results/software-repair-hard-screen-2026-10-19.json),
+[feedback screen](../results/software-repair-feedback-screen-2026-10-19.json),
+[archived replay](../results/software-repair-archived-replay-2026-10-19.json).
