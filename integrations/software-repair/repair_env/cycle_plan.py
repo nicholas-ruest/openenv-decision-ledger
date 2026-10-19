@@ -1,5 +1,8 @@
 """Cycle-aware incremental build repair: independent oracle and bounded fixture."""
 
+import hashlib
+import random
+
 INSTRUCTIONS = """Repair build_plan(graph, changed). graph maps module names to dependency lists; every dependency exists, but cycles/self-loops are allowed. changed may contain duplicates and unknown names. Return a dictionary with four keys. unknown is the sorted unique unknown changed names. Affected modules are known changed modules and all their transitive consumers. Detect strongly connected components in the graph INDUCED BY AFFECTED MODULES ONLY. cycles is the lexicographically sorted list of sorted cyclic components (size>1, or a singleton with a self-loop). blocked is the sorted union of those components and all their affected transitive consumers. order builds the remaining affected modules, topologically, always choosing the lexicographically smallest currently ready module. Dependencies outside the affected set are already built and do not block, even if cyclic elsewhere. Empty/unknown-only changes yield empty order/blocked/cycles. Do not mutate inputs. At most8 modules. Use only the documented bounded Python subset; no imports, nested functions or nonlocal statements."""
 
 REFERENCE = '''def build_plan(graph, changed):
@@ -54,6 +57,43 @@ INITIAL = REFERENCE.replace(
     "unknown = sorted([name for name in changed if name not in graph])",
 ).replace("order.append(min(ready))", "order.append(max(ready))").replace(
     '"cycles": sorted(cycles)', '"cycles": sorted(cycles)[::-1]')
+
+
+def mutated_initial(seed):
+    """Select three deterministic semantic defects, without changing the oracle."""
+    material = f"software-repair-plan-d4|{seed}|semantic-defects"
+    rng = random.Random(int.from_bytes(hashlib.sha256(material.encode()).digest(), "big"))
+    source = REFERENCE
+    defects = rng.sample(range(6), 3)
+    if 0 in defects:
+        source = source.replace(
+            "unknown = sorted(set([name for name in changed if name not in graph]))",
+            "unknown = sorted([name for name in changed if name not in graph])")
+    if 1 in defects:
+        source = source.replace("order.append(min(ready))", "order.append(max(ready))")
+    if 2 in defects:
+        source = source.replace('"cycles": sorted(cycles)', '"cycles": sorted(cycles)[::-1]')
+    if 3 in defects:
+        source = source.replace("cycles.append(sorted(component))", "cycles.append(sorted(component)[::-1])")
+    if 4 in defects:
+        source = source.replace("while growing:", "while False:", 1)
+    if 5 in defects:
+        # Distinguish the downstream-blocking loop from affected-set expansion.
+        source = source.replace("for name in affected:\n            if name not in blocked and any([dep in blocked for dep in graph[name]]):",
+                                "for name in []:\n            if name not in blocked and any([dep in blocked for dep in graph[name]]):")
+    return source
+
+
+def variant_inputs(rng, count, *, visible=False):
+    """Fair examples leave multi-component cycle cases for contract reasoning."""
+    produced = 0
+    for index, args in enumerate(inputs(rng, count * 3 + 6)):
+        if visible and index % 6 in (2, 3):
+            continue
+        yield args
+        produced += 1
+        if produced == count:
+            return
 
 
 def reference(args):
