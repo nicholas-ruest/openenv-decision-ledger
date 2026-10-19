@@ -11,6 +11,7 @@ import copy
 import json
 import math
 import operator
+from collections import ChainMap
 
 MAX_SOURCE = 8192
 MAX_ITEMS = 128
@@ -35,9 +36,27 @@ class _Continue(Exception):
     pass
 
 
+class _Generator:
+    """Internal lazy iterator with a bounded yield count; never exported as JSON."""
+    def __init__(self, iterator):
+        self.iterator, self.count = iterator, 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        value = next(self.iterator)
+        self.count += 1
+        if self.count > MAX_ITEMS:
+            raise Rejected("generator yield limit")
+        return bounded(value)
+
+
 def bounded(value, depth=0):
     if depth > 8:
         raise Rejected("value nesting limit")
+    if isinstance(value, _Generator):
+        return value
     if value is None or type(value) is bool:
         return value
     if type(value) is int and value.bit_length() <= 128:
@@ -71,7 +90,7 @@ class Program:
                ast.UAdd, ast.USub, ast.Not, ast.And, ast.Or, ast.Eq, ast.NotEq,
                ast.Lt, ast.LtE, ast.Gt, ast.GtE, ast.In, ast.NotIn, ast.Is, ast.IsNot,
                ast.Attribute, ast.Break, ast.Continue, ast.Set, ast.BitAnd, ast.BitOr,
-               ast.LShift, ast.Pow, ast.ListComp, ast.SetComp, ast.DictComp, ast.comprehension)
+               ast.LShift, ast.Pow, ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp, ast.comprehension)
 
     def __init__(self, source: str):
         if type(source) is not str or len(source.encode()) > MAX_SOURCE:
@@ -85,12 +104,12 @@ class Program:
             raise Rejected("unsupported Python syntax")
         self.functions = {}
         for node in tree.body:
-            if not isinstance(node, ast.FunctionDef) or node.name.startswith("_"):
+            if not isinstance(node, ast.FunctionDef) or node.name.startswith("__"):
                 raise Rejected("module must contain named functions only")
             args = node.args
             if (node.decorator_list or node.returns or args.posonlyargs or args.kwonlyargs
                     or args.vararg or args.kwarg or args.defaults or args.kw_defaults
-                    or any(a.annotation or a.arg.startswith("_") for a in args.args)
+                    or any(a.annotation or a.arg.startswith("__") for a in args.args)
                     or node.name in self.functions):
                 raise Rejected("unsupported function signature")
             if any(isinstance(n, ast.FunctionDef) for stmt in node.body for n in ast.walk(stmt)):
@@ -131,7 +150,7 @@ class Program:
 
     def _call(self, name, args, depth):
         self._tick()
-        if depth > 6 or name not in self.functions:
+        if depth > 16 or name not in self.functions:
             raise Rejected("function/depth limit")
         function = self.functions[name]
         if len(args) != len(function.args.args):
@@ -146,7 +165,7 @@ class Program:
     def _assign(self, target, value, frame, depth):
         self._tick()
         bounded(value)
-        if isinstance(target, ast.Name) and not target.id.startswith("_"):
+        if isinstance(target, ast.Name) and not target.id.startswith("__"):
             frame[target.id] = value
         elif isinstance(target, (ast.Tuple, ast.List)):
             if type(value) not in (list, tuple) or len(value) != len(target.elts):
@@ -187,7 +206,7 @@ class Program:
                 if node.orelse:
                     raise Rejected("loop else unsupported")
                 values = self._expr(node.iter, frame, depth)
-                if type(values) not in (list, tuple, str, dict, set):
+                if type(values) not in (list, tuple, str, dict, set, _Generator):
                     raise Rejected("iteration type unsupported")
                 for value in values:
                     self._tick()
@@ -220,6 +239,8 @@ class Program:
         fn = self._binary.get(type(op))
         if fn is None:
             raise Rejected("operator unsupported")
+        if isinstance(op, (ast.BitAnd, ast.BitOr)) and type(left) is set and type(right) is set:
+            return bounded(fn(left, right))
         if isinstance(op, (ast.Pow, ast.LShift, ast.BitAnd, ast.BitOr)):
             if type(left) is not int or type(right) is not int:
                 raise Rejected("integer operator requires integers")
@@ -243,38 +264,49 @@ class Program:
         if isinstance(node, ast.Constant):
             return bounded(node.value)
         if isinstance(node, ast.Name):
-            if node.id not in frame or node.id.startswith("_"):
+            if node.id not in frame or node.id.startswith("__"):
                 raise Rejected("unknown variable")
             return frame[node.id]
         if isinstance(node, ast.Set):
             return bounded({ev(n) for n in node.elts})
-        if isinstance(node, (ast.ListComp, ast.SetComp, ast.DictComp)):
+        if isinstance(node, (ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp)):
             if len(node.generators) > 2 or any(g.is_async for g in node.generators):
                 raise Rejected("comprehension limit")
             result = {} if isinstance(node, ast.DictComp) else set() if isinstance(node, ast.SetComp) else []
-            local = dict(frame)
-            def collect(index):
+            # Keep comprehension locals separate while preserving Python's late
+            # binding of outer variables in a lazy generator expression.
+            local = ChainMap({}, frame)
+            first_values = ev(node.generators[0].iter)
+            if type(first_values) not in (list, tuple, dict, set, str, _Generator):
+                raise Rejected("comprehension input unsupported")
+            first_iterator = iter(first_values)
+            def generate(index):
                 if index == len(node.generators):
-                    if len(result) >= MAX_ITEMS:
-                        raise Rejected("comprehension size limit")
                     if isinstance(node, ast.DictComp):
-                        result[self._expr(node.key, local, depth)] = self._expr(node.value, local, depth)
-                    elif isinstance(node, ast.SetComp):
-                        result.add(self._expr(node.elt, local, depth))
+                        yield (self._expr(node.key, local, depth), self._expr(node.value, local, depth))
                     else:
-                        result.append(self._expr(node.elt, local, depth))
-                    bounded(result)
+                        yield self._expr(node.elt, local, depth)
                     return
                 generator = node.generators[index]
-                values = self._expr(generator.iter, local, depth)
-                if type(values) not in (list, tuple, dict, set, str):
+                values = first_values if index == 0 else self._expr(generator.iter, local, depth)
+                if type(values) not in (list, tuple, dict, set, str, _Generator):
                     raise Rejected("comprehension input unsupported")
-                for item in values:
+                for item in (first_iterator if index == 0 else values):
                     self._tick()
                     self._assign(generator.target, item, local, depth)
                     if all(self._expr(condition, local, depth) for condition in generator.ifs):
-                        collect(index + 1)
-            collect(0)
+                        yield from generate(index + 1)
+            iterator = _Generator(generate(0))
+            if isinstance(node, ast.GeneratorExp):
+                return iterator
+            for item in iterator:
+                if isinstance(node, ast.DictComp):
+                    result[item[0]] = item[1]
+                elif isinstance(node, ast.SetComp):
+                    result.add(item)
+                else:
+                    result.append(item)
+                bounded(result)
             return result
         if isinstance(node, (ast.List, ast.Tuple)):
             values = [ev(n) for n in node.elts]
@@ -359,6 +391,20 @@ class Program:
                     return None
                 if type(value) is set and node.func.attr == "discard" and len(args) == 1:
                     value.discard(args[0])
+                    return None
+                if type(value) in (list, dict, set) and node.func.attr == "copy" and not args:
+                    return bounded(value.copy())
+                if type(value) in (list, set) and len(args) == 1 and node.func.attr in ("extend", "update"):
+                    items = args[0]
+                    if type(items) not in (list, tuple, set) or len(items) + len(value) > MAX_ITEMS:
+                        raise Rejected("collection update limit")
+                    if type(value) is list and node.func.attr == "extend":
+                        value.extend(items)
+                    elif type(value) is set and node.func.attr == "update":
+                        value.update(items)
+                    else:
+                        raise Rejected("collection method unsupported")
+                    bounded(value)
                     return None
             raise Rejected("call unsupported")
         raise Rejected("expression unsupported")

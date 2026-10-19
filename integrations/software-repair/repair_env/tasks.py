@@ -5,10 +5,11 @@ import hashlib
 import json
 import random
 from dataclasses import dataclass
-from . import hard_tasks
+from . import hard_tasks, cycle_plan
 
 FAMILIES = ("clamp", "overlap", "chunks", "unique", "counts", "prefix") + hard_tasks.FAMILIES
 TASK_IDS = [f"software_repair-{family}-d{d}" for family in FAMILIES for d in (1, 2)]
+TASK_IDS.append("software_repair-plan-d3")
 TRAINING_TASK_IDS = [f"software_repair-{family}-d{d}" for family in hard_tasks.FAMILIES for d in (1, 2)]
 SOURCE_PATH = "src/solution.py"
 
@@ -70,6 +71,8 @@ _SPECS.update(hard_tasks.SPECS)
 
 
 def _initial(family, source, difficulty):
+    if family == "plan" and difficulty == 3:
+        return cycle_plan.INITIAL
     if family == "clamp":
         source = source.replace("return lo", "return 0")
         return source.replace("return hi", "return lo") if difficulty == 2 else source
@@ -93,6 +96,10 @@ def _initial(family, source, difficulty):
 
 
 def _inputs(family, rng, count, difficulty):
+    if family == "plan" and difficulty == 3:
+        for args in cycle_plan.inputs(rng, count):
+            yield Case(args, cycle_plan.reference(args))
+        return
     if family in hard_tasks.FAMILIES:
         for args in hard_tasks.inputs(family, rng, count, difficulty):
             yield Case(args, reference(family, args))
@@ -129,7 +136,7 @@ def make_task(task_id, seed):
     # Independent streams: neither hidden inputs nor answers derive from public tests.
     public_rng = random.Random(int.from_bytes(hashlib.sha256((material + "|public").encode()).digest(), "big"))
     hidden_rng = random.Random(int.from_bytes(hashlib.sha256((material + "|hidden").encode()).digest(), "big"))
-    name, instructions, source = _SPECS[family]
+    name, instructions, source = ("build_plan", cycle_plan.INSTRUCTIONS, cycle_plan.REFERENCE) if family == "plan" and difficulty == 3 else _SPECS[family]
     case_id = hashlib.sha256(material.encode()).hexdigest()[:12]
     initial = f"# Repair case {case_id}; {family} level {difficulty}\n" + _initial(family, source, difficulty)
     public = tuple(_inputs(family, public_rng, 6, difficulty))
@@ -156,7 +163,7 @@ def visible_files(task):
               "Only src/solution.py is writable. Tests shown here are examples; final grading uses fresh hidden cases. "
               "Reward requires improving hidden test results over the original broken module; unchanged, formatting-only and non-improving edits earn zero. "
               "Python subset: named functions, return/assign/if/for/while, lists/dicts, indexing/slices, integer arithmetic/comparisons, "
-              "len/min/max/sum/abs/sorted/list/range/set/dict/tuple/enumerate/zip/any/all, comprehensions, break/continue, bounded integer powers/bitops, list append/pop/sort/reverse/remove, set.add/remove/discard and dict get/pop/items/keys/values. No imports, generators, "
+              "len/min/max/sum/abs/sorted/list/range/set/dict/tuple/enumerate/zip/any/all, comprehensions, break/continue, bounded lazy generator expressions, integer powers/bitops and set union/intersection, list append/pop/sort/reverse/remove/copy/extend, set.add/remove/discard/copy/update and dict get/pop/items/keys/values/copy. Single-underscore helper/local names are allowed; function call depth is limited to16. No imports, yield/async, nested functions, "
               "exceptions, decorators, filesystem or shell. Limits: 8192 source bytes,128 collection items,80000 execution steps/case. "
               "Visible tests use the same bounded interpreter as hidden tests; tests are not executed by host pytest in the environment.")
     return {SOURCE_PATH: task.initial_source, "tests/test_public.py": test_source,

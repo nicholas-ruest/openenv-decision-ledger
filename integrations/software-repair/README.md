@@ -60,3 +60,11 @@ Test feedback reports every case status but repeats detailed input/expected/actu
 for at most two failures, avoiding large successful-test payloads. Full visible
 examples remain readable in the test file. The proxy permits all12 environment
 actions and still independently enforces its token/context and dollar caps.
+
+An additional diagnostic task software_repair-plan-d3 adds induced-subgraph
+cycle components, downstream blocking, unknown changes and stable incremental
+ordering. It is excluded from the default export until model signal is tested.
+There are21 available IDs, with84 native controls. Bounded lazy generator
+expressions support short-circuiting and at most128 yields; single-underscore
+helpers/locals,16-deep calls, bounded copy/extend/update and set union/intersection
+support natural algorithms without granting host Python access.

@@ -35,8 +35,8 @@ SPEC.loader.exec_module(helper)
 
 TOKENIZER_SHA = "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3"
 MODEL = "Qwen/Qwen3.8-27B"
-GROUPS = [("software_repair-plan-d2", 987000), ("software_repair-plan-d2", 987100)]
-SAMPLES = 2
+GROUPS = [("software_repair-plan-d3", 988000), ("software_repair-plan-d3", 988100)]
+SAMPLES = 4
 MAX_TURNS = 12
 BASE = "https://router.huggingface.co/v1"
 
@@ -137,7 +137,14 @@ def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadlin
                 "response_format": {"type": "json_object"},
                 "chat_template_kwargs": {"enable_thinking": True}}, 90)
         except Exception as exc:
-            row["failure"] = "provider_or_reservation_failure"
+            if isinstance(exc, ValueError) and str(exc) == "screen reservation cap exhausted":
+                row["failure"] = "screen_reservation_cap_exhausted"
+                stop.set()
+            elif isinstance(exc, ValueError) and str(exc) == "selected metadata or quote changed":
+                row["failure"] = "selected_provenance_changed"
+                stop.set()
+            else:
+                row["failure"] = "provider_or_reservation_failure"
             row["failure_type"] = type(exc).__name__
             break
         metric = helper.metric_for(reply)
@@ -179,6 +186,8 @@ def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadlin
             break
         if observation.done:
             row.update(reward=float(observation.reward), solved=observation.reward == 1.0)
+            if observation.error:
+                row["failure"] = "environment_tool_budget_exhausted" if observation.error.startswith("step budget exhausted") else "environment_failure"
             try:
                 _, outcomes = check(Program(env._files[SOURCE_PATH]), env._task, env._task.hidden, details=True)
                 row["hidden_execution_rejections"] = sum(item["error"] is not None for item in outcomes)
