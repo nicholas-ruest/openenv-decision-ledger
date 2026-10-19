@@ -133,7 +133,9 @@ def test_hidden_case_inputs_and_grader_are_not_workspace_files():
     assert sorted(observation.files) == ["README.md", "pyproject.toml", "src/solution.py", "tests/test_public.py"]
     before = copy.deepcopy(env._task.hidden)
     public = json.loads(env.step(RepairAction(op="test")).content)
-    assert [row["args"] for row in public["tests"]] == [case.args for case in env._task.public]
+    detailed = [row for row in public["tests"] if "args" in row]
+    assert len(detailed) <= 2
+    assert all(row["args"] == env._task.public[row["test"] - 1].args for row in detailed)
     assert env._task.hidden == before
     for path in ("../tasks.py", "/proc/self/environ", "tests/test_public.py", "README.md"):
         result = env.step(RepairAction(op="write", path=path, content="hacked"))
@@ -181,6 +183,9 @@ def test_bounded_algorithm_features_and_comprehension_scope():
     mapping = {i: value for i, value in enumerate(values)}
     unique = {value for value in values}
     unique.add(7)
+    unique.add(8)
+    unique.remove(8)
+    unique.discard(100)
     result = []
     for value in sorted(unique):
         if value == 4:
@@ -192,6 +197,19 @@ def test_bounded_algorithm_features_and_comprehension_scope():
     return [result, list(mapping.items()), x, 2 ** 7, 3 << 2, 7 & 3]
 '''
     assert Program(source).run("f", [[-1, 2, 3, 2]]) == [[6, 7], [(1, 6), (2, 4)], 99, 128, 12, 3]
+
+
+def test_success_feedback_is_compact_and_failed_examples_are_bounded():
+    env = RepairEnvironment()
+    env.reset(task_id="software_repair-plan-d2", seed=986000)
+    task = env._task
+    failed = json.loads(env.step(RepairAction(op="test")).content)
+    assert sum("args" in result for result in failed["tests"]) <= 2
+    env.step(RepairAction(op="write", path=SOURCE_PATH, content=task.reference_source))
+    observation = env.step(RepairAction(op="test"))
+    success = json.loads(observation.content)
+    assert success["passed"] == 6 and all("args" not in row for row in success["tests"])
+    assert len(observation.content.encode()) < 650
 
 
 @pytest.mark.parametrize("source", [

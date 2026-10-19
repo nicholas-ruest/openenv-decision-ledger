@@ -121,7 +121,15 @@ class RepairEnvironment(Environment[RepairAction, RepairObservation, State]):
             try:
                 program = Program(self._files[SOURCE_PATH])
                 passed, results = check(program, self._task, self._task.public, details=True)
-                return self._observe(content=json.dumps({"passed": passed, "total": len(results), "tests": results}, separators=(",", ":")))
+                feedback, detailed_failures = [], 0
+                for result in results:
+                    if not result["passed"] and detailed_failures < 2:
+                        feedback.append(result)
+                        detailed_failures += 1
+                    else:
+                        feedback.append({"test": result["test"], "passed": result["passed"], "error": result["error"]})
+                return self._observe(content=json.dumps({"passed": passed, "total": len(results), "tests": feedback,
+                    "feedback": "Full inputs and expectations are in tests/test_public.py; at most two failing examples are repeated here."}, separators=(",", ":")))
             except (Rejected, RecursionError):
                 return self._observe(error="invalid or unsupported Python; see README.md")
         raise ValueError("unknown action")

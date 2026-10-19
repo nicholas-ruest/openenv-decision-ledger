@@ -62,14 +62,19 @@ Gate syntax/value resource bounds; zero-reward and unchanged-code controls;
 independent trusted reference answers; nontrivial partial repairs; hidden/public
 separation; session isolation; and every task ID over native WebSocket.
 Publish an immutable amd64 image only after tests. A separate runner must pull
-it anonymously, run pinned `openenv validate`, replay48 controls, and export
+it anonymously, run pinned `openenv validate`, replay four controls per task ID (currently80 total), and export
 visible dataset rows plus the exact candidate request. Export never submits.
 
 The candidate changes both workflow and problem distribution; it is exploratory
 and cannot isolate which change causes an outcome. It does not confirm Arena's
-private interface. No target-model calibration or training has yet been done
-on this candidate. Controls/oracles are not model solves. Target signal and
-transfer require further evidence. No private GPU/inference job, new purchase,
+private interface. The initial target-model proxy screen solved16/16 samples across four
+unique prompts (four samples per prompt); every group had zero reward variance.
+This is inference calibration, not training. It rejected the basic families
+as the default proposed mix. Four harder software contracts were added:
+transitive build planning, cost-optimal regression selection, interval merging
+and idempotent event replay. Their two levels form a provisional eight-task
+export, pending fresh target-model signal checks. Controls/oracles are not model solves. Target signal and
+transfer require further evidence. No private GPU/training job, new purchase,
 automatic promotion, merge or Arena POST is part of these offline gates.
 
 Any next submission requires explicit approval of its exact request. A public

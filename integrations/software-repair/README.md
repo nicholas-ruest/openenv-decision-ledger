@@ -5,7 +5,7 @@ submission remains unchanged. No private score or trained-model improvement
 is claimed for this candidate.
 
 The learner edits `src/solution.py`, runs visible test cases, and submits a
-workspace for independently generated hidden cases. Six software families,
+workspace for independently generated hidden cases. Ten software families,
 two difficulties each, are selected with `software_repair-FAMILY-d1|d2`.
 Actions are `list`, `read`, `write`, `test`, and `submit`; write requires the
 exact module path. Reading `*` returns all four visible files. Tests give
@@ -15,7 +15,10 @@ Only a documented pure subset of Python is interpreted. No host Python eval,
 exec, subprocess, imports, filesystem or network is available to candidate
 code. Code may use named functions, assignments, conditionals, loops, literals,
 lists/dicts, indexing/slices, bounded integer arithmetic, comparisons,
-len/min/max/sum/abs/sorted/list/range, list.append and dict.get. This is not a
+bounded comprehensions, break/continue, len/min/max/sum/abs/sorted/list/range,
+set/dict/tuple/enumerate/zip/any/all, list append/pop/sort/reverse/remove, set.add/remove/discard,
+and dict get/pop/items/keys/values. Source is capped at8192 bytes, collections
+at128 items, and interpreter work at80000 steps per test case. This is not a
 shell or an arbitrary Python execution sandbox.
 
 Rewards require improving hidden behavior over the original broken code.
@@ -40,6 +43,20 @@ docker build --platform linux/amd64 -f integrations/software-repair/Dockerfile -
 ```
 
 The GitHub workflow additionally publishes an exclusive tag in the existing
-public GHCR package, independently pulls by digest and exports192 visible task
+public GHCR package, independently pulls by digest and exports128 visible task
 rows plus the exact image-bound request. These are runtime controls, not model
 benchmarks. Neither workflow nor exporter can submit to Arena.
+
+The initial four-prompt target-model screen solved all16 rollouts, with zero
+within-prompt variance. Those basic families remain available as diagnostic
+controls but are excluded from the default proposed training mix. The current
+export selects eight provisional harder tasks: dependency build plans, minimum
+cost regression-suite selection, interval merging and idempotent event replay,
+each at two levels. A fresh bounded screen must establish whether these offer
+useful reward variation. This is still one software category, and neither the
+interface nor these synthetic tasks are attested to match private evaluation.
+
+Test feedback reports every case status but repeats detailed input/expected/actual
+for at most two failures, avoiding large successful-test payloads. Full visible
+examples remain readable in the test file. The proxy permits all12 environment
+actions and still independently enforces its token/context and dollar caps.

@@ -35,9 +35,9 @@ SPEC.loader.exec_module(helper)
 
 TOKENIZER_SHA = "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3"
 MODEL = "Qwen/Qwen3.8-27B"
-GROUPS = [(f"software_repair-{family}-d2", 986000 + i * 100)
-          for i, family in enumerate(("plan", "cover", "merge", "replay"))]
+GROUPS = [("software_repair-plan-d2", 987000), ("software_repair-plan-d2", 987100)]
 SAMPLES = 2
+MAX_TURNS = 12
 BASE = "https://router.huggingface.co/v1"
 
 
@@ -115,7 +115,7 @@ def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadlin
            "reward": 0.0, "solved": False, "failure": None, "calls": [], "messages": messages}
     opener = urllib.request.build_opener(helper.NoRedirect(), urllib.request.ProxyHandler({}))
     generated, observed = 0, 0
-    for turn in range(6):
+    for turn in range(MAX_TURNS):
         if stop.is_set() or time.monotonic() >= deadline:
             row["failure"] = "screen_stopped"
             break
@@ -204,7 +204,7 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if not args.execute:
         print(json.dumps({"executed": False, "groups": GROUPS, "samples_per_group": SAMPLES,
-                          "max_calls": len(GROUPS) * SAMPLES * 6, "max_quoted_reservations_usd": 2}))
+                          "max_calls": len(GROUPS) * SAMPLES * MAX_TURNS, "max_quoted_reservations_usd": 2}))
         return 0
     budget = DollarReservations(args.budget_receipt)
     token = os.environ.get("HF_TOKEN", "")
@@ -219,7 +219,7 @@ def main(argv=None):
         "source_files_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
             for p in [Path(__file__), HELPER, *sorted((ROOT / "integrations/software-repair/repair_env").glob("*.py"))]},
         "tokenizer_sha256": TOKENIZER_SHA, "thinking_requested": True, "thinking_verified": False,
-        "max_calls": len(GROUPS) * SAMPLES * 6, "max_turns_per_rollout": 6, "no_retry": True,
+        "max_calls": len(GROUPS) * SAMPLES * MAX_TURNS, "max_turns_per_rollout": MAX_TURNS, "no_retry": True,
         "arena_budget_matched": False, "checkpoint_attested": False,
         "is_training": False, "private_arena_score": None}
     (args.output / "protocol.json").write_text(json.dumps(protocol, indent=2))
@@ -246,9 +246,9 @@ def main(argv=None):
     summary = {"rollouts": len(records), "unique_prompt_groups": len(GROUPS),
         "full_solves": sum(row["solved"] for row in records),
         "groups": [{"task_id": task, "seed": seed,
-            "rewards": [r["reward"] for r in records if r["task_id"] == task],
-            "failures": [r["failure"] for r in records if r["task_id"] == task],
-            "prompt_hashes": sorted({r.get("prompt_sha256", "missing") for r in records if r["task_id"] == task})}
+            "rewards": [r["reward"] for r in records if r["task_id"] == task and r["seed"] == seed],
+            "failures": [r["failure"] for r in records if r["task_id"] == task and r["seed"] == seed],
+            "prompt_hashes": sorted({r.get("prompt_sha256", "missing") for r in records if r["task_id"] == task and r["seed"] == seed})}
             for task, seed in GROUPS], "is_training": False, "arena_budget_matched": False}
     (args.output / "complete.json").write_text(json.dumps(summary, indent=2))
     print(json.dumps(summary))

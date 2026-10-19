@@ -156,7 +156,7 @@ def visible_files(task):
               "Only src/solution.py is writable. Tests shown here are examples; final grading uses fresh hidden cases. "
               "Reward requires improving hidden test results over the original broken module; unchanged, formatting-only and non-improving edits earn zero. "
               "Python subset: named functions, return/assign/if/for/while, lists/dicts, indexing/slices, integer arithmetic/comparisons, "
-              "len/min/max/sum/abs/sorted/list/range/set/dict/tuple/enumerate/zip/any/all, comprehensions, break/continue, bounded integer powers/bitops, list append/pop/sort/reverse, set.add and dict get/pop/items/keys/values. No imports, generators, "
+              "len/min/max/sum/abs/sorted/list/range/set/dict/tuple/enumerate/zip/any/all, comprehensions, break/continue, bounded integer powers/bitops, list append/pop/sort/reverse/remove, set.add/remove/discard and dict get/pop/items/keys/values. No imports, generators, "
               "exceptions, decorators, filesystem or shell. Limits: 8192 source bytes,128 collection items,80000 execution steps/case. "
               "Visible tests use the same bounded interpreter as hidden tests; tests are not executed by host pytest in the environment.")
     return {SOURCE_PATH: task.initial_source, "tests/test_public.py": test_source,

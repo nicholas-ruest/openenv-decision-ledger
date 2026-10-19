@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-19",
+  "kind": "target-model proxy inference screen; not training",
+  "source_revision": "3ebcd9d68e678d4dde762e3e11a24d6fb3bc95b4",
+  "model": "Qwen/Qwen3.8-27B:deepinfra",
+  "temperature": 0.7,
+  "thinking_requested": true,
+  "thinking_verified": false,
+  "checkpoint_attested": false,
+  "arena_budget_matched": false,
+  "json_mode": true,
+  "max_calls_per_rollout": 6,
+  "max_reply_tokens": 4096,
+  "generation_plus_observation_cap": 8192,
+  "context_cap": 16384,
+  "retries": 0,
+  "rollouts": 16,
+  "unique_prompts": 4,
+  "full_solves": 16,
+  "partial_solves": 0,
+  "wrong_answers": 0,
+  "failures": 0,
+  "groups": [
+    {
+      "task_id": "software_repair-chunks-d2",
+      "seed": 985000,
+      "rewards": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "within_prompt_variance": 0,
+      "identical_prompt_sha256": "ee3c633997e2fda1b93bab5f01a53d7136758fc376ae92baacac2d4e2fa7d3b2"
+    },
+    {
+      "task_id": "software_repair-unique-d2",
+      "seed": 985100,
+      "rewards": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "within_prompt_variance": 0,
+      "identical_prompt_sha256": "90c10d5a0555f21eb51c5ef36553aa08677875c983b9ed17257afaeb8cce4899"
+    },
+    {
+      "task_id": "software_repair-counts-d2",
+      "seed": 985200,
+      "rewards": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "within_prompt_variance": 0,
+      "identical_prompt_sha256": "8ff3c41ee64b6803e0df5c80eeeb31ef9f14eb019ee6b76e7e4e11fa24fc581b"
+    },
+    {
+      "task_id": "software_repair-prefix-d2",
+      "seed": 985300,
+      "rewards": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "within_prompt_variance": 0,
+      "identical_prompt_sha256": "b5db90b8bec9571312a57ba405a5e255152d756458f370b79781aa53d0ef38c3"
+    }
+  ],
+  "provider_usage": {
+    "calls": 72,
+    "prompt_tokens": 66162,
+    "completion_tokens": 4929
+  },
+  "archive_sha256": {
+    "protocol.json": "29d19e9c2fd1ef89cd42bcefa48bf3bd7979e2f7d1d20609d244d0a9afd48f75",
+    "episodes.jsonl": "41585b90c269a8fc3300817f8bdc6569e3c78b62a549e638ed1193cbcaf78741",
+    "complete.json": "597091a45265ba3ad320c8b59d462e1b5e0e4d381a1b0e1df2374210fecd6c37"
+  },
+  "decision": "Reject sampled basic families as default training mix: zero sampled within-prompt reward variance. Retain as diagnostics. Add separately gated harder software contracts.",
+  "limitations": [
+    "Only four unique prompts; repeated samples are not new tasks.",
+    "No private Arena transfer score or model improvement measured.",
+    "Proxy wrapper, effective thinking and checkpoint equivalence are unattested."
+  ]
+}

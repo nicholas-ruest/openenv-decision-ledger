@@ -346,5 +346,11 @@ class Program:
                         raise Rejected("set size limit")
                     value.add(args[0])
                     return None
+                if type(value) in (set, list) and node.func.attr == "remove" and len(args) == 1:
+                    value.remove(args[0])
+                    return None
+                if type(value) is set and node.func.attr == "discard" and len(args) == 1:
+                    value.discard(args[0])
+                    return None
             raise Rejected("call unsupported")
         raise Rejected("expression unsupported")
