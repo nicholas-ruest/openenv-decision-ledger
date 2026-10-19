@@ -2,10 +2,6 @@
 
 INSTRUCTIONS = """Repair build_plan(graph, changed). graph maps module names to dependency lists; every dependency exists, but cycles/self-loops are allowed. changed may contain duplicates and unknown names. Return a dictionary with four keys. unknown is the sorted unique unknown changed names. Affected modules are known changed modules and all their transitive consumers. Detect strongly connected components in the graph INDUCED BY AFFECTED MODULES ONLY. cycles is the lexicographically sorted list of sorted cyclic components (size>1, or a singleton with a self-loop). blocked is the sorted union of those components and all their affected transitive consumers. order builds the remaining affected modules, topologically, always choosing the lexicographically smallest currently ready module. Dependencies outside the affected set are already built and do not block, even if cyclic elsewhere. Empty/unknown-only changes yield empty order/blocked/cycles. Do not mutate inputs. At most8 modules. Use only the documented bounded Python subset; no imports, nested functions or nonlocal statements."""
 
-INITIAL = '''def build_plan(graph, changed):
-    return {"order": [], "blocked": [], "cycles": [], "unknown": []}
-'''
-
 REFERENCE = '''def build_plan(graph, changed):
     unknown = sorted(set([name for name in changed if name not in graph]))
     affected = sorted(set([name for name in changed if name in graph]))
@@ -50,6 +46,14 @@ REFERENCE = '''def build_plan(graph, changed):
         order.append(min(ready))
     return {"order": order, "blocked": sorted(blocked), "cycles": sorted(cycles), "unknown": unknown}
 '''
+
+# A working implementation with three local semantic defects, rather than an
+# empty function that makes every rollout implement the complete algorithm.
+INITIAL = REFERENCE.replace(
+    "unknown = sorted(set([name for name in changed if name not in graph]))",
+    "unknown = sorted([name for name in changed if name not in graph])",
+).replace("order.append(min(ready))", "order.append(max(ready))").replace(
+    '"cycles": sorted(cycles)', '"cycles": sorted(cycles)[::-1]')
 
 
 def reference(args):
@@ -115,5 +119,6 @@ def inputs(rng, count):
             else:
                 changed = [names[-1]]
         else:
-            changed = [names[0], names[0], "unknown_" + str(rng.randint(300, 500))]
+            missing = "unknown_" + str(rng.randint(300, 500))
+            changed = [names[0], names[0], missing, missing]
         yield [graph, changed]

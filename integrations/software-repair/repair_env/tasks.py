@@ -160,6 +160,7 @@ def visible_files(task):
     test_source += "@pytest.mark.parametrize('args,expected', " + repr(cases) + ")\n"
     test_source += "def test_contract(args, expected):\n    assert " + task.entrypoint + "(*args) == expected\n"
     readme = (task.instructions + "\nEdit src/solution.py, run test, inspect failures, and submit. "
+              "Read path '*' to inspect all visible workspace files in one action. "
               "Only src/solution.py is writable. Tests shown here are examples; final grading uses fresh hidden cases. "
               "Reward requires improving hidden test results over the original broken module; unchanged, formatting-only and non-improving edits earn zero. "
               "Python subset: named functions, return/assign/if/for/while, lists/dicts, indexing/slices, integer arithmetic/comparisons, "

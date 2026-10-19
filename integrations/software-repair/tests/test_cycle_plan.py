@@ -67,3 +67,22 @@ def test_natural_solution_size_is_supported_but_larger_ast_remains_bounded():
 def test_set_method_forms_match_bounded_set_operators():
     source = "def f():\n    a={1,2}\n    return [sorted(a.union({3}, [4])), sorted(a.intersection([2,3])), sorted(a.difference({1}))]"
     assert Program(source).run("f", []) == [[1,2,3,4], [2], [2]]
+
+
+@pytest.mark.parametrize("seed", [994000, 994100, 994200, 994300])
+def test_realistic_planner_has_repairable_semantic_defects_without_execution_failures(seed):
+    from repair_env.environment import RepairAction, RepairEnvironment, check
+    env = RepairEnvironment()
+    env.reset(task_id="software_repair-plan-d3", seed=seed)
+    baseline, outcomes = check(Program(env._task.initial_source), env._task,
+                               env._task.hidden, details=True)
+    assert 0 < baseline < len(outcomes)
+    assert all(row["error"] is None for row in outcomes)
+    # Correct only the cycle ordering defect: a real, useful but incomplete fix.
+    partial = env._task.initial_source.replace('"cycles": sorted(cycles)[::-1]',
+                                                '"cycles": sorted(cycles)')
+    env.step(RepairAction(op="write", path="src/solution.py", content=partial))
+    assert 0 < env.step(RepairAction(op="submit")).reward < 1
+    env.reset(task_id="software_repair-plan-d3", seed=seed)
+    env.step(RepairAction(op="write", path="src/solution.py", content=cycle_plan.REFERENCE))
+    assert env.step(RepairAction(op="submit")).reward == 1

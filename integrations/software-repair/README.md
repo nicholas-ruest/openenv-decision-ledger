@@ -68,3 +68,15 @@ There are21 available IDs, with84 native controls. Bounded lazy generator
 expressions support short-circuiting and at most128 yields; single-underscore
 helpers/locals,16-deep calls, bounded copy/extend/update and set union/intersection
 support natural algorithms without granting host Python access.
+
+The cycle-aware task now starts with a complete but broken planner containing
+local ordering/deduplication defects. It is a debugging task, not implementation
+from an empty stub. Offline controls verify that an incomplete semantic repair
+earns partial credit and the complete repair earns1, without interpreter errors.
+These controls are not model rollouts or learning evidence.
+
+The earlier empty-stub screen is archived separately: two valid full solves over
+eight rollouts/two prompts, four provider timeouts, one truncation and one episode
+budget failure. It did not qualify for confirmation. The new scaffold has not
+yet been screened against the model. The historical submission JSON and Hugging
+Face preview still pin the earlier image; neither is approved for submission.
