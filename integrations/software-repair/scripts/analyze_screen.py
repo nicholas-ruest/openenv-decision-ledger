@@ -53,9 +53,20 @@ def classify(protocol, rows):
             "failures": dict(Counter(row["failure"] for row in sampled if row.get("failure"))),
             "prompt_sha256": next(iter(hashes)) if hashes else None,
             "productive": len(valid) >= 3 and full > 0 and full < len(valid)})
+    calls = [call for row in rows for call in row.get("calls", [])]
+    labels = [call["client_call_label"] for call in calls if call.get("client_call_label")]
+    response_ids = [call["provider_response_id_sha256"] for call in calls
+                    if call.get("provider_response_id_sha256")]
+    duplicate_labels = len(labels) != len(set(labels))
+    duplicate_ids = len(response_ids) != len(set(response_ids))
+    provenance = {"recorded_calls": len(calls), "all_client_labels_available": bool(calls) and len(labels) == len(calls),
+        "all_response_ids_available": bool(calls) and len(response_ids) == len(calls),
+        "duplicate_client_labels": duplicate_labels, "duplicate_provider_response_ids": duplicate_ids}
     return {"stage": protocol.get("stage"), "complete": complete, "groups": groups,
         "unique_prompts": len(planned), "rollouts": len(rows),
-        "genuine_signal_screened": complete and any(group["productive"] for group in groups),
+        "sampling_provenance": provenance,
+        "genuine_signal_screened": complete and not duplicate_labels and not duplicate_ids
+            and any(group["productive"] for group in groups),
         "is_training": False, "private_arena_improvement": None}
 
 

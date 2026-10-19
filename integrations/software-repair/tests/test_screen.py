@@ -74,7 +74,7 @@ def test_proxy_group_actions_and_failure_separation(tmp_path, monkeypatch, failu
         {"op": "test"}, {"op": "submit"}]
     def provider(opener, base, token, payload, timeout):
         turn = sum(message["role"] == "assistant" for message in payload["messages"])
-        reply = {"choices": [{"message": {"content": "not-json" if failure == "invalid_json_action" else json.dumps(actions[turn])},
+        reply = {"id": "fixture-reply-" + str(turn), "choices": [{"message": {"content": "not-json" if failure == "invalid_json_action" else json.dumps(actions[turn])},
                               "finish_reason": "length" if failure == "completion_truncated" else "stop"}],
                  "usage": {"prompt_tokens": 100, "completion_tokens": 100, "total_tokens": 200}}
         if failure == "missing_usage":
@@ -91,6 +91,9 @@ def test_proxy_group_actions_and_failure_separation(tmp_path, monkeypatch, failu
     else:
         assert result["solved"] and result["reward"] == 1
         assert len(result["calls"]) == 4
+        assert len({call["client_call_label"] for call in result["calls"]}) == 4
+        assert len({call["provider_response_id_sha256"] for call in result["calls"]}) == 4
+        assert "fixture-reply-" not in json.dumps(result)
         assert not result["arena_budget_matched"] and not result["thinking_verified"]
 
 

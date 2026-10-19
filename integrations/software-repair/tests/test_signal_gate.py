@@ -55,6 +55,17 @@ def test_incomplete_and_saturated_groups_do_not_qualify():
     assert not gate.classify(protocol, rows)["genuine_signal_screened"]
 
 
+@pytest.mark.parametrize("field", ["client_call_label", "provider_response_id_sha256"])
+def test_reused_request_or_response_identity_cannot_supply_independent_signal(field):
+    protocol, rows = fixture([1, .8, 0, 1])
+    for index, row in enumerate(rows):
+        row["calls"] = [{"client_call_label": "call-" + str(index),
+                         "provider_response_id_sha256": format(index, "064x")}]
+    assert gate.classify(protocol, rows)["genuine_signal_screened"]
+    rows[-1]["calls"][0][field] = rows[0]["calls"][0][field]
+    assert not gate.classify(protocol, rows)["genuine_signal_screened"]
+
+
 def test_confirmation_needs_fresh_matched_productive_prompts_and_never_authorizes_submission():
     p, rows = fixture([1, .8, 0, 1])
     q, fresh = fixture([1, 1, .9, 1], seed=2, stage="confirm")

@@ -35,8 +35,8 @@ SPEC.loader.exec_module(helper)
 
 TOKENIZER_SHA = "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3"
 MODEL = "Qwen/Qwen3.8-27B"
-GROUPS = [("software_repair-release-d1", 1020000), ("software_repair-release-d1", 1020100)]
-CONFIRM_GROUPS = [("software_repair-release-d1", 1021000), ("software_repair-release-d1", 1021100)]
+GROUPS = [("software_repair-release-d1", 1030000), ("software_repair-release-d1", 1030100)]
+CONFIRM_GROUPS = [("software_repair-release-d1", 1031000), ("software_repair-release-d1", 1031100)]
 SAMPLES = 4
 MAX_TURNS = 12
 BASE = "https://router.huggingface.co/v1"
@@ -135,7 +135,8 @@ def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadlin
                 raise ValueError("selected metadata or quote changed")
             # UTF8 bytes plus overhead is a deliberately conservative billing reservation.
             prompt_bound = len(helper.canonical(messages).encode()) + 4096
-            reserved = budget.reserve(f"{prefix}:{task_id}:{seed}:{sample}:{turn}", prompt_bound,
+            call_label = f"{prefix}:{task_id}:{seed}:{sample}:{turn}"
+            reserved = budget.reserve(call_label, prompt_bound,
                                      allowance, frozen["provider"]["pricing"])
             reply = helper.provider_call(opener, BASE, token, {"model": MODEL + ":deepinfra",
                 "messages": messages, "temperature": 0.7, "max_tokens": allowance,
@@ -157,6 +158,10 @@ def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadlin
             break
         metric = helper.metric_for(reply)
         metric.update(reserved_usd=reserved, max_tokens=allowance)
+        identifier = reply.get("id")
+        metric.update(client_call_label=call_label,
+            provider_response_id_sha256=hashlib.sha256(identifier.encode()).hexdigest()
+                if isinstance(identifier, str) and identifier else None)
         row["calls"].append(metric)
         message = reply["choices"][0]["message"]
         content = message.get("content") or ""

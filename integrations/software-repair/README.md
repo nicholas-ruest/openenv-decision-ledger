@@ -13,6 +13,10 @@ feedback only on visible cases. Each episode permits12 actions. Reset already
 includes the README; a direct source read avoids repeating it. Test feedback
 keeps two failing expected/actual results; all six complete input examples
 remain available in the visible test file.
+Each detailed failing result includes a `case_path` such as
+`tests/test_public.py#case=2`. Reading that view returns exactly that public
+example's input and expected output, with no hidden-case access. The complete
+test file and read-all action remain available.
 
 Only a documented pure subset of Python is interpreted. No host Python eval,
 exec, subprocess, imports, filesystem or network is available to candidate
