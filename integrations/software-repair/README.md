@@ -7,7 +7,7 @@ is claimed for this candidate.
 The learner edits `src/solution.py`, runs visible test cases, and submits a
 workspace for independently generated hidden cases. Ten software families,
 two difficulties each, are selected with `software_repair-FAMILY-d1|d2`.
-Actions are `list`, `read`, `write`, `test`, and `submit`; write requires the
+Actions are `list`, `read`, `write`, `patch`, `test`, and `submit`; write requires the
 exact module path. Reading `*` returns all four visible files. Tests give
 feedback only on visible cases. Each episode permits12 actions. Reset already
 includes the README; a direct source read avoids repeating it. Test feedback
