@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import ast
 import copy
+import json
 import math
 import operator
 
@@ -109,6 +110,10 @@ class Program:
             raise Rejected("loop control outside a loop") from None
         if working != original:
             raise Rejected("input mutation forbidden")
+        try:
+            json.dumps(result, allow_nan=False)
+        except (TypeError, ValueError):
+            raise Rejected("result must be JSON serializable") from None
         return result
 
     def _tick(self):

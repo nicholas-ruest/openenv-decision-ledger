@@ -200,6 +200,8 @@ def test_bounded_algorithm_features_and_comprehension_scope():
     "def f(): return 99 ** 127",
     "def f():\n    break",
     "def f(): return [x async for x in []]",
+    "def f(): return [{1, 2}]",
+    "def f(): return {(1, 2): 3}",
 ])
 def test_new_algorithm_features_preserve_resource_bounds(source):
     with pytest.raises(Rejected):

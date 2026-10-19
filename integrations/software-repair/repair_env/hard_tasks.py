@@ -175,6 +175,14 @@ def inputs(family, rng, count, difficulty):
             names = ["suite_" + str(n) for n in rng.sample(range(80), 3 + 2 * difficulty)]
             suites = {name: {"targets": [t for t in targets if rng.random() < .5], "cost": rng.randint(1, 8)} for name in names}
             required = [] if i % 11 == 0 else rng.sample(targets, 1 + i % 5)
+            if i % 4 == 1:
+                # One expensive all-in-one suite loses to two cheaper suites.
+                required = list(targets)
+                for name in names:
+                    suites[name]["cost"] = 20
+                suites[names[0]] = {"targets": list(targets), "cost": 9}
+                suites[names[1]] = {"targets": targets[:2], "cost": 2}
+                suites[names[2]] = {"targets": targets[2:], "cost": 2}
             if i % 7 == 0 and required:
                 required.append("missing_" + str(rng.randint(80, 200)))
             yield [required, suites]
