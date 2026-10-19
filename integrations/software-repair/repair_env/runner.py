@@ -98,6 +98,14 @@ class Program:
             self.functions[node.name] = node
         if not 1 <= len(self.functions) <= 4:
             raise Rejected("one to four functions required")
+        parents = {id(child): parent for parent in nodes for child in ast.iter_child_nodes(parent)}
+        for node in nodes:
+            if isinstance(node, (ast.Break, ast.Continue)):
+                parent = parents[id(node)]
+                while not isinstance(parent, (ast.FunctionDef, ast.For, ast.While)):
+                    parent = parents[id(parent)]
+                if isinstance(parent, ast.FunctionDef):
+                    raise Rejected("loop control outside a lexical loop")
         self.fingerprint = ast.dump(tree, include_attributes=False)
 
     def run(self, name, args):

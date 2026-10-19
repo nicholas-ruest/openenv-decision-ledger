@@ -220,6 +220,8 @@ def test_success_feedback_is_compact_and_failed_examples_are_bounded():
     "def f(): return [x async for x in []]",
     "def f(): return [{1, 2}]",
     "def f(): return {(1, 2): 3}",
+    "def g():\n    break\ndef f():\n    for i in range(2):\n        g()",
+    "def g():\n    continue\ndef f():\n    for i in range(2):\n        g()",
 ])
 def test_new_algorithm_features_preserve_resource_bounds(source):
     with pytest.raises(Rejected):
