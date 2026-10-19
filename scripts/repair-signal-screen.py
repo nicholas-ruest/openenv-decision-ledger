@@ -27,6 +27,7 @@ from repair_env.environment import RepairAction, RepairEnvironment  # noqa: E402
 from repair_env.tasks import visible_files  # noqa: E402
 
 HELPER = ROOT / "integrations/openenv-arena/scripts/calibrate.py"
+sys.path.insert(0, str(HELPER.parent.parent))
 SPEC = importlib.util.spec_from_file_location("baseline_calibration_utilities", HELPER)
 helper = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(helper)
