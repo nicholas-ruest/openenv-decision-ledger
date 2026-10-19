@@ -1,4 +1,5 @@
 import copy
+import json
 
 import pytest
 
@@ -121,7 +122,9 @@ def test_patch_does_not_bypass_the_interpreter():
     env.reset(task_id="software_repair-clamp-d1", seed=998200)
     env.step(RepairAction(op="patch", path="src/solution.py",
                          search="return 0", replacement="return open('private')"))
-    assert "unsupported" in env.step(RepairAction(op="test")).error
+    tested = json.loads(env.step(RepairAction(op="test")).content)
+    assert tested["passed"] < tested["total"]
+    assert any("call unsupported" in (case["error"] or "") for case in tested["tests"])
     assert env.step(RepairAction(op="submit")).reward == 0
 
 
