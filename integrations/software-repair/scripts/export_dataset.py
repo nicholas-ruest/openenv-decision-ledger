@@ -42,13 +42,15 @@ if __name__ == "__main__":
                     "files": visible_files(task), "prompt": task.instructions}) + "\n")
     (args.output / "submission-candidate.json").write_text(json.dumps(request(args.image), indent=2))
     (args.output / "REVIEW.json").write_text(json.dumps({"submitted": False,
-        "approval_required": True, "target_model_calibrated": False,
+        "approval_required": True, "ready_for_submission": False,
+        "learning_signal_confirmed": False, "target_model_calibrated": False,
         "dataset_update_required_before_submission": True,
         "hypothesis": "edit/test/retest workflows may transfer better than graph-answer JSON",
         "private_arena_score": None}, indent=2))
     (args.output / "README.md").write_text("---\nlicense: mit\ntask_categories:\n- text-generation\n---\n\n"
         "# Decision Ledger software repair candidate\n\n8 provisional tasks across four harder Python repair families and two difficulty levels. "
-        "Actions: list/read/write/test/submit. Candidate Python is interpreted by a documented bounded subset; "
+        "Actions: list/read/write/patch/test/submit. Exact-text patches must uniquely match src/solution.py and respect the source limit. "
+        "Candidate Python is interpreted by a documented bounded subset; "
         "no host Python, shell, imports or network. Visible tests give feedback; hidden inputs are independently "
         "generated, disjoint from visible inputs. Reward requires improving hidden results over the broken module; "
         "full reward requires every hidden case. No rewards for formatting or unchanged code.\n\n"

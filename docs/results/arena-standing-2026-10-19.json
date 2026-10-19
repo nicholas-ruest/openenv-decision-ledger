@@ -1,0 +1,20 @@
+{
+  "observed_at_utc": "2026-10-19T14:54:11Z",
+  "source_url": "https://openenvarena-arena.hf.space/api/leaderboard",
+  "account": "GlobalBusinessAdvisors",
+  "participants": 33,
+  "displayed_position": 26,
+  "average_score": 0.07500000000000001,
+  "sum_domain_best_solves": 3,
+  "domain_tasks_total": 40,
+  "software_best_solves": 0,
+  "software_tasks": 5,
+  "top_10_cutoff_score": 0.15000000000000002,
+  "top_10_cutoff_domain_best_solves": 6,
+  "limits": [
+    "Snapshot only; rankings may change.",
+    "Equal scores do not guarantee a displayed top-10 position.",
+    "Domain bests may come from different runs; this account has only one evaluated run.",
+    "Local proxy solves and runtime tests do not change this score."
+  ]
+}

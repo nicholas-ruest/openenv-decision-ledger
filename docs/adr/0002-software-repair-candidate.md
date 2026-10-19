@@ -2,6 +2,17 @@
 
 Status: candidate; no promotion, submission or target-model improvement claim.
 
+Latest Oct19 validation: runtime e1f1078d3f5c85af7d58d371017b6a1a8c424605
+passed143 tests,105 anonymous native controls and six SDK checks. It adds
+cycle-aware debugging and bounded atomic exact-text patches. The same two task
+instances produced4/8 valid full repairs before and7/8 after the patch schema/docs
+change, under independent stochastic samples. No model used a patch action;
+all valid completions fully solved. This is neither causal patch-benefit evidence
+nor productive reward variation or model learning. See
+`../results/software-repair-patch-workflow-2026-10-19.json` for hashes and limits.
+The default eight-task mix remains provisional. Historical submission/export
+artifacts still pin the prior image/schema and are not approved for another run.
+
 ## Problem and evidence
 
 The first Arena run `9f129154f9335c7e21f4dd6e` completed 291 updates and scored

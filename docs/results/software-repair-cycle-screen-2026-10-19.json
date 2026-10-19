@@ -128,8 +128,14 @@
     "action_payload_bytes_scripted_full_write": 2011,
     "comparison_limit": "Scripted action bytes only; excludes model reasoning, context and additional patch turns. No model performance claim.",
     "native_control_plan": 105,
-    "model_screen": "not run",
+    "model_screen": "completed: see software-repair-patch-workflow-2026-10-19.json",
     "paid_inference_queued": false,
-    "submission_json_and_hf_preview": "Historical previous image/schema, not this patch runtime; not approved."
+    "submission_json_and_hf_preview": "Historical previous image/schema, not this patch runtime; not approved.",
+    "validated_revision": "e1f1078d3f5c85af7d58d371017b6a1a8c424605",
+    "ci": "https://github.com/nicholas-ruest/openenv-decision-ledger/actions/runs/39272179935",
+    "tests_passed": 143,
+    "anonymous_native_controls_passed": 105,
+    "patch_adoption": 0,
+    "productive_signal": false
   }
 }
