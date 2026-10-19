@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-19",
+  "task_id": "software_repair-plan-d3",
+  "source_revision": "b7196a12e6467f566fa8ff0c4aada34e164551f5",
+  "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:9cb8e487a3ed0bb0033d7ffb6ccbb533ee5fa38d625f75dcc18e8b5820df644f",
+  "ci": {
+    "url": "https://github.com/nicholas-ruest/openenv-decision-ledger/actions/runs/39269846910",
+    "unit_tests_passed": 131,
+    "anonymous_native_controls_passed": 84,
+    "sdk_validation": "passed"
+  },
+  "interrupted_predecessor": {
+    "source_revision": "02fd1bb4ae5b850273eac9d4d324f050d8e2201e",
+    "completed_rollouts": 4,
+    "complete": false,
+    "reason": "512-node AST cap rejected natural 803-900-node repairs; worker stopped, archives and all reservations preserved",
+    "offline_posthoc_regrades": {
+      "saved_repairs": 3,
+      "hidden_cases_passed_each": 30,
+      "new_model_samples": 0,
+      "limitation": "posthoc diagnosis under changed interpreter, not actual rollout solves"
+    }
+  },
+  "fresh_screen": {
+    "rollouts": 8,
+    "unique_prompts": 2,
+    "samples_per_prompt": 4,
+    "seeds": [
+      992000,
+      992100
+    ],
+    "valid_full_solves": 2,
+    "valid_partial": 0,
+    "valid_wrong": 0,
+    "provider_timeouts": 4,
+    "completion_truncated": 1,
+    "episode_budget_failures": 1,
+    "valid_rewards_per_prompt": [
+      [
+        1.0
+      ],
+      [
+        1.0
+      ]
+    ],
+    "valid_reward_std_per_prompt": [
+      0.0,
+      0.0
+    ],
+    "within_group_prompt_identity_verified": true,
+    "frozen_sources_verified": true,
+    "raw_records_sha256": "de4ec69b79f5db6308ef68a99f00eef95300931cbc643c63672df6ef1d5473ea",
+    "genuine_signal_screened": false,
+    "confirmation_launched": false
+  },
+  "next_design": {
+    "change": "existing broken planner with local deduplication and ordering defects replaces empty stub",
+    "reward_code_changed": false,
+    "default_training_mix_changed": false,
+    "model_signal": "untested",
+    "why": "focus on debugging and reduce whole-program synthesis; provider timeouts remain separate infrastructure failures",
+    "source_revision": "21e9f62528d3a8e40a02439b83f5352c4e4e0f67",
+    "offline_tests_passed": 135,
+    "independent_oracle_comparisons": 576,
+    "initial_hidden_passes_range": [
+      18,
+      19
+    ],
+    "fresh_screen_seeds": [
+      995000,
+      995100
+    ],
+    "predeclared_confirmation_seeds": [
+      996000,
+      996100
+    ],
+    "screen_status": "running",
+    "allocation_shared_with_interrupted_and_prior_screen": true
+  },
+  "limits": {
+    "thinking_requested": true,
+    "thinking_verified": false,
+    "provider_checkpoint_attested": false,
+    "arena_wrapper_matched": false,
+    "is_training": false,
+    "ranking_improvement": null,
+    "promotion": false,
+    "arena_submission": false,
+    "historical_request_still_approved": false
+  }
+}
