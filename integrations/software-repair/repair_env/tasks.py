@@ -161,6 +161,8 @@ def visible_files(task):
     test_source += "def test_contract(args, expected):\n    assert " + task.entrypoint + "(*args) == expected\n"
     readme = (task.instructions + "\nEdit src/solution.py, run test, inspect failures, and submit. "
               "Read path '*' to inspect all visible workspace files in one action. "
+              "For a local fix use op='patch', path='src/solution.py', search=the exact old text, replacement=the new text. "
+              "Search must match exactly once; empty, missing, ambiguous or oversized patches leave the module unchanged. Full-file write is also available. "
               "Only src/solution.py is writable. Tests shown here are examples; final grading uses fresh hidden cases. "
               "Reward requires improving hidden test results over the original broken module; unchanged, formatting-only and non-improving edits earn zero. "
               "Python subset: named functions, return/assign/if/for/while, lists/dicts, indexing/slices, integer arithmetic/comparisons, "

@@ -37,7 +37,7 @@ def replay(url):
     records = []
     for index, task_id in enumerate(TASK_IDS):
         reference = make_task(task_id, 983000 + index).reference_source  # Exact public level-specific fixture.
-        for control in ("declared_examples", "reference_repair", "rejected_host_access", "protected_test_file"):
+        for control in ("declared_examples", "reference_repair", "reference_patch", "rejected_host_access", "protected_test_file"):
             with connect(ws, proxy=None, max_size=1_048_576, open_timeout=10, close_timeout=3) as socket:
                 reset = exchange(socket, "reset", {"task_id": task_id, "seed": 983000 + index})
                 assert not reset["done"] and reset["reward"] == 0
@@ -46,6 +46,12 @@ def replay(url):
                 assert set(workspace) == {"README.md", "pyproject.toml", "src/solution.py", "tests/test_public.py"}
                 if control == "reference_repair":
                     exchange(socket, "step", {"op": "write", "path": "src/solution.py", "content": reference})
+                    tested = exchange(socket, "step", {"op": "test"})
+                    assert json.loads(tested["observation"]["content"])["passed"] == 6
+                elif control == "reference_patch":
+                    result = exchange(socket, "step", {"op": "patch", "path": "src/solution.py",
+                        "search": workspace["src/solution.py"], "replacement": reference})
+                    assert not result["observation"]["error"]
                     tested = exchange(socket, "step", {"op": "test"})
                     assert json.loads(tested["observation"]["content"])["passed"] == 6
                 elif control == "rejected_host_access":
@@ -57,11 +63,11 @@ def replay(url):
                     result = exchange(socket, "step", {"op": "write", "path": "tests/test_public.py", "content": "pass"})
                     assert result["observation"]["error"]
                 terminal = exchange(socket, "step", {"op": "submit"})
-                expected = 1.0 if control == "reference_repair" else 0.0
+                expected = 1.0 if control in ("reference_repair", "reference_patch") else 0.0
                 assert terminal["done"] and terminal["reward"] == expected, (task_id, control, terminal["reward"])
                 records.append({"task_id": task_id, "control": control, "reward": expected,
                     "workspace_sha256": hashlib.sha256(json.dumps(workspace, sort_keys=True).encode()).hexdigest()})
-    return {"status": "passed", "episodes_passed": len(records), "episodes_expected": 4 * len(TASK_IDS),
+    return {"status": "passed", "episodes_passed": len(records), "episodes_expected": 5 * len(TASK_IDS),
         "schema": {key: schema[key] for key in ("action", "observation")}, "records": records,
         "is_model_benchmark": False, "private_arena_score": None,
         "limits": ["Native protocol and reference fixtures only; no model learning/transfer evidence",

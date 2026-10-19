@@ -64,7 +64,7 @@ actions and still independently enforces its token/context and dollar caps.
 An additional diagnostic task software_repair-plan-d3 adds induced-subgraph
 cycle components, downstream blocking, unknown changes and stable incremental
 ordering. It is excluded from the default export until model signal is tested.
-There are21 available IDs, with84 native controls. Bounded lazy generator
+There are21 available IDs, with105 native controls including exact-text patches. Bounded lazy generator
 expressions support short-circuiting and at most128 yields; single-underscore
 helpers/locals,16-deep calls, bounded copy/extend/update and set union/intersection
 support natural algorithms without granting host Python access.
@@ -80,3 +80,9 @@ eight rollouts/two prompts, four provider timeouts, one truncation and one episo
 budget failure. It did not qualify for confirmation. The new scaffold has not
 yet been screened against the model. The historical submission JSON and Hugging
 Face preview still pin the earlier image; neither is approved for submission.
+
+The patch action edits one exact nonempty occurrence using search/replacement
+fields. Ambiguous/missing matches, protected paths and oversized UTF8 results are
+rejected atomically. Patching uses the same interpreter and source-byte limit as
+full-file writes. This permits local fixes without generating a complete module;
+whether it improves model rollout reliability still requires a fresh screen.

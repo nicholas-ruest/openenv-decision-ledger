@@ -17,9 +17,11 @@ MAX_STEPS = 12
 
 
 class RepairAction(Action):
-    op: Literal["list", "read", "write", "test", "submit"]
+    op: Literal["list", "read", "write", "patch", "test", "submit"]
     path: str = ""
     content: str = Field(default="", max_length=8192)
+    search: str = Field(default="", max_length=8192)
+    replacement: str = Field(default="", max_length=8192)
 
 
 class RepairObservation(Observation):
@@ -114,10 +116,17 @@ class RepairEnvironment(Environment[RepairAction, RepairObservation, State]):
             if action.path == "*":
                 return self._observe(content=json.dumps(self._files, separators=(",", ":")))
             return self._observe(content=self._files[action.path]) if action.path in self._files else self._observe(error="unknown workspace path")
-        if action.op == "write":
-            if action.path != SOURCE_PATH or len(action.content.encode()) > 8192:
+        if action.op in ("write", "patch"):
+            if action.path != SOURCE_PATH:
                 return self._observe(error="only src/solution.py is writable; source limit8192 bytes")
-            self._files[SOURCE_PATH] = action.content
+            candidate = action.content
+            if action.op == "patch":
+                if not action.search or self._files[SOURCE_PATH].count(action.search) != 1:
+                    return self._observe(error="patch search must be nonempty and match exactly once; module unchanged")
+                candidate = self._files[SOURCE_PATH].replace(action.search, action.replacement, 1)
+            if len(candidate.encode()) > 8192:
+                return self._observe(error="only src/solution.py is writable; source limit8192 bytes")
+            self._files[SOURCE_PATH] = candidate
             return self._observe(content="module updated; use test for visible feedback")
         if action.op == "test":
             try:

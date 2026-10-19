@@ -86,3 +86,56 @@ def test_realistic_planner_has_repairable_semantic_defects_without_execution_fai
     env.reset(task_id="software_repair-plan-d3", seed=seed)
     env.step(RepairAction(op="write", path="src/solution.py", content=cycle_plan.REFERENCE))
     assert env.step(RepairAction(op="submit")).reward == 1
+
+
+def test_exact_patch_can_complete_a_repair_without_full_file_generation():
+    from repair_env.environment import RepairAction, RepairEnvironment
+    env = RepairEnvironment()
+    env.reset(task_id="software_repair-clamp-d1", seed=998000)
+    result = env.step(RepairAction(op="patch", path="src/solution.py",
+                                   search="return 0", replacement="return lo"))
+    assert not result.error
+    assert env.step(RepairAction(op="submit")).reward == 1
+
+
+@pytest.mark.parametrize("path,search,replacement", [
+    ("README.md", "Repair", "Changed"),
+    ("src/solution.py", "", "ignored"),
+    ("src/solution.py", "not present", "ignored"),
+    ("src/solution.py", " ", "ignored"),
+    ("src/solution.py", "return 0", "é" * 4100),
+])
+def test_invalid_patch_is_atomic_and_preserves_the_module(path, search, replacement):
+    from repair_env.environment import RepairAction, RepairEnvironment
+    env = RepairEnvironment()
+    env.reset(task_id="software_repair-clamp-d1", seed=998100)
+    before = env._files.copy()
+    assert env.step(RepairAction(op="patch", path=path, search=search,
+                                 replacement=replacement)).error
+    assert env._files == before
+
+
+def test_patch_does_not_bypass_the_interpreter():
+    from repair_env.environment import RepairAction, RepairEnvironment
+    env = RepairEnvironment()
+    env.reset(task_id="software_repair-clamp-d1", seed=998200)
+    env.step(RepairAction(op="patch", path="src/solution.py",
+                         search="return 0", replacement="return open('private')"))
+    assert "unsupported" in env.step(RepairAction(op="test")).error
+    assert env.step(RepairAction(op="submit")).reward == 0
+
+
+def test_three_local_planner_patches_repair_the_actual_workspace():
+    from repair_env.environment import RepairAction, RepairEnvironment
+    env = RepairEnvironment()
+    env.reset(task_id="software_repair-plan-d3", seed=998300)
+    edits = [
+        ("unknown = sorted([name for name in changed if name not in graph])",
+         "unknown = sorted(set([name for name in changed if name not in graph]))"),
+        ("order.append(max(ready))", "order.append(min(ready))"),
+        ('"cycles": sorted(cycles)[::-1]', '"cycles": sorted(cycles)'),
+    ]
+    for search, replacement in edits:
+        assert not env.step(RepairAction(op="patch", path="src/solution.py",
+                                        search=search, replacement=replacement)).error
+    assert env.step(RepairAction(op="submit")).reward == 1
