@@ -5,9 +5,11 @@ import hashlib
 import json
 import random
 from dataclasses import dataclass
+from . import hard_tasks
 
-FAMILIES = ("clamp", "overlap", "chunks", "unique", "counts", "prefix")
+FAMILIES = ("clamp", "overlap", "chunks", "unique", "counts", "prefix") + hard_tasks.FAMILIES
 TASK_IDS = [f"software_repair-{family}-d{d}" for family in FAMILIES for d in (1, 2)]
+TRAINING_TASK_IDS = [f"software_repair-{family}-d{d}" for family in hard_tasks.FAMILIES for d in (1, 2)]
 SOURCE_PATH = "src/solution.py"
 
 
@@ -47,7 +49,7 @@ def reference(family, args):
     if family == "prefix":
         values = args[0]
         return [sum(values[:i]) for i in range(1, len(values) + 1)]
-    raise ValueError("unknown repair family")
+    return hard_tasks.reference(family, args)
 
 
 _SPECS = {
@@ -64,6 +66,7 @@ _SPECS = {
     "prefix": ("prefix_sums", "Return running inclusive sums of the integer list: output[i]=sum(values[0:i+1]). Preserve length and order, including negative values; empty input gives [].",
                "def prefix_sums(values):\n    total = 0\n    result = []\n    for value in values:\n        total = total + value\n        result.append(total)\n    return result\n"),
 }
+_SPECS.update(hard_tasks.SPECS)
 
 
 def _initial(family, source, difficulty):
@@ -86,11 +89,14 @@ def _initial(family, source, difficulty):
         source = source.replace("total = total + value", "total = value")
         return source.replace("total = value\n        result.append(total)",
                               "result.append(total)\n        total = value") if difficulty == 2 else source
-    raise ValueError("unknown repair family")
+    return hard_tasks.initial(family, source, difficulty)
 
 
 def _inputs(family, rng, count, difficulty):
-    cases = []
+    if family in hard_tasks.FAMILIES:
+        for args in hard_tasks.inputs(family, rng, count, difficulty):
+            yield Case(args, reference(family, args))
+        return
     for i in range(count):
         if family == "clamp":
             lo = rng.randint(2, 40)
@@ -111,8 +117,7 @@ def _inputs(family, rng, count, difficulty):
             args = [values]
             if family == "chunks":
                 args += [(-1, 0, 1, 2, 5, 100)[i % 6]]
-        cases.append(Case(args, reference(family, args)))
-    return tuple(cases)
+        yield Case(args, reference(family, args))
 
 
 def make_task(task_id, seed):
@@ -127,7 +132,7 @@ def make_task(task_id, seed):
     name, instructions, source = _SPECS[family]
     case_id = hashlib.sha256(material.encode()).hexdigest()[:12]
     initial = f"# Repair case {case_id}; {family} level {difficulty}\n" + _initial(family, source, difficulty)
-    public = _inputs(family, public_rng, 6, difficulty)
+    public = tuple(_inputs(family, public_rng, 6, difficulty))
     seen = {json.dumps(c.args, sort_keys=True) for c in public}
     hidden = []
     for case in _inputs(family, hidden_rng, 600, difficulty):
@@ -151,8 +156,8 @@ def visible_files(task):
               "Only src/solution.py is writable. Tests shown here are examples; final grading uses fresh hidden cases. "
               "Reward requires improving hidden test results over the original broken module; unchanged, formatting-only and non-improving edits earn zero. "
               "Python subset: named functions, return/assign/if/for/while, lists/dicts, indexing/slices, integer arithmetic/comparisons, "
-              "len/min/max/sum/abs/sorted/list/range, list.append and dict.get. No imports, comprehensions, generators, "
-              "exceptions, decorators, filesystem or shell. Limits: 8192 source bytes,128 collection items,12000 execution steps/case. "
+              "len/min/max/sum/abs/sorted/list/range/set/dict/tuple/enumerate/zip/any/all, comprehensions, break/continue, bounded integer powers/bitops, list append/pop/sort/reverse, set.add and dict get/pop/items/keys/values. No imports, generators, "
+              "exceptions, decorators, filesystem or shell. Limits: 8192 source bytes,128 collection items,80000 execution steps/case. "
               "Visible tests use the same bounded interpreter as hidden tests; tests are not executed by host pytest in the environment.")
     return {SOURCE_PATH: task.initial_source, "tests/test_public.py": test_source,
             "README.md": readme, "pyproject.toml": "[project]\nname = 'repair-case'\nversion = '0.0.1'\n\n[tool.pytest.ini_options]\npythonpath = ['src']\n"}

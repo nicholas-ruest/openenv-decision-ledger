@@ -7,7 +7,7 @@ import pytest
 
 from repair_env.environment import RepairAction, RepairEnvironment, check
 from repair_env.runner import Program, Rejected
-from repair_env.tasks import SOURCE_PATH, TASK_IDS, make_task, task_fingerprint
+from repair_env.tasks import SOURCE_PATH, TASK_IDS, TRAINING_TASK_IDS, make_task, task_fingerprint
 
 
 @pytest.mark.parametrize("task_id", TASK_IDS)
@@ -90,8 +90,8 @@ def test_export_request_is_image_bound_and_does_not_send():
     with pytest.raises(ValueError):
         module.request("ghcr.io/nicholas-ruest/openenv-decision-ledger:latest")
     value = module.request("ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:" + "a" * 64)
-    assert len(value["tasks"]) == 12
-    assert {task["task_id"] for task in value["tasks"]} == set(TASK_IDS)
+    assert len(value["tasks"]) == 8
+    assert {task["task_id"] for task in value["tasks"]} == set(TRAINING_TASK_IDS)
     assert value["schema"]["action"] == RepairAction.model_json_schema()
     assert value["finish_action"] == {"op": "submit"}
     assert all(task["completion_tokens"] == 8192 for task in value["tasks"])
@@ -110,7 +110,7 @@ def test_export_request_is_image_bound_and_does_not_send():
     "def clamp(a,b,c):\n    while True:\n        pass",
     "def clamp(a,b,c): return clamp(a,b,c)",
     "def clamp(a,b,c): return list(range(1000000000))",
-    "def clamp(a,b,c): return [x for x in range(3)]",
+    "def clamp(a,b,c): return (x for x in range(3))",
     "def clamp(a,b,c): return __import__('os')",
     "def clamp(a,b,c): return (lambda: 1)()",
     "def clamp(a,b,c):\n    try:\n        return a\n    except:\n        return 0",
@@ -172,3 +172,35 @@ def test_no_candidate_eval_exec_or_subprocess_in_runner():
     tree = ast.parse(Path(__file__).parents[1].joinpath("repair_env/runner.py").read_text())
     calls = [node.func.id for node in ast.walk(tree) if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)]
     assert not set(calls).intersection({"eval", "exec", "compile", "open", "getattr", "__import__"})
+
+
+def test_bounded_algorithm_features_and_comprehension_scope():
+    source = '''def f(xs):
+    x = 99
+    values = [x * 2 for x in xs if x > 0]
+    mapping = {i: value for i, value in enumerate(values)}
+    unique = {value for value in values}
+    unique.add(7)
+    result = []
+    for value in sorted(unique):
+        if value == 4:
+            continue
+        result.append(value)
+        if value == 7:
+            break
+    mapping.pop(0, None)
+    return [result, list(mapping.items()), x, 2 ** 7, 3 << 2, 7 & 3]
+'''
+    assert Program(source).run("f", [[-1, 2, 3, 2]]) == [[6, 7], [(1, 6), (2, 4)], 99, 128, 12, 3]
+
+
+@pytest.mark.parametrize("source", [
+    "def f(): return [x for x in range(128) for y in range(128)]",
+    "def f(): return 1 << 127 + 1",
+    "def f(): return 99 ** 127",
+    "def f():\n    break",
+    "def f(): return [x async for x in []]",
+])
+def test_new_algorithm_features_preserve_resource_bounds(source):
+    with pytest.raises(Rejected):
+        Program(source).run("f", [])

@@ -14,7 +14,7 @@ import operator
 MAX_SOURCE = 8192
 MAX_ITEMS = 128
 MAX_STRING = 2048
-MAX_STEPS = 12000
+MAX_STEPS = 80000
 
 
 class Rejected(ValueError):
@@ -24,6 +24,14 @@ class Rejected(ValueError):
 class _Return(Exception):
     def __init__(self, value):
         self.value = value
+
+
+class _Break(Exception):
+    pass
+
+
+class _Continue(Exception):
+    pass
 
 
 def bounded(value, depth=0):
@@ -37,7 +45,7 @@ def bounded(value, depth=0):
         return value
     if type(value) is str and len(value) <= MAX_STRING:
         return value
-    if type(value) in (list, tuple, dict) and len(value) <= MAX_ITEMS:
+    if type(value) in (list, tuple, dict, set) and len(value) <= MAX_ITEMS:
         for item in (value.items() if type(value) is dict else value):
             bounded(item, depth + 1)
         return value
@@ -46,7 +54,9 @@ def bounded(value, depth=0):
 
 class Program:
     _binary = {ast.Add: operator.add, ast.Sub: operator.sub, ast.Mult: operator.mul,
-               ast.FloorDiv: operator.floordiv, ast.Mod: operator.mod}
+               ast.FloorDiv: operator.floordiv, ast.Mod: operator.mod,
+               ast.BitAnd: operator.and_, ast.BitOr: operator.or_, ast.LShift: operator.lshift,
+               ast.Pow: operator.pow}
     _compare = {ast.Eq: operator.eq, ast.NotEq: operator.ne, ast.Lt: operator.lt,
                 ast.LtE: operator.le, ast.Gt: operator.gt, ast.GtE: operator.ge,
                 ast.In: lambda a, b: a in b, ast.NotIn: lambda a, b: a not in b,
@@ -59,7 +69,8 @@ class Program:
                ast.Add, ast.Sub, ast.Mult, ast.FloorDiv, ast.Mod,
                ast.UAdd, ast.USub, ast.Not, ast.And, ast.Or, ast.Eq, ast.NotEq,
                ast.Lt, ast.LtE, ast.Gt, ast.GtE, ast.In, ast.NotIn, ast.Is, ast.IsNot,
-               ast.Attribute)
+               ast.Attribute, ast.Break, ast.Continue, ast.Set, ast.BitAnd, ast.BitOr,
+               ast.LShift, ast.Pow, ast.ListComp, ast.SetComp, ast.DictComp, ast.comprehension)
 
     def __init__(self, source: str):
         if type(source) is not str or len(source.encode()) > MAX_SOURCE:
@@ -92,7 +103,10 @@ class Program:
         self.steps = MAX_STEPS
         original = copy.deepcopy(bounded(args))
         working = copy.deepcopy(original)
-        result = bounded(self._call(name, working, 0))
+        try:
+            result = bounded(self._call(name, working, 0))
+        except (_Break, _Continue):
+            raise Rejected("loop control outside a loop") from None
         if working != original:
             raise Rejected("input mutation forbidden")
         return result
@@ -160,18 +174,32 @@ class Program:
                 if node.orelse:
                     raise Rejected("loop else unsupported")
                 values = self._expr(node.iter, frame, depth)
-                if type(values) not in (list, tuple, str, dict):
+                if type(values) not in (list, tuple, str, dict, set):
                     raise Rejected("iteration type unsupported")
                 for value in values:
                     self._tick()
                     self._assign(node.target, value, frame, depth)
-                    self._block(node.body, frame, depth)
+                    try:
+                        self._block(node.body, frame, depth)
+                    except _Break:
+                        break
+                    except _Continue:
+                        continue
             elif isinstance(node, ast.While):
                 if node.orelse:
                     raise Rejected("loop else unsupported")
                 while self._expr(node.test, frame, depth):
                     self._tick()
-                    self._block(node.body, frame, depth)
+                    try:
+                        self._block(node.body, frame, depth)
+                    except _Break:
+                        break
+                    except _Continue:
+                        continue
+            elif isinstance(node, ast.Break):
+                raise _Break()
+            elif isinstance(node, ast.Continue):
+                raise _Continue()
             elif not isinstance(node, ast.Pass):
                 raise Rejected("statement unsupported")
 
@@ -179,6 +207,15 @@ class Program:
         fn = self._binary.get(type(op))
         if fn is None:
             raise Rejected("operator unsupported")
+        if isinstance(op, (ast.Pow, ast.LShift, ast.BitAnd, ast.BitOr)):
+            if type(left) is not int or type(right) is not int:
+                raise Rejected("integer operator requires integers")
+            if isinstance(op, (ast.Pow, ast.LShift)):
+                if not 0 <= right <= 127:
+                    raise Rejected("exponent/shift limit")
+                size = left.bit_length() * right if isinstance(op, ast.Pow) else left.bit_length() + right
+                if size > 128:
+                    raise Rejected("integer size limit")
         if isinstance(op, ast.Mult):
             for sequence, count in ((left, right), (right, left)):
                 if type(sequence) in (list, tuple, str) and type(count) is int:
@@ -196,6 +233,36 @@ class Program:
             if node.id not in frame or node.id.startswith("_"):
                 raise Rejected("unknown variable")
             return frame[node.id]
+        if isinstance(node, ast.Set):
+            return bounded({ev(n) for n in node.elts})
+        if isinstance(node, (ast.ListComp, ast.SetComp, ast.DictComp)):
+            if len(node.generators) > 2 or any(g.is_async for g in node.generators):
+                raise Rejected("comprehension limit")
+            result = {} if isinstance(node, ast.DictComp) else set() if isinstance(node, ast.SetComp) else []
+            local = dict(frame)
+            def collect(index):
+                if index == len(node.generators):
+                    if len(result) >= MAX_ITEMS:
+                        raise Rejected("comprehension size limit")
+                    if isinstance(node, ast.DictComp):
+                        result[self._expr(node.key, local, depth)] = self._expr(node.value, local, depth)
+                    elif isinstance(node, ast.SetComp):
+                        result.add(self._expr(node.elt, local, depth))
+                    else:
+                        result.append(self._expr(node.elt, local, depth))
+                    bounded(result)
+                    return
+                generator = node.generators[index]
+                values = self._expr(generator.iter, local, depth)
+                if type(values) not in (list, tuple, dict, set, str):
+                    raise Rejected("comprehension input unsupported")
+                for item in values:
+                    self._tick()
+                    self._assign(generator.target, item, local, depth)
+                    if all(self._expr(condition, local, depth) for condition in generator.ifs):
+                        collect(index + 1)
+            collect(0)
+            return result
         if isinstance(node, (ast.List, ast.Tuple)):
             values = [ev(n) for n in node.elts]
             return bounded(tuple(values) if isinstance(node, ast.Tuple) else values)
@@ -241,7 +308,10 @@ class Program:
                         raise Rejected("range size limit")
                     return list(result)
                 builtins = {"len": len, "min": min, "max": max, "sum": sum,
-                            "abs": abs, "sorted": sorted, "list": list}
+                            "abs": abs, "sorted": sorted, "list": list, "set": set,
+                            "tuple": tuple, "dict": dict, "any": any, "all": all,
+                            "enumerate": lambda *xs: list(enumerate(*xs)),
+                            "zip": lambda *xs: list(zip(*xs))}
                 if name in builtins:
                     # list(integer) is invalid; no unbounded generator is reachable.
                     return bounded(builtins[name](*args))
@@ -255,5 +325,21 @@ class Program:
                     return None
                 if node.func.attr == "get" and type(value) is dict and len(args) in (1, 2):
                     return bounded(value.get(*args))
+                if type(value) is dict and not args and node.func.attr in ("items", "keys", "values"):
+                    methods = {"items": value.items, "keys": value.keys, "values": value.values}
+                    return bounded(list(methods[node.func.attr]()))
+                if node.func.attr == "pop" and type(value) in (list, dict):
+                    return bounded(value.pop(*args))
+                if type(value) is list and not args and node.func.attr in ("sort", "reverse"):
+                    if node.func.attr == "sort":
+                        value.sort()
+                    else:
+                        value.reverse()
+                    return None
+                if type(value) is set and node.func.attr == "add" and len(args) == 1:
+                    if len(value) >= MAX_ITEMS:
+                        raise Rejected("set size limit")
+                    value.add(args[0])
+                    return None
             raise Rejected("call unsupported")
         raise Rejected("expression unsupported")

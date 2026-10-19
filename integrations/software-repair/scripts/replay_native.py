@@ -62,7 +62,7 @@ def replay(url):
                 assert terminal["done"] and terminal["reward"] == expected, (task_id, control, terminal["reward"])
                 records.append({"task_id": task_id, "control": control, "reward": expected,
                     "workspace_sha256": hashlib.sha256(json.dumps(workspace, sort_keys=True).encode()).hexdigest()})
-    return {"status": "passed", "episodes_passed": len(records), "episodes_expected": 48,
+    return {"status": "passed", "episodes_passed": len(records), "episodes_expected": 4 * len(TASK_IDS),
         "schema": {key: schema[key] for key in ("action", "observation")}, "records": records,
         "is_model_benchmark": False, "private_arena_score": None,
         "limits": ["Native protocol and reference fixtures only; no model learning/transfer evidence",

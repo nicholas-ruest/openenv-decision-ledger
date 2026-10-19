@@ -63,7 +63,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r integrations/openenv-arena/requirements.lock -r integrations/openenv-arena/requirements-dev.lock
-      - name: Anonymous pull, native SDK validation and 48-control replay
+      - name: Anonymous pull, native SDK validation and seeded-control replay
         run: |
           export DOCKER_CONFIG=$(mktemp -d)
           docker pull "$IMAGE"

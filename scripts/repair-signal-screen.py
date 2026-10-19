@@ -34,8 +34,8 @@ SPEC.loader.exec_module(helper)
 
 TOKENIZER_SHA = "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3"
 MODEL = "Qwen/Qwen3.8-27B"
-GROUPS = [(f"software_repair-{family}-d2", 985000 + i * 100)
-          for i, family in enumerate(("chunks", "unique", "counts", "prefix"))]
+GROUPS = [(f"software_repair-{family}-d2", 986000 + i * 100)
+          for i, family in enumerate(("plan", "cover", "merge", "replay"))]
 BASE = "https://router.huggingface.co/v1"
 
 
