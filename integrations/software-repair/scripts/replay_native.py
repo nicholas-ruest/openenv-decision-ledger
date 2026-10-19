@@ -11,7 +11,7 @@ from websockets.sync.client import connect
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from repair_env.tasks import TASK_IDS, _SPECS  # noqa: E402
+from repair_env.tasks import TASK_IDS, make_task  # noqa: E402
 
 
 def exchange(socket, kind, data):
@@ -36,8 +36,7 @@ def replay(url):
     assert {"action", "observation"} <= schema.keys()
     records = []
     for index, task_id in enumerate(TASK_IDS):
-        family = task_id.split("-")[1]
-        reference = _SPECS[family][2]  # Public static contract fixture, no hidden inputs/answers.
+        reference = make_task(task_id, 983000 + index).reference_source  # Exact public level-specific fixture.
         for control in ("declared_examples", "reference_repair", "rejected_host_access", "protected_test_file"):
             with connect(ws, proxy=None, max_size=1_048_576, open_timeout=10, close_timeout=3) as socket:
                 reset = exchange(socket, "reset", {"task_id": task_id, "seed": 983000 + index})
