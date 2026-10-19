@@ -125,7 +125,8 @@ def make_task(task_id, seed):
     public_rng = random.Random(int.from_bytes(hashlib.sha256((material + "|public").encode()).digest(), "big"))
     hidden_rng = random.Random(int.from_bytes(hashlib.sha256((material + "|hidden").encode()).digest(), "big"))
     name, instructions, source = _SPECS[family]
-    initial = f"# Repair case {seed}; {family} level {difficulty}\n" + _initial(family, source, difficulty)
+    case_id = hashlib.sha256(material.encode()).hexdigest()[:12]
+    initial = f"# Repair case {case_id}; {family} level {difficulty}\n" + _initial(family, source, difficulty)
     public = _inputs(family, public_rng, 6, difficulty)
     seen = {json.dumps(c.args, sort_keys=True) for c in public}
     hidden = []

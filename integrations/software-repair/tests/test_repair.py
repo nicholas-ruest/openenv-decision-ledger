@@ -69,6 +69,34 @@ def test_partial_reward_requires_behavioral_improvement():
     assert 0 < result.reward < 1 and result.done
 
 
+def test_memorizing_public_examples_does_not_solve_hidden_cases():
+    env = RepairEnvironment()
+    env.reset(task_id="software_repair-clamp-d2", seed=990006)
+    source = "def clamp(value, lo, hi):\n"
+    for case in env._task.public:
+        source += f"    if [value, lo, hi] == {case.args!r}:\n        return {case.expected!r}\n"
+    source += "    return 0\n"
+    env.step(RepairAction(op="write", path=SOURCE_PATH, content=source))
+    assert json.loads(env.step(RepairAction(op="test")).content)["passed"] == 6
+    assert env.step(RepairAction(op="submit")).reward == 0
+
+
+def test_export_request_is_image_bound_and_does_not_send():
+    import importlib.util
+    script = Path(__file__).parents[1] / "scripts/export_dataset.py"
+    spec = importlib.util.spec_from_file_location("repair_export", script)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    with pytest.raises(ValueError):
+        module.request("ghcr.io/nicholas-ruest/openenv-decision-ledger:latest")
+    value = module.request("ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:" + "a" * 64)
+    assert len(value["tasks"]) == 12
+    assert {task["task_id"] for task in value["tasks"]} == set(TASK_IDS)
+    assert value["schema"]["action"] == RepairAction.model_json_schema()
+    assert value["finish_action"] == {"op": "submit"}
+    assert all(task["completion_tokens"] == 8192 for task in value["tasks"])
+
+
 @pytest.mark.parametrize("source", [
     "import os\ndef clamp(a,b,c): return os.environ",
     "def clamp(a,b,c): return open('/etc/passwd').read()",
