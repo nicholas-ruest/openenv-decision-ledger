@@ -26,7 +26,7 @@ def test_generated_tasks_have_real_defects_and_independent_controls(task_id):
         assert before < 30 and after == 30
         # Trusted CPython is used ONLY on our own static reference fixtures.
         namespace = {}
-        exec(task.reference_source, {}, namespace)
+        exec(task.reference_source, namespace)
         for case in task.public + task.hidden:
             assert namespace[task.entrypoint](*copy.deepcopy(case.args)) == case.expected
     assert len(fingerprints) == 16

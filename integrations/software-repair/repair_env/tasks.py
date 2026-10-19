@@ -5,12 +5,13 @@ import hashlib
 import json
 import random
 from dataclasses import dataclass
-from . import hard_tasks, cycle_plan
+from . import hard_tasks, cycle_plan, release_plan
 
 FAMILIES = ("clamp", "overlap", "chunks", "unique", "counts", "prefix") + hard_tasks.FAMILIES
 TASK_IDS = [f"software_repair-{family}-d{d}" for family in FAMILIES for d in (1, 2)]
 TASK_IDS.append("software_repair-plan-d3")
 TASK_IDS.append("software_repair-plan-d4")
+TASK_IDS.append("software_repair-release-d1")
 TRAINING_TASK_IDS = [f"software_repair-{family}-d{d}" for family in hard_tasks.FAMILIES for d in (1, 2)]
 SOURCE_PATH = "src/solution.py"
 
@@ -72,6 +73,8 @@ _SPECS.update(hard_tasks.SPECS)
 
 
 def _initial(family, source, difficulty, seed=None):
+    if family == "release":
+        return release_plan.initial(seed)
     if family == "plan" and difficulty == 4:
         return cycle_plan.mutated_initial(seed)
     if family == "plan" and difficulty == 3:
@@ -99,6 +102,10 @@ def _initial(family, source, difficulty, seed=None):
 
 
 def _inputs(family, rng, count, difficulty, *, visible=False):
+    if family == "release":
+        for args in release_plan.inputs(rng, count):
+            yield Case(args, release_plan.reference(args))
+        return
     if family == "plan" and difficulty in (3, 4):
         generated = (cycle_plan.variant_inputs(rng, count, visible=visible) if difficulty == 4
                      else cycle_plan.inputs(rng, count))
@@ -141,7 +148,10 @@ def make_task(task_id, seed):
     # Independent streams: neither hidden inputs nor answers derive from public tests.
     public_rng = random.Random(int.from_bytes(hashlib.sha256((material + "|public").encode()).digest(), "big"))
     hidden_rng = random.Random(int.from_bytes(hashlib.sha256((material + "|hidden").encode()).digest(), "big"))
-    name, instructions, source = ("build_plan", cycle_plan.INSTRUCTIONS, cycle_plan.REFERENCE) if family == "plan" and difficulty in (3, 4) else _SPECS[family]
+    if family == "release":
+        name, instructions, source = "plan_release", release_plan.INSTRUCTIONS, release_plan.REFERENCE
+    else:
+        name, instructions, source = ("build_plan", cycle_plan.INSTRUCTIONS, cycle_plan.REFERENCE) if family == "plan" and difficulty in (3, 4) else _SPECS[family]
     if family == "plan" and difficulty == 4:
         instructions += " Existing code has several semantic defects. Visible examples do not cover every graph shape in the contract; reason about the complete specification."
     case_id = hashlib.sha256(material.encode()).hexdigest()[:12]
