@@ -9,11 +9,14 @@ workspace for independently generated hidden cases. Ten software families,
 two difficulties each, are selected with `software_repair-FAMILY-d1|d2`.
 Actions are `list`, `read`, `write`, `test`, and `submit`; write requires the
 exact module path. Reading `*` returns all four visible files. Tests give
-feedback only on visible cases. Each episode permits12 actions.
+feedback only on visible cases. Each episode permits12 actions. Reset already
+includes the README; a direct source read avoids repeating it. Test feedback
+keeps two failing expected/actual results; all six complete input examples
+remain available in the visible test file.
 
 Only a documented pure subset of Python is interpreted. No host Python eval,
 exec, subprocess, imports, filesystem or network is available to candidate
-code. Code may use named functions, assignments, conditionals, loops, literals,
+code. Code may use one to four top-level named functions, assignments, conditionals, loops, literals,
 lists/dicts, indexing/slices, bounded integer arithmetic, comparisons,
 bounded comprehensions, break/continue, len/min/max/sum/abs/sorted/list/range,
 set/dict/tuple/enumerate/zip/any/all, list append/pop/sort/reverse/remove, set.add/remove/discard,

@@ -135,12 +135,12 @@ class RepairEnvironment(Environment[RepairAction, RepairObservation, State]):
                 feedback, detailed_failures = [], 0
                 for result in results:
                     if not result["passed"] and detailed_failures < 2:
-                        feedback.append(result)
+                        feedback.append({key: value for key, value in result.items() if key != "args"})
                         detailed_failures += 1
                     else:
                         feedback.append({"test": result["test"], "passed": result["passed"], "error": result["error"]})
                 return self._observe(content=json.dumps({"passed": passed, "total": len(results), "tests": feedback,
-                    "feedback": "Full inputs and expectations are in tests/test_public.py; at most two failing examples are repeated here."}, separators=(",", ":")))
+                    "feedback": "Inputs are in tests/test_public.py; at most two failing expected/actual results are repeated here."}, separators=(",", ":")))
             except Rejected as exc:
                 return self._observe(error="invalid or unsupported Python: " + str(exc))
             except RecursionError:
