@@ -1,3 +1,4 @@
+import ast
 import json
 
 import pytest
@@ -15,7 +16,8 @@ def test_public_case_view_is_exact_read_only_and_smaller_than_all_examples(numbe
     assert json.loads(observation.content) == {"test": number, "args": case.args, "expected": case.expected}
     full = env.step(RepairAction(op="read", path="tests/test_public.py"))
     assert len(observation.content) < len(full.content)
-    assert repr([(c.args, c.expected) for c in env._task.public]) in full.content
+    fixture = ast.parse(full.content).body[2].decorator_list[0].args[1]
+    assert ast.literal_eval(fixture) == [(c.args, c.expected) for c in env._task.public]
     assert env.step(RepairAction(op="write", path=path, content="changed")).error
     assert env._task.public[number - 1] == case
 

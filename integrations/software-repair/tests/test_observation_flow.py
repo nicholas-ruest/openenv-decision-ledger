@@ -1,3 +1,4 @@
+import ast
 import importlib.util
 import json
 from pathlib import Path
@@ -35,7 +36,8 @@ def test_compact_failure_feedback_retains_results_and_visible_inputs():
         assert row["expected"] == case.expected
         assert "actual" in row and "args" not in row
     full = env.step(RepairAction(op="read", path="tests/test_public.py"))
-    assert repr([(case.args, case.expected) for case in env._task.public]) in full.content
+    fixture = ast.parse(full.content).body[2].decorator_list[0].args[1]
+    assert ast.literal_eval(fixture) == [(c.args, c.expected) for c in env._task.public]
 
 
 def saved_row():

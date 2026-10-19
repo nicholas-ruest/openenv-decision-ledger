@@ -171,10 +171,25 @@ def make_task(task_id, seed):
     return Task(task_id, seed, name, instructions, initial, source, public, tuple(hidden))
 
 
+def compact_literal(value):
+    """Render Python fixture values without optional separator whitespace."""
+    if type(value) is list:
+        return "[" + ",".join(map(compact_literal, value)) + "]"
+    if type(value) is tuple:
+        items = ",".join(map(compact_literal, value))
+        return "(" + items + ("," if len(value) == 1 else "") + ")"
+    if type(value) is dict:
+        return "{" + ",".join(compact_literal(k) + ":" + compact_literal(v)
+                              for k, v in value.items()) + "}"
+    if type(value) not in (str, int, bool, type(None)):
+        raise TypeError("unsupported public fixture literal")
+    return repr(value)
+
+
 def visible_files(task):
     cases = [(case.args, case.expected) for case in task.public]
     test_source = "import pytest\nfrom solution import " + task.entrypoint + "\n\n"
-    test_source += "@pytest.mark.parametrize('args,expected', " + repr(cases) + ")\n"
+    test_source += "@pytest.mark.parametrize('args,expected', " + compact_literal(cases) + ")\n"
     test_source += "def test_contract(args, expected):\n    assert " + task.entrypoint + "(*args) == expected\n"
     readme = (task.instructions + "\nEdit src/solution.py, run test, inspect failures, and submit. "
               "This README is already in reset.prompt. Start with read path 'src/solution.py'; "
