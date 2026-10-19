@@ -78,3 +78,12 @@ def test_proxy_group_actions_and_failure_separation(tmp_path, monkeypatch, failu
         assert result["solved"] and result["reward"] == 1
         assert len(result["calls"]) == 4
         assert not result["arena_budget_matched"] and not result["thinking_verified"]
+
+
+def test_confirmation_plan_uses_disjoint_seeds_without_any_provider_call(monkeypatch, capsys):
+    monkeypatch.setattr(screen, "quote", lambda *a: pytest.fail("plan contacted provider"))
+    assert screen.main(["--stage", "confirm"]) == 0
+    plan = json.loads(capsys.readouterr().out)
+    assert plan["stage"] == "confirm" and not plan["executed"]
+    assert {seed for _, seed in plan["groups"]}.isdisjoint(seed for _, seed in screen.GROUPS)
+    assert plan["max_calls"] == 96
