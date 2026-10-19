@@ -23,8 +23,9 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "integrations/software-repair"))
-from repair_env.environment import RepairAction, RepairEnvironment  # noqa: E402
-from repair_env.tasks import visible_files  # noqa: E402
+from repair_env.environment import RepairAction, RepairEnvironment, check  # noqa: E402
+from repair_env.tasks import visible_files, SOURCE_PATH
+from repair_env.runner import Program, Rejected  # noqa: E402
 
 HELPER = ROOT / "integrations/openenv-arena/scripts/calibrate.py"
 sys.path.insert(0, str(HELPER.parent.parent))
@@ -36,6 +37,7 @@ TOKENIZER_SHA = "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f
 MODEL = "Qwen/Qwen3.8-27B"
 GROUPS = [(f"software_repair-{family}-d2", 986000 + i * 100)
           for i, family in enumerate(("plan", "cover", "merge", "replay"))]
+SAMPLES = 2
 BASE = "https://router.huggingface.co/v1"
 
 
@@ -177,6 +179,14 @@ def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadlin
             break
         if observation.done:
             row.update(reward=float(observation.reward), solved=observation.reward == 1.0)
+            try:
+                _, outcomes = check(Program(env._files[SOURCE_PATH]), env._task, env._task.hidden, details=True)
+                row["hidden_execution_rejections"] = sum(item["error"] is not None for item in outcomes)
+                row["hidden_wrong_answers"] = sum(not item["passed"] and item["error"] is None for item in outcomes)
+                if row["hidden_execution_rejections"]:
+                    row["failure"] = "candidate_execution_failure"
+            except Rejected:
+                row["failure"] = "invalid_candidate_code"
             break
     else:
         row["failure"] = "screen_tool_budget_exhausted"
@@ -193,8 +203,8 @@ def main(argv=None):
     parser.add_argument("--output", type=Path)
     args = parser.parse_args(argv)
     if not args.execute:
-        print(json.dumps({"executed": False, "groups": GROUPS, "samples_per_group": 4,
-                          "max_calls": 96, "max_quoted_reservations_usd": 2}))
+        print(json.dumps({"executed": False, "groups": GROUPS, "samples_per_group": SAMPLES,
+                          "max_calls": len(GROUPS) * SAMPLES * 6, "max_quoted_reservations_usd": 2}))
         return 0
     budget = DollarReservations(args.budget_receipt)
     token = os.environ.get("HF_TOKEN", "")
@@ -205,11 +215,11 @@ def main(argv=None):
     opener = urllib.request.build_opener(helper.NoRedirect(), urllib.request.ProxyHandler({}))
     frozen = quote(opener, token)
     args.output.mkdir(exist_ok=False)
-    protocol = {"groups": GROUPS, "samples_per_group": 4, "provider": frozen,
+    protocol = {"groups": GROUPS, "samples_per_group": SAMPLES, "provider": frozen,
         "source_files_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
             for p in [Path(__file__), HELPER, *sorted((ROOT / "integrations/software-repair/repair_env").glob("*.py"))]},
         "tokenizer_sha256": TOKENIZER_SHA, "thinking_requested": True, "thinking_verified": False,
-        "max_calls": 96, "max_turns_per_rollout": 6, "no_retry": True,
+        "max_calls": len(GROUPS) * SAMPLES * 6, "max_turns_per_rollout": 6, "no_retry": True,
         "arena_budget_matched": False, "checkpoint_attested": False,
         "is_training": False, "private_arena_score": None}
     (args.output / "protocol.json").write_text(json.dumps(protocol, indent=2))
@@ -218,9 +228,9 @@ def main(argv=None):
         for task_id, seed in GROUPS:
             if stop.is_set():
                 break
-            with ThreadPoolExecutor(max_workers=4) as pool:
+            with ThreadPoolExecutor(max_workers=SAMPLES) as pool:
                 futures = [pool.submit(episode, task_id, seed, i, token, counter, budget,
-                    frozen, stop, deadline, args.output.name) for i in range(4)]
+                    frozen, stop, deadline, args.output.name) for i in range(SAMPLES)]
                 for future in futures:
                     try:
                         record = future.result()

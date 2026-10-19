@@ -47,7 +47,7 @@ def test_default_plan_cannot_contact_provider(monkeypatch, capsys):
     monkeypatch.setattr(screen, "quote", lambda *a: pytest.fail("default contacted provider"))
     assert screen.main([]) == 0
     value = json.loads(capsys.readouterr().out)
-    assert not value["executed"] and value["max_calls"] == 96
+    assert not value["executed"] and value["max_calls"] == 48
 
 
 @pytest.mark.parametrize("failure", [None, "invalid_json_action", "completion_truncated", "missing_usage"])
