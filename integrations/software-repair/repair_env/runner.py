@@ -17,6 +17,7 @@ MAX_SOURCE = 8192
 MAX_ITEMS = 128
 MAX_STRING = 2048
 MAX_STEPS = 80000
+MAX_AST_NODES = 2048
 
 
 class Rejected(ValueError):
@@ -100,7 +101,9 @@ class Program:
         except (SyntaxError, RecursionError, ValueError):
             raise Rejected("invalid Python syntax") from None
         nodes = list(ast.walk(tree))
-        if len(nodes) > 512 or any(not isinstance(n, self._syntax) for n in nodes):
+        if len(nodes) > MAX_AST_NODES:
+            raise Rejected("AST node limit2048")
+        if any(not isinstance(n, self._syntax) for n in nodes):
             raise Rejected("unsupported Python syntax")
         self.functions = {}
         for node in tree.body:
@@ -406,5 +409,10 @@ class Program:
                         raise Rejected("collection method unsupported")
                     bounded(value)
                     return None
+                if type(value) is set and node.func.attr in ("union", "intersection", "difference"):
+                    if len(args) > 4 or any(type(item) not in (list, tuple, dict, set) or len(item) > MAX_ITEMS for item in args):
+                        raise Rejected("set method input limit")
+                    methods = {"union": value.union, "intersection": value.intersection, "difference": value.difference}
+                    return bounded(methods[node.func.attr](*args))
             raise Rejected("call unsupported")
         raise Rejected("expression unsupported")

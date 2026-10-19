@@ -47,8 +47,10 @@ def check(program, task, cases, *, details=False):
         try:
             actual = program.run(task.entrypoint, case.args)
             good, error = exact(actual, case.expected), None
-        except (Rejected, ArithmeticError, TypeError, ValueError, KeyError, IndexError, RecursionError, RuntimeError):
-            actual, good, error = None, False, "candidate execution rejected or failed"
+        except Rejected as exc:
+            actual, good, error = None, False, "rejected: " + str(exc)
+        except (ArithmeticError, TypeError, ValueError, KeyError, IndexError, RecursionError, RuntimeError) as exc:
+            actual, good, error = None, False, "candidate " + type(exc).__name__
         passed += good
         if details:
             results.append({"test": index + 1, "passed": good, "args": case.args,
@@ -130,8 +132,10 @@ class RepairEnvironment(Environment[RepairAction, RepairObservation, State]):
                         feedback.append({"test": result["test"], "passed": result["passed"], "error": result["error"]})
                 return self._observe(content=json.dumps({"passed": passed, "total": len(results), "tests": feedback,
                     "feedback": "Full inputs and expectations are in tests/test_public.py; at most two failing examples are repeated here."}, separators=(",", ":")))
-            except (Rejected, RecursionError):
-                return self._observe(error="invalid or unsupported Python; see README.md")
+            except Rejected as exc:
+                return self._observe(error="invalid or unsupported Python: " + str(exc))
+            except RecursionError:
+                return self._observe(error="Python syntax nesting limit")
         raise ValueError("unknown action")
 
     @property

@@ -56,3 +56,14 @@ def f(xs):
     assert Program(source).run("f", [list(range(9))]) == [36, list(range(10)), list(range(9)) + [10, 11], [10]]
     with pytest.raises(Rejected, match="update limit"):
         Program("def f():\n    xs=list(range(128))\n    xs.extend([1])\n    return xs").run("f", [])
+
+
+def test_natural_solution_size_is_supported_but_larger_ast_remains_bounded():
+    assert Program("def f():\n" + "    a=1\n" * 180 + "    return a").run("f", []) == 1
+    with pytest.raises(Rejected, match="AST node limit2048"):
+        Program("def f():\n" + "    a=1\n" * 600 + "    return a")
+
+
+def test_set_method_forms_match_bounded_set_operators():
+    source = "def f():\n    a={1,2}\n    return [sorted(a.union({3}, [4])), sorted(a.intersection([2,3])), sorted(a.difference({1}))]"
+    assert Program(source).run("f", []) == [[1,2,3,4], [2], [2]]

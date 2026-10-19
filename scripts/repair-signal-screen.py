@@ -35,8 +35,8 @@ SPEC.loader.exec_module(helper)
 
 TOKENIZER_SHA = "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3"
 MODEL = "Qwen/Qwen3.8-27B"
-GROUPS = [("software_repair-plan-d3", 988000), ("software_repair-plan-d3", 988100)]
-CONFIRM_GROUPS = [("software_repair-plan-d3", 989000), ("software_repair-plan-d3", 989100)]
+GROUPS = [("software_repair-plan-d3", 992000), ("software_repair-plan-d3", 992100)]
+CONFIRM_GROUPS = [("software_repair-plan-d3", 993000), ("software_repair-plan-d3", 993100)]
 SAMPLES = 4
 MAX_TURNS = 12
 BASE = "https://router.huggingface.co/v1"
