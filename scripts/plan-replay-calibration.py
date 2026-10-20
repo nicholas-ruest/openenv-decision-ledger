@@ -21,11 +21,13 @@ def digest(value):
                                      ensure_ascii=True, allow_nan=False).encode()).hexdigest()
 
 
-def build():
+def build(profile_name="replay_compare"):
+    if profile_name not in ("replay_compare", "merge_compare"):
+        raise ValueError("offline comparison profile required")
     stages = {}
     workspaces = set()
-    for stage in SEEDS:
-        profile = get_profile("replay_compare", stage)
+    for stage in ("screen", "confirm"):
+        profile = get_profile(profile_name, stage)
         groups = []
         for task_id, seed in profile["groups"]:
             task = make_task(task_id, seed)
@@ -47,18 +49,19 @@ def build():
               ROOT / "integrations/software-repair/scripts/screen_deadline.py",
               ROOT / "integrations/openenv-arena/scripts/calibrate.py",
               *sorted((ROOT / "integrations/software-repair/repair_env").glob("*.py"))]
-    return {"plan_version": 2, "profile": "replay_compare",
-        "signal_task_ids": get_profile("replay_compare", "screen")["signal_task_ids"],
+    return {"plan_version": 2, "profile": profile_name,
+        "signal_task_ids": get_profile(profile_name, "screen")["signal_task_ids"],
         "executed": False, "paid_execution_allowed": False,
         "source_revision": subprocess.check_output(["git", "-C", str(ROOT), "rev-parse", "HEAD"])
                                      .decode().strip(),
         "source_files_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
                                 for p in source},
-        "stages": stages, "confirmation_conditional_on_replay_d3_signal": True,
+        "stages": stages, "confirmation_conditional_on_candidate_signal": True,
+        **({"confirmation_conditional_on_replay_d3_signal": True} if profile_name == "replay_compare" else {}),
         "intended_settings": sampling_settings(),
         "unverified": ["Provider selected metadata and price quote must be frozen at admission.",
             "Private billing reconciliation and shared reservation admission are not performed.",
-            "The runner shares this profile but replay paid execution is unconditionally disabled.",
+            "The runner shares this comparison profile but paid execution is unconditionally disabled.",
             "Local worker supervision does not attest remote request cancellation or billing stop.",
             "Workspace hashes are not native reset observation hashes; those must match within live groups.",
             "Source revision records the parent checkout; source hashes include local plan content.",
@@ -69,9 +72,10 @@ def build():
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--profile", choices=("replay_compare", "merge_compare"), default="replay_compare")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args(argv)
-    content = json.dumps(build(), indent=2) + "\n"
+    content = json.dumps(build(args.profile), indent=2) + "\n"
     if args.output:
         with args.output.open("x") as stream:
             stream.write(content)

@@ -16,7 +16,7 @@ from repair_env.runner import Program, Rejected
 from repair_env.tasks import TRAINING_TASK_IDS, make_task, task_fingerprint, visible_files
 
 DIAGNOSTICS = ["software_repair-plan-d3", "software_repair-plan-d4", "software_repair-release-d1",
-               "software_repair-replay-d3"]
+               "software_repair-replay-d3", "software_repair-merge-d3"]
 
 
 def exact(actual, expected):

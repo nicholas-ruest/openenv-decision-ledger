@@ -6,6 +6,8 @@ SAMPLES = 4
 MAX_TURNS = 12
 REPLAY_TASKS = ("software_repair-replay-d2", "software_repair-replay-d3")
 REPLAY_SEEDS = {"screen": (1060000, 1060100), "confirm": (1061000, 1061100)}
+MERGE_TASKS = ("software_repair-merge-d2", "software_repair-merge-d3")
+MERGE_SEEDS = {"screen": (1082000, 1082100), "confirm": (1083000, 1083100)}
 
 
 def sampling_settings():
@@ -27,6 +29,10 @@ def get_profile(name, stage):
         def groups(part):
             return [[task, seed] for task in REPLAY_TASKS for seed in REPLAY_SEEDS[part]]
         targets = ["software_repair-replay-d3"]
+    elif name == "merge_compare":
+        def groups(part):
+            return [[task, seed] for task in MERGE_TASKS for seed in MERGE_SEEDS[part]]
+        targets = ["software_repair-merge-d3"]
     else:
         raise ValueError("unknown calibration profile")
     selected = groups(stage)

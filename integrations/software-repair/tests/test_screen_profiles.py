@@ -20,6 +20,23 @@ def test_replay_profile_requires_new_arm_and_disjoint_confirmation():
         assert profile["samples_per_group"] == 4 and not profile["execution_enabled"]
 
 
+def test_merge_comparison_is_locked_candidate_specific_and_disjoint_from_other_seeds():
+    screen = profiles.get_profile("merge_compare", "screen")
+    confirm = profiles.get_profile("merge_compare", "confirm")
+    assert screen["signal_task_ids"] == confirm["signal_task_ids"] == ["software_repair-merge-d3"]
+    assert screen["planned_confirmation_groups"] == confirm["groups"]
+    seeds = [seed for stage in (screen, confirm) for _, seed in stage["groups"]]
+    assert len(set(seeds)) == 4
+    reserved = {seed for values in profiles.REPLAY_SEEDS.values() for seed in values}
+    for start in (900000, 910000, 920000, 1076000, 1078000, 1080000, 1081000):
+        reserved.update(range(start, start + 128))
+    assert set(seeds).isdisjoint(reserved)
+    for stage in (screen, confirm):
+        assert len(stage["groups"]) == 4 and stage["max_calls"] == 192
+        assert not stage["execution_enabled"] and stage["samples_per_group"] == 4
+        assert stage["sampling_settings"] == profiles.sampling_settings()
+
+
 def test_legacy_release_groups_stay_frozen_and_profiles_cannot_mutate_each_other():
     release = profiles.get_profile("release", "screen")
     assert release["groups"] == [["software_repair-release-d1", 1030000],

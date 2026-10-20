@@ -339,7 +339,7 @@ def _execute(deadline, args, profile):
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--execute", action="store_true")
-    parser.add_argument("--profile", choices=("release", "replay_compare"), default="release")
+    parser.add_argument("--profile", choices=("release", "replay_compare", "merge_compare"), default="release")
     parser.add_argument("--stage", choices=("screen", "confirm"), default="screen")
     parser.add_argument("--budget-receipt", type=Path)
     parser.add_argument("--tokenizer", type=Path)
@@ -350,7 +350,7 @@ def main(argv=None):
         print(json.dumps({**profile, "executed": False, "max_quoted_reservations_usd": 2}))
         return 0
     if not profile["execution_enabled"]:
-        raise ValueError("replay comparison is plan-only; paid execution is disabled")
+        raise ValueError("comparison is plan-only; paid execution is disabled")
     if args.output is None or args.budget_receipt is None or args.tokenizer is None:
         raise ValueError("fresh output, existing budget receipt and pinned tokenizer paths required")
     if args.output.exists():
