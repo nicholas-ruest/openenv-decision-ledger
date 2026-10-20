@@ -15,6 +15,8 @@ spec.loader.exec_module(plan)
 
 def test_review_packet_freezes_disjoint_reproducible_groups_without_execution():
     result = plan.build()
+    assert result["plan_version"] == 2 and result["profile"] == "replay_compare"
+    assert result["signal_task_ids"] == ["software_repair-replay-d3"]
     assert result["executed"] is False and result["paid_execution_allowed"] is False
     assert result["new_model_calls"] == 0 and not result["arena_submission_authorized"]
     assert result["is_training"] is False and result["mix_adoption"] is False

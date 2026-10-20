@@ -19,11 +19,47 @@ def digest(value):
                                      ensure_ascii=True, allow_nan=False).encode()).hexdigest()
 
 
+def sampling_provenance(rows):
+    calls = [call for row in rows for call in row.get("calls", [])]
+    labels = [call["client_call_label"] for call in calls
+              if isinstance(call.get("client_call_label"), str) and call["client_call_label"].strip()]
+    response_ids = [call["provider_response_id_sha256"] for call in calls
+                    if isinstance(call.get("provider_response_id_sha256"), str)
+                    and re.fullmatch(r"[0-9a-f]{64}", call["provider_response_id_sha256"])]
+    return {"recorded_calls": len(calls), "all_client_labels_available": bool(calls) and len(labels) == len(calls),
+        "all_response_ids_available": bool(calls) and len(response_ids) == len(calls),
+        "duplicate_client_labels": len(labels) != len(set(labels)),
+        "duplicate_provider_response_ids": len(response_ids) != len(set(response_ids)),
+        "completed_rollouts_have_calls": all(row.get("calls") for row in rows if not row.get("failure")),
+        "client_label_hashes": sorted(hashlib.sha256(label.encode()).hexdigest() for label in labels),
+        "provider_response_id_hashes": sorted(response_ids)}
+
+
+def identities_verified(provenance):
+    return (provenance["all_client_labels_available"] and provenance["all_response_ids_available"]
+            and provenance["completed_rollouts_have_calls"] and not provenance["duplicate_client_labels"]
+            and not provenance["duplicate_provider_response_ids"])
+
+
+def signal_tasks(protocol):
+    planned = {task for task, _ in protocol["groups"]}
+    targets = protocol.get("signal_task_ids")
+    if targets is None:
+        # A mixed legacy archive has no declared candidate arm. Keep descriptive
+        # results, but never let an unrelated task supply its promotion signal.
+        return sorted(planned) if len(planned) == 1 else []
+    if (type(targets) is not list or not targets or any(type(t) is not str for t in targets)
+            or len(set(targets)) != len(targets) or not set(targets) <= planned):
+        raise ValueError("invalid declared signal tasks")
+    return targets
+
+
 def classify(protocol, rows):
     planned = {tuple(group) for group in protocol["groups"]}
     count = protocol["samples_per_group"]
     if not planned or len(planned) != len(protocol["groups"]) or type(count) is not int or count < 2:
         raise ValueError("invalid predeclared groups")
+    targets = signal_tasks(protocol)
     seen = set()
     groups = []
     for row in rows:
@@ -47,7 +83,7 @@ def classify(protocol, rows):
     for task, seed in protocol["groups"]:
         sampled = [row for row in rows if (row["task_id"], row["seed"]) == (task, seed)]
         hashes = {row.get("prompt_sha256") for row in sampled}
-        if len(hashes) > 1 or any(not isinstance(h, str) or len(h) != 64 for h in hashes):
+        if len(hashes) > 1 or any(not isinstance(h, str) or not re.fullmatch(r"[0-9a-f]{64}", h) for h in hashes):
             raise ValueError("within-group prompt identity differs or is missing")
         valid = [row["reward"] for row in sampled if not row.get("failure")]
         full = sum(reward == 1 for reward in valid)
@@ -58,30 +94,34 @@ def classify(protocol, rows):
             "failures": dict(Counter(row["failure"] for row in sampled if row.get("failure"))),
             "prompt_sha256": next(iter(hashes)) if hashes else None,
             "productive": len(valid) >= 3 and full > 0 and full < len(valid)})
-    calls = [call for row in rows for call in row.get("calls", [])]
-    labels = [call["client_call_label"] for call in calls
-              if isinstance(call.get("client_call_label"), str) and call["client_call_label"].strip()]
-    response_ids = [call["provider_response_id_sha256"] for call in calls
-                    if isinstance(call.get("provider_response_id_sha256"), str)
-                    and re.fullmatch(r"[0-9a-f]{64}", call["provider_response_id_sha256"])]
-    duplicate_labels = len(labels) != len(set(labels))
-    duplicate_ids = len(response_ids) != len(set(response_ids))
-    provenance = {"recorded_calls": len(calls), "all_client_labels_available": bool(calls) and len(labels) == len(calls),
-        "all_response_ids_available": bool(calls) and len(response_ids) == len(calls),
-        "duplicate_client_labels": duplicate_labels, "duplicate_provider_response_ids": duplicate_ids,
-        "completed_rollouts_have_calls": all(row.get("calls") for row in rows if not row.get("failure")),
-        "client_label_hashes": sorted(hashlib.sha256(label.encode()).hexdigest() for label in labels),
-        "provider_response_id_hashes": sorted(response_ids)}
-    identity_verified = (provenance["all_client_labels_available"] and
-                         provenance["all_response_ids_available"] and
-                         provenance["completed_rollouts_have_calls"] and
-                         not duplicate_labels and not duplicate_ids)
+    observed_prompts = [g["prompt_sha256"] for g in groups if g["samples"]]
+    if len(observed_prompts) != len(set(observed_prompts)):
+        raise ValueError("distinct groups reuse a prompt identity")
+    provenance = sampling_provenance(rows)
+    tasks = {}
+    for task_id in sorted({task for task, _ in planned}):
+        selected = [row for row in rows if row["task_id"] == task_id]
+        selected_groups = [group for group in groups if group["task_id"] == task_id]
+        own_provenance = sampling_provenance(selected)
+        # Missing calls in another arm remain that arm's failure. Reused call
+        # identities anywhere in the comparison invalidate independence.
+        own_identity = (identities_verified(own_provenance) and
+                        not provenance["duplicate_client_labels"] and
+                        not provenance["duplicate_provider_response_ids"])
+        own_complete = len(selected) == len(selected_groups) * count
+        tasks[task_id] = {"complete": own_complete,
+            "productive_groups": sum(group["productive"] for group in selected_groups),
+            "sampling_provenance": own_provenance, "sampling_identity_verified": own_identity,
+            "genuine_signal_screened": own_complete and own_identity
+                and any(group["productive"] for group in selected_groups)}
     return {"stage": protocol.get("stage"), "complete": complete, "groups": groups,
         "unique_prompts": len(planned), "rollouts": len(rows),
-        "signal_gate_version": 2, "sampling_provenance": provenance,
-        "sampling_identity_verified": identity_verified,
-        "genuine_signal_screened": complete and identity_verified
-            and any(group["productive"] for group in groups),
+        "distinct_observed_prompts": len(observed_prompts),
+        "signal_gate_version": 3, "sampling_provenance": provenance,
+        "sampling_identity_verified": identities_verified(provenance),
+        "signal_task_ids": targets, "tasks": tasks,
+        "genuine_signal_screened": complete and bool(targets)
+            and all(tasks[task]["genuine_signal_screened"] for task in targets),
         "is_training": False, "private_arena_improvement": None}
 
 
@@ -104,8 +144,9 @@ def load_verified(directory):
 
 
 def confirmation(screen_protocol, screen, confirm_protocol, confirmed):
-    for key in ("provider", "source_files_sha256", "tokenizer_sha256", "samples_per_group"):
-        if screen_protocol[key] != confirm_protocol[key]:
+    for key in ("provider", "source_files_sha256", "tokenizer_sha256", "samples_per_group",
+                "profile", "signal_task_ids", "sampling_settings"):
+        if screen_protocol.get(key) != confirm_protocol.get(key):
             raise ValueError("unmatched confirmation settings")
     if screen_protocol.get("stage") != "screen" or confirm_protocol.get("stage") != "confirm":
         raise ValueError("confirmation stages differ")
@@ -113,16 +154,34 @@ def confirmation(screen_protocol, screen, confirm_protocol, confirmed):
         raise ValueError("confirmation prompts overlap")
     if confirm_protocol["groups"] != screen_protocol.get("planned_confirmation_groups"):
         raise ValueError("confirmation differs from predeclared prompts")
-    first = screen.get("sampling_provenance", {})
-    fresh = confirmed.get("sampling_provenance", {})
-    independent = (screen.get("signal_gate_version") == confirmed.get("signal_gate_version") == 2
-                   and screen.get("sampling_identity_verified") is True
-                   and confirmed.get("sampling_identity_verified") is True)
-    for field in ("client_label_hashes", "provider_response_id_hashes"):
-        left, right = set(first.get(field, [])), set(fresh.get(field, []))
-        independent = independent and bool(left) and bool(right) and left.isdisjoint(right)
+    targets = signal_tasks(screen_protocol)
+    if targets != signal_tasks(confirm_protocol):
+        raise ValueError("unmatched signal tasks")
+    arms = {}
+    for task_id in sorted({task for task, _ in screen_protocol["groups"]}):
+        first = screen.get("tasks", {}).get(task_id, {})
+        fresh = confirmed.get("tasks", {}).get(task_id, {})
+        independent = (screen.get("signal_gate_version") == confirmed.get("signal_gate_version") == 3
+                       and first.get("sampling_identity_verified") is True
+                       and fresh.get("sampling_identity_verified") is True)
+        for field in ("client_label_hashes", "provider_response_id_hashes"):
+            left = set(first.get("sampling_provenance", {}).get(field, []))
+            right = set(fresh.get("sampling_provenance", {}).get(field, []))
+            all_before = set(screen.get("sampling_provenance", {}).get(field, []))
+            all_after = set(confirmed.get("sampling_provenance", {}).get(field, []))
+            independent = (independent and bool(left) and bool(right)
+                           and left.isdisjoint(all_after) and right.isdisjoint(all_before))
+        before = {g["prompt_sha256"] for g in screen["groups"] if g["task_id"] == task_id}
+        after = {g["prompt_sha256"] for g in confirmed["groups"] if g["task_id"] == task_id}
+        prompts_disjoint = bool(before) and bool(after) and before.isdisjoint(after)
+        arms[task_id] = {"signal_required": task_id in targets,
+            "sampling_identities_disjoint": bool(independent), "prompt_identities_disjoint": prompts_disjoint,
+            "confirmed": bool(first.get("genuine_signal_screened") and fresh.get("genuine_signal_screened")
+                              and independent and prompts_disjoint)}
+    independent = bool(targets) and all(arms[t]["sampling_identities_disjoint"] for t in targets)
     return {"provisional_single_family_signal_confirmed": screen["genuine_signal_screened"] and
-            confirmed["genuine_signal_screened"] and independent,
+            confirmed["genuine_signal_screened"] and bool(targets) and all(arms[t]["confirmed"] for t in targets),
+            "signal_task_ids": targets, "tasks": arms,
             "sampling_identities_disjoint": bool(independent), "is_model_improvement": False,
             "darwin_promotion": False, "arena_submission_authorized": False}
 

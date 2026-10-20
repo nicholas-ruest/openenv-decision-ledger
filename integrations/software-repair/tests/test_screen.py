@@ -104,3 +104,15 @@ def test_confirmation_plan_uses_disjoint_seeds_without_any_provider_call(monkeyp
     assert plan["stage"] == "confirm" and not plan["executed"]
     assert {seed for _, seed in plan["groups"]}.isdisjoint(seed for _, seed in screen.GROUPS)
     assert plan["max_calls"] == 96
+
+
+def test_replay_profile_plan_and_lock_precede_budget_authentication_or_provider(monkeypatch, capsys):
+    for name in ("quote", "DollarReservations"):
+        monkeypatch.setattr(screen, name, lambda *a: pytest.fail("plan or lock touched admission/provider"))
+    assert screen.main(["--profile", "replay_compare"]) == 0
+    plan = json.loads(capsys.readouterr().out)
+    assert plan["signal_task_ids"] == ["software_repair-replay-d3"]
+    assert len(plan["groups"]) == 4 and plan["max_calls"] == 192
+    assert not plan["executed"] and not plan["execution_enabled"]
+    with pytest.raises(ValueError, match="plan-only"):
+        screen.main(["--profile", "replay_compare", "--execute"])

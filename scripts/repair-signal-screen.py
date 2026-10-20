@@ -26,6 +26,8 @@ sys.path.insert(0, str(ROOT / "integrations/software-repair"))
 from repair_env.environment import RepairAction, RepairEnvironment, check  # noqa: E402
 from repair_env.tasks import visible_files, SOURCE_PATH
 from repair_env.runner import Program, Rejected  # noqa: E402
+sys.path.insert(0, str(ROOT / "integrations/software-repair/scripts"))
+from screen_profiles import get_profile, MODEL, TOKENIZER_SHA, SAMPLES, MAX_TURNS
 
 HELPER = ROOT / "integrations/openenv-arena/scripts/calibrate.py"
 sys.path.insert(0, str(HELPER.parent.parent))
@@ -33,12 +35,8 @@ SPEC = importlib.util.spec_from_file_location("baseline_calibration_utilities", 
 helper = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(helper)
 
-TOKENIZER_SHA = "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3"
-MODEL = "Qwen/Qwen3.8-27B"
-GROUPS = [("software_repair-release-d1", 1030000), ("software_repair-release-d1", 1030100)]
-CONFIRM_GROUPS = [("software_repair-release-d1", 1031000), ("software_repair-release-d1", 1031100)]
-SAMPLES = 4
-MAX_TURNS = 12
+GROUPS = get_profile("release", "screen")["groups"]
+CONFIRM_GROUPS = get_profile("release", "confirm")["groups"]
 BASE = "https://router.huggingface.co/v1"
 
 
@@ -220,16 +218,19 @@ def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadlin
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--execute", action="store_true")
+    parser.add_argument("--profile", choices=("release", "replay_compare"), default="release")
     parser.add_argument("--stage", choices=("screen", "confirm"), default="screen")
     parser.add_argument("--budget-receipt", type=Path)
     parser.add_argument("--tokenizer", type=Path)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args(argv)
-    groups = GROUPS if args.stage == "screen" else CONFIRM_GROUPS
+    profile = get_profile(args.profile, args.stage)
+    groups = profile["groups"]
     if not args.execute:
-        print(json.dumps({"executed": False, "stage": args.stage, "groups": groups, "samples_per_group": SAMPLES,
-                          "max_calls": len(groups) * SAMPLES * MAX_TURNS, "max_quoted_reservations_usd": 2}))
+        print(json.dumps({**profile, "executed": False, "max_quoted_reservations_usd": 2}))
         return 0
+    if not profile["execution_enabled"]:
+        raise ValueError("replay comparison is plan-only; paid execution is disabled")
     budget = DollarReservations(args.budget_receipt)
     token = os.environ.get("HF_TOKEN", "")
     if not token:
@@ -239,14 +240,20 @@ def main(argv=None):
     opener = urllib.request.build_opener(helper.NoRedirect(), urllib.request.ProxyHandler({}))
     frozen = quote(opener, token)
     args.output.mkdir(exist_ok=False)
-    protocol = {"stage": args.stage, "groups": groups, "samples_per_group": SAMPLES, "provider": frozen,
+    protocol = {"stage": args.stage, "profile": args.profile, "groups": groups,
+        "signal_task_ids": profile["signal_task_ids"], "sampling_settings": profile["sampling_settings"],
+        "samples_per_group": SAMPLES, "provider": frozen,
         "source_files_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
-            for p in [Path(__file__), HELPER, *sorted((ROOT / "integrations/software-repair/repair_env").glob("*.py"))]},
+            for p in [Path(__file__), HELPER,
+                      ROOT / "integrations/software-repair/scripts/screen_profiles.py",
+                      ROOT / "integrations/software-repair/scripts/analyze_screen.py",
+                      *sorted((ROOT / "integrations/software-repair/repair_env").glob("*.py"))]},
         "tokenizer_sha256": TOKENIZER_SHA, "thinking_requested": True, "thinking_verified": False,
         "max_calls": len(groups) * SAMPLES * MAX_TURNS, "max_turns_per_rollout": MAX_TURNS, "no_retry": True,
         "arena_budget_matched": False, "checkpoint_attested": False,
         "is_training": False, "private_arena_score": None,
-        "planned_confirmation_groups": CONFIRM_GROUPS, "confirmation_requires_genuine_signal": True}
+        "planned_confirmation_groups": profile["planned_confirmation_groups"],
+        "confirmation_requires_genuine_signal": True}
     (args.output / "protocol.json").write_text(json.dumps(protocol, indent=2))
     stop, deadline, records = threading.Event(), time.monotonic() + 1200, []
     with (args.output / "episodes.jsonl").open("x") as stream:

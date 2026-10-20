@@ -9,7 +9,10 @@ The packet records actual workspace hashes and frozen source hashes for all
 eight proposed prompts. The builder has no provider or credential access,
 rejects `--execute`, and refuses to overwrite an existing output. Two offline
 checks verify prompt identity, disjoint seeds and the CLI refusal behavior.
-It does not configure or launch the inference runner.
+The runner shares the same frozen profile. Preview it with
+`python scripts/repair-signal-screen.py --profile replay_compare` in the pinned
+native environment. This profile rejects `--execute` before budget, credential,
+tokenizer or provider access. The historical release profile is preserved.
 Rebuild the packet after any runner configuration or source change.
 
 The offline audit establishes that independent single-bug repairs can earn
@@ -40,8 +43,7 @@ identical-prompt causal comparisons.
 Use the existing frozen limits: temperature0.7, thinking on, JSON actions,
 maximum12 actions,8192 episode generation/observation units,16384 context units,
 no retries. Record actual protocol values rather than inferring them from this
-plan. The present screen script has fixed task groups: configuring and testing
-the new groups is still required before any execution.
+plan. Replay execution remains locked; this packet is not a paid launch request.
 
 ## Admission and decision
 
@@ -52,7 +54,13 @@ allocation, reset counters or spend during the current offline continuation.
 If the complete predeclared screen cannot fit the remaining reconciled cap,
 do not silently reduce the groups or treat an incomplete screen as evidence.
 
-Analyze each arm separately with the version2 identity/grader checks. A
+Analyze each arm separately with the version3 identity/grader checks. Only
+replay-d3 is a required signal arm; productive old replay results cannot qualify
+the candidate. Explicit profile, signal targets and sampling settings must match
+across stages. Different seed labels with identical prompt hashes cannot serve
+as fresh confirmation, and copied request/response identities from either arm
+cannot supply independent samples. Mixed legacy archives without a declared
+candidate remain descriptive. A
 productive group requires at least three valid completions, a full solve and
 a genuine non-full valid outcome. Provider, schema, truncation, execution and
 budget failures cannot supply reward variance. Record full, partial and valid
