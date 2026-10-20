@@ -125,11 +125,42 @@ def classify(protocol, rows):
         "is_training": False, "private_arena_improvement": None}
 
 
+def verify_worker_receipt(directory, protocol):
+    supervision = protocol.get("worker_supervision")
+    if supervision is None:
+        if "integrations/software-repair/scripts/screen_deadline.py" in protocol.get("source_files_sha256", {}):
+            raise ValueError("supervised worker marker missing")
+        return  # Historical archives retain their original unsupervised protocol.
+    if type(supervision) is not dict or supervision.get("required") is not True:
+        raise ValueError("invalid worker supervision protocol")
+    limit = supervision.get("wall_seconds")
+    if type(limit) not in (int, float) or not math.isfinite(limit) or not 0 < limit <= 1200:
+        raise ValueError("invalid worker supervision bound")
+    if "sampling_settings" in protocol and protocol["sampling_settings"].get("stage_wall_seconds") != limit:
+        raise ValueError("worker bound differs from frozen settings")
+    directory = Path(directory)
+    receipt = directory.with_name(directory.name + ".worker.jsonl")
+    if not receipt.is_file():
+        raise ValueError("supervised worker receipt unavailable")
+    events = [json.loads(line) for line in receipt.read_text().splitlines() if line.strip()]
+    if len(events) != 3 or [e.get("event") for e in events] != ["starting", "started", "terminal"]:
+        raise ValueError("supervised worker lifecycle incomplete")
+    started, worker, terminal = events
+    if (started.get("wall_seconds") != supervision.get("wall_seconds")
+            or type(worker.get("pid")) is not int or worker["pid"] <= 0
+            or terminal.get("pid") != worker["pid"] or terminal.get("status") != "completed"
+            or terminal.get("shutdown_verified") is not True
+            or terminal.get("finished_before_deadline") is not True
+            or type(terminal.get("worker_exitcode")) is not int or terminal["worker_exitcode"] != 0):
+        raise ValueError("supervised worker did not complete within deadline")
+
+
 def load_verified(directory):
     directory = Path(directory)
     if not (directory / "complete.json").exists():
         raise ValueError("screen has not completed")
     protocol = json.loads((directory / "protocol.json").read_text())
+    verify_worker_receipt(directory, protocol)
     for name, expected in protocol["source_files_sha256"].items():
         source = (REPO / name).resolve()
         if not source.is_relative_to(REPO) or hashlib.sha256(source.read_bytes()).hexdigest() != expected:

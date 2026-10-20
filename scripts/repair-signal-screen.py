@@ -28,6 +28,9 @@ from repair_env.tasks import visible_files, SOURCE_PATH
 from repair_env.runner import Program, Rejected  # noqa: E402
 sys.path.insert(0, str(ROOT / "integrations/software-repair/scripts"))
 from screen_profiles import get_profile, MODEL, TOKENIZER_SHA, SAMPLES, MAX_TURNS
+from screen_deadline import DeadlineExceeded, request_timeout, run_bounded
+
+_now = time.monotonic
 
 HELPER = ROOT / "integrations/openenv-arena/scripts/calibrate.py"
 sys.path.insert(0, str(HELPER.parent.parent))
@@ -44,9 +47,9 @@ def fingerprint(value):
     return hashlib.sha256(helper.canonical(value).encode()).hexdigest()
 
 
-def quote(opener, token):
+def quote(opener, token, timeout=15):
     request = urllib.request.Request(BASE + "/models", headers={"Authorization": "Bearer " + token})
-    with opener.open(request, timeout=15) as response:
+    with opener.open(request, timeout=timeout) as response:
         raw = response.read(2_000_001)
     if len(raw) > 2_000_000:
         raise ValueError("model catalog exceeds bound")
@@ -108,9 +111,29 @@ class DollarReservations:
         return float(amount)
 
 
+def failed_finish_diagnostic(env, last_observation):
+    """Score locally after failure without changing its label or valid reward."""
+    try:
+        terminal = last_observation if last_observation.done else env.step(RepairAction(op="submit"))
+        diagnostic = {"available": True, "origin": "local_terminal_diagnostic",
+            "finish_action_sent": not last_observation.done, "observed_done": terminal.done,
+            "terminal_reward": float(terminal.reward), "environment_error": bool(terminal.error),
+            "counts_as_valid_completion": False}
+        try:
+            _, outcomes = check(Program(env._files[SOURCE_PATH]), env._task, env._task.hidden, details=True)
+            diagnostic["hidden_execution_rejections"] = sum(item["error"] is not None for item in outcomes)
+            diagnostic["hidden_wrong_answers"] = sum(not item["passed"] and item["error"] is None for item in outcomes)
+        except Exception as exc:
+            diagnostic["grader_error_type"] = type(exc).__name__
+        return diagnostic
+    except Exception as exc:
+        return {"available": False, "error_type": type(exc).__name__, "counts_as_valid_completion": False}
+
+
 def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadline, prefix):
     env = RepairEnvironment()
     reset = env.reset(task_id=task_id, seed=seed)
+    last_observation = reset
     identity = fingerprint({"reset": reset.model_dump(), "files": visible_files(env._task)})
     messages = [{"role": "system", "content": "Operate the Python repair workspace. Inspect files, edit src/solution.py, test, then submit the repaired workspace. Emit exactly one JSON action instance, no markdown. Follow the README Python subset. Action schema: " + json.dumps(RepairAction.model_json_schema())},
                 {"role": "user", "content": reset.model_dump_json()}]
@@ -119,7 +142,7 @@ def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadlin
     opener = urllib.request.build_opener(helper.NoRedirect(), urllib.request.ProxyHandler({}))
     generated, observed = 0, 0
     for turn in range(MAX_TURNS):
-        if stop.is_set() or time.monotonic() >= deadline:
+        if stop.is_set() or _now() >= deadline:
             row["failure"] = "screen_stopped"
             break
         remaining = 8192 - generated - observed
@@ -128,20 +151,29 @@ def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadlin
             row["failure"] = "episode_budget_exhausted"
             break
         try:
-            if quote(opener, token) != frozen:
+            if quote(opener, token, request_timeout(deadline, 15, now=_now())) != frozen:
                 stop.set()
                 raise ValueError("selected metadata or quote changed")
+            request_timeout(deadline, 90, now=_now())  # No reservation after quote consumes the deadline.
+            if stop.is_set():
+                raise DeadlineExceeded("screen stopped before reservation")
             # UTF8 bytes plus overhead is a deliberately conservative billing reservation.
             prompt_bound = len(helper.canonical(messages).encode()) + 4096
             call_label = f"{prefix}:{task_id}:{seed}:{sample}:{turn}"
             reserved = budget.reserve(call_label, prompt_bound,
                                      allowance, frozen["provider"]["pricing"])
+            if stop.is_set():
+                raise DeadlineExceeded("screen stopped before provider call")
             reply = helper.provider_call(opener, BASE, token, {"model": MODEL + ":deepinfra",
                 "messages": messages, "temperature": 0.7, "max_tokens": allowance,
                 "response_format": {"type": "json_object"},
-                "chat_template_kwargs": {"enable_thinking": True}}, 90)
+                "chat_template_kwargs": {"enable_thinking": True}},
+                request_timeout(deadline, 90, now=_now()))
         except Exception as exc:
-            if isinstance(exc, ValueError) and str(exc) == "screen reservation cap exhausted":
+            if isinstance(exc, DeadlineExceeded):
+                row["failure"] = "screen_stopped"
+                stop.set()
+            elif isinstance(exc, ValueError) and str(exc) == "screen reservation cap exhausted":
                 row["failure"] = "screen_reservation_cap_exhausted"
                 stop.set()
             elif isinstance(exc, ValueError) and str(exc) == "billing observation expired":
@@ -189,6 +221,7 @@ def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadlin
             row["failure"] = "invalid_json_action"
             break
         observation = env.step(action)
+        last_observation = observation
         text = observation.model_dump_json()
         observed += counter.count(text)
         messages.append({"role": "user", "content": text})
@@ -210,9 +243,75 @@ def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadlin
             break
     else:
         row["failure"] = "screen_tool_budget_exhausted"
+    if row["failure"]:
+        row["termination_grading"] = failed_finish_diagnostic(env, last_observation)
     row.update(generation_tokens=generated, observation_tokens=observed,
                arena_budget_matched=False, thinking_verified=False)
     return row
+
+
+def _execute(deadline, args, profile):
+    groups = profile["groups"]
+    args.output.mkdir(exist_ok=False)  # Claim a fresh root before auth or HTTP.
+    request_timeout(deadline, 15, now=_now())
+    budget = DollarReservations(args.budget_receipt)
+    token = os.environ.get("HF_TOKEN", "")
+    if not token:
+        raise ValueError("existing private environment authentication required")
+    counter = helper.load_counter(argparse.Namespace(accounting="arena", tokenizer_json=args.tokenizer,
+                                                   tokenizer_sha256=TOKENIZER_SHA))
+    opener = urllib.request.build_opener(helper.NoRedirect(), urllib.request.ProxyHandler({}))
+    frozen = quote(opener, token, request_timeout(deadline, 15, now=_now()))
+    request_timeout(deadline, 90, now=_now())
+    protocol = {"stage": args.stage, "profile": args.profile, "groups": groups,
+        "signal_task_ids": profile["signal_task_ids"], "sampling_settings": profile["sampling_settings"],
+        "samples_per_group": SAMPLES, "provider": frozen,
+        "source_files_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
+            for p in [Path(__file__), HELPER,
+                      ROOT / "integrations/software-repair/scripts/screen_profiles.py",
+                      ROOT / "integrations/software-repair/scripts/analyze_screen.py",
+                      ROOT / "integrations/software-repair/scripts/screen_deadline.py",
+                      *sorted((ROOT / "integrations/software-repair/repair_env").glob("*.py"))]},
+        "tokenizer_sha256": TOKENIZER_SHA, "thinking_requested": True, "thinking_verified": False,
+        "max_calls": len(groups) * SAMPLES * MAX_TURNS, "max_turns_per_rollout": MAX_TURNS, "no_retry": True,
+        "arena_budget_matched": False, "checkpoint_attested": False,
+        "is_training": False, "private_arena_score": None,
+        "worker_supervision": {"required": True, "wall_seconds": profile["sampling_settings"]["stage_wall_seconds"]},
+        "planned_confirmation_groups": profile["planned_confirmation_groups"],
+        "confirmation_requires_genuine_signal": True}
+    (args.output / "protocol.json").write_text(json.dumps(protocol, indent=2))
+    stop, records = threading.Event(), []
+    with (args.output / "episodes.jsonl").open("x") as stream:
+        for task_id, seed in groups:
+            if stop.is_set():
+                break
+            with ThreadPoolExecutor(max_workers=SAMPLES) as pool:
+                futures = [pool.submit(episode, task_id, seed, i, token, counter, budget,
+                    frozen, stop, deadline, args.output.name) for i in range(SAMPLES)]
+                for sample, future in enumerate(futures):
+                    try:
+                        record = future.result()
+                    except Exception as exc:
+                        stop.set()
+                        record = {"task_id": task_id, "seed": seed, "sample": sample,
+                                  "failure": "screen_internal_failure",
+                                  "failure_type": type(exc).__name__, "reward": 0, "solved": False}
+                    raw = json.dumps(record).replace(token, "[REDACTED]")
+                    stream.write(raw + "\n")
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                    records.append(record)
+    summary = {"rollouts": len(records), "unique_prompt_groups": len(groups),
+        "full_solves": sum(row["solved"] and not row["failure"] for row in records),
+        "failed_episode_terminal_diagnostics": sum("termination_grading" in row for row in records),
+        "groups": [{"task_id": task, "seed": seed,
+            "rewards": [r["reward"] for r in records if r["task_id"] == task and r["seed"] == seed],
+            "failures": [r["failure"] for r in records if r["task_id"] == task and r["seed"] == seed],
+            "prompt_hashes": sorted({r.get("prompt_sha256", "missing") for r in records if r["task_id"] == task and r["seed"] == seed})}
+            for task, seed in groups], "is_training": False, "arena_budget_matched": False}
+    (args.output / "complete.json").write_text(json.dumps(summary, indent=2))
+    print(json.dumps(summary))
+    return 0
 
 
 def main(argv=None):
@@ -225,66 +324,19 @@ def main(argv=None):
     parser.add_argument("--output", type=Path)
     args = parser.parse_args(argv)
     profile = get_profile(args.profile, args.stage)
-    groups = profile["groups"]
     if not args.execute:
         print(json.dumps({**profile, "executed": False, "max_quoted_reservations_usd": 2}))
         return 0
     if not profile["execution_enabled"]:
         raise ValueError("replay comparison is plan-only; paid execution is disabled")
-    budget = DollarReservations(args.budget_receipt)
-    token = os.environ.get("HF_TOKEN", "")
-    if not token:
-        raise ValueError("existing private environment authentication required")
-    counter = helper.load_counter(argparse.Namespace(accounting="arena", tokenizer_json=args.tokenizer,
-                                                   tokenizer_sha256=TOKENIZER_SHA))
-    opener = urllib.request.build_opener(helper.NoRedirect(), urllib.request.ProxyHandler({}))
-    frozen = quote(opener, token)
-    args.output.mkdir(exist_ok=False)
-    protocol = {"stage": args.stage, "profile": args.profile, "groups": groups,
-        "signal_task_ids": profile["signal_task_ids"], "sampling_settings": profile["sampling_settings"],
-        "samples_per_group": SAMPLES, "provider": frozen,
-        "source_files_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
-            for p in [Path(__file__), HELPER,
-                      ROOT / "integrations/software-repair/scripts/screen_profiles.py",
-                      ROOT / "integrations/software-repair/scripts/analyze_screen.py",
-                      *sorted((ROOT / "integrations/software-repair/repair_env").glob("*.py"))]},
-        "tokenizer_sha256": TOKENIZER_SHA, "thinking_requested": True, "thinking_verified": False,
-        "max_calls": len(groups) * SAMPLES * MAX_TURNS, "max_turns_per_rollout": MAX_TURNS, "no_retry": True,
-        "arena_budget_matched": False, "checkpoint_attested": False,
-        "is_training": False, "private_arena_score": None,
-        "planned_confirmation_groups": profile["planned_confirmation_groups"],
-        "confirmation_requires_genuine_signal": True}
-    (args.output / "protocol.json").write_text(json.dumps(protocol, indent=2))
-    stop, deadline, records = threading.Event(), time.monotonic() + 1200, []
-    with (args.output / "episodes.jsonl").open("x") as stream:
-        for task_id, seed in groups:
-            if stop.is_set():
-                break
-            with ThreadPoolExecutor(max_workers=SAMPLES) as pool:
-                futures = [pool.submit(episode, task_id, seed, i, token, counter, budget,
-                    frozen, stop, deadline, args.output.name) for i in range(SAMPLES)]
-                for future in futures:
-                    try:
-                        record = future.result()
-                    except Exception as exc:
-                        stop.set()
-                        record = {"task_id": task_id, "seed": seed, "failure": "screen_internal_failure",
-                                  "failure_type": type(exc).__name__, "reward": 0, "solved": False}
-                    raw = json.dumps(record).replace(token, "[REDACTED]")
-                    stream.write(raw + "\n")
-                    stream.flush()
-                    os.fsync(stream.fileno())
-                    records.append(record)
-    summary = {"rollouts": len(records), "unique_prompt_groups": len(groups),
-        "full_solves": sum(row["solved"] for row in records),
-        "groups": [{"task_id": task, "seed": seed,
-            "rewards": [r["reward"] for r in records if r["task_id"] == task and r["seed"] == seed],
-            "failures": [r["failure"] for r in records if r["task_id"] == task and r["seed"] == seed],
-            "prompt_hashes": sorted({r.get("prompt_sha256", "missing") for r in records if r["task_id"] == task and r["seed"] == seed})}
-            for task, seed in groups], "is_training": False, "arena_budget_matched": False}
-    (args.output / "complete.json").write_text(json.dumps(summary, indent=2))
-    print(json.dumps(summary))
-    return 0
+    if args.output is None or args.budget_receipt is None or args.tokenizer is None:
+        raise ValueError("fresh output, existing budget receipt and pinned tokenizer paths required")
+    if args.output.exists():
+        raise ValueError("screen output already exists")
+    receipt = args.output.with_name(args.output.name + ".worker.jsonl")
+    result = run_bounded(_execute, (args, profile), profile["sampling_settings"]["stage_wall_seconds"], receipt)
+    print(json.dumps({"worker": result, "is_training": False}))
+    return 0 if result["status"] == "completed" and result["shutdown_verified"] else 1
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 import importlib.util
 import hashlib
+import json
 from pathlib import Path
 
 import pytest
@@ -30,6 +31,17 @@ def test_failures_cannot_manufacture_productive_variance():
     assert not result["genuine_signal_screened"]
     assert result["groups"][0]["valid_rewards"] == [1, 1]
     assert result["groups"][0]["wrong"] == 0
+
+
+def test_failed_finish_diagnostics_never_supply_valid_reward_variance():
+    protocol, rows = fixture([1, 1, 0, 0], [None, None, "invalid_json_action", "episode_budget_exceeded"])
+    for row, reward in zip(rows[2:], [.5, .75]):
+        row["termination_grading"] = {"available": True, "terminal_reward": reward,
+                                       "counts_as_valid_completion": False}
+    result = gate.classify(protocol, rows)
+    assert not result["genuine_signal_screened"]
+    assert result["groups"][0]["valid_rewards"] == [1, 1]
+    assert result["groups"][0]["partial"] == result["groups"][0]["wrong"] == 0
 
 
 def test_actual_valid_partial_and_wrong_answers_supply_signal():
@@ -231,3 +243,44 @@ def test_changed_sampling_settings_or_legacy_gate_cannot_confirm():
     q["sampling_settings"]["temperature"] = .7
     before["signal_gate_version"] = after["signal_gate_version"] = 2
     assert not gate.confirmation(p, before, q, after)["provisional_single_family_signal_confirmed"]
+
+
+def worker_events():
+    return [{"event": "starting", "wall_seconds": 1}, {"event": "started", "pid": 123},
+            {"event": "terminal", "pid": 123, "status": "completed", "worker_exitcode": 0,
+             "shutdown_verified": True, "finished_before_deadline": True}]
+
+
+@pytest.mark.parametrize("field,value", [("status", "timed_out"), ("shutdown_verified", False),
+    ("finished_before_deadline", False), ("worker_exitcode", 1), ("pid", 124)])
+def test_complete_marker_cannot_override_failed_worker_receipt(tmp_path, field, value):
+    root = tmp_path / "run"
+    root.mkdir()
+    protocol = {"worker_supervision": {"required": True, "wall_seconds": 1}}
+    (root / "complete.json").write_text("{}")
+    (root / "protocol.json").write_text(json.dumps(protocol))
+    events = worker_events()
+    events[-1][field] = value
+    root.with_name("run.worker.jsonl").write_text("\n".join(json.dumps(row) for row in events))
+    with pytest.raises(ValueError, match="within deadline"):
+        gate.load_verified(root)
+
+
+def test_worker_receipt_is_required_complete_and_matches_frozen_wall_limit(tmp_path):
+    root = tmp_path / "run"
+    protocol = {"worker_supervision": {"required": True, "wall_seconds": 1}}
+    with pytest.raises(ValueError, match="unavailable"):
+        gate.verify_worker_receipt(root, protocol)
+    receipt = root.with_name("run.worker.jsonl")
+    events = worker_events()
+    receipt.write_text("\n".join(json.dumps(row) for row in events[:-1]))
+    with pytest.raises(ValueError, match="incomplete"):
+        gate.verify_worker_receipt(root, protocol)
+    receipt.write_text("\n".join(json.dumps(row) for row in events))
+    gate.verify_worker_receipt(root, protocol)
+    protocol["worker_supervision"]["wall_seconds"] = 2
+    with pytest.raises(ValueError, match="within deadline"):
+        gate.verify_worker_receipt(root, protocol)
+    with pytest.raises(ValueError, match="marker missing"):
+        gate.verify_worker_receipt(root, {"source_files_sha256": {
+            "integrations/software-repair/scripts/screen_deadline.py": "frozen"}})

@@ -44,6 +44,7 @@ def build():
     source = [Path(__file__), ROOT / "scripts/repair-signal-screen.py",
               ROOT / "integrations/software-repair/scripts/analyze_screen.py",
               ROOT / "integrations/software-repair/scripts/screen_profiles.py",
+              ROOT / "integrations/software-repair/scripts/screen_deadline.py",
               ROOT / "integrations/openenv-arena/scripts/calibrate.py",
               *sorted((ROOT / "integrations/software-repair/repair_env").glob("*.py"))]
     return {"plan_version": 2, "profile": "replay_compare",
@@ -58,6 +59,7 @@ def build():
         "unverified": ["Provider selected metadata and price quote must be frozen at admission.",
             "Private billing reconciliation and shared reservation admission are not performed.",
             "The runner shares this profile but replay paid execution is unconditionally disabled.",
+            "Local worker supervision does not attest remote request cancellation or billing stop.",
             "Workspace hashes are not native reset observation hashes; those must match within live groups.",
             "Source revision records the parent checkout; source hashes include local plan content.",
             "Arena checkpoint, thinking and chat wrapper equivalence is unattested."],

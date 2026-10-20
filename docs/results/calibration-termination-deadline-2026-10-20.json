@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-20",
+  "source_parent": "0aa99d8c2205ac14f841067d8c0455cc0c7a383e",
+  "previous_ci": {
+    "run": 39376238953,
+    "conclusion": "SUCCESS",
+    "tests_passed": 317,
+    "anonymous_native_controls_passed": 120,
+    "sdk_checks_passed": 6
+  },
+  "changes": [
+    "An owned Linux worker supervises the calibration environment and HTTP threads; wall time includes startup.",
+    "Quote/provider timeouts use remaining time, with fresh deadline/stop checks before reservation and provider admission.",
+    "Existing reservations are never refunded when time or stop state is consumed after reservation.",
+    "Exclusive worker receipts record PID, exit, shutdown and deadline outcome; failed/late receipts cannot be overridden by a completion marker.",
+    "Local finish grading after failed episodes is stored separately and cannot supply valid reward variance or full-solve counts.",
+    "Already-terminal tool-budget failures retain their original reward rather than being regraded.",
+    "The replay profile remains locked before budget, credentials, tokenizer or provider access."
+  ],
+  "offline_checks": {
+    "passed": 65,
+    "seconds": 1.23,
+    "command": "PYTHONPATH=integrations/software-repair python -m pytest integrations/software-repair/tests/test_screen_deadline.py integrations/software-repair/tests/test_signal_gate.py integrations/software-repair/tests/test_replay_calibration_plan.py integrations/software-repair/tests/test_screen_profiles.py -q",
+    "actual_local_process_checks": [
+      "A stuck worker with four threads was killed at a 0.5-second bound; SIGKILL exit and stopped state were observed within 3 seconds, with the partial archive preserved.",
+      "A second worker blocked on actual localhost HTTP requests was killed and its shutdown observed under the same bound.",
+      "Normal exit, nonzero exit, sanitized exception and missing worker result remain distinct.",
+      "Existing receipt paths and invalid/unbounded limits are refused without overwriting archives."
+    ],
+    "gate_checks": [
+      "Failed-episode terminal reward diagnostics cannot supply valid variance.",
+      "Timeout, late completion, failed exit, unverified shutdown, mismatched PID and incomplete receipts fail closed.",
+      "A completion marker cannot override a failed supervised receipt."
+    ]
+  },
+  "native_episode_checks": {
+    "status": "pending full CI",
+    "cases": [
+      "Partial replay repair followed by invalid JSON, truncation or observation overflow retains failure and valid reward 0, with terminal diagnostic 0.5.",
+      "An already-terminal environment tool-budget failure is not regraded into a success.",
+      "Deadline consumption during quote/reservation and stop during reservation do not admit a provider call; existing reservations persist.",
+      "The CLI uses an owned supervised worker; mocked fixture execution does not access credentials or provider admission.",
+      "Failed full-reward rows are excluded from summary full solves."
+    ]
+  },
+  "profile_packet": "docs/results/replay-calibration-profile-v2-bounded-2026-10-20.json",
+  "runtime_files_changed": false,
+  "reward_formula_changed": false,
+  "training_mix_changed": false,
+  "new_model_calls": 0,
+  "is_training": false,
+  "signal_confirmed": false,
+  "promotion": false,
+  "ranking_improvement": null,
+  "limitations": [
+    "Process shutdown is local evidence, not provider request cancellation or invoice verification.",
+    "The supervisor targets this in-process environment/HTTP worker, not arbitrary subprocess trees or remote jobs.",
+    "Local supervision depends on its parent remaining alive; parent-crash behavior is not attested by these tests.",
+    "Native grading/CLI cases still require the pinned-SDK CI; offline process checks are not model rollouts.",
+    "Hard-killed archives may lack terminal grading and remain incomplete.",
+    "Proxy checkpoint/thinking/Arena wrapper equivalence remains unattested.",
+    "The default eight-task mix and validated 7156868 review image remain unchanged."
+  ]
+}

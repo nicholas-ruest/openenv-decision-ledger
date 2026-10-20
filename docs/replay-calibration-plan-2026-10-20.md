@@ -45,6 +45,25 @@ maximum12 actions,8192 episode generation/observation units,16384 context units,
 no retries. Record actual protocol values rather than inferring them from this
 plan. Replay execution remains locked; this packet is not a paid launch request.
 
+The historical execution entrypoint now supervises its in-process environment
+and HTTP threads in one owned Linux worker. Its wall bound includes startup.
+Socket timeouts are limited by the remaining time; deadline/stop checks run
+again after quote and reservation. Reservations already appended are never
+refunded. The supervisor records the worker PID, observed exit and deadline
+outcome in an exclusive sibling `.worker.jsonl` receipt. It kills a stuck
+worker, preserves partial archives and does not fabricate a completion marker.
+Analysis requires a successful matching receipt for supervised protocols;
+an existing `complete.json` cannot override a failed or late worker outcome.
+This validates local shutdown only, not remote cancellation or billing stop.
+
+After a format, truncation or budget failure, local finish-action grading is
+stored under `termination_grading` when available. Its reward is diagnostic:
+the failure label and valid-completion reward remain unchanged, and it cannot
+supply GRPO signal or full-solve counts. An episode already terminal from the
+environment's tool limit retains that terminal reward rather than being
+regraded into a success. A hard worker kill may leave no terminal diagnostic;
+the partial archive remains incomplete.
+
 ## Admission and decision
 
 Execution requires a fresh private reconciliation of actual inference usage and

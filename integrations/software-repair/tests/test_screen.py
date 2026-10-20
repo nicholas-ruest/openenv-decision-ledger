@@ -1,5 +1,6 @@
 import importlib.util
 import json
+from argparse import Namespace
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import threading
@@ -138,3 +139,120 @@ def test_reserved_finish_requires_literal_boolean_not_numeric_coercion(tmp_path,
     else:
         assert not result["solved"] and result["failure"] == "invalid_json_action"
         assert result["reward"] == 0  # A correct saved workspace cannot erase format failure.
+        assert result["termination_grading"]["terminal_reward"] == 1
+        assert result["termination_grading"]["counts_as_valid_completion"] is False
+
+
+@pytest.mark.parametrize("ending", ["invalid", "truncated", "budget"])
+def test_failed_episode_terminal_partial_reward_is_diagnostic_only(tmp_path, monkeypatch, ending):
+    from repair_env.tasks import make_task
+    task = make_task("software_repair-replay-d3", 1070000)
+    partial = task.initial_source.replace("if True:", "if identifier not in seen:")
+    frozen = {"provider": {"pricing": {"input": .2, "output": 2.5}}}
+    monkeypatch.setattr(screen, "quote", lambda *a: frozen)
+    def provider(opener, base, token, payload, timeout):
+        turn = sum(message["role"] == "assistant" for message in payload["messages"])
+        content = json.dumps({"op": "write", "path": "src/solution.py", "content": partial}) if turn == 0 else "invalid"
+        return {"id": f"offline-partial-fixture-{turn}", "choices": [{"message": {"content": content},
+            "finish_reason": "length" if ending == "truncated" and turn else "stop"}],
+            "usage": {"prompt_tokens": 100, "completion_tokens": 100}}
+    monkeypatch.setattr(screen.helper, "provider_call", provider)
+    class ObservationOverflow:
+        def count(self, text):
+            return 9000
+        def context(self, messages):
+            return 0
+    counter = ObservationOverflow() if ending == "budget" else screen.helper.TokenCounter()
+    result = screen.episode(task.task_id, task.seed, 0, "offline-fixture-placeholder", counter,
+        screen.DollarReservations(receipt(tmp_path)), frozen, threading.Event(),
+        time.monotonic() + 30, "offline-partial-fixture")
+    expected = {"invalid": "invalid_json_action", "truncated": "completion_truncated", "budget": "episode_budget_exceeded"}
+    assert result["failure"] == expected[ending] and not result["solved"] and result["reward"] == 0
+    diagnostic = result["termination_grading"]
+    assert diagnostic["available"] and diagnostic["finish_action_sent"] and diagnostic["observed_done"]
+    assert diagnostic["terminal_reward"] == .5 and not diagnostic["counts_as_valid_completion"]
+
+
+def test_already_terminal_budget_failure_is_not_regraded_into_a_success(monkeypatch):
+    from repair_env.environment import RepairAction, RepairEnvironment
+    from repair_env.tasks import make_task
+    env = RepairEnvironment()
+    task = make_task("software_repair-counts-d2", 1070100)
+    env.reset(task_id=task.task_id, seed=task.seed)
+    env.step(RepairAction(op="write", path="src/solution.py", content=task.reference_source))
+    for _ in range(11):
+        last = env.step(RepairAction(op="list"))
+    assert last.done and last.reward == 0 and last.error
+    monkeypatch.setattr(env, "step", lambda *a: pytest.fail("terminal episode was regraded"))
+    result = screen.failed_finish_diagnostic(env, last)
+    assert result["terminal_reward"] == 0 and not result["finish_action_sent"]
+    assert result["hidden_wrong_answers"] == 0 and not result["counts_as_valid_completion"]
+
+
+@pytest.mark.parametrize("expire_after", ["quote", "reservation", "stop_during_reservation"])
+def test_deadline_consumed_during_admission_never_contacts_provider_or_refunds(tmp_path, monkeypatch, expire_after):
+    clock = [0]
+    stop = threading.Event()
+    monkeypatch.setattr(screen, "_now", lambda: clock[0])
+    frozen = {"provider": {"pricing": {"input": .2, "output": 2.5}}}
+    def quote(*args):
+        assert 0 < args[2] <= 10
+        if expire_after == "quote":
+            clock[0] = 11
+        return frozen
+    monkeypatch.setattr(screen, "quote", quote)
+    monkeypatch.setattr(screen.helper, "provider_call", lambda *a: pytest.fail("admitted an expired provider call"))
+    budget = screen.DollarReservations(receipt(tmp_path))
+    reserve = budget.reserve
+    def advancing_reservation(*args):
+        value = reserve(*args)
+        if expire_after == "reservation":
+            clock[0] = 11
+        else:
+            stop.set()
+        return value
+    monkeypatch.setattr(budget, "reserve", advancing_reservation)
+    result = screen.episode("software_repair-counts-d2", 1070200, 0, "offline-fixture-placeholder",
+        screen.helper.TokenCounter(), budget, frozen, stop, 10, "offline-deadline-fixture")
+    assert result["failure"] == "screen_stopped" and result["calls"] == []
+    if expire_after == "quote":
+        assert not budget.ledger.exists()
+    else:
+        assert len(budget.ledger.read_text().splitlines()) == 1  # Never refund an existing reservation.
+
+
+def test_cli_runs_in_owned_supervised_worker_without_admission_or_credentials(tmp_path, monkeypatch, capsys):
+    def fake_execute(until, args, profile):
+        args.output.mkdir()
+        (args.output / "fixture.json").write_text(json.dumps({"deadline_in_future": until > time.monotonic()}))
+        return 0
+    monkeypatch.setattr(screen, "_execute", fake_execute)
+    monkeypatch.setattr(screen, "quote", lambda *a: pytest.fail("fixture contacted provider"))
+    monkeypatch.setattr(screen, "DollarReservations", lambda *a: pytest.fail("fixture touched admission"))
+    output = tmp_path / "run"
+    result = screen.main(["--execute", "--output", str(output), "--budget-receipt", str(tmp_path / "unused"),
+                          "--tokenizer", str(tmp_path / "unused-tokenizer")])
+    assert result == 0 and json.loads(capsys.readouterr().out)["worker"]["shutdown_verified"]
+    assert json.loads((output / "fixture.json").read_text())["deadline_in_future"]
+    assert output.with_name("run.worker.jsonl").exists()
+
+
+def test_screen_summary_does_not_count_failed_full_reward_rows_as_solves(tmp_path, monkeypatch, capsys):
+    monkeypatch.setenv("HF_TOKEN", "offline-fixture-placeholder")
+    monkeypatch.setattr(screen.helper, "load_counter", lambda *a: screen.helper.TokenCounter())
+    monkeypatch.setattr(screen, "quote", lambda *a: {"provider": {"pricing": {"input": .2, "output": 2.5}}})
+    def failed_episode(task, seed, sample, *args):
+        return {"task_id": task, "seed": seed, "sample": sample, "solved": True, "reward": 1,
+                "failure": "invalid_json_action", "prompt_sha256": "a" * 64,
+                "termination_grading": {"terminal_reward": 1, "counts_as_valid_completion": False}}
+    monkeypatch.setattr(screen, "episode", failed_episode)
+    profile = screen.get_profile("release", "screen")
+    profile["groups"] = [["software_repair-counts-d2", 1070300]]
+    profile["signal_task_ids"] = ["software_repair-counts-d2"]
+    output = tmp_path / "run"
+    args = Namespace(output=output, budget_receipt=receipt(tmp_path), tokenizer=tmp_path / "unused",
+                     stage="screen", profile="release")
+    assert screen._execute(time.monotonic() + 30, args, profile) == 0
+    summary = json.loads((output / "complete.json").read_text())
+    assert summary["rollouts"] == 4 and summary["full_solves"] == 0
+    assert summary["failed_episode_terminal_diagnostics"] == 4
