@@ -1,7 +1,7 @@
 """Offline repair-path audit; controlled edits are not model rollouts."""
 
 import argparse
-from collections import Counter
+from collections import Counter, defaultdict
 from itertools import combinations
 import hashlib
 import json
@@ -31,6 +31,100 @@ def exact(actual, expected):
 
 def fingerprint(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest()
+
+
+def typed_value(value, *, input_order=True):
+    """No bool/int or list/tuple collapse; preserve observable input-map order.
+
+    Expected dict order is ignored like the grader. This is a content identity,
+    not an assertion that renamed/reordered inputs are semantically equivalent.
+    """
+    kind = type(value)
+    if kind in (str, int, bool, type(None)):
+        return [kind.__name__, value]
+    if kind in (list, tuple):
+        return [kind.__name__, [typed_value(item, input_order=input_order) for item in value]]
+    if kind is dict:
+        items = [[typed_value(key, input_order=input_order), typed_value(item, input_order=input_order)]
+                 for key, item in value.items()]
+        if not input_order:
+            items.sort(key=lambda item: json.dumps(item[0], sort_keys=True))
+        return ["dict", items]
+    raise TypeError("unsupported audit identity type")
+
+
+def contract_identity(task):
+    return fingerprint([task.entrypoint, Program(task.reference_source).fingerprint])
+
+
+def case_identity(task, case):
+    return fingerprint([contract_identity(task), typed_value(case.args)])
+
+
+def cohort_diversity(tasks):
+    """Count actual content, not seed-bearing task IDs or source comments."""
+    cases, suites = defaultdict(list), defaultdict(list)
+    for task in tasks:
+        contract = contract_identity(task)
+        split_signatures = {}
+        for split, items in (("public", task.public), ("hidden", task.hidden)):
+            signatures = []
+            for case in items:
+                key = fingerprint([contract, typed_value(case.args)])
+                label = fingerprint(typed_value(case.expected, input_order=False))
+                cases[key].append({"task_id": task.task_id, "seed": task.seed, "split": split,
+                                   "expected_sha256": label})
+                signatures.append([key, label])
+            split_signatures[split] = sorted(signatures)
+        signature = fingerprint([contract, Program(task.initial_source).fingerprint, split_signatures])
+        suites[signature].append({"task_id": task.task_id, "seed": task.seed})
+    duplicated = {key: owners for key, owners in cases.items() if len(owners) > 1}
+    cross_seed = {key: owners for key, owners in duplicated.items() if len({o["seed"] for o in owners}) > 1}
+    cross_task = {key: owners for key, owners in duplicated.items() if len({o["task_id"] for o in owners}) > 1}
+    split_overlap = {key: owners for key, owners in duplicated.items()
+                     if {o["split"] for o in owners} == {"public", "hidden"}}
+    conflicts = {key: owners for key, owners in cases.items()
+                 if len({o["expected_sha256"] for o in owners}) > 1}
+    return {"case_occurrences": sum(map(len, cases.values())), "distinct_input_keys": len(cases),
+        "repeated_input_occurrences": sum(len(owners) - 1 for owners in duplicated.values()),
+        "duplicated_input_keys": len(duplicated), "cross_seed_duplicate_input_keys": len(cross_seed),
+        "cross_task_duplicate_input_keys": len(cross_task), "public_hidden_overlap_input_keys": len(split_overlap),
+        "conflicting_expected_label_keys": len(conflicts),
+        "seed_independent_content_suites": len(suites),
+        "duplicated_content_suites": {key: owners for key, owners in suites.items() if len(owners) > 1},
+        "duplicate_input_owners": duplicated, "conflicting_label_owners": conflicts,
+        "identity_limitations": ["Input dict insertion order is preserved; expected dict order is ignored.",
+            "Exact typed inputs are compared within the same reference-AST contract, not up to renaming.",
+            "Seed and source comments are excluded from suite signatures; these are not observed prompt hashes.",
+            "Cross-level reuse is reported, not automatically classified as data leakage."]}
+
+
+def isolated_defects(task, local):
+    """Leave one catalogued defect while fixing every other catalogued edit.
+
+    Inverting repaired text is unsafe: correct loop text may occur elsewhere.
+    Original defect sites are unique and checked before each forward edit.
+    """
+    measured = []
+    for name, _, _ in local:
+        mutant = task.initial_source
+        for other, old, new in local:
+            if other == name:
+                continue
+            if mutant.count(old) != 1:
+                raise ValueError("ambiguous isolated defect forward edit")
+            mutant = mutant.replace(old, new, 1)
+        result = evaluate(task, mutant)
+        public_errors, hidden_errors = bool(result["public_errors"]), bool(result["hidden_errors"])
+        public_wrong = len(task.public) - result["public_passed"] - sum(result["public_errors"].values())
+        hidden_wrong = len(task.hidden) - result["hidden_passed"] - sum(result["hidden_errors"].values())
+        measured.append({"defect": name, **result, "public_wrong_answers": public_wrong,
+            "hidden_wrong_answers": hidden_wrong,
+            "public_semantic_detection": not public_errors and public_wrong > 0,
+            "hidden_semantic_activation": not hidden_errors and hidden_wrong > 0,
+            "hidden_active_public_missed": not public_errors and not hidden_errors
+                and hidden_wrong > 0 and public_wrong == 0})
+    return measured
 
 
 def evaluate(task, source):
@@ -142,10 +236,17 @@ def audit_instance(task):
         measured.append({"kind": kind, "edits": names, **result, "formula_reward": reward,
                          "public_full_hidden_incomplete": result["public_passed"] == 6 and passed < 30})
     files = visible_files(task)
+    read_all = json.dumps(files, separators=(",", ":"))
+    case_views = [json.dumps({"test": number, "args": case.args, "expected": case.expected},
+                            separators=(",", ":")) for number, case in enumerate(task.public, 1)]
     return {"task_id": task.task_id, "seed": task.seed, "task_fingerprint": task_fingerprint(task),
             "baseline": baseline, "reference": reference, "local_edit_count": len(local),
             "controlled_variants": measured,
+            "isolated_defects": isolated_defects(task, local),
+            "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
             "workspace_utf8_bytes": {name: len(content.encode()) for name, content in files.items()},
+            "read_content_utf8_bytes": {"all": len(read_all.encode()), "source": len(files["src/solution.py"].encode()),
+                                        "individual_public_cases": [len(text.encode()) for text in case_views]},
             "public_hidden_disjoint": True, "counts_as_model_rollout": False}
 
 
@@ -155,13 +256,14 @@ def run(seed, count, task_ids=None):
     task_ids = TRAINING_TASK_IDS + DIAGNOSTICS if task_ids is None else task_ids
     if not task_ids or len(set(task_ids)) != len(task_ids) or not set(task_ids) <= set(TRAINING_TASK_IDS + DIAGNOSTICS):
         raise ValueError("known distinct audit task IDs required")
-    rows = [audit_instance(make_task(task_id, current))
-            for task_id in task_ids for current in range(seed, seed + count)]
+    tasks = [make_task(task_id, current) for task_id in task_ids for current in range(seed, seed + count)]
+    rows = [audit_instance(task) for task in tasks]
     summary = {}
     for task_id in task_ids:
         selected = [row for row in rows if row["task_id"] == task_id]
         variants = [item for row in selected for item in row["controlled_variants"]]
         valid = [item for item in variants if not item["hidden_errors"]]
+        defects = [item for row in selected for item in row["isolated_defects"]]
         summary[task_id] = {
             "instances": len(selected), "in_provisional_training_mix": task_id in TRAINING_TASK_IDS,
             "baseline_public_passed": [row["baseline"]["public_passed"] for row in selected],
@@ -171,15 +273,23 @@ def run(seed, count, task_ids=None):
             "valid_partial_reward": sum(0 < row["formula_reward"] < 1 for row in valid),
             "valid_full_reward": sum(row["formula_reward"] == 1 for row in valid),
             "public_full_hidden_incomplete": sum(row["public_full_hidden_incomplete"] for row in valid),
+            "isolated_catalogued_defects": len(defects),
+            "isolated_public_semantic_detections": sum(item["public_semantic_detection"] for item in defects),
+            "isolated_hidden_semantic_activations": sum(item["hidden_semantic_activation"] for item in defects),
+            "isolated_hidden_active_public_missed": sum(item["hidden_active_public_missed"] for item in defects),
+            "isolated_execution_failures": sum(bool(item["public_errors"] or item["hidden_errors"]) for item in defects),
         }
-    return {"audit_version": 1, "seed_start": seed, "seed_count_per_task": count,
+    return {"audit_version": 2, "seed_start": seed, "seed_count_per_task": count,
             "unique_task_instances": len(rows), "summary": summary, "rows": rows,
+            "cohort_diversity": cohort_diversity(tasks),
             "new_model_calls": 0, "is_training": False, "training_mix_changed": False,
             "limitations": ["Controlled edits are constructed diagnostics, not model actions.",
                             "The environment reward formula is reproduced; native parity is tested separately.",
                             "No within-prompt model variance, training or ranking gain is established.",
                             "Single-edit tasks have no proper nonempty edit subset.",
-                            "Component controls for empty stubs are not local-edit subsets."]}
+                            "Component controls for empty stubs are not local-edit subsets.",
+                            "Byte counts reproduce read content only, not observation envelopes or tokenizer costs.",
+                            "Isolated mutants measure catalogued defect detection, not arbitrary candidate-code coverage."]}
 
 
 def main():
