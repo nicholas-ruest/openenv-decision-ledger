@@ -64,4 +64,4 @@ def get_profile(name, stage):
             "samples_per_group": samples, "max_calls": len(selected) * samples * MAX_TURNS,
             "sampling_settings": settings,
             "purpose": "reliability_only" if name == "repair_reliability" else "signal_screen",
-            "execution_enabled": name in ("release", "merge_probe", "repair_reliability")}
+            "execution_enabled": name in ("release", "merge_probe", "repair_reliability", "release_witness")}
