@@ -98,3 +98,19 @@ def test_authorized_release_witness_preserves_frozen_prompts_and_sampling():
 def test_unknown_profile_or_stage_never_falls_back(name, stage):
     with pytest.raises(ValueError):
         profiles.get_profile(name, stage)
+
+
+def test_capacity_screen_is_a_new_frozen_arm_not_a_relabelled_confirmation():
+    original = profiles.get_profile('release_witness', 'screen')
+    screen = profiles.get_profile('release_witness_capacity', 'screen')
+    confirm = profiles.get_profile('release_witness_capacity', 'confirm')
+    assert screen['groups'] == [['software_repair-release-d2', 1093000], ['software_repair-release-d2', 1093100]]
+    assert confirm['groups'] == [['software_repair-release-d2', 1094000], ['software_repair-release-d2', 1094100]]
+    assert screen['planned_confirmation_groups'] == confirm['groups']
+    assert len({seed for stage in (original, screen, confirm) for _, seed in stage['groups']}) == 6
+    expected = profiles.sampling_settings()
+    expected.update(episode_generation_observation_units=12288, context_units=24576)
+    for stage in (screen, confirm):
+        assert stage['sampling_settings'] == expected and stage['execution_enabled']
+        assert stage['samples_per_group'] == 4 and stage['max_calls'] == 96
+    assert original['sampling_settings'] == profiles.sampling_settings()

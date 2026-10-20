@@ -131,10 +131,10 @@ def failed_finish_diagnostic(env, last_observation):
         return {"available": False, "error_type": type(exc).__name__, "counts_as_valid_completion": False}
 
 
-def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadline, prefix):
+def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadline, prefix, settings=None):
     progress = {}
     try:
-        return _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadline, prefix, progress)
+        return _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadline, prefix, progress, settings)
     except Exception as exc:
         stop.set()
         # Preserve only actually observed state; never synthesize reset/call
@@ -148,7 +148,13 @@ def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadlin
         return row
 
 
-def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadline, prefix, progress):
+def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadline, prefix, progress, settings=None):
+    settings = settings or get_profile("release", "screen")["sampling_settings"]
+    episode_units = settings["episode_generation_observation_units"]
+    context_units = settings["context_units"]
+    if (type(episode_units) is not int or type(context_units) is not int or
+            not 1 <= episode_units <= context_units <= 32768):
+        raise ValueError("invalid frozen episode capacity")
     env = RepairEnvironment()
     reset = env.reset(task_id=task_id, seed=seed)
     last_observation = reset
@@ -165,8 +171,8 @@ def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadli
         if stop.is_set() or _now() >= deadline:
             row["failure"] = "screen_stopped"
             break
-        remaining = 8192 - generated - observed
-        allowance = min(4096, remaining, 16384 - counter.context(messages))
+        remaining = episode_units - generated - observed
+        allowance = min(4096, remaining, context_units - counter.context(messages))
         if allowance < 1:
             row["failure"] = "episode_budget_exhausted"
             break
@@ -249,7 +255,7 @@ def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadli
         text = observation.model_dump_json()
         observed += counter.count(text)
         messages.append({"role": "user", "content": text})
-        if generated + observed > 8192 or counter.context(messages) > 16384:
+        if generated + observed > episode_units or counter.context(messages) > context_units:
             row["failure"] = "episode_budget_exceeded"
             break
         if observation.done:
@@ -313,7 +319,7 @@ def _execute(deadline, args, profile):
                 break
             with ThreadPoolExecutor(max_workers=samples) as pool:
                 futures = [pool.submit(episode, task_id, seed, i, token, counter, budget,
-                    frozen, stop, deadline, args.output.name) for i in range(samples)]
+                    frozen, stop, deadline, args.output.name, profile["sampling_settings"]) for i in range(samples)]
                 for sample, future in enumerate(futures):
                     try:
                         record = future.result()
@@ -347,7 +353,7 @@ def main(argv=None):
     parser.add_argument(
         "--profile",
         choices=("release", "replay_compare", "merge_compare", "merge_probe",
-                 "repair_reliability", "release_witness"),
+                 "repair_reliability", "release_witness", "release_witness_capacity"),
         default="release",
     )
     parser.add_argument("--stage", choices=("screen", "confirm"), default="screen")

@@ -364,3 +364,27 @@ def test_release_witness_admission_still_requires_budget_tokenizer_and_fresh_out
     assert len(plan["groups"]) == 2 and plan["max_calls"] == 96
     with pytest.raises(ValueError, match="budget receipt and pinned tokenizer"):
         screen.main(["--profile", "release_witness", "--execute"])
+
+
+def test_explicit_capacity_changes_real_episode_accounting_and_preserves_default(tmp_path, monkeypatch):
+    from repair_env.tasks import _SPECS
+    frozen = {'provider': {'pricing': {'input': .2, 'output': 2.5}}}
+    monkeypatch.setattr(screen, 'quote', lambda *a: frozen)
+    actions = [{'op': 'read', 'path': 'src/solution.py'},
+               {'op': 'write', 'path': 'src/solution.py', 'content': _SPECS['counts'][2]},
+               {'op': 'test'}, {'op': 'submit'}]
+    def provider(opener, base, token, payload, timeout):
+        turn = sum(m['role'] == 'assistant' for m in payload['messages'])
+        return {'id': f'offline-capacity-fixture-{turn}', 'choices': [{'message': {'content': json.dumps(actions[turn])},
+                'finish_reason': 'stop'}], 'usage': {'prompt_tokens': 100, 'completion_tokens': min(2500, payload['max_tokens'])}}
+    monkeypatch.setattr(screen.helper, 'provider_call', provider)
+    common = ('software_repair-counts-d2', 985500, 0, 'offline-fixture-placeholder', screen.helper.TokenCounter())
+    base = screen.episode(*common, screen.DollarReservations(receipt(tmp_path)), frozen,
+                          threading.Event(), time.monotonic() + 30, 'base')
+    settings = screen.get_profile('release_witness_capacity', 'screen')['sampling_settings']
+    expanded = screen.episode(*common, screen.DollarReservations(receipt(tmp_path)), frozen,
+                              threading.Event(), time.monotonic() + 30, 'expanded', settings)
+    assert base['failure'] == 'episode_budget_exceeded' and not base['solved']
+    assert expanded['failure'] is None and expanded['solved'] and expanded['reward'] == 1
+    assert expanded['generation_tokens'] + expanded['observation_tokens'] <= 12288
+    assert screen.get_profile('release_witness', 'screen')['sampling_settings']['episode_generation_observation_units'] == 8192

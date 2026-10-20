@@ -47,9 +47,12 @@ def get_profile(name, stage):
             seed = 1086000 if part == "screen" else 1087000
             return [["software_repair-merge-d3", seed]]
         targets = ["software_repair-merge-d3"]
-    elif name == "release_witness":
+    elif name in ("release_witness", "release_witness_capacity"):
         def groups(part):
-            seeds = (1091000, 1091100) if part == "screen" else (1092000, 1092100)
+            if name == "release_witness_capacity":
+                seeds = (1093000, 1093100) if part == "screen" else (1094000, 1094100)
+            else:
+                seeds = (1091000, 1091100) if part == "screen" else (1092000, 1092100)
             return [["software_repair-release-d2", seed] for seed in seeds]
         targets = ["software_repair-release-d2"]
     else:
@@ -57,6 +60,9 @@ def get_profile(name, stage):
     selected = groups(stage)
     samples = 2 if name == "repair_reliability" else SAMPLES
     settings = sampling_settings()
+    if name == "release_witness_capacity":
+        settings["episode_generation_observation_units"] = 12288
+        settings["context_units"] = 24576
     if name == "repair_reliability":
         settings["stage_wall_seconds"] = 600
     return {"profile": name, "stage": stage, "groups": selected,
@@ -64,4 +70,4 @@ def get_profile(name, stage):
             "samples_per_group": samples, "max_calls": len(selected) * samples * MAX_TURNS,
             "sampling_settings": settings,
             "purpose": "reliability_only" if name == "repair_reliability" else "signal_screen",
-            "execution_enabled": name in ("release", "merge_probe", "repair_reliability", "release_witness")}
+            "execution_enabled": name in ("release", "merge_probe", "repair_reliability", "release_witness", "release_witness_capacity")}
