@@ -1,4 +1,5 @@
 import importlib.util
+import hashlib
 from pathlib import Path
 
 import pytest
@@ -15,7 +16,9 @@ def fixture(rewards, failures=None, seed=1, stage="screen"):
                 "planned_confirmation_groups": [["task", seed+1]]}
     rows = [{"task_id": "task", "seed": seed, "sample": i, "reward": reward,
              "solved": reward == 1, "failure": failure, "prompt_sha256": "a" * 64,
-             "hidden_execution_rejections": 0, "hidden_wrong_answers": int(reward != 1)}
+             "hidden_execution_rejections": 0, "hidden_wrong_answers": int(reward != 1),
+             "calls": [{"client_call_label": f"sample:{seed}:{i}",
+                        "provider_response_id_sha256": hashlib.sha256(f"reply:{seed}:{i}".encode()).hexdigest()}]}
             for i, (reward, failure) in enumerate(zip(rewards, failures))]
     return protocol, rows
 
@@ -75,3 +78,55 @@ def test_confirmation_needs_fresh_matched_productive_prompts_and_never_authorize
     q["provider"] = {"id": "changed"}
     with pytest.raises(ValueError):
         gate.confirmation(p, gate.classify(p, rows), q, gate.classify(q, fresh))
+
+
+@pytest.mark.parametrize("missing", ["calls", "client_call_label", "provider_response_id_sha256"])
+def test_missing_call_identity_cannot_supply_signal(missing):
+    protocol, rows = fixture([1, .8, 0, 1])
+    if missing == "calls":
+        rows[-1].pop("calls")
+    else:
+        rows[-1]["calls"][0].pop(missing)
+    result = gate.classify(protocol, rows)
+    assert result["groups"][0]["productive"]
+    assert not result["genuine_signal_screened"]
+    assert not result["sampling_identity_verified"]
+
+
+@pytest.mark.parametrize("bad_id", [None, 123, "", "z" * 64, "a" * 63])
+def test_malformed_response_identity_cannot_supply_signal(bad_id):
+    protocol, rows = fixture([1, .8, 0, 1])
+    rows[0]["calls"][0]["provider_response_id_sha256"] = bad_id
+    assert not gate.classify(protocol, rows)["genuine_signal_screened"]
+
+
+@pytest.mark.parametrize("field", ["client_call_label", "provider_response_id_sha256"])
+def test_confirmation_rejects_response_or_request_reuse_across_stages(field):
+    p, rows = fixture([1, .8, 0, 1])
+    q, fresh = fixture([1, 1, .9, 1], seed=2, stage="confirm")
+    fresh[-1]["calls"][0][field] = rows[0]["calls"][0][field]
+    screen, confirmed = gate.classify(p, rows), gate.classify(q, fresh)
+    assert screen["genuine_signal_screened"] and confirmed["genuine_signal_screened"]
+    result = gate.confirmation(p, screen, q, confirmed)
+    assert not result["sampling_identities_disjoint"]
+    assert not result["provisional_single_family_signal_confirmed"]
+
+
+def test_legacy_missing_id_archives_remain_descriptive_only():
+    p, rows = fixture([1, .8, 0, 1])
+    for row in rows:
+        row.pop("calls")
+    result = gate.classify(p, rows)
+    assert result["groups"][0]["valid_rewards"] == [1, .8, 0, 1]
+    assert not result["genuine_signal_screened"]
+
+
+@pytest.mark.parametrize("field,value", [
+    ("hidden_wrong_answers", -1), ("hidden_wrong_answers", 1),
+    ("hidden_execution_rejections", False), ("solved", 1),
+])
+def test_inconsistent_completed_grader_diagnostics_are_rejected(field, value):
+    p, rows = fixture([1, .8, 0, 1])
+    rows[0][field] = value
+    with pytest.raises(ValueError, match="consistent grader"):
+        gate.classify(p, rows)

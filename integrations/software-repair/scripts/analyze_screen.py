@@ -5,6 +5,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
+import re
 import statistics
 import sys
 
@@ -35,8 +36,12 @@ def classify(protocol, rows):
         reward = row["reward"]
         if type(reward) not in (int, float) or not math.isfinite(reward) or not 0 <= reward <= 1:
             raise ValueError("invalid reward")
-        if not row.get("failure") and (row.get("hidden_execution_rejections") != 0 or
-                type(row.get("hidden_wrong_answers")) is not int or row.get("solved") != (reward == 1)):
+        wrong = row.get("hidden_wrong_answers")
+        rejected = row.get("hidden_execution_rejections")
+        if not row.get("failure") and (type(rejected) is not int or rejected != 0 or
+                type(wrong) is not int or wrong < 0 or
+                (reward == 1 and wrong != 0) or (reward < 1 and wrong == 0) or
+                type(row.get("solved")) is not bool or row["solved"] != (reward == 1)):
             raise ValueError("completed sample lacks consistent grader diagnostics")
     complete = len(rows) == len(planned) * count
     for task, seed in protocol["groups"]:
@@ -54,18 +59,28 @@ def classify(protocol, rows):
             "prompt_sha256": next(iter(hashes)) if hashes else None,
             "productive": len(valid) >= 3 and full > 0 and full < len(valid)})
     calls = [call for row in rows for call in row.get("calls", [])]
-    labels = [call["client_call_label"] for call in calls if call.get("client_call_label")]
+    labels = [call["client_call_label"] for call in calls
+              if isinstance(call.get("client_call_label"), str) and call["client_call_label"].strip()]
     response_ids = [call["provider_response_id_sha256"] for call in calls
-                    if call.get("provider_response_id_sha256")]
+                    if isinstance(call.get("provider_response_id_sha256"), str)
+                    and re.fullmatch(r"[0-9a-f]{64}", call["provider_response_id_sha256"])]
     duplicate_labels = len(labels) != len(set(labels))
     duplicate_ids = len(response_ids) != len(set(response_ids))
     provenance = {"recorded_calls": len(calls), "all_client_labels_available": bool(calls) and len(labels) == len(calls),
         "all_response_ids_available": bool(calls) and len(response_ids) == len(calls),
-        "duplicate_client_labels": duplicate_labels, "duplicate_provider_response_ids": duplicate_ids}
+        "duplicate_client_labels": duplicate_labels, "duplicate_provider_response_ids": duplicate_ids,
+        "completed_rollouts_have_calls": all(row.get("calls") for row in rows if not row.get("failure")),
+        "client_label_hashes": sorted(hashlib.sha256(label.encode()).hexdigest() for label in labels),
+        "provider_response_id_hashes": sorted(response_ids)}
+    identity_verified = (provenance["all_client_labels_available"] and
+                         provenance["all_response_ids_available"] and
+                         provenance["completed_rollouts_have_calls"] and
+                         not duplicate_labels and not duplicate_ids)
     return {"stage": protocol.get("stage"), "complete": complete, "groups": groups,
         "unique_prompts": len(planned), "rollouts": len(rows),
-        "sampling_provenance": provenance,
-        "genuine_signal_screened": complete and not duplicate_labels and not duplicate_ids
+        "signal_gate_version": 2, "sampling_provenance": provenance,
+        "sampling_identity_verified": identity_verified,
+        "genuine_signal_screened": complete and identity_verified
             and any(group["productive"] for group in groups),
         "is_training": False, "private_arena_improvement": None}
 
@@ -98,8 +113,17 @@ def confirmation(screen_protocol, screen, confirm_protocol, confirmed):
         raise ValueError("confirmation prompts overlap")
     if confirm_protocol["groups"] != screen_protocol.get("planned_confirmation_groups"):
         raise ValueError("confirmation differs from predeclared prompts")
+    first = screen.get("sampling_provenance", {})
+    fresh = confirmed.get("sampling_provenance", {})
+    independent = (screen.get("signal_gate_version") == confirmed.get("signal_gate_version") == 2
+                   and screen.get("sampling_identity_verified") is True
+                   and confirmed.get("sampling_identity_verified") is True)
+    for field in ("client_label_hashes", "provider_response_id_hashes"):
+        left, right = set(first.get(field, [])), set(fresh.get(field, []))
+        independent = independent and bool(left) and bool(right) and left.isdisjoint(right)
     return {"provisional_single_family_signal_confirmed": screen["genuine_signal_screened"] and
-            confirmed["genuine_signal_screened"], "is_model_improvement": False,
+            confirmed["genuine_signal_screened"] and independent,
+            "sampling_identities_disjoint": bool(independent), "is_model_improvement": False,
             "darwin_promotion": False, "arena_submission_authorized": False}
 
 
