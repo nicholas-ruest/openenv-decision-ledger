@@ -55,7 +55,7 @@ def test_every_single_fix_of_a_seeded_defect_earns_genuine_partial_reward(seed):
 def test_new_cases_retain_independent_oracle_and_no_input_mutation():
     task = make_task("software_repair-release-d2", 1090200)
     namespace = {}
-    exec(task.reference_source, {}, namespace)  # Trusted static fixture only.
+    exec(task.reference_source, namespace, namespace)  # Trusted static fixture only.
     for case in task.public + task.hidden:
         before = copy.deepcopy(case.args)
         assert release_plan.reference(case.args) == case.expected

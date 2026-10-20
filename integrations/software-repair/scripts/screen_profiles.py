@@ -47,6 +47,11 @@ def get_profile(name, stage):
             seed = 1086000 if part == "screen" else 1087000
             return [["software_repair-merge-d3", seed]]
         targets = ["software_repair-merge-d3"]
+    elif name == "release_witness":
+        def groups(part):
+            seeds = (1091000, 1091100) if part == "screen" else (1092000, 1092100)
+            return [["software_repair-release-d2", seed] for seed in seeds]
+        targets = ["software_repair-release-d2"]
     else:
         raise ValueError("unknown calibration profile")
     selected = groups(stage)

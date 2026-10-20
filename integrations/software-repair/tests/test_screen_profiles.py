@@ -77,6 +77,20 @@ def test_reliability_probe_is_small_fresh_and_separate_from_signal_confirmation(
     assert value["execution_enabled"]
 
 
+def test_release_witness_plan_has_fresh_candidate_prompts_and_remains_locked():
+    screen = profiles.get_profile("release_witness", "screen")
+    confirm = profiles.get_profile("release_witness", "confirm")
+    assert screen["groups"] == [["software_repair-release-d2", 1091000],
+                                 ["software_repair-release-d2", 1091100]]
+    assert confirm["groups"] == [["software_repair-release-d2", 1092000],
+                                  ["software_repair-release-d2", 1092100]]
+    assert screen["planned_confirmation_groups"] == confirm["groups"]
+    for value in (screen, confirm):
+        assert value["samples_per_group"] == 4 and value["max_calls"] == 96
+        assert value["signal_task_ids"] == ["software_repair-release-d2"]
+        assert not value["execution_enabled"]
+
+
 @pytest.mark.parametrize("name,stage", [("unknown", "screen"), ("replay_compare", "unknown"), ("", "")])
 def test_unknown_profile_or_stage_never_falls_back(name, stage):
     with pytest.raises(ValueError):

@@ -345,7 +345,9 @@ def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--execute", action="store_true")
     parser.add_argument(
-        "--profile", choices=("release", "replay_compare", "merge_compare", "merge_probe", "repair_reliability"),
+        "--profile",
+        choices=("release", "replay_compare", "merge_compare", "merge_probe",
+                 "repair_reliability", "release_witness"),
         default="release",
     )
     parser.add_argument("--stage", choices=("screen", "confirm"), default="screen")
