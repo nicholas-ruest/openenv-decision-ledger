@@ -116,3 +116,25 @@ def test_replay_profile_plan_and_lock_precede_budget_authentication_or_provider(
     assert not plan["executed"] and not plan["execution_enabled"]
     with pytest.raises(ValueError, match="plan-only"):
         screen.main(["--profile", "replay_compare", "--execute"])
+
+
+@pytest.mark.parametrize("finish", [True, False, 1, 1.0])
+def test_reserved_finish_requires_literal_boolean_not_numeric_coercion(tmp_path, monkeypatch, finish):
+    from repair_env.tasks import _SPECS
+    frozen = {"provider": {"pricing": {"input": .2, "output": 2.5}}}
+    monkeypatch.setattr(screen, "quote", lambda *a: frozen)
+    actions = [{"op": "write", "path": "src/solution.py", "content": _SPECS["counts"][2]},
+               {"finish": finish}]
+    def provider(opener, base, token, payload, timeout):
+        turn = sum(message["role"] == "assistant" for message in payload["messages"])
+        return {"id": f"offline-finish-fixture-{turn}", "choices": [{"message": {"content": json.dumps(actions[turn])},
+            "finish_reason": "stop"}], "usage": {"prompt_tokens": 100, "completion_tokens": 100}}
+    monkeypatch.setattr(screen.helper, "provider_call", provider)
+    result = screen.episode("software_repair-counts-d2", 985001, 0, "offline-fixture-placeholder",
+        screen.helper.TokenCounter(), screen.DollarReservations(receipt(tmp_path)), frozen,
+        threading.Event(), time.monotonic() + 30, "offline-finish-fixture")
+    if finish is True:
+        assert result["solved"] and result["reward"] == 1 and result["failure"] is None
+    else:
+        assert not result["solved"] and result["failure"] == "invalid_json_action"
+        assert result["reward"] == 0  # A correct saved workspace cannot erase format failure.

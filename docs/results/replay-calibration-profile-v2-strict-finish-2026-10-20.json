@@ -1,0 +1,126 @@
+{
+  "plan_version": 2,
+  "profile": "replay_compare",
+  "signal_task_ids": [
+    "software_repair-replay-d3"
+  ],
+  "executed": false,
+  "paid_execution_allowed": false,
+  "source_revision": "a38b65e59a0b9e9090152995f708b64558f195b7",
+  "source_files_sha256": {
+    "scripts/plan-replay-calibration.py": "c2edb46085058939021cb00c5feaa70dd7e9ac83fcef563bc1a2474e2ab0ccb4",
+    "scripts/repair-signal-screen.py": "d8e6e4ab4c81e0a058505ff249392ef85ec3adbb2b7fd16610e0b6c4e110b42b",
+    "integrations/software-repair/scripts/analyze_screen.py": "a82650afa8be9f1540ca1aebc5d7cb7208dcd43672513a590f4b766d15f392f1",
+    "integrations/software-repair/scripts/screen_profiles.py": "a86b234669adff8088f60b1e71869ab83e7e4009e36ae2dac668991086fa02af",
+    "integrations/openenv-arena/scripts/calibrate.py": "62788e67aa07f5f235c68f654cda84e9130147eb13fa9b9ef1f44a31a8a16420",
+    "integrations/software-repair/repair_env/__init__.py": "aecafe955038a15f8cbbca11f39b4166adca30cc7ca0027d530d90942c80b52f",
+    "integrations/software-repair/repair_env/app.py": "973f5ef06580f7ad6cce0f7ba7557578a491e97b157d155457bb0de8b714ceb3",
+    "integrations/software-repair/repair_env/cycle_plan.py": "f56d5d65809deb0580df3a4a07b0fc797c27096cf761fbbb3d078d5889ae32eb",
+    "integrations/software-repair/repair_env/environment.py": "c1e6dee6b7cd55f65d7e84c95860c0399d1fdea7388971436e2c49f1a468002e",
+    "integrations/software-repair/repair_env/hard_tasks.py": "6093bd954ae91e5806c8b65db42aa99263a2f214f7454a73ac100a3ccef01d4f",
+    "integrations/software-repair/repair_env/release_plan.py": "b5e549f78d167259f81a141dd43c685453124cdab3889308445f71c2ee9da0bf",
+    "integrations/software-repair/repair_env/replay_curriculum.py": "96fb75dfb6946bb36f1c9f3d5509ae3e7ce7368ffd139cab168dbe5e96002ca5",
+    "integrations/software-repair/repair_env/runner.py": "8b6c5d9e6d75fad912c7e179bdaf8284c3bbb15ecfa8a95250e539714474d8cc",
+    "integrations/software-repair/repair_env/tasks.py": "7f9b86a3b34ee0a46d09f26c8ed40ef2ed79d664093338ff38bb258c0be8e05f"
+  },
+  "stages": {
+    "screen": {
+      "groups": [
+        {
+          "task_id": "software_repair-replay-d2",
+          "seed": 1060000,
+          "workspace_sha256": "2fd085f93ad58b093ea4167c5cf41c26c672882512a97a404e7f0d6372f89f25",
+          "task_fingerprint": "c535ec1a063ed5bd64a4890d88ce944db6c1f5e3db8185a9e25776a60f5bcc56",
+          "workspace_utf8_bytes": 9189
+        },
+        {
+          "task_id": "software_repair-replay-d2",
+          "seed": 1060100,
+          "workspace_sha256": "f46d4b3b006a5654541733b18b24febee4dc7842fa1e9006ff2f2560e919aa81",
+          "task_fingerprint": "aec8ed378f97894446442f2a3f86dcee3cc75f8977a22a7347011badb985f699",
+          "workspace_utf8_bytes": 9154
+        },
+        {
+          "task_id": "software_repair-replay-d3",
+          "seed": 1060000,
+          "workspace_sha256": "34c886c3a0dee3368adccb6a748da11de15c8f881bbe07fe7bcc6c950e46fdf8",
+          "task_fingerprint": "a285435760d3cac3983a018efbd4c0abe4d83b61f94f05ac01ba7715dc526f08",
+          "workspace_utf8_bytes": 9214
+        },
+        {
+          "task_id": "software_repair-replay-d3",
+          "seed": 1060100,
+          "workspace_sha256": "3c91680a237e8eebf09baa04561af97cc05b4bce72bf85b03d9e5259466389b5",
+          "task_fingerprint": "a38fadbdcf75a742d84708c1b0e44182ff02340cd00112579406d5da1cad37fe",
+          "workspace_utf8_bytes": 9206
+        }
+      ],
+      "distinct_task_prompts": 4,
+      "samples_per_prompt": 4,
+      "planned_rollouts": 16,
+      "max_calls": 192
+    },
+    "confirm": {
+      "groups": [
+        {
+          "task_id": "software_repair-replay-d2",
+          "seed": 1061000,
+          "workspace_sha256": "b037da597e699d91c480942b7b53aa9ccbe4fc1cee6b3cb70d24e98099fb0fe5",
+          "task_fingerprint": "cdfa17ded1958e4d3d3bbb4512df8d5c33c35e376ee1c6ca045b903c137f9e0c",
+          "workspace_utf8_bytes": 9351
+        },
+        {
+          "task_id": "software_repair-replay-d2",
+          "seed": 1061100,
+          "workspace_sha256": "48ec19f4ea2db11052bfc2c1d0810c22a3f53687a14c1e7992ed74dae0638e5b",
+          "task_fingerprint": "774bcd73cdfe138c45f67b33dcaba489d42b02912847d119f1be79144e98a271",
+          "workspace_utf8_bytes": 9111
+        },
+        {
+          "task_id": "software_repair-replay-d3",
+          "seed": 1061000,
+          "workspace_sha256": "c0726310f14d8a07484385a9984970f86ca2a0bae2882a94114c6bb8f325d49b",
+          "task_fingerprint": "37b44a88fe03331e341583fae881dd52bf720f3ad2e516309f9b8871fbc58d96",
+          "workspace_utf8_bytes": 9236
+        },
+        {
+          "task_id": "software_repair-replay-d3",
+          "seed": 1061100,
+          "workspace_sha256": "a64561da2f23b9ad2a036484bc7356b511fbc92f6a5daa8a80639948a2088c2c",
+          "task_fingerprint": "b7903b7e1703daadd52c4d2687fe1eef7550a637b2688fbd331b8e3b86ff7de5",
+          "workspace_utf8_bytes": 9227
+        }
+      ],
+      "distinct_task_prompts": 4,
+      "samples_per_prompt": 4,
+      "planned_rollouts": 16,
+      "max_calls": 192
+    }
+  },
+  "confirmation_conditional_on_replay_d3_signal": true,
+  "intended_settings": {
+    "model": "Qwen/Qwen3.8-27B",
+    "provider": "deepinfra",
+    "tokenizer_sha256": "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3",
+    "temperature": 0.7,
+    "thinking_requested": true,
+    "response_format": "json_object",
+    "max_actions": 12,
+    "episode_generation_observation_units": 8192,
+    "context_units": 16384,
+    "stage_wall_seconds": 1200,
+    "retries": 0
+  },
+  "unverified": [
+    "Provider selected metadata and price quote must be frozen at admission.",
+    "Private billing reconciliation and shared reservation admission are not performed.",
+    "The runner shares this profile but replay paid execution is unconditionally disabled.",
+    "Workspace hashes are not native reset observation hashes; those must match within live groups.",
+    "Source revision records the parent checkout; source hashes include local plan content.",
+    "Arena checkpoint, thinking and chat wrapper equivalence is unattested."
+  ],
+  "new_model_calls": 0,
+  "is_training": false,
+  "mix_adoption": false,
+  "arena_submission_authorized": false
+}

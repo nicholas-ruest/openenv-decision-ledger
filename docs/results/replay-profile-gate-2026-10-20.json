@@ -30,11 +30,20 @@
       "Profile seeds, settings and offline packet share one source; historical release groups stay unchanged."
     ]
   },
-  "native_runner_checks_pending_ci": [
+  "native_runner_checks_verified_in_ci": [
     "Replay profile preview emits four groups and192 maximum calls without provider access.",
     "Replay --execute is rejected before budget receipt, credentials, tokenizer or provider access.",
     "Existing mocked proxy episode and budget regression tests still pass."
   ],
+  "native_suite_ci_verification": {
+    "run": 39375659242,
+    "source_revision": "a38b65e59a0b9e9090152995f708b64558f195b7",
+    "tests_passed": 313,
+    "test_seconds": 130.12,
+    "test_publish_job": "SUCCESS",
+    "anonymous_container_checks": "SUCCESS:120 native controls and6 SDK checks",
+    "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:a42e903e544ca89818017d30c15b1b9e19f3538d9cccbe4ff241d5f9cdc3029e"
+  },
   "new_model_calls": 0,
   "is_training": false,
   "signal_confirmed": false,

@@ -180,7 +180,7 @@ def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadlin
             break
         try:
             value = json.loads(content)
-            if value == {"finish": True}:
+            if type(value) is dict and set(value) == {"finish"} and value["finish"] is True:
                 value = {"op": "submit"}
             elif type(value) is dict and set(value) == {"action"}:
                 value = value["action"]
