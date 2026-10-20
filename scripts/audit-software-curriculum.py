@@ -15,7 +15,8 @@ sys.path.insert(0, str(ROOT / "integrations/software-repair"))
 from repair_env.runner import Program, Rejected
 from repair_env.tasks import TRAINING_TASK_IDS, make_task, task_fingerprint, visible_files
 
-DIAGNOSTICS = ["software_repair-plan-d3", "software_repair-plan-d4", "software_repair-release-d1"]
+DIAGNOSTICS = ["software_repair-plan-d3", "software_repair-plan-d4", "software_repair-release-d1",
+               "software_repair-replay-d3"]
 
 
 def exact(actual, expected):
@@ -148,13 +149,16 @@ def audit_instance(task):
             "public_hidden_disjoint": True, "counts_as_model_rollout": False}
 
 
-def run(seed, count):
+def run(seed, count, task_ids=None):
     if type(seed) is not int or type(count) is not int or not 1 <= count <= 32 or seed < 0:
         raise ValueError("bounded nonnegative seed range required")
+    task_ids = TRAINING_TASK_IDS + DIAGNOSTICS if task_ids is None else task_ids
+    if not task_ids or len(set(task_ids)) != len(task_ids) or not set(task_ids) <= set(TRAINING_TASK_IDS + DIAGNOSTICS):
+        raise ValueError("known distinct audit task IDs required")
     rows = [audit_instance(make_task(task_id, current))
-            for task_id in TRAINING_TASK_IDS + DIAGNOSTICS for current in range(seed, seed + count)]
+            for task_id in task_ids for current in range(seed, seed + count)]
     summary = {}
-    for task_id in TRAINING_TASK_IDS + DIAGNOSTICS:
+    for task_id in task_ids:
         selected = [row for row in rows if row["task_id"] == task_id]
         variants = [item for row in selected for item in row["controlled_variants"]]
         valid = [item for item in variants if not item["hidden_errors"]]
@@ -182,11 +186,12 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--seed", type=int, required=True)
     parser.add_argument("--count", type=int, default=8)
+    parser.add_argument("--tasks", nargs="+", choices=TRAINING_TASK_IDS + DIAGNOSTICS)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.output.exists():
         raise ValueError("refusing to overwrite an audit archive")
-    report = run(args.seed, args.count)
+    report = run(args.seed, args.count, args.tasks)
     report["source_revision"] = subprocess.check_output(["git", "-C", str(ROOT), "rev-parse", "HEAD"]).decode().strip()
     report["source_files_sha256"] = {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
                                     for path in [Path(__file__), *sorted((ROOT / "integrations/software-repair/repair_env").glob("*.py"))]}

@@ -160,7 +160,7 @@
   "findings": [
     "Both single-edit repairs in replay-d2 earned zero on all16 independent task instances:32 controlled zero-reward variants, no execution failures.",
     "Cover-d1 also has32 zero-reward proper edit subsets; its objective and reported-cost edits are coupled.",
-    "Four one-edit tasks have no nonempty proper subset; no claim about model reward variance follows.",
+    "Three one-edit tasks have no nonempty proper subset; no claim about model reward variance follows.",
     "Diagnostic plan/release cases offer partial-repair rewards, but prior model screens remain failure-heavy and unconfirmed."
   ],
   "new_model_calls": 0,
@@ -170,7 +170,13 @@
   "limitations": [
     "Controlled source edits and component controls are not sampled model actions or GRPO groups.",
     "Disjoint procedural seeds recheck a generator property; they do not confirm model learning.",
-    "Public-full/hidden-incomplete variants expose non-exhaustive example coverage, not automatically an unfair task.",
-    "Native reward parity remains pending CI."
-  ]
+    "Public-full/hidden-incomplete variants expose non-exhaustive example coverage, not automatically an unfair task."
+  ],
+  "ci_verification": {
+    "run": 39370701869,
+    "tests_passed": 271,
+    "seconds": 89.97,
+    "native_reward_parity_tests_ran": true,
+    "anonymous_image_checks": "SUCCESS:115 native controls and6 SDK checks"
+  }
 }

@@ -5,13 +5,14 @@ import hashlib
 import json
 import random
 from dataclasses import dataclass
-from . import hard_tasks, cycle_plan, release_plan
+from . import hard_tasks, cycle_plan, release_plan, replay_curriculum
 
 FAMILIES = ("clamp", "overlap", "chunks", "unique", "counts", "prefix") + hard_tasks.FAMILIES
 TASK_IDS = [f"software_repair-{family}-d{d}" for family in FAMILIES for d in (1, 2)]
 TASK_IDS.append("software_repair-plan-d3")
 TASK_IDS.append("software_repair-plan-d4")
 TASK_IDS.append("software_repair-release-d1")
+TASK_IDS.append("software_repair-replay-d3")
 TRAINING_TASK_IDS = [f"software_repair-{family}-d{d}" for family in hard_tasks.FAMILIES for d in (1, 2)]
 SOURCE_PATH = "src/solution.py"
 
@@ -73,6 +74,8 @@ _SPECS.update(hard_tasks.SPECS)
 
 
 def _initial(family, source, difficulty, seed=None):
+    if family == "replay" and difficulty == 3:
+        return hard_tasks.initial(family, source, 2)
     if family == "release":
         return release_plan.initial(seed)
     if family == "plan" and difficulty == 4:
@@ -102,6 +105,10 @@ def _initial(family, source, difficulty, seed=None):
 
 
 def _inputs(family, rng, count, difficulty, *, visible=False):
+    if family == "replay" and difficulty == 3:
+        for args in replay_curriculum.inputs(rng, count):
+            yield Case(args, hard_tasks.reference(family, args))
+        return
     if family == "release":
         for args in release_plan.inputs(rng, count):
             yield Case(args, release_plan.reference(args))

@@ -71,7 +71,7 @@ actions and still independently enforces its token/context and dollar caps.
 An additional diagnostic task software_repair-plan-d3 adds induced-subgraph
 cycle components, downstream blocking, unknown changes and stable incremental
 ordering. It is excluded from the default export until model signal is tested.
-There are23 available IDs, with115 native controls including exact-text patches. Bounded lazy generator
+There are24 available IDs, with120 native controls including exact-text patches. Bounded lazy generator
 expressions support short-circuiting and at most128 yields; single-underscore
 helpers/locals,16-deep calls, bounded copy/extend/update and set union/intersection
 support natural algorithms without granting host Python access.
@@ -111,3 +111,13 @@ lexicographic IDs. Zero-cost suites, insufficient budgets and blocked modules
 are explicit contract cases. Six suites bound exhaustive selection to64 subsets.
 An independent combinations oracle checks the fixture's bitmask algorithm.
 This diagnostic also remains excluded from the default eight-task export.
+
+Diagnostic software_repair-replay-d3 retains replay-d2's two semantic faults,
+contract, independent oracle, reference algorithm and18 events per case. Its
+examples and hidden pool cover isolated undo defects, isolated duplicate-ID
+defects and their interaction. The old pool combined both faults in every case:
+fixing either one alone earned zero. In two disjoint offline seed cohorts, each
+single-fault repair instead earned1/3 or0.5 on the new pool. These are constructed
+repair controls, not model rollouts or evidence of learning. The reward formula,
+interpreter limits and default eight-task export are unchanged. This diagnostic
+requires a fresh model screen and disjoint confirmation before mix adoption.
