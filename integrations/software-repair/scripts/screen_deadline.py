@@ -3,11 +3,13 @@
 No provider API, job creation, credential lookup or billing cancellation exists
 here. Killing a local worker does not attest remote request cancellation.
 """
+import ctypes
 import json
 import math
 import multiprocessing
 import os
 from pathlib import Path
+import signal
 import time
 
 
@@ -24,8 +26,24 @@ def request_timeout(deadline, cap, *, now=None):
     return min(cap, remaining)
 
 
-def _entry(connection, target, args, deadline):
+def arm_parent_death(expected_parent):
+    """Linux-only: stop this worker if its owning supervisor disappears.
+
+    Arm before target code and then recheck the parent to close the fork/prctl
+    race. This protects this process and its threads, not arbitrary descendants
+    or a request already executing at a remote provider.
+    """
+    libc = ctypes.CDLL(None, use_errno=True)
+    if libc.prctl(1, signal.SIGKILL, 0, 0, 0) != 0:  # PR_SET_PDEATHSIG
+        raise OSError(ctypes.get_errno(), "cannot arm worker parent-death guard")
+    if os.getppid() != expected_parent:
+        os.kill(os.getpid(), signal.SIGKILL)
+        raise RuntimeError("worker parent changed")  # Fail closed even in a mocked test.
+
+
+def _entry(connection, target, args, deadline, parent_pid):
     try:
+        arm_parent_death(parent_pid)
         code = target(deadline, *args)
         code = 0 if code is None else code
         if type(code) is not int or not 0 <= code <= 255:
@@ -54,7 +72,7 @@ def run_bounded(target, args, seconds, receipt):
         deadline = started + seconds
         record({"event": "starting", "wall_seconds": seconds, "target": target.__name__})
         receiver, sender = context.Pipe(duplex=False)
-        process = context.Process(target=_entry, args=(sender, target, args, deadline), daemon=True)
+        process = context.Process(target=_entry, args=(sender, target, args, deadline, os.getpid()), daemon=True)
         try:
             process.start()
             sender.close()

@@ -55,6 +55,11 @@ worker, preserves partial archives and does not fabricate a completion marker.
 Analysis requires a successful matching receipt for supervised protocols;
 an existing `complete.json` cannot override a failed or late worker outcome.
 This validates local shutdown only, not remote cancellation or billing stop.
+Before target code runs, the Linux worker arms a parent-death SIGKILL guard and
+checks that the owning supervisor has not changed. An actual supervisor-kill
+fixture verifies that its worker and four blocked threads stop and can be
+reaped, while preserving the partial archive. A lost supervisor cannot write a
+successful terminal receipt. This is not arbitrary descendant-tree cleanup.
 
 After a format, truncation or budget failure, local finish-action grading is
 stored under `termination_grading` when available. Its reward is diagnostic:
@@ -63,6 +68,11 @@ supply GRPO signal or full-solve counts. An episode already terminal from the
 environment's tool limit retains that terminal reward rather than being
 regraded into a success. A hard worker kill may leave no terminal diagnostic;
 the partial archive remains incomplete.
+Internal episode exceptions retain captured reset/messages and actual call
+identities when available, plus only the exception type. If reset identity was
+never captured, the failed row explicitly marks it unavailable. Analysis can
+report those failures without inventing a reset or hash; the affected arm
+cannot pass the signal gate, even if its other three samples are productive.
 
 ## Admission and decision
 

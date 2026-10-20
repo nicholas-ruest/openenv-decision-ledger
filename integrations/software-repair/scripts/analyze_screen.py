@@ -82,7 +82,10 @@ def classify(protocol, rows):
     complete = len(rows) == len(planned) * count
     for task, seed in protocol["groups"]:
         sampled = [row for row in rows if (row["task_id"], row["seed"]) == (task, seed)]
-        hashes = {row.get("prompt_sha256") for row in sampled}
+        unavailable = [row for row in sampled if row.get("prompt_identity_unavailable") is True]
+        if any(not row.get("failure") or row.get("prompt_sha256") is not None for row in unavailable):
+            raise ValueError("unavailable prompt identity requires a failed sample without a claimed hash")
+        hashes = {row.get("prompt_sha256") for row in sampled if row not in unavailable}
         if len(hashes) > 1 or any(not isinstance(h, str) or not re.fullmatch(r"[0-9a-f]{64}", h) for h in hashes):
             raise ValueError("within-group prompt identity differs or is missing")
         valid = [row["reward"] for row in sampled if not row.get("failure")]
@@ -93,8 +96,10 @@ def classify(protocol, rows):
             "valid_reward_std": statistics.pstdev(valid) if valid else None,
             "failures": dict(Counter(row["failure"] for row in sampled if row.get("failure"))),
             "prompt_sha256": next(iter(hashes)) if hashes else None,
+            "prompt_identity_verified": not unavailable and bool(hashes),
+            "prompt_identity_unavailable_samples": len(unavailable),
             "productive": len(valid) >= 3 and full > 0 and full < len(valid)})
-    observed_prompts = [g["prompt_sha256"] for g in groups if g["samples"]]
+    observed_prompts = [g["prompt_sha256"] for g in groups if g["prompt_sha256"] is not None]
     if len(observed_prompts) != len(set(observed_prompts)):
         raise ValueError("distinct groups reuse a prompt identity")
     provenance = sampling_provenance(rows)
@@ -106,6 +111,7 @@ def classify(protocol, rows):
         # Missing calls in another arm remain that arm's failure. Reused call
         # identities anywhere in the comparison invalidate independence.
         own_identity = (identities_verified(own_provenance) and
+                        all(group["prompt_identity_verified"] for group in selected_groups) and
                         not provenance["duplicate_client_labels"] and
                         not provenance["duplicate_provider_response_ids"])
         own_complete = len(selected) == len(selected_groups) * count
@@ -118,7 +124,8 @@ def classify(protocol, rows):
         "unique_prompts": len(planned), "rollouts": len(rows),
         "distinct_observed_prompts": len(observed_prompts),
         "signal_gate_version": 3, "sampling_provenance": provenance,
-        "sampling_identity_verified": identities_verified(provenance),
+        "sampling_identity_verified": identities_verified(provenance)
+            and all(group["prompt_identity_verified"] for group in groups),
         "signal_task_ids": targets, "tasks": tasks,
         "genuine_signal_screened": complete and bool(targets)
             and all(tasks[task]["genuine_signal_screened"] for task in targets),
@@ -167,8 +174,15 @@ def load_verified(directory):
             raise ValueError("frozen source differs; analyze with the original checkout")
     rows = [json.loads(line) for line in (directory / "episodes.jsonl").read_text().splitlines()]
     for row in rows:
+        if row.get("prompt_identity_unavailable") is True:
+            if not row.get("failure") or row.get("prompt_sha256") is not None or row.get("messages"):
+                raise ValueError("unavailable prompt identity conflicts with observed evidence")
+            continue  # Descriptive failure only; classify prevents this arm qualifying.
         task = make_task(row["task_id"], row["seed"])
-        reset = json.loads(row["messages"][1]["content"])
+        try:
+            reset = json.loads(row["messages"][1]["content"])
+        except (KeyError, IndexError, TypeError, json.JSONDecodeError) as exc:
+            raise ValueError("saved reset identity unavailable without explicit failure marker") from exc
         if digest({"reset": reset, "files": visible_files(task)}) != row["prompt_sha256"]:
             raise ValueError("saved reset/workspace identity mismatch")
     return protocol, classify(protocol, rows)

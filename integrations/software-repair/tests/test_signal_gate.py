@@ -51,6 +51,49 @@ def test_actual_valid_partial_and_wrong_answers_supply_signal():
     assert result["groups"][0]["partial"] == 1 and result["groups"][0]["wrong"] == 1
 
 
+def test_internal_failure_without_observed_prompt_is_descriptive_not_signal():
+    protocol, rows = fixture([1, .5, 1, 0], [None, None, None, "screen_internal_failure"])
+    rows[-1].pop("prompt_sha256")
+    rows[-1].update(prompt_identity_unavailable=True, calls=[])
+    result = gate.classify(protocol, rows)
+    group = result["groups"][0]
+    assert group["productive"] and group["valid_rewards"] == [1, .5, 1]
+    assert group["failures"] == {"screen_internal_failure": 1}
+    assert group["prompt_identity_unavailable_samples"] == 1
+    assert not group["prompt_identity_verified"]
+    assert not result["sampling_identity_verified"] and not result["genuine_signal_screened"]
+    rows[-1]["failure"] = None
+    with pytest.raises(ValueError):
+        gate.classify(protocol, rows)
+
+
+def test_all_internal_failures_are_analyzable_without_fabricated_prompt_ids(tmp_path):
+    task = "software_repair-replay-d3"
+    protocol = {"groups": [[task, 1071000]], "samples_per_group": 4,
+                "stage": "screen", "source_files_sha256": {}}
+    rows = [{"task_id": task, "seed": 1071000, "sample": i,
+             "failure": "screen_internal_failure", "reward": 0, "solved": False,
+             "calls": [], "prompt_identity_unavailable": True} for i in range(4)]
+    (tmp_path / "protocol.json").write_text(json.dumps(protocol))
+    (tmp_path / "complete.json").write_text("{}")
+    archive = tmp_path / "episodes.jsonl"
+    archive.write_text("\n".join(json.dumps(row) for row in rows))
+    _, result = gate.load_verified(tmp_path)
+    assert result["complete"] and result["distinct_observed_prompts"] == 0
+    assert result["groups"][0]["valid"] == 0
+    assert result["groups"][0]["failures"] == {"screen_internal_failure": 4}
+    assert not result["genuine_signal_screened"]
+    rows[0]["messages"] = [{"content": "fabricated"}]
+    archive.write_text("\n".join(json.dumps(row) for row in rows))
+    with pytest.raises(ValueError, match="conflicts"):
+        gate.load_verified(tmp_path)
+    rows[0].pop("messages")
+    rows[0].pop("prompt_identity_unavailable")
+    archive.write_text("\n".join(json.dumps(row) for row in rows))
+    with pytest.raises(ValueError, match="explicit failure marker"):
+        gate.load_verified(tmp_path)
+
+
 @pytest.mark.parametrize("defect", ["duplicate", "identity", "missing_diagnostic"])
 def test_bad_identity_or_missing_diagnostics_fail_closed(defect):
     protocol, rows = fixture([1, .8, 0, 1])

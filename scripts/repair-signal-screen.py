@@ -131,14 +131,33 @@ def failed_finish_diagnostic(env, last_observation):
 
 
 def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadline, prefix):
+    progress = {}
+    try:
+        return _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadline, prefix, progress)
+    except Exception as exc:
+        stop.set()
+        # Preserve only actually observed state; never synthesize reset/call
+        # identities for an episode which failed before capturing them.
+        row = progress.get("row", {"task_id": task_id, "seed": seed, "sample": sample,
+                                   "calls": [], "prompt_identity_unavailable": True})
+        row.update(failure="screen_internal_failure", failure_type=type(exc).__name__,
+                   reward=0, solved=False, arena_budget_matched=False, thinking_verified=False)
+        if "last_observation" in progress:
+            row["termination_grading"] = failed_finish_diagnostic(progress["env"], progress["last_observation"])
+        return row
+
+
+def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadline, prefix, progress):
     env = RepairEnvironment()
     reset = env.reset(task_id=task_id, seed=seed)
     last_observation = reset
+    progress.update(env=env, last_observation=reset)
     identity = fingerprint({"reset": reset.model_dump(), "files": visible_files(env._task)})
     messages = [{"role": "system", "content": "Operate the Python repair workspace. Inspect files, edit src/solution.py, test, then submit the repaired workspace. Emit exactly one JSON action instance, no markdown. Follow the README Python subset. Action schema: " + json.dumps(RepairAction.model_json_schema())},
                 {"role": "user", "content": reset.model_dump_json()}]
     row = {"task_id": task_id, "seed": seed, "sample": sample, "prompt_sha256": identity,
            "reward": 0.0, "solved": False, "failure": None, "calls": [], "messages": messages}
+    progress["row"] = row
     opener = urllib.request.build_opener(helper.NoRedirect(), urllib.request.ProxyHandler({}))
     generated, observed = 0, 0
     for turn in range(MAX_TURNS):
@@ -186,13 +205,14 @@ def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadlin
                 row["failure"] = "provider_or_reservation_failure"
             row["failure_type"] = type(exc).__name__
             break
-        metric = helper.metric_for(reply)
-        metric.update(reserved_usd=reserved, max_tokens=allowance)
         identifier = reply.get("id")
-        metric.update(client_call_label=call_label,
-            provider_response_id_sha256=hashlib.sha256(identifier.encode()).hexdigest()
-                if isinstance(identifier, str) and identifier else None)
+        # Save actual response identity before parsing usage/choices; a parser
+        # failure must not erase an already observed provider call.
+        metric = {"client_call_label": call_label, "reserved_usd": reserved, "max_tokens": allowance,
+            "provider_response_id_sha256": hashlib.sha256(identifier.encode()).hexdigest()
+                if isinstance(identifier, str) and identifier else None}
         row["calls"].append(metric)
+        metric.update(helper.metric_for(reply))
         message = reply["choices"][0]["message"]
         content = message.get("content") or ""
         fields, reasoning, _, _, error, leaked = helper.reasoning_payload(message, token)
@@ -222,6 +242,7 @@ def episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadlin
             break
         observation = env.step(action)
         last_observation = observation
+        progress["last_observation"] = observation
         text = observation.model_dump_json()
         observed += counter.count(text)
         messages.append({"role": "user", "content": text})
@@ -295,7 +316,8 @@ def _execute(deadline, args, profile):
                         stop.set()
                         record = {"task_id": task_id, "seed": seed, "sample": sample,
                                   "failure": "screen_internal_failure",
-                                  "failure_type": type(exc).__name__, "reward": 0, "solved": False}
+                                  "failure_type": type(exc).__name__, "reward": 0, "solved": False,
+                                  "calls": [], "prompt_identity_unavailable": True}
                     raw = json.dumps(record).replace(token, "[REDACTED]")
                     stream.write(raw + "\n")
                     stream.flush()

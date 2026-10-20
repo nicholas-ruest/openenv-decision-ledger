@@ -189,6 +189,48 @@ def test_already_terminal_budget_failure_is_not_regraded_into_a_success(monkeypa
     assert result["hidden_wrong_answers"] == 0 and not result["counts_as_valid_completion"]
 
 
+@pytest.mark.parametrize("point", ["before_reset", "metric", "after_write"])
+def test_internal_error_preserves_only_observed_identity_and_diagnostic_state(tmp_path, monkeypatch, point):
+    from repair_env.tasks import make_task
+    task = make_task("software_repair-replay-d3", 1071000)
+    partial = task.initial_source.replace("if True:", "if identifier not in seen:")
+    frozen = {"provider": {"pricing": {"input": .2, "output": 2.5}}}
+    monkeypatch.setattr(screen, "quote", lambda *a: frozen)
+    def provider(*args):
+        return {"id": "internal-fixture-response", "choices": [{"message": {"content": json.dumps(
+            {"op": "write", "path": "src/solution.py", "content": partial})}, "finish_reason": "stop"}],
+            "usage": {"prompt_tokens": 100, "completion_tokens": 100}}
+    monkeypatch.setattr(screen.helper, "provider_call", provider)
+    def explode(*args, **kwargs):
+        raise RuntimeError("private synthetic exception text")
+    if point == "before_reset":
+        monkeypatch.setattr(screen, "RepairEnvironment", explode)
+    if point == "metric":
+        monkeypatch.setattr(screen.helper, "metric_for", explode)
+    class BrokenCounter:
+        def context(self, messages):
+            return 0
+        count = staticmethod(explode)
+    stop = threading.Event()
+    row = screen.episode(task.task_id, task.seed, 2, "offline-fixture-placeholder",
+        BrokenCounter() if point == "after_write" else screen.helper.TokenCounter(),
+        screen.DollarReservations(receipt(tmp_path)), frozen, stop, time.monotonic() + 30,
+        "offline-internal-fixture")
+    assert row["failure"] == "screen_internal_failure" and row["failure_type"] == "RuntimeError"
+    assert stop.is_set() and not row["solved"] and row["reward"] == 0 and row["sample"] == 2
+    assert "private synthetic exception text" not in json.dumps(row)
+    if point == "before_reset":
+        assert row["prompt_identity_unavailable"] and not row["calls"]
+        assert "messages" not in row and "prompt_sha256" not in row
+    else:
+        assert len(row["calls"]) == 1 and len(row["prompt_sha256"]) == 64
+        assert row["calls"][0]["client_call_label"].endswith(":2:0")
+        assert len(row["calls"][0]["provider_response_id_sha256"]) == 64
+        assert len(row["messages"]) >= 2
+        assert row["termination_grading"]["terminal_reward"] == (.5 if point == "after_write" else 0)
+        assert not row["termination_grading"]["counts_as_valid_completion"]
+
+
 @pytest.mark.parametrize("expire_after", ["quote", "reservation", "stop_during_reservation"])
 def test_deadline_consumed_during_admission_never_contacts_provider_or_refunds(tmp_path, monkeypatch, expire_after):
     clock = [0]
