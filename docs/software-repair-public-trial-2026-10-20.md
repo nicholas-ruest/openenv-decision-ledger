@@ -2,7 +2,7 @@
 
 The existing public software-repair candidate is technically ready for an exploratory Arena trial. This is a distinct proposal for source `c95e6fe79e44c9b1514fd59e186a0a70ac424858`, matching the already-public Hugging Face source archive, schema and all 128 exported workspaces. It does not replace or promote the retained `7156868` compact-feedback candidate. That newer candidate's public dataset bundle has not been published. There is no measured evidence that this earlier candidate outperforms the newer candidate.
 
-[Exact POST body](../../config/software-repair-public-trial-20261020.json), SHA256 `acc4b04f87db6c86a0bf8dcc75352dc4b80bf82cabe80526904b5852c07223ad`.
+[Exact POST body](../config/software-repair-public-trial-20261020.json), SHA256 `acc4b04f87db6c86a0bf8dcc75352dc4b80bf82cabe80526904b5852c07223ad`.
 
 Endpoint: `POST https://openenvarena-arena.hf.space/api/openenv/submissions`. **Do not POST before the human explicitly approves this exact request.** Acceptance automatically starts Arena training.
 
