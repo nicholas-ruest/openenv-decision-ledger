@@ -126,3 +126,14 @@ def test_generalization_profile_is_fresh_and_keeps_capacity_settings_matched():
         assert stage['signal_task_ids'] == ['software_repair-release-d3']
         assert stage['sampling_settings'] == profiles.get_profile('release_witness_capacity', 'screen')['sampling_settings']
         assert stage['samples_per_group'] == 4 and stage['max_calls'] == 96 and stage['execution_enabled']
+
+
+def test_stream_probe_has_two_samples_one_new_prompt_and_no_confirmation():
+    value = profiles.get_profile('release_stream_probe', 'screen')
+    assert value['groups'] == [['software_repair-release-d3', 1102000]]
+    assert value['samples_per_group'] == 2 and value['max_calls'] == 24
+    assert value['sampling_settings']['provider_streaming'] is True
+    assert value['sampling_settings']['stage_wall_seconds'] == 600
+    assert value['purpose'] == 'reliability_only' and value['execution_enabled']
+    assert value['planned_confirmation_groups'] == []
+    assert not profiles.get_profile('release_stream_probe', 'confirm')['execution_enabled']

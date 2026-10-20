@@ -23,6 +23,8 @@ import urllib.error
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from provider_stream import provider_call as stream_provider_call
 sys.path.insert(0, str(ROOT / "integrations/software-repair"))
 from repair_env.environment import RepairAction, RepairEnvironment, check  # noqa: E402
 from repair_env.tasks import visible_files, SOURCE_PATH
@@ -192,7 +194,8 @@ def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadli
                                      allowance, frozen["provider"]["pricing"])
             if stop.is_set():
                 raise DeadlineExceeded("screen stopped before provider call")
-            reply = helper.provider_call(opener, BASE, token, {"model": MODEL + ":deepinfra",
+            call = stream_provider_call if settings.get("provider_streaming") else helper.provider_call
+            reply = call(opener, BASE, token, {"model": MODEL + ":deepinfra",
                 "messages": messages, "temperature": 0.7, "max_tokens": allowance,
                 "response_format": {"type": "json_object"},
                 "chat_template_kwargs": {"enable_thinking": True}},
@@ -301,7 +304,7 @@ def _execute(deadline, args, profile):
         "samples_per_group": samples, "purpose": profile.get("purpose", "signal_screen"),
         "provider": frozen,
         "source_files_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
-            for p in [Path(__file__), HELPER,
+            for p in [Path(__file__), HELPER, ROOT / "scripts/provider_stream.py",
                       ROOT / "integrations/software-repair/scripts/screen_profiles.py",
                       ROOT / "integrations/software-repair/scripts/analyze_screen.py",
                       ROOT / "integrations/software-repair/scripts/screen_deadline.py",
@@ -356,7 +359,7 @@ def main(argv=None):
         "--profile",
         choices=("release", "replay_compare", "merge_compare", "merge_probe",
                  "repair_reliability", "release_witness", "release_witness_capacity",
-                 "release_generalization"),
+                 "release_generalization", "release_stream_probe"),
         default="release",
     )
     parser.add_argument("--stage", choices=("screen", "confirm"), default="screen")

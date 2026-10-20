@@ -47,6 +47,10 @@ def get_profile(name, stage):
             seed = 1086000 if part == "screen" else 1087000
             return [["software_repair-merge-d3", seed]]
         targets = ["software_repair-merge-d3"]
+    elif name == "release_stream_probe":
+        def groups(part):
+            return [["software_repair-release-d3", 1102000]] if part == "screen" else []
+        targets = ["software_repair-release-d3"]
     elif name == "release_generalization":
         def groups(part):
             seeds = (1100000, 1100100) if part == "screen" else (1101000, 1101100)
@@ -63,16 +67,19 @@ def get_profile(name, stage):
     else:
         raise ValueError("unknown calibration profile")
     selected = groups(stage)
-    samples = 2 if name == "repair_reliability" else SAMPLES
+    samples = 2 if name in ("repair_reliability", "release_stream_probe") else SAMPLES
     settings = sampling_settings()
-    if name in ("release_witness_capacity", "release_generalization"):
+    if name in ("release_witness_capacity", "release_generalization", "release_stream_probe"):
         settings["episode_generation_observation_units"] = 12288
         settings["context_units"] = 24576
-    if name == "repair_reliability":
+    if name == "release_stream_probe":
+        settings["provider_streaming"] = True
+    if name in ("repair_reliability", "release_stream_probe"):
         settings["stage_wall_seconds"] = 600
     return {"profile": name, "stage": stage, "groups": selected,
             "planned_confirmation_groups": groups("confirm"), "signal_task_ids": targets,
             "samples_per_group": samples, "max_calls": len(selected) * samples * MAX_TURNS,
             "sampling_settings": settings,
-            "purpose": "reliability_only" if name == "repair_reliability" else "signal_screen",
-            "execution_enabled": name in ("release", "merge_probe", "repair_reliability", "release_witness", "release_witness_capacity", "release_generalization")}
+            "purpose": "reliability_only" if name in ("repair_reliability", "release_stream_probe") else "signal_screen",
+            "execution_enabled": name in ("release", "merge_probe", "repair_reliability", "release_witness", "release_witness_capacity", "release_generalization")
+                or (name == "release_stream_probe" and stage == "screen")}
