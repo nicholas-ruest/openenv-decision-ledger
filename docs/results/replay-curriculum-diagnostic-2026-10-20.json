@@ -123,6 +123,17 @@
     "Case distributions and visible workspace differ between tasks; this is not a matched-prompt causal model comparison.",
     "Different procedural seeds confirm an offline generator property, not model learning.",
     "UTF8 workspace bytes are not tokenizer counts; wrapper/checkpoint/thinking equivalence to Arena is unattested.",
-    "Native CI and image validation for this new diagnostic must be verified before any review adoption."
-  ]
+    "Passing native controls validates environment behavior, not model signal or mix adoption."
+  ],
+  "ci_verification": {
+    "run": 39371163213,
+    "conclusion": "SUCCESS",
+    "source_revision": "9f424db15ba9d8ebb4090863e8f990bffa134aee",
+    "tests_passed": 290,
+    "test_seconds": 68.96,
+    "native_parity_checks_ran": true,
+    "anonymous_native_controls": 120,
+    "sdk_validation": "SUCCESS",
+    "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:442932a2cdc0906726c77db3c7cf2d15ff8314eab74b95a4a6c96680f082243e"
+  }
 }

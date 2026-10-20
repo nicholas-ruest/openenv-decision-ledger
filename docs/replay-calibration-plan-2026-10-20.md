@@ -3,6 +3,15 @@
 Status: review plan only. No inference has been launched or authorized by this
 document. The diagnostic remains outside the default eight-task export.
 
+Generate a deterministic offline review packet with
+`python scripts/plan-replay-calibration.py --output replay-plan.json`.
+The packet records actual workspace hashes and frozen source hashes for all
+eight proposed prompts. The builder has no provider or credential access,
+rejects `--execute`, and refuses to overwrite an existing output. Two offline
+checks verify prompt identity, disjoint seeds and the CLI refusal behavior.
+It does not configure or launch the inference runner.
+Rebuild the packet after any runner configuration or source change.
+
 The offline audit establishes that independent single-bug repairs can earn
 partial reward on replay-d3. It does not establish that a model will generate
 these repairs, produce useful within-prompt variance or improve after training.
