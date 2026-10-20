@@ -60,6 +60,10 @@ def classify(protocol, rows):
     if not planned or len(planned) != len(protocol["groups"]) or type(count) is not int or count < 2:
         raise ValueError("invalid predeclared groups")
     targets = signal_tasks(protocol)
+    required = protocol.get("required_productive_groups", 1)
+    if (type(required) is not int or required < 1 or
+            any(sum(group[0] == task for group in planned) < required for task, _ in planned)):
+        raise ValueError("invalid productive group requirement")
     seen = set()
     groups = []
     for row in rows:
@@ -117,13 +121,14 @@ def classify(protocol, rows):
         own_complete = len(selected) == len(selected_groups) * count
         tasks[task_id] = {"complete": own_complete,
             "productive_groups": sum(group["productive"] for group in selected_groups),
+            "required_productive_groups": required,
             "sampling_provenance": own_provenance, "sampling_identity_verified": own_identity,
             "genuine_signal_screened": own_complete and own_identity
-                and any(group["productive"] for group in selected_groups)}
+                and sum(group["productive"] for group in selected_groups) >= required}
     return {"stage": protocol.get("stage"), "complete": complete, "groups": groups,
         "unique_prompts": len(planned), "rollouts": len(rows),
         "distinct_observed_prompts": len(observed_prompts),
-        "signal_gate_version": 3, "sampling_provenance": provenance,
+        "signal_gate_version": 3, "required_productive_groups": required, "sampling_provenance": provenance,
         "sampling_identity_verified": identities_verified(provenance)
             and all(group["prompt_identity_verified"] for group in groups),
         "signal_task_ids": targets, "tasks": tasks,
@@ -190,7 +195,7 @@ def load_verified(directory):
 
 def confirmation(screen_protocol, screen, confirm_protocol, confirmed):
     for key in ("provider", "source_files_sha256", "tokenizer_sha256", "samples_per_group",
-                "profile", "signal_task_ids", "sampling_settings"):
+                "profile", "signal_task_ids", "sampling_settings", "required_productive_groups"):
         if screen_protocol.get(key) != confirm_protocol.get(key):
             raise ValueError("unmatched confirmation settings")
     if screen_protocol.get("stage") != "screen" or confirm_protocol.get("stage") != "confirm":

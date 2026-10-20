@@ -137,3 +137,17 @@ def test_stream_probe_has_two_samples_one_new_prompt_and_no_confirmation():
     assert value['purpose'] == 'reliability_only' and value['execution_enabled']
     assert value['planned_confirmation_groups'] == []
     assert not profiles.get_profile('release_stream_probe', 'confirm')['execution_enabled']
+
+
+def test_streamed_signal_screen_requires_two_new_productive_prompt_groups():
+    first = profiles.get_profile('release_generalization_stream', 'screen')
+    second = profiles.get_profile('release_generalization_stream', 'confirm')
+    assert first['groups'] == [['software_repair-release-d3', 1104000], ['software_repair-release-d3', 1104100]]
+    assert second['groups'] == [['software_repair-release-d3', 1105000], ['software_repair-release-d3', 1105100]]
+    for value in (first, second):
+        assert value['samples_per_group'] == 4 and value['max_calls'] == 96
+        assert value['required_productive_groups'] == 2 and value['execution_enabled']
+        assert value['sampling_settings']['provider_streaming'] is True
+        assert value['sampling_settings']['stage_wall_seconds'] == 1200
+    assert first['sampling_settings'] == second['sampling_settings']
+    assert first['planned_confirmation_groups'] == second['groups']

@@ -336,3 +336,46 @@ def test_worker_receipt_is_required_complete_and_matches_frozen_wall_limit(tmp_p
     with pytest.raises(ValueError, match="marker missing"):
         gate.verify_worker_receipt(root, {"source_files_sha256": {
             "integrations/software-repair/scripts/screen_deadline.py": "frozen"}})
+
+
+def two_group_fixture(second_rewards):
+    protocol, rows = fixture([1, .5, 1, .5], seed=1)
+    other, tail = fixture(second_rewards, seed=2)
+    protocol['groups'] += other['groups']
+    protocol['required_productive_groups'] = 2
+    return protocol, rows + tail
+
+
+def test_declared_two_prompt_gate_cannot_pass_on_one_productive_group():
+    protocol, rows = two_group_fixture([1, 1, 1, 1])
+    result = gate.classify(protocol, rows)
+    assert result['tasks']['task']['productive_groups'] == 1
+    assert not result['genuine_signal_screened']
+    protocol.pop('required_productive_groups')
+    assert gate.classify(protocol, rows)['genuine_signal_screened']  # Legacy archives keep their original rule.
+
+
+def test_both_productive_prompt_groups_meet_declared_requirement():
+    protocol, rows = two_group_fixture([1, .5, 0, 1])
+    result = gate.classify(protocol, rows)
+    assert result['genuine_signal_screened'] and result['required_productive_groups'] == 2
+
+
+@pytest.mark.parametrize('value', [0, True, 3, '2'])
+def test_invalid_required_group_count_fails_closed(value):
+    protocol, rows = two_group_fixture([1, .5, 0, 1])
+    protocol['required_productive_groups'] = value
+    with pytest.raises(ValueError, match='productive group requirement'):
+        gate.classify(protocol, rows)
+
+
+def test_confirmation_cannot_silently_lower_required_group_count():
+    protocol, rows = two_group_fixture([1, .5, 0, 1])
+    confirm_protocol, first = fixture([1, .5, 0, 1], seed=3, stage='confirm')
+    other, second = fixture([1, .5, 0, 1], seed=4, stage='confirm')
+    confirm_protocol['groups'] += other['groups']
+    protocol['planned_confirmation_groups'] = confirm_protocol['groups']
+    confirm_protocol['required_productive_groups'] = 1
+    with pytest.raises(ValueError, match='unmatched confirmation settings'):
+        gate.confirmation(protocol, gate.classify(protocol, rows), confirm_protocol,
+                          gate.classify(confirm_protocol, first + second))

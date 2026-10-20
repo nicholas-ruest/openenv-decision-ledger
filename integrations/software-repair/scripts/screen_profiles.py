@@ -51,9 +51,13 @@ def get_profile(name, stage):
         def groups(part):
             return [["software_repair-release-d3", 1102000]] if part == "screen" else []
         targets = ["software_repair-release-d3"]
-    elif name == "release_generalization":
+    elif name in ("release_generalization", "release_generalization_stream"):
+        streamed = name == "release_generalization_stream"
         def groups(part):
-            seeds = (1100000, 1100100) if part == "screen" else (1101000, 1101100)
+            if streamed:
+                seeds = (1104000, 1104100) if part == "screen" else (1105000, 1105100)
+            else:
+                seeds = (1100000, 1100100) if part == "screen" else (1101000, 1101100)
             return [["software_repair-release-d3", seed] for seed in seeds]
         targets = ["software_repair-release-d3"]
     elif name in ("release_witness", "release_witness_capacity"):
@@ -69,17 +73,18 @@ def get_profile(name, stage):
     selected = groups(stage)
     samples = 2 if name in ("repair_reliability", "release_stream_probe") else SAMPLES
     settings = sampling_settings()
-    if name in ("release_witness_capacity", "release_generalization", "release_stream_probe"):
+    if name in ("release_witness_capacity", "release_generalization", "release_stream_probe", "release_generalization_stream"):
         settings["episode_generation_observation_units"] = 12288
         settings["context_units"] = 24576
-    if name == "release_stream_probe":
+    if name in ("release_stream_probe", "release_generalization_stream"):
         settings["provider_streaming"] = True
     if name in ("repair_reliability", "release_stream_probe"):
         settings["stage_wall_seconds"] = 600
-    return {"profile": name, "stage": stage, "groups": selected,
+    return {**({"required_productive_groups": 2} if name == "release_generalization_stream" else {}),
+            "profile": name, "stage": stage, "groups": selected,
             "planned_confirmation_groups": groups("confirm"), "signal_task_ids": targets,
             "samples_per_group": samples, "max_calls": len(selected) * samples * MAX_TURNS,
             "sampling_settings": settings,
             "purpose": "reliability_only" if name in ("repair_reliability", "release_stream_probe") else "signal_screen",
-            "execution_enabled": name in ("release", "merge_probe", "repair_reliability", "release_witness", "release_witness_capacity", "release_generalization")
+            "execution_enabled": name in ("release", "merge_probe", "repair_reliability", "release_witness", "release_witness_capacity", "release_generalization", "release_generalization_stream")
                 or (name == "release_stream_probe" and stage == "screen")}

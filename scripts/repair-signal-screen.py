@@ -313,6 +313,7 @@ def _execute(deadline, args, profile):
     request_timeout(deadline, 90, now=_now())
     protocol = {"stage": args.stage, "profile": args.profile, "groups": groups,
         "signal_task_ids": profile["signal_task_ids"], "sampling_settings": profile["sampling_settings"],
+        "required_productive_groups": profile.get("required_productive_groups", 1),
         "samples_per_group": samples, "purpose": profile.get("purpose", "signal_screen"),
         "provider": frozen,
         "source_files_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
@@ -373,7 +374,7 @@ def main(argv=None):
         "--profile",
         choices=("release", "replay_compare", "merge_compare", "merge_probe",
                  "repair_reliability", "release_witness", "release_witness_capacity",
-                 "release_generalization", "release_stream_probe"),
+                 "release_generalization", "release_stream_probe", "release_generalization_stream"),
         default="release",
     )
     parser.add_argument("--stage", choices=("screen", "confirm"), default="screen")
