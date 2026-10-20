@@ -25,6 +25,18 @@ def test_reset_documents_function_limit_and_direct_file_reads():
     assert workspace == env._files  # All original files remain accessible.
 
 
+def test_reset_action_examples_are_valid_instances_without_giving_a_repair():
+    env = RepairEnvironment()
+    reset = env.reset(task_id="software_repair-merge-d3", seed=1086000)
+    for text in ('{"op":"read","path":"src/solution.py"}',
+                 '{"op":"test"}', '{"op":"submit"}'):
+        assert text in reset.prompt
+        action = RepairAction.model_validate_json(text)
+        assert action.op in ("read", "test", "submit")
+    assert "never the action schema" in reset.prompt
+    assert env._files["src/solution.py"] == env._task.initial_source
+
+
 def test_compact_failure_feedback_retains_results_and_visible_inputs():
     env = RepairEnvironment()
     env.reset(task_id="software_repair-release-d1", seed=1010000)

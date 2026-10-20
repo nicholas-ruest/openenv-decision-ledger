@@ -51,6 +51,15 @@ def test_actual_valid_partial_and_wrong_answers_supply_signal():
     assert result["groups"][0]["partial"] == 1 and result["groups"][0]["wrong"] == 1
 
 
+def test_two_reliability_samples_cannot_pass_the_training_signal_gate():
+    protocol, rows = fixture([1, .5])
+    protocol.update(samples_per_group=2, purpose="reliability_only")
+    result = gate.classify(protocol, rows)
+    assert result["complete"] and result["groups"][0]["valid"] == 2
+    assert not result["groups"][0]["productive"]
+    assert not result["genuine_signal_screened"]
+
+
 def test_internal_failure_without_observed_prompt_is_descriptive_not_signal():
     protocol, rows = fixture([1, .5, 1, 0], [None, None, None, "screen_internal_failure"])
     rows[-1].pop("prompt_sha256")

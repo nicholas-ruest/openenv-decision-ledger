@@ -205,6 +205,8 @@ def visible_files(task):
     test_source += "def test_contract(args, expected):\n    assert " + task.entrypoint + "(*args) == expected\n"
     readme = (task.instructions + "\nEdit src/solution.py, run test, inspect failures, and submit. "
               "This README is already in reset.prompt. Start with read path 'src/solution.py'; "
+              'send the action instance {"op":"read","path":"src/solution.py"}, never the action schema. '
+              'Later {"op":"test"} runs tests and {"op":"submit"} ends the episode. '
               "Run test for feedback, then read its case_path (tests/test_public.py#case=N, N=1..6) for one full example. "
               "Reading tests/test_public.py returns all six examples. Read path '*' includes all files and repeats this README. "
               "For a local fix use op='patch', path='src/solution.py', search=the exact old text, replacement=the new text. "

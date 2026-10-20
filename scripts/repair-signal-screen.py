@@ -27,7 +27,7 @@ from repair_env.environment import RepairAction, RepairEnvironment, check  # noq
 from repair_env.tasks import visible_files, SOURCE_PATH
 from repair_env.runner import Program, Rejected  # noqa: E402
 sys.path.insert(0, str(ROOT / "integrations/software-repair/scripts"))
-from screen_profiles import get_profile, MODEL, TOKENIZER_SHA, SAMPLES, MAX_TURNS
+from screen_profiles import get_profile, MODEL, TOKENIZER_SHA, SAMPLES, MAX_TURNS, REQUEST_TIMEOUT_S
 from screen_deadline import DeadlineExceeded, request_timeout, run_bounded
 
 _now = time.monotonic
@@ -173,7 +173,7 @@ def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadli
             if quote(opener, token, request_timeout(deadline, 15, now=_now())) != frozen:
                 stop.set()
                 raise ValueError("selected metadata or quote changed")
-            request_timeout(deadline, 90, now=_now())  # No reservation after quote consumes the deadline.
+            request_timeout(deadline, REQUEST_TIMEOUT_S, now=_now())  # No reservation after deadline.
             if stop.is_set():
                 raise DeadlineExceeded("screen stopped before reservation")
             # UTF8 bytes plus overhead is a deliberately conservative billing reservation.
@@ -187,7 +187,7 @@ def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadli
                 "messages": messages, "temperature": 0.7, "max_tokens": allowance,
                 "response_format": {"type": "json_object"},
                 "chat_template_kwargs": {"enable_thinking": True}},
-                request_timeout(deadline, 90, now=_now()))
+                request_timeout(deadline, REQUEST_TIMEOUT_S, now=_now()))
         except Exception as exc:
             if isinstance(exc, DeadlineExceeded):
                 row["failure"] = "screen_stopped"
@@ -273,6 +273,7 @@ def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadli
 
 def _execute(deadline, args, profile):
     groups = profile["groups"]
+    samples = profile["samples_per_group"]
     args.output.mkdir(exist_ok=False)  # Claim a fresh root before auth or HTTP.
     request_timeout(deadline, 15, now=_now())
     budget = DollarReservations(args.budget_receipt)
@@ -286,7 +287,8 @@ def _execute(deadline, args, profile):
     request_timeout(deadline, 90, now=_now())
     protocol = {"stage": args.stage, "profile": args.profile, "groups": groups,
         "signal_task_ids": profile["signal_task_ids"], "sampling_settings": profile["sampling_settings"],
-        "samples_per_group": SAMPLES, "provider": frozen,
+        "samples_per_group": samples, "purpose": profile.get("purpose", "signal_screen"),
+        "provider": frozen,
         "source_files_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
             for p in [Path(__file__), HELPER,
                       ROOT / "integrations/software-repair/scripts/screen_profiles.py",
@@ -294,7 +296,7 @@ def _execute(deadline, args, profile):
                       ROOT / "integrations/software-repair/scripts/screen_deadline.py",
                       *sorted((ROOT / "integrations/software-repair/repair_env").glob("*.py"))]},
         "tokenizer_sha256": TOKENIZER_SHA, "thinking_requested": True, "thinking_verified": False,
-        "max_calls": len(groups) * SAMPLES * MAX_TURNS, "max_turns_per_rollout": MAX_TURNS, "no_retry": True,
+        "max_calls": len(groups) * samples * MAX_TURNS, "max_turns_per_rollout": MAX_TURNS, "no_retry": True,
         "arena_budget_matched": False, "checkpoint_attested": False,
         "is_training": False, "private_arena_score": None,
         "worker_supervision": {"required": True, "wall_seconds": profile["sampling_settings"]["stage_wall_seconds"]},
@@ -306,9 +308,9 @@ def _execute(deadline, args, profile):
         for task_id, seed in groups:
             if stop.is_set():
                 break
-            with ThreadPoolExecutor(max_workers=SAMPLES) as pool:
+            with ThreadPoolExecutor(max_workers=samples) as pool:
                 futures = [pool.submit(episode, task_id, seed, i, token, counter, budget,
-                    frozen, stop, deadline, args.output.name) for i in range(SAMPLES)]
+                    frozen, stop, deadline, args.output.name) for i in range(samples)]
                 for sample, future in enumerate(futures):
                     try:
                         record = future.result()
@@ -340,7 +342,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--execute", action="store_true")
     parser.add_argument(
-        "--profile", choices=("release", "replay_compare", "merge_compare", "merge_probe"),
+        "--profile", choices=("release", "replay_compare", "merge_compare", "merge_probe", "repair_reliability"),
         default="release",
     )
     parser.add_argument("--stage", choices=("screen", "confirm"), default="screen")

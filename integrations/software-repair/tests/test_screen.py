@@ -295,7 +295,9 @@ def test_cli_runs_in_owned_supervised_worker_without_admission_or_credentials(tm
     assert output.with_name("run.worker.jsonl").exists()
 
 
-def test_screen_summary_does_not_count_failed_full_reward_rows_as_solves(tmp_path, monkeypatch, capsys):
+@pytest.mark.parametrize("profile_name,samples", [("release", 4), ("repair_reliability", 2)])
+def test_screen_summary_does_not_count_failed_full_reward_rows_as_solves(
+        tmp_path, monkeypatch, capsys, profile_name, samples):
     monkeypatch.setenv("HF_TOKEN", "offline-fixture-placeholder")
     monkeypatch.setattr(screen.helper, "load_counter", lambda *a: screen.helper.TokenCounter())
     monkeypatch.setattr(screen, "quote", lambda *a: {"provider": {"pricing": {"input": .2, "output": 2.5}}})
@@ -304,13 +306,31 @@ def test_screen_summary_does_not_count_failed_full_reward_rows_as_solves(tmp_pat
                 "failure": "invalid_json_action", "prompt_sha256": "a" * 64,
                 "termination_grading": {"terminal_reward": 1, "counts_as_valid_completion": False}}
     monkeypatch.setattr(screen, "episode", failed_episode)
-    profile = screen.get_profile("release", "screen")
+    profile = screen.get_profile(profile_name, "screen")
     profile["groups"] = [["software_repair-counts-d2", 1070300]]
     profile["signal_task_ids"] = ["software_repair-counts-d2"]
     output = tmp_path / "run"
     args = Namespace(output=output, budget_receipt=receipt(tmp_path), tokenizer=tmp_path / "unused",
-                     stage="screen", profile="release")
+                     stage="screen", profile=profile_name)
     assert screen._execute(time.monotonic() + 30, args, profile) == 0
     summary = json.loads((output / "complete.json").read_text())
-    assert summary["rollouts"] == 4 and summary["full_solves"] == 0
-    assert summary["failed_episode_terminal_diagnostics"] == 4
+    assert summary["rollouts"] == samples and summary["full_solves"] == 0
+    assert summary["failed_episode_terminal_diagnostics"] == samples
+
+
+@pytest.mark.parametrize("remaining,expected_timeout", [(200, 180), (45, 45)])
+def test_provider_wait_can_exceed_old_limit_but_never_remaining_wall_budget(
+        tmp_path, monkeypatch, remaining, expected_timeout):
+    monkeypatch.setattr(screen, "_now", lambda: 100)
+    frozen = {"provider": {"pricing": {"input": .2, "output": 2.5}}}
+    monkeypatch.setattr(screen, "quote", lambda *a: frozen)
+    observed = []
+    def provider(opener, base, token, payload, timeout):
+        observed.append(timeout)
+        return {"id": "offline-timeout-fixture", "usage": {"prompt_tokens": 100, "completion_tokens": 10},
+                "choices": [{"message": {"content": '{"op":"submit"}'}, "finish_reason": "stop"}]}
+    monkeypatch.setattr(screen.helper, "provider_call", provider)
+    screen.episode("software_repair-counts-d2", 1086001, 0, "offline-fixture-placeholder",
+                   screen.helper.TokenCounter(), screen.DollarReservations(receipt(tmp_path)),
+                   frozen, threading.Event(), 100 + remaining, "timeout-bound-fixture")
+    assert observed == [expected_timeout]

@@ -66,6 +66,17 @@ def test_small_probe_preserves_sampling_and_does_not_unlock_comparisons():
         assert not profiles.get_profile(name, "screen")["execution_enabled"]
 
 
+def test_reliability_probe_is_small_fresh_and_separate_from_signal_confirmation():
+    value = profiles.get_profile("repair_reliability", "screen")
+    assert value["groups"] == [["software_repair-merge-d3", 1086000]]
+    assert value["planned_confirmation_groups"] == [["software_repair-merge-d3", 1087000]]
+    assert value["samples_per_group"] == 2 and value["max_calls"] == 24
+    assert value["purpose"] == "reliability_only"
+    assert value["sampling_settings"]["stage_wall_seconds"] == 600
+    assert value["sampling_settings"]["request_timeout_seconds"] == 180
+    assert value["execution_enabled"]
+
+
 @pytest.mark.parametrize("name,stage", [("unknown", "screen"), ("replay_compare", "unknown"), ("", "")])
 def test_unknown_profile_or_stage_never_falls_back(name, stage):
     with pytest.raises(ValueError):
