@@ -123,8 +123,7 @@ def test_confirmation_plan_uses_disjoint_seeds_without_any_provider_call(monkeyp
 
 
 @pytest.mark.parametrize("profile,task", [("replay_compare", "software_repair-replay-d3"),
-                                        ("merge_compare", "software_repair-merge-d3"),
-                                        ("release_witness", "software_repair-release-d2")])
+                                        ("merge_compare", "software_repair-merge-d3")])
 def test_replay_profile_plan_and_lock_precede_budget_authentication_or_provider(monkeypatch, capsys, profile, task):
     for name in ("quote", "DollarReservations"):
         monkeypatch.setattr(screen, name, lambda *a: pytest.fail("plan or lock touched admission/provider"))
@@ -354,3 +353,14 @@ def test_provider_http_status_is_preserved_without_error_body(tmp_path, monkeypa
     assert result["failure"] == "provider_or_reservation_failure"
     assert result["failure_type"] == "HTTPError" and result["provider_http_status"] == code
     assert "private upstream detail" not in json.dumps(result)
+
+
+def test_release_witness_admission_still_requires_budget_tokenizer_and_fresh_output(monkeypatch, capsys):
+    for name in ("quote", "DollarReservations"):
+        monkeypatch.setattr(screen, name, lambda *a: pytest.fail("unadmitted execution touched provider"))
+    assert screen.main(["--profile", "release_witness"]) == 0
+    plan = json.loads(capsys.readouterr().out)
+    assert plan["execution_enabled"] and not plan["executed"]
+    assert len(plan["groups"]) == 2 and plan["max_calls"] == 96
+    with pytest.raises(ValueError, match="budget receipt and pinned tokenizer"):
+        screen.main(["--profile", "release_witness", "--execute"])
