@@ -21,7 +21,6 @@
   "learning_signal_confirmed": false,
   "model_training_started": false,
   "arena_submitted": false,
-  "default_eight_task_export_changed": false,
   "new_diagnostic": "software_repair-release-d2",
   "new_diagnostic_in_default_export": false,
   "curriculum_controls": {
@@ -73,12 +72,14 @@
     ],
     "reproduce": "python scripts/audit-software-curriculum.py --seed SEED --count 4 --tasks software_repair-release-d1 software_repair-release-d2 --output FRESH.json"
   },
-  "next_measurement": "Locked release_witness profile:8 sampled rollouts on2fresh prompts;8conditional confirmation rollouts on2further disjoint prompts. Private admission remains required; no automatic queue.",
+  "next_measurement": "Locked release_witness profile: 8 sampled rollouts on 2 fresh prompts; 8 conditional confirmation rollouts on 2 further disjoint prompts. Private admission remains required; no automatic queue.",
   "limits": [
     "Six proxy rollouts are not six unique tasks; each probe used one identical prompt across its samples.",
     "The two reliability samples do not establish a causal reliability improvement or GRPO variance.",
     "Constructed controls verify feedback coverage, not model learning or private-task transfer.",
     "Provider checkpoint/thinking and Arena wrapper equivalence remain unattested.",
     "No signed Flywheel promotion receipt or new Arena evaluation exists. Retained candidates and historical archives remain separate."
-  ]
+  ],
+  "default_eight_task_mix_changed": false,
+  "reset_guidance_changed": true
 }

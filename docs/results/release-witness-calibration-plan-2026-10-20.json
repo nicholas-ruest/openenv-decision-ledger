@@ -119,7 +119,7 @@
     "integrations/software-repair/repair_env/runner.py": "8b6c5d9e6d75fad912c7e179bdaf8284c3bbb15ecfa8a95250e539714474d8cc",
     "integrations/software-repair/repair_env/tasks.py": "c354c4ac1261ac3e65ea188c5afd474db9029a5a6a7c50528b2388ce66d4020c"
   },
-  "candidate_requirement": "Each of two screen groups AND two disjoint confirmation groups must have at least3 valid responses, at least1 full solve and at least1 valid non-full reward; failures never supply variance.",
+  "candidate_requirement": "Each of two screen groups AND two disjoint confirmation groups must have at least 3 valid responses, at least 1 full solve and at least 1 valid non-full reward; failures never supply variance.",
   "adoption_authorized": false,
   "model_training": false,
   "arena_submission": false,
