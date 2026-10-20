@@ -7,7 +7,7 @@ Provider checkpoint/thinking and the Arena chat wrapper remain unattested.
 from __future__ import annotations
 
 import argparse
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from decimal import Decimal
 import fcntl
@@ -180,6 +180,7 @@ def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadli
         if allowance < 1:
             row["failure"] = "episode_budget_exhausted"
             break
+        operation = "selected_model_quote"
         try:
             if quote(opener, token, request_timeout(deadline, 15, now=_now())) != frozen:
                 stop.set()
@@ -190,10 +191,12 @@ def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadli
             # UTF8 bytes plus overhead is a deliberately conservative billing reservation.
             prompt_bound = len(helper.canonical(messages).encode()) + 4096
             call_label = f"{prefix}:{task_id}:{seed}:{sample}:{turn}"
+            operation = "dollar_reservation"
             reserved = budget.reserve(call_label, prompt_bound,
                                      allowance, frozen["provider"]["pricing"])
             if stop.is_set():
                 raise DeadlineExceeded("screen stopped before provider call")
+            operation = "model_provider"
             call = stream_provider_call if settings.get("provider_streaming") else helper.provider_call
             reply = call(opener, BASE, token, {"model": MODEL + ":deepinfra",
                 "messages": messages, "temperature": 0.7, "max_tokens": allowance,
@@ -215,7 +218,16 @@ def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadli
                 stop.set()
             else:
                 row["failure"] = "provider_or_reservation_failure"
+            if operation == "selected_model_quote" and isinstance(exc, ValueError):
+                stop.set()  # Removal/malformed metadata cannot admit any further calls.
             row["failure_type"] = type(exc).__name__
+            row["failure_operation"] = operation
+            safe_codes = {"model catalog exceeds bound": "catalog_size_limit",
+                "selected model disappeared or ambiguous": "selected_model_missing_or_ambiguous",
+                "bound route unavailable": "bound_provider_unavailable",
+                "selected provider price outside frozen screen bounds": "quote_outside_bounds",
+                "selected metadata or quote changed": "selected_provenance_changed"}
+            row["failure_code"] = safe_codes.get(str(exc), type(exc).__name__)
             if isinstance(exc, urllib.error.HTTPError):
                 row["provider_http_status"] = exc.code
             break
@@ -323,9 +335,10 @@ def _execute(deadline, args, profile):
             if stop.is_set():
                 break
             with ThreadPoolExecutor(max_workers=samples) as pool:
-                futures = [pool.submit(episode, task_id, seed, i, token, counter, budget,
-                    frozen, stop, deadline, args.output.name, profile["sampling_settings"]) for i in range(samples)]
-                for sample, future in enumerate(futures):
+                futures = {pool.submit(episode, task_id, seed, i, token, counter, budget,
+                    frozen, stop, deadline, args.output.name, profile["sampling_settings"]): i for i in range(samples)}
+                for future in as_completed(futures):
+                    sample = futures[future]
                     try:
                         record = future.result()
                     except Exception as exc:
@@ -339,6 +352,7 @@ def _execute(deadline, args, profile):
                     stream.flush()
                     os.fsync(stream.fileno())
                     records.append(record)
+    records.sort(key=lambda row: (row["task_id"], row["seed"], row["sample"]))
     summary = {"rollouts": len(records), "unique_prompt_groups": len(groups),
         "full_solves": sum(row["solved"] and not row["failure"] for row in records),
         "failed_episode_terminal_diagnostics": sum("termination_grading" in row for row in records),

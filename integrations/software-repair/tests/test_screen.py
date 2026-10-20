@@ -393,3 +393,69 @@ def test_explicit_capacity_changes_real_episode_accounting_and_preserves_default
 def test_closed_allocation_cannot_admit_more_calls(tmp_path):
     with pytest.raises(ValueError, match='closed for new calls'):
         screen.DollarReservations(receipt(tmp_path, closed_for_new_calls=True))
+
+
+def test_finished_sample_is_fsynced_while_an_earlier_sample_is_still_waiting(tmp_path, monkeypatch):
+    release = threading.Event()
+    fast_finished = threading.Event()
+    errors = []
+    def fake_episode(task, seed, sample, *args):
+        if sample == 0:
+            assert release.wait(5), 'fixture must be released'
+        else:
+            fast_finished.set()
+        return {'task_id': task, 'seed': seed, 'sample': sample, 'reward': 0,
+                'solved': False, 'failure': 'offline_fixture', 'calls': [], 'prompt_sha256': 'a' * 64}
+    monkeypatch.setenv('HF_TOKEN', 'offline-placeholder')
+    monkeypatch.setattr(screen, 'episode', fake_episode)
+    monkeypatch.setattr(screen, 'quote', lambda *a: {})
+    monkeypatch.setattr(screen.helper, 'load_counter', lambda *a: screen.helper.TokenCounter())
+    output = tmp_path / 'archive'
+    args = Namespace(stage='screen', profile='release_stream_probe', output=output,
+                     budget_receipt=receipt(tmp_path), tokenizer=tmp_path / 'unused')
+    def work():
+        try:
+            screen._execute(time.monotonic() + 10, args, screen.get_profile(args.profile, args.stage))
+        except Exception as error:
+            errors.append(error)
+    worker = threading.Thread(target=work, daemon=True)
+    worker.start()
+    observed = []
+    try:
+        assert fast_finished.wait(2)
+        deadline = time.monotonic() + 1
+        while time.monotonic() < deadline:
+            path = output / 'episodes.jsonl'
+            lines = path.read_text().splitlines() if path.exists() else []
+            if lines:
+                observed = [json.loads(line) for line in lines]
+                break
+            threading.Event().wait(.01)
+        assert [row['sample'] for row in observed] == [1]
+        assert not release.is_set()  # The slower sample is still inside the provider fixture.
+    finally:
+        release.set()
+        worker.join(2)
+    assert not worker.is_alive() and not errors
+    assert sorted(json.loads(line)['sample'] for line in (output / 'episodes.jsonl').read_text().splitlines()) == [0, 1]
+    assert json.loads((output / 'complete.json').read_text())['rollouts'] == 2
+
+
+@pytest.mark.parametrize('where', ['quote', 'provider'])
+def test_failure_operation_and_allowlisted_code_do_not_serialize_exception_text(tmp_path, monkeypatch, where):
+    frozen = {'provider': {'pricing': {'input': .2, 'output': 2.5}}}
+    def missing(*args):
+        raise ValueError('selected model disappeared or ambiguous')
+    def private_error(*args):
+        raise ValueError('untrusted fixture contains offline-private-placeholder')
+    monkeypatch.setattr(screen, 'quote', missing if where == 'quote' else lambda *args: frozen)
+    monkeypatch.setattr(screen.helper, 'provider_call', private_error)
+    stop = threading.Event()
+    result = screen.episode('software_repair-counts-d2', 985001, 0, 'offline-private-placeholder',
+        screen.helper.TokenCounter(), screen.DollarReservations(receipt(tmp_path)), frozen,
+        stop, time.monotonic() + 30, 'offline-safe-errors')
+    assert stop.is_set() == (where == 'quote')
+    assert result['failure'] == 'provider_or_reservation_failure'
+    assert result['failure_operation'] == ('selected_model_quote' if where == 'quote' else 'model_provider')
+    assert result['failure_code'] == ('selected_model_missing_or_ambiguous' if where == 'quote' else 'ValueError')
+    assert 'untrusted fixture' not in json.dumps(result) and 'offline-private-placeholder' not in json.dumps(result)
