@@ -33,10 +33,18 @@ def get_profile(name, stage):
         def groups(part):
             return [[task, seed] for task in MERGE_TASKS for seed in MERGE_SEEDS[part]]
         targets = ["software_repair-merge-d3"]
+    elif name == "merge_probe":
+        # A single candidate prompt, not the larger locked comparison. Each
+        # admission still requires the existing fresh, shared dollar receipt.
+        def groups(part):
+            seed = 1082000 if part == "screen" else 1083000
+            return [["software_repair-merge-d3", seed]]
+        targets = ["software_repair-merge-d3"]
     else:
         raise ValueError("unknown calibration profile")
     selected = groups(stage)
     return {"profile": name, "stage": stage, "groups": selected,
             "planned_confirmation_groups": groups("confirm"), "signal_task_ids": targets,
             "samples_per_group": SAMPLES, "max_calls": len(selected) * SAMPLES * MAX_TURNS,
-            "sampling_settings": sampling_settings(), "execution_enabled": name == "release"}
+            "sampling_settings": sampling_settings(),
+            "execution_enabled": name in ("release", "merge_probe")}

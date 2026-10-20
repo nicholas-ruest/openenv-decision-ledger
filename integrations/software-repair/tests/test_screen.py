@@ -65,6 +65,20 @@ def test_default_plan_cannot_contact_provider(monkeypatch, capsys):
     assert not value["executed"] and value["max_calls"] == 96
 
 
+def test_small_probe_cannot_skip_private_budget_admission(tmp_path, monkeypatch):
+    called = []
+    def refuse_receipt(path):
+        called.append(path)
+        raise ValueError("fresh reconciled existing inference allocation required")
+    monkeypatch.setattr(screen, "DollarReservations", refuse_receipt)
+    monkeypatch.setattr(screen, "quote", lambda *a: pytest.fail("provider before budget admission"))
+    args = Namespace(stage="screen", profile="merge_probe", output=tmp_path / "fresh",
+                     budget_receipt=tmp_path / "private.json", tokenizer=tmp_path / "tokenizer.json")
+    with pytest.raises(ValueError, match="fresh reconciled"):
+        screen._execute(time.monotonic() + 30, args, screen.get_profile("merge_probe", "screen"))
+    assert called == [args.budget_receipt]
+
+
 @pytest.mark.parametrize("failure", [None, "invalid_json_action", "completion_truncated", "missing_usage"])
 def test_proxy_group_actions_and_failure_separation(tmp_path, monkeypatch, failure):
     from repair_env.tasks import _SPECS

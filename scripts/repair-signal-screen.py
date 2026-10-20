@@ -339,7 +339,10 @@ def _execute(deadline, args, profile):
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--execute", action="store_true")
-    parser.add_argument("--profile", choices=("release", "replay_compare", "merge_compare"), default="release")
+    parser.add_argument(
+        "--profile", choices=("release", "replay_compare", "merge_compare", "merge_probe"),
+        default="release",
+    )
     parser.add_argument("--stage", choices=("screen", "confirm"), default="screen")
     parser.add_argument("--budget-receipt", type=Path)
     parser.add_argument("--tokenizer", type=Path)

@@ -51,6 +51,21 @@ def test_legacy_release_groups_stay_frozen_and_profiles_cannot_mutate_each_other
     assert fresh["sampling_settings"]["temperature"] == .7
 
 
+def test_small_probe_preserves_sampling_and_does_not_unlock_comparisons():
+    screen = profiles.get_profile("merge_probe", "screen")
+    confirm = profiles.get_profile("merge_probe", "confirm")
+    assert screen["groups"] == [["software_repair-merge-d3", 1082000]]
+    assert confirm["groups"] == [["software_repair-merge-d3", 1083000]]
+    assert screen["planned_confirmation_groups"] == confirm["groups"]
+    for value in (screen, confirm):
+        assert value["max_calls"] == 48 and value["samples_per_group"] == 4
+        assert value["signal_task_ids"] == ["software_repair-merge-d3"]
+        assert value["sampling_settings"] == profiles.sampling_settings()
+        assert value["execution_enabled"]
+    for name in ("merge_compare", "replay_compare"):
+        assert not profiles.get_profile(name, "screen")["execution_enabled"]
+
+
 @pytest.mark.parametrize("name,stage", [("unknown", "screen"), ("replay_compare", "unknown"), ("", "")])
 def test_unknown_profile_or_stage_never_falls_back(name, stage):
     with pytest.raises(ValueError):
