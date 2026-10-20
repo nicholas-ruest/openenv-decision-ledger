@@ -6,7 +6,7 @@ with release-d1. These cases add feedback coverage rather than new failure modes
 """
 
 
-def inputs(rng, count):
+def inputs(rng, count, *, dependency_witness=False):
     for index in range(count):
         a, b, x, y, z, w = [f"module_{n}" for n in rng.sample(range(1_000_000), 6)]
         ids = sorted(f"suite_{n}" for n in rng.sample(range(1_000_000), 6))
@@ -27,6 +27,10 @@ def inputs(rng, count):
             suites = {name: {"targets": [], "cost": budget + 100} for name in ids}
             suites[ids[0]] = {"targets": [x], "cost": unit}
             suites[ids[1]] = {"targets": [x, y], "cost": 2 * unit}
+            if dependency_witness:
+                dependency, consumer = max(x, y), min(x, y)
+                graph[consumer] = [dependency]
+                changed = [dependency]
         elif mode == 2:  # A free suite fits a zero budget, inclusively.
             budget = 0
             suites[ids[0]] = {"targets": [x], "cost": 0}
@@ -50,3 +54,18 @@ def inputs(rng, count):
         items = list(suites.items())
         rng.shuffle(items)
         yield [graph, changed, dict(items), budget]
+
+
+def generalized_inputs(rng, count, *, visible=False):
+    """Preserve defect witnesses and exercise the broader graph contract.
+
+    Public examples include a dependency whose consumer sorts before it. Hidden
+    cases mix twelve independently named witnesses with general release graphs.
+    Neither input stream derives from the public examples.
+    """
+    from . import release_plan
+
+    witnesses = count if visible else min(12, count)
+    yield from inputs(rng, witnesses, dependency_witness=True)
+    if witnesses < count:
+        yield from release_plan.inputs(rng, count - witnesses)

@@ -76,6 +76,8 @@ class DollarReservations:
     def __init__(self, receipt):
         self.path = Path(receipt)
         value = json.loads(self.path.read_text())
+        if value.get("closed_for_new_calls") is True:
+            raise ValueError("inference allocation is closed for new calls")
         checked = datetime.fromisoformat(value["checked_at"])
         age = (datetime.now(timezone.utc) - checked).total_seconds()
         cap = Decimal(str(value["screen_cap_usd"]))
@@ -353,7 +355,8 @@ def main(argv=None):
     parser.add_argument(
         "--profile",
         choices=("release", "replay_compare", "merge_compare", "merge_probe",
-                 "repair_reliability", "release_witness", "release_witness_capacity"),
+                 "repair_reliability", "release_witness", "release_witness_capacity",
+                 "release_generalization"),
         default="release",
     )
     parser.add_argument("--stage", choices=("screen", "confirm"), default="screen")

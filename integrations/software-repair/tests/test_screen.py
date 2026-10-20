@@ -388,3 +388,8 @@ def test_explicit_capacity_changes_real_episode_accounting_and_preserves_default
     assert expanded['failure'] is None and expanded['solved'] and expanded['reward'] == 1
     assert expanded['generation_tokens'] + expanded['observation_tokens'] <= 12288
     assert screen.get_profile('release_witness', 'screen')['sampling_settings']['episode_generation_observation_units'] == 8192
+
+
+def test_closed_allocation_cannot_admit_more_calls(tmp_path):
+    with pytest.raises(ValueError, match='closed for new calls'):
+        screen.DollarReservations(receipt(tmp_path, closed_for_new_calls=True))

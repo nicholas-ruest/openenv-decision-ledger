@@ -69,35 +69,36 @@ def replay(url):
                 assert terminal["done"] and terminal["reward"] == expected, (task_id, control, terminal["reward"])
                 records.append({"task_id": task_id, "control": control, "reward": expected,
                     "workspace_sha256": hashlib.sha256(json.dumps(workspace, sort_keys=True).encode()).hexdigest()})
-    task_id, seed = "software_repair-release-d2", 1090100
-    task = make_task(task_id, seed)
-    repairs = [
-        ('required = set(base["order"] + base["blocked"])', 'required = set(base["order"])'),
-        ('key = (cost, len(uncovered),', 'key = (len(uncovered), cost,'),
-        ('if cost < budget:', 'if cost <= budget:'),
-        ('len(selected), selected[::-1])', 'len(selected), selected)'),
-    ]
-    selected = [(old, new) for old, new in repairs if old in task.initial_source]
-    assert len(selected) == 3
-    variants = [[pair] for pair in selected] + [selected[:2]]
-    baseline = check(Program(task.initial_source), task, task.hidden)[0]
-    for index, edits in enumerate(variants):
-        source = task.initial_source
-        for old, new in edits:
-            source = source.replace(old, new)
-        passed, details = check(Program(source), task, task.hidden, details=True)
-        assert all(row["error"] is None for row in details)
-        expected = min(.95, (passed - baseline) / (len(task.hidden) - baseline))
-        assert 0 < expected < 1
-        with connect(ws, proxy=None, max_size=1_048_576, open_timeout=10, close_timeout=3) as socket:
-            exchange(socket, "reset", {"task_id": task_id, "seed": seed})
-            exchange(socket, "step", {"op": "write", "path": "src/solution.py", "content": source})
-            terminal = exchange(socket, "step", {"op": "submit"})
-            assert terminal["done"] and terminal["reward"] == expected
-            records.append({"task_id": task_id, "control": f"partial_semantic_repair_{index}",
-                            "reward": expected})
+    for task_id in ("software_repair-release-d2", "software_repair-release-d3"):
+        seed = 1090100
+        task = make_task(task_id, seed)
+        repairs = [
+            ('required = set(base["order"] + base["blocked"])', 'required = set(base["order"])'),
+            ('key = (cost, len(uncovered),', 'key = (len(uncovered), cost,'),
+            ('if cost < budget:', 'if cost <= budget:'),
+            ('len(selected), selected[::-1])', 'len(selected), selected)'),
+        ]
+        selected = [(old, new) for old, new in repairs if old in task.initial_source]
+        assert len(selected) == 3
+        variants = [[pair] for pair in selected] + [selected[:2]]
+        baseline = check(Program(task.initial_source), task, task.hidden)[0]
+        for index, edits in enumerate(variants):
+            source = task.initial_source
+            for old, new in edits:
+                source = source.replace(old, new)
+            passed, details = check(Program(source), task, task.hidden, details=True)
+            assert all(row["error"] is None for row in details)
+            expected = min(.95, (passed - baseline) / (len(task.hidden) - baseline))
+            assert 0 < expected < 1
+            with connect(ws, proxy=None, max_size=1_048_576, open_timeout=10, close_timeout=3) as socket:
+                exchange(socket, "reset", {"task_id": task_id, "seed": seed})
+                exchange(socket, "step", {"op": "write", "path": "src/solution.py", "content": source})
+                terminal = exchange(socket, "step", {"op": "submit"})
+                assert terminal["done"] and terminal["reward"] == expected
+                records.append({"task_id": task_id, "control": f"partial_semantic_repair_{index}",
+                                "reward": expected})
     return {"status": "passed", "episodes_passed": len(records),
-        "episodes_expected": 5 * len(TASK_IDS) + len(variants),
+        "episodes_expected": 5 * len(TASK_IDS) + 2 * len(variants),
         "schema": {key: schema[key] for key in ("action", "observation")}, "records": records,
         "is_model_benchmark": False, "private_arena_score": None,
         "limits": ["Native protocol and reference fixtures only; no model learning/transfer evidence",

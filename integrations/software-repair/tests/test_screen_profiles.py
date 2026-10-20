@@ -114,3 +114,15 @@ def test_capacity_screen_is_a_new_frozen_arm_not_a_relabelled_confirmation():
         assert stage['sampling_settings'] == expected and stage['execution_enabled']
         assert stage['samples_per_group'] == 4 and stage['max_calls'] == 96
     assert original['sampling_settings'] == profiles.sampling_settings()
+
+
+def test_generalization_profile_is_fresh_and_keeps_capacity_settings_matched():
+    first = profiles.get_profile('release_generalization', 'screen')
+    second = profiles.get_profile('release_generalization', 'confirm')
+    assert first['groups'] == [['software_repair-release-d3', 1100000], ['software_repair-release-d3', 1100100]]
+    assert second['groups'] == [['software_repair-release-d3', 1101000], ['software_repair-release-d3', 1101100]]
+    assert first['planned_confirmation_groups'] == second['groups']
+    for stage in (first, second):
+        assert stage['signal_task_ids'] == ['software_repair-release-d3']
+        assert stage['sampling_settings'] == profiles.get_profile('release_witness_capacity', 'screen')['sampling_settings']
+        assert stage['samples_per_group'] == 4 and stage['max_calls'] == 96 and stage['execution_enabled']

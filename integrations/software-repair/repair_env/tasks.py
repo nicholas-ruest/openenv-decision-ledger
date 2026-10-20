@@ -16,6 +16,7 @@ TASK_IDS.append("software_repair-plan-d3")
 TASK_IDS.append("software_repair-plan-d4")
 TASK_IDS.append("software_repair-release-d1")
 TASK_IDS.append("software_repair-release-d2")
+TASK_IDS.append("software_repair-release-d3")
 TASK_IDS.append("software_repair-replay-d3")
 TASK_IDS.append("software_repair-merge-d3")
 TRAINING_TASK_IDS = [f"software_repair-{family}-d{d}" for family in hard_tasks.FAMILIES for d in (1, 2)]
@@ -119,8 +120,12 @@ def _inputs(family, rng, count, difficulty, *, visible=False):
             yield Case(args, hard_tasks.reference(family, args))
         return
     if family == "release":
-        generator = release_curriculum.inputs if difficulty == 2 else release_plan.inputs
-        for args in generator(rng, count):
+        if difficulty == 3:
+            generated = release_curriculum.generalized_inputs(rng, count, visible=visible)
+        else:
+            generator = release_curriculum.inputs if difficulty == 2 else release_plan.inputs
+            generated = generator(rng, count)
+        for args in generated:
             yield Case(args, release_plan.reference(args))
         return
     if family == "plan" and difficulty in (3, 4):
