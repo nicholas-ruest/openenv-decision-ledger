@@ -19,6 +19,7 @@ from pathlib import Path
 import sys
 import threading
 import time
+import urllib.error
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -204,6 +205,8 @@ def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadli
             else:
                 row["failure"] = "provider_or_reservation_failure"
             row["failure_type"] = type(exc).__name__
+            if isinstance(exc, urllib.error.HTTPError):
+                row["provider_http_status"] = exc.code
             break
         identifier = reply.get("id")
         # Save actual response identity before parsing usage/choices; a parser

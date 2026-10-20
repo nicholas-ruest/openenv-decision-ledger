@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import threading
 import time
+import urllib.error
 
 import pytest
 
@@ -334,3 +335,20 @@ def test_provider_wait_can_exceed_old_limit_but_never_remaining_wall_budget(
                    screen.helper.TokenCounter(), screen.DollarReservations(receipt(tmp_path)),
                    frozen, threading.Event(), 100 + remaining, "timeout-bound-fixture")
     assert observed == [expected_timeout]
+
+
+@pytest.mark.parametrize("code", [429, 503])
+def test_provider_http_status_is_preserved_without_error_body(tmp_path, monkeypatch, code):
+    frozen = {"provider": {"pricing": {"input": .2, "output": 2.5}}}
+    monkeypatch.setattr(screen, "quote", lambda *a: frozen)
+    def fail(*args):
+        raise urllib.error.HTTPError(screen.BASE, code, "private upstream detail", {}, None)
+    monkeypatch.setattr(screen.helper, "provider_call", fail)
+    result = screen.episode(
+        "software_repair-counts-d2", 1090201, 0, "offline-fixture-placeholder",
+        screen.helper.TokenCounter(), screen.DollarReservations(receipt(tmp_path)),
+        frozen, threading.Event(), time.monotonic() + 30, "http-diagnostic-fixture",
+    )
+    assert result["failure"] == "provider_or_reservation_failure"
+    assert result["failure_type"] == "HTTPError" and result["provider_http_status"] == code
+    assert "private upstream detail" not in json.dumps(result)
