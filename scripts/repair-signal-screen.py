@@ -384,7 +384,8 @@ def main(argv=None):
         choices=("release", "replay_compare", "merge_compare", "merge_probe",
                  "repair_reliability", "release_witness", "release_witness_capacity",
                  "release_generalization", "release_stream_probe", "release_generalization_stream",
-                 "direct_release", "direct_release_control", "direct_synthesis", "direct_capacity_control"),
+                 "direct_release", "direct_release_control", "direct_synthesis", "direct_capacity_control",
+                 "tuple_synthesis", "tuple_capacity_control", "kv_components", "kv_easy_control"),
         default="release",
     )
     parser.add_argument("--stage", choices=("screen", "confirm"), default="screen")

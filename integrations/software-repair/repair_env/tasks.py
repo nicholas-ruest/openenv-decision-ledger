@@ -9,6 +9,7 @@ from . import (
     hard_tasks, cycle_plan, release_plan, replay_curriculum, merge_curriculum,
     release_curriculum,
     release_synthesis,
+    kv_repair,
 )
 
 FAMILIES = ("clamp", "overlap", "chunks", "unique", "counts", "prefix") + hard_tasks.FAMILIES
@@ -21,6 +22,7 @@ TASK_IDS.append("software_repair-release-d3")
 TASK_IDS.append("software_repair-release-d4")
 TASK_IDS.append("software_repair-replay-d3")
 TASK_IDS.append("software_repair-merge-d3")
+TASK_IDS.extend(("software_repair-kv-d1", "software_repair-kv-d2"))
 TRAINING_TASK_IDS = [f"software_repair-{family}-d{d}" for family in hard_tasks.FAMILIES for d in (1, 2)]
 SOURCE_PATH = "src/solution.py"
 
@@ -45,6 +47,8 @@ class Task:
 
 def reference(family, args):
     """Trusted independent specification; never exposed as an environment tool."""
+    if family == "kv":
+        return kv_repair.reference(args)
     if family == "clamp":
         value, lo, hi = args
         return min(hi, max(lo, value))
@@ -79,9 +83,12 @@ _SPECS = {
                "def prefix_sums(values):\n    total = 0\n    result = []\n    for value in values:\n        total = total + value\n        result.append(total)\n    return result\n"),
 }
 _SPECS.update(hard_tasks.SPECS)
+_SPECS["kv"] = ("replay_store", kv_repair.INSTRUCTIONS, kv_repair.REFERENCE)
 
 
 def _initial(family, source, difficulty, seed=None):
+    if family == "kv":
+        return kv_repair.initial(seed, difficulty)
     if family in ("replay", "merge") and difficulty == 3:
         return hard_tasks.initial(family, source, 2)
     if family == "release":
@@ -115,6 +122,10 @@ def _initial(family, source, difficulty, seed=None):
 
 
 def _inputs(family, rng, count, difficulty, *, visible=False):
+    if family == "kv":
+        for args in kv_repair.inputs(rng, count):
+            yield Case(args, kv_repair.reference(args))
+        return
     if family == "merge" and difficulty == 3:
         for args in merge_curriculum.inputs(rng, count):
             yield Case(args, hard_tasks.reference(family, args))
@@ -172,7 +183,8 @@ def make_task(task_id, seed):
     difficulty = int(level[1:])
     # The synthesis/control comparison intentionally shares case inputs and the
     # oracle while changing the original source. Existing d3 stays byte-frozen.
-    case_task_id = "software_repair-release-d3" if task_id == "software_repair-release-d4" else task_id
+    case_task_id = ("software_repair-release-d3" if task_id == "software_repair-release-d4" else
+                    "software_repair-kv-d1" if task_id == "software_repair-kv-d2" else task_id)
     material = f"decision-ledger-code-repair-v1|{case_task_id}|{seed}"
     # Independent streams: neither hidden inputs nor answers derive from public tests.
     public_rng = random.Random(int.from_bytes(hashlib.sha256((material + "|public").encode()).digest(), "big"))
@@ -233,7 +245,7 @@ def visible_files(task):
               "Only src/solution.py is writable. Tests shown here are examples; final grading uses fresh hidden cases. "
               "Reward requires improving hidden test results over the original broken module; unchanged, formatting-only and non-improving edits earn zero. "
               "Python subset: one to four top-level named functions, return/assign/if/for/while, lists/dicts, indexing/slices, integer arithmetic/comparisons, "
-              "len/min/max/sum/abs/sorted/list/range/set/dict/tuple/enumerate/zip/any/all, comprehensions, break/continue, bounded lazy generator expressions, integer powers/bitops and set union/intersection, list append/pop/sort/reverse/remove/copy/extend, set.add/remove/discard/copy/update/union/intersection/difference and dict get/pop/items/keys/values/copy. Single-underscore helper/local names are allowed; function call depth is limited to16. No imports, yield/async, nested functions, "
+              "len/min/max/sum/abs/sorted/list/range/set/dict/tuple/enumerate/zip/any/all, comprehensions, break/continue, bounded lazy generator expressions, integer powers/bitops and set union/intersection, list append/pop/sort/reverse/remove/copy/extend, set.add/remove/discard/copy/update/union/intersection/difference and dict get/pop/items/keys/values/copy. Internal dictionary tuple keys are supported; returned values must be JSON-serializable. Single-underscore helper/local names are allowed; function call depth is limited to16. No imports, yield/async, nested functions, "
               "exceptions, decorators, filesystem or shell. Limits: 8192 source bytes,2048 AST nodes,128 collection items,80000 execution steps/case. "
               "Visible tests use the same bounded interpreter as hidden tests; tests are not executed by host pytest in the environment.")
     return {SOURCE_PATH: task.initial_source, "tests/test_public.py": test_source,

@@ -178,7 +178,11 @@ class Program:
         elif isinstance(target, ast.Subscript):
             container = self._expr(target.value, frame, depth)
             key = self._expr(target.slice, frame, depth)
-            if type(container) not in (list, dict) or type(key) not in (str, int):
+            # Tuple keys already work in dictionary literals/comprehensions and
+            # lookups. Assignment must accept the same bounded immutable keys;
+            # a tuple is not, however, a valid list index. No host calls added.
+            valid_key = type(key) in (str, int) or (type(container) is dict and type(key) is tuple)
+            if type(container) not in (list, dict) or not valid_key:
                 raise Rejected("assignment target unsupported")
             if type(container) is dict and key not in container and len(container) >= MAX_ITEMS:
                 raise Rejected("mapping size limit")

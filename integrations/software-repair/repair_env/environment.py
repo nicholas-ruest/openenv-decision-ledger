@@ -61,6 +61,13 @@ def check(program, task, cases, *, details=False):
     return passed, results
 
 
+def semantic_fields(results):
+    """Exact meaningful contract fields; execution failures earn no field credit."""
+    return sum(sum(key in row["actual"] and exact(row["actual"][key], expected)
+                   for key, expected in row["expected"].items())
+               for row in results if row["error"] is None and type(row["actual"]) is dict)
+
+
 class RepairEnvironment(Environment[RepairAction, RepairObservation, State]):
     SUPPORTS_CONCURRENT_SESSIONS = True
 
@@ -76,7 +83,12 @@ class RepairEnvironment(Environment[RepairAction, RepairObservation, State]):
         self._task = make_task(task_id, seed)
         self._files = visible_files(self._task)
         self._original = Program(self._task.initial_source)
-        self._baseline, _ = check(self._original, self._task, self._task.hidden)
+        component_reward = self._task.task_id.startswith("software_repair-kv-")
+        self._baseline, baseline_details = check(self._original, self._task, self._task.hidden, details=component_reward)
+        self._component_baseline = semantic_fields(baseline_details) if component_reward else None
+        self._component_total = sum(len(row["expected"]) for row in baseline_details) if component_reward else None
+        if component_reward and self._component_baseline >= self._component_total:
+            raise ValueError("generated task lacks an observable component defect")
         if self._baseline == len(self._task.hidden):
             raise ValueError("generated task lacks an observable defect")
         self._state = State(episode_id=episode_id or str(uuid4()), step_count=0)
@@ -99,10 +111,15 @@ class RepairEnvironment(Environment[RepairAction, RepairObservation, State]):
             try:
                 program = Program(self._files[SOURCE_PATH])
                 if program.fingerprint != self._original.fingerprint:
-                    passed, _ = check(program, self._task, self._task.hidden)
+                    components = self._component_baseline is not None
+                    passed, details = check(program, self._task, self._task.hidden, details=components)
                     total = len(self._task.hidden)
                     if passed == total:
                         self._reward = 1.0
+                    elif components:
+                        improved = semantic_fields(details) - self._component_baseline
+                        if improved > 0:
+                            self._reward = min(0.95, improved / (self._component_total - self._component_baseline))
                     elif passed > self._baseline:
                         self._reward = min(0.95, (passed - self._baseline) / (total - self._baseline))
             except (Rejected, RecursionError):
