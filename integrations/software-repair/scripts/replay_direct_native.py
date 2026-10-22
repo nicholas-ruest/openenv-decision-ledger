@@ -9,7 +9,7 @@ import urllib.request
 from websockets.sync.client import connect
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from repair_env.direct_environment import DIRECT_TASK_IDS, SYNTHESIS_TASK_ID, KV_TASK_IDS, LINEAR_TASK_IDS, DirectRepairAction
+from repair_env.direct_environment import DIRECT_TASK_IDS, SYNTHESIS_TASK_ID, KV_TASK_IDS, LINEAR_TASK_IDS, IGNORE_TASK_IDS, DirectRepairAction
 from repair_env.environment import RepairAction, RepairEnvironment
 from repair_env.tasks import SOURCE_PATH, make_task
 
@@ -31,7 +31,7 @@ def replay(url):
     assert schema["action"] == DirectRepairAction.model_json_schema()
     ws = ("wss" if parsed.scheme == "https" else "ws") + "://" + parsed.netloc + parsed.path.rstrip("/") + "/ws"
     records = []
-    tasks = DIRECT_TASK_IDS + (SYNTHESIS_TASK_ID,) + KV_TASK_IDS + LINEAR_TASK_IDS
+    tasks = DIRECT_TASK_IDS + (SYNTHESIS_TASK_ID,) + KV_TASK_IDS + LINEAR_TASK_IDS + IGNORE_TASK_IDS
     for task_id in tasks:
         for seed in (1110000, 1110100, 1110200, 1110300):
             task = make_task(task_id, seed)

@@ -41,6 +41,14 @@ def test_synthesis_control_uses_same_new_cases_but_not_primary_or_confirmed_case
     assert max(seeds(a)|seeds(c))<1210000
 
 
+def test_ignore_primary_control_and_confirmation_are_predeclared_and_disjoint():
+    a=fresh.plan('screen','ignore');b=fresh.plan('screen','ignore_control')
+    c=fresh.plan('confirm','ignore');seeds=lambda p:{s for g in p['groups'] for s in g}
+    assert a['groups']==b['groups'] and a['task_id']=='software_repair-ignore-d2'
+    assert b['task_id']=='software_repair-ignore-d1' and not seeds(a)&seeds(c)
+    assert max(seeds(a)|seeds(c))<1260000 and a['max_calls']==10
+
+
 def test_first_four_valid_selection_is_completion_order_not_best_reward():
     seeds=list(range(5)); rows=[row(2,0,'completion_truncated'),row(4,.25),row(1,1),row(3,1),row(0,1)]
     x=fresh.assess(rows,seeds)

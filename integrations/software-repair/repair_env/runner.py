@@ -1,7 +1,7 @@
 """A bounded interpreter for a documented, pure subset of Python.
 
 Candidate text is parsed, never passed to Python eval/exec or a host subprocess.
-Only JSON-like values cross the interpreter boundary. No imports, attributes,
+Only JSON-like values cross the interpreter boundary. No imports, arbitrary attributes,
 filesystem, network, reflection, exception handlers, or first-class callables.
 """
 from __future__ import annotations
@@ -369,6 +369,15 @@ class Program:
                     return bounded(builtins[name](*args))
             elif isinstance(node.func, ast.Attribute):
                 value = ev(node.func.value)
+                if type(value) is str:
+                    methods = {"split": value.split, "rsplit": value.rsplit,
+                               "startswith": value.startswith, "endswith": value.endswith,
+                               "replace": value.replace, "strip": value.strip,
+                               "lstrip": value.lstrip, "rstrip": value.rstrip,
+                               "find": value.find, "count": value.count,
+                               "join": value.join, "lower": value.lower, "upper": value.upper}
+                    if node.func.attr in methods:
+                        return bounded(methods[node.func.attr](*args))
                 if node.func.attr == "append" and type(value) is list and len(args) == 1:
                     if len(value) >= MAX_ITEMS:
                         raise Rejected("list size limit")

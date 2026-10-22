@@ -11,6 +11,7 @@ from . import (
     release_synthesis,
     kv_repair,
     linear_repair,
+    ignore_repair,
 )
 
 FAMILIES = ("clamp", "overlap", "chunks", "unique", "counts", "prefix") + hard_tasks.FAMILIES
@@ -26,6 +27,7 @@ TASK_IDS.append("software_repair-merge-d3")
 TASK_IDS.extend(("software_repair-kv-d1", "software_repair-kv-d2"))
 TASK_IDS.extend(("software_repair-linear-d1", "software_repair-linear-d2"))
 TASK_IDS.extend(("software_repair-linear-d3", "software_repair-linear-d4"))
+TASK_IDS.extend(("software_repair-ignore-d1", "software_repair-ignore-d2"))
 TRAINING_TASK_IDS = [f"software_repair-{family}-d{d}" for family in hard_tasks.FAMILIES for d in (1, 2)]
 SOURCE_PATH = "src/solution.py"
 
@@ -50,6 +52,8 @@ class Task:
 
 def reference(family, args):
     """Trusted independent specification; never exposed as an environment tool."""
+    if family == "ignore":
+        return ignore_repair.reference(args)
     if family == "linear":
         return linear_repair.reference(args)
     if family == "kv":
@@ -90,9 +94,12 @@ _SPECS = {
 _SPECS.update(hard_tasks.SPECS)
 _SPECS["kv"] = ("replay_store", kv_repair.INSTRUCTIONS, kv_repair.REFERENCE)
 _SPECS["linear"] = ("check_history", linear_repair.INSTRUCTIONS, linear_repair.REFERENCE)
+_SPECS["ignore"] = ("classify_ignore", ignore_repair.INSTRUCTIONS, ignore_repair.REFERENCE)
 
 
 def _initial(family, source, difficulty, seed=None):
+    if family == "ignore":
+        return ignore_repair.initial(seed,difficulty)
     if family == "linear":
         return linear_repair.initial(seed, difficulty)
     if family == "kv":
@@ -130,6 +137,10 @@ def _initial(family, source, difficulty, seed=None):
 
 
 def _inputs(family, rng, count, difficulty, *, visible=False):
+    if family == "ignore":
+        for args in ignore_repair.inputs(rng,count):
+            yield Case(args,ignore_repair.reference(args))
+        return
     if family == "linear":
         for args in linear_repair.inputs(rng, count):
             yield Case(args, linear_repair.reference(args))
@@ -197,7 +208,8 @@ def make_task(task_id, seed):
     # oracle while changing the original source. Existing d3 stays byte-frozen.
     case_task_id = ("software_repair-release-d3" if task_id == "software_repair-release-d4" else
                     "software_repair-kv-d1" if task_id == "software_repair-kv-d2" else
-                    "software_repair-linear-d1" if task_id in ("software_repair-linear-d2", "software_repair-linear-d3", "software_repair-linear-d4") else task_id)
+                    "software_repair-linear-d1" if task_id in ("software_repair-linear-d2", "software_repair-linear-d3", "software_repair-linear-d4") else
+                    "software_repair-ignore-d1" if task_id == "software_repair-ignore-d2" else task_id)
     material = f"decision-ledger-code-repair-v1|{case_task_id}|{seed}"
     # Independent streams: neither hidden inputs nor answers derive from public tests.
     public_rng = random.Random(int.from_bytes(hashlib.sha256((material + "|public").encode()).digest(), "big"))
@@ -261,7 +273,7 @@ def visible_files(task):
               "Reward requires improving hidden test results over the original broken module; unchanged, formatting-only and non-improving edits earn zero. "
               "Python subset: one to four top-level named functions, return/assign/if/for/while, lists/dicts, indexing/slices, integer arithmetic/comparisons, "
               "len/min/max/sum/abs/sorted/list/range/set/dict/tuple/enumerate/zip/any/all, comprehensions, break/continue, bounded lazy generator expressions, integer powers/bitops and set union/intersection, list append/pop/sort/reverse/remove/copy/extend, set.add/remove/discard/copy/update/union/intersection/difference and dict get/pop/items/keys/values/copy. Internal dictionary tuple keys are supported; returned values must be JSON-serializable. Single-underscore helper/local names are allowed; function call depth is limited to16. No imports, yield/async, nested functions, "
-              "exceptions, decorators, filesystem or shell. Limits: 8192 source bytes,2048 AST nodes,128 collection items,80000 execution steps/case. "
+              "exceptions, decorators, filesystem or shell. No lambdas or keyword arguments. Bounded pure string split/rsplit/startswith/endswith/replace/strip/lstrip/rstrip/find/count/join/lower/upper methods are supported. Limits: 8192 source bytes,2048 AST nodes,128 collection items,80000 execution steps/case. "
               "Visible tests use the same bounded interpreter as hidden tests; tests are not executed by host pytest in the environment.")
     return {SOURCE_PATH: task.initial_source, "tests/test_public.py": test_source,
             "README.md": readme, "pyproject.toml": "[project]\nname = 'repair-case'\nversion = '0.0.1'\n\n[tool.pytest.ini_options]\npythonpath = ['src']\n"}
