@@ -32,6 +32,15 @@ def test_linear_curriculum_has_disjoint_frozen_fresh_groups_and_same_capacity():
     assert a['max_calls']==10 and a['selection']==fresh.plan('screen')['selection']
 
 
+def test_synthesis_control_uses_same_new_cases_but_not_primary_or_confirmed_cases():
+    a=fresh.plan('screen','linear_synthesis');b=fresh.plan('screen','linear_control')
+    c=fresh.plan('confirm','linear_synthesis');d=fresh.plan('screen','linear')
+    seeds=lambda p:{s for g in p['groups'] for s in g}
+    assert a['groups']==b['groups'] and a['task_id']!=b['task_id']
+    assert not seeds(a)&(seeds(c)|seeds(d))
+    assert max(seeds(a)|seeds(c))<1210000
+
+
 def test_first_four_valid_selection_is_completion_order_not_best_reward():
     seeds=list(range(5)); rows=[row(2,0,'completion_truncated'),row(4,.25),row(1,1),row(3,1),row(0,1)]
     x=fresh.assess(rows,seeds)

@@ -64,3 +64,15 @@ def test_levels_share_case_stream_and_do_not_modify_default_training_mix():
     a=make_task(LINEAR_TASK_IDS[0],1240600);b=make_task(LINEAR_TASK_IDS[1],1240600)
     assert a.public==b.public and a.hidden==b.hidden and a.initial_source!=b.initial_source
     assert len(TRAINING_TASK_IDS)==8 and not set(LINEAR_TASK_IDS)&set(TRAINING_TASK_IDS)
+
+
+def test_synthesis_and_matched_control_share_cases_and_complete_contract_without_algorithm_hints():
+    repaired=make_task('software_repair-linear-d2',1240700)
+    synth=make_task('software_repair-linear-d3',1240700)
+    control=make_task('software_repair-linear-d4',1240700)
+    assert synth.public==control.public==repaired.public and synth.hidden==control.hidden==repaired.hidden
+    assert synth.instructions==control.instructions and synth.reference_source==control.reference_source
+    assert 'Backtrack when' not in synth.instructions and 'distinct search states' not in synth.instructions
+    assert 'search_order' not in synth.initial_source
+    assert control.initial_source.split('\n',1)[1]==repaired.initial_source.split('\n',1)[1]
+    assert evaluate(synth,synth.initial_source)==0 and evaluate(synth,synth.reference_source)==1

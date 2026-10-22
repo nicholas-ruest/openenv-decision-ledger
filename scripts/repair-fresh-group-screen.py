@@ -22,7 +22,11 @@ SPEC.loader.exec_module(base)
 TASK = "software_repair-kv-d2"
 SEEDS = {"screen": [1152000, 1152100], "confirm": [1153000, 1153100]}
 CURRICULA = {"kv": (TASK, SEEDS), "linear": ("software_repair-linear-d2",
-             {"screen": [1200000,1200100], "confirm": [1201000,1201100]})}
+             {"screen": [1200000,1200100], "confirm": [1201000,1201100]}),
+             "linear_synthesis": ("software_repair-linear-d3",
+             {"screen":[1202000,1202100],"confirm":[1203000,1203100]}),
+             "linear_control": ("software_repair-linear-d4",
+             {"screen":[1202000,1202100],"confirm":[1203000,1203100]})}
 
 
 def plan(stage, curriculum="kv"):

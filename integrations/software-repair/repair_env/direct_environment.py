@@ -15,7 +15,7 @@ from .tasks import SOURCE_PATH, compact_literal
 DIRECT_TASK_IDS = ("software_repair-release-d2", "software_repair-release-d3")
 SYNTHESIS_TASK_ID = "software_repair-release-d4"
 KV_TASK_IDS = ("software_repair-kv-d1", "software_repair-kv-d2")
-LINEAR_TASK_IDS = ("software_repair-linear-d1", "software_repair-linear-d2")
+LINEAR_TASK_IDS = tuple("software_repair-linear-d"+str(i) for i in (1,2,3,4))
 
 
 class DirectRepairAction(Action):

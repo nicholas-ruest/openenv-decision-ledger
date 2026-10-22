@@ -59,6 +59,16 @@ def check_history(initial, operations):
     return {"linearizable": True, "witness": found[0], "final": found[1], "pending": omitted}
 '''
 
+# A valid-shaped but semantically incomplete checker. Unlike the repair arm,
+# this does not disclose a search algorithm or a cache/state representation.
+PLACEHOLDER = '''def check_history(initial, operations):
+    pending = [op["id"] for op in operations if op["end"] is None]
+    return {"linearizable": False, "witness": [], "final": None, "pending": pending}
+'''
+UNGUIDED_INSTRUCTIONS = INSTRUCTIONS.replace(
+    " Backtrack when an apparently legal prefix cannot explain later results.", "").replace(
+    " Different register states with the same used-operation set are distinct search states.", "")
+
 MUTATIONS = (
     ('if prior["end"] is not None and prior["end"] < op["start"]:', 'if False:', 'ignore_realtime'),
     ('        op = ops[i]\n        after = value', '        op = ops[i]\n        if op["end"] is None:\n            continue\n        after = value', 'ignore_pending'),
@@ -82,6 +92,8 @@ def mutate(indices):
 
 
 def initial(seed, difficulty):
+    if difficulty == 3:return PLACEHOLDER
+    if difficulty == 4:difficulty = 2
     rng = random.Random(int.from_bytes(hashlib.sha256(f'linear-v1|{seed}|{difficulty}'.encode()).digest(),'big'))
     return mutate(rng.sample(range(len(MUTATIONS)), 2 if difficulty == 1 else 4))
 
