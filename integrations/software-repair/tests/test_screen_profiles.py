@@ -8,6 +8,22 @@ profiles = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(profiles)
 
 
+def test_direct_code_comparison_uses_same_tasks_seeds_and_shared_sampling():
+    direct = profiles.get_profile("direct_release", "screen")
+    control = profiles.get_profile("direct_release_control", "screen")
+    assert direct["groups"] == control["groups"]
+    assert direct["required_productive_groups"] == control["required_productive_groups"] == 2
+    assert direct["samples_per_group"] == control["samples_per_group"] == 4
+    assert direct["max_calls"] == 8 and control["max_calls"] == 96
+    a, b = direct["sampling_settings"].copy(), control["sampling_settings"].copy()
+    assert a.pop("interface") == "direct_code" and b.pop("interface") == "interactive"
+    assert a.pop("max_actions") == 1 and b.pop("max_actions") == 12
+    assert a == b
+    confirm = profiles.get_profile("direct_release", "confirm")
+    assert direct["planned_confirmation_groups"] == confirm["groups"]
+    assert set(map(tuple, direct["groups"])).isdisjoint(map(tuple, confirm["groups"]))
+
+
 def test_replay_profile_requires_new_arm_and_disjoint_confirmation():
     screen = profiles.get_profile("replay_compare", "screen")
     confirm = profiles.get_profile("replay_compare", "confirm")

@@ -27,6 +27,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from provider_stream import provider_call as stream_provider_call
 sys.path.insert(0, str(ROOT / "integrations/software-repair"))
 from repair_env.environment import RepairAction, RepairEnvironment, check  # noqa: E402
+from repair_env.direct_environment import DirectRepairAction, DirectRepairEnvironment
 from repair_env.tasks import visible_files, SOURCE_PATH
 from repair_env.runner import Program, Rejected  # noqa: E402
 sys.path.insert(0, str(ROOT / "integrations/software-repair/scripts"))
@@ -119,7 +120,8 @@ class DollarReservations:
 def failed_finish_diagnostic(env, last_observation):
     """Score locally after failure without changing its label or valid reward."""
     try:
-        terminal = last_observation if last_observation.done else env.step(RepairAction(op="submit"))
+        terminal = last_observation if last_observation.done else env.step(
+            getattr(env, "_finish_action", RepairAction(op="submit")))
         diagnostic = {"available": True, "origin": "local_terminal_diagnostic",
             "finish_action_sent": not last_observation.done, "observed_done": terminal.done,
             "terminal_reward": float(terminal.reward), "environment_error": bool(terminal.error),
@@ -159,24 +161,28 @@ def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadli
     if (type(episode_units) is not int or type(context_units) is not int or
             not 1 <= episode_units <= context_units <= 32768):
         raise ValueError("invalid frozen episode capacity")
-    env = RepairEnvironment()
+    direct = settings.get("interface") == "direct_code"
+    env = DirectRepairEnvironment() if direct else RepairEnvironment()
+    action_type = DirectRepairAction if direct else RepairAction
     reset = env.reset(task_id=task_id, seed=seed)
     last_observation = reset
     progress.update(env=env, last_observation=reset)
     identity = fingerprint({"reset": reset.model_dump(), "files": visible_files(env._task)})
-    messages = [{"role": "system", "content": "Operate the Python repair workspace. Inspect files, edit src/solution.py, test, then submit the repaired workspace. Emit exactly one JSON action instance, no markdown. Follow the README Python subset. Action schema: " + json.dumps(RepairAction.model_json_schema())},
+    instruction = ("Repair the supplied Python module. Return one JSON object whose content field is the complete repaired code. No markdown, schema copying, diff or tool command. " if direct else
+                   "Operate the Python repair workspace. Inspect files, edit src/solution.py, test, then submit the repaired workspace. ")
+    messages = [{"role": "system", "content": instruction + "Emit exactly one JSON action instance, no markdown. Follow the documented Python subset. Action schema: " + json.dumps(action_type.model_json_schema())},
                 {"role": "user", "content": reset.model_dump_json()}]
     row = {"task_id": task_id, "seed": seed, "sample": sample, "prompt_sha256": identity,
            "reward": 0.0, "solved": False, "failure": None, "calls": [], "messages": messages}
     progress["row"] = row
     opener = urllib.request.build_opener(helper.NoRedirect(), urllib.request.ProxyHandler({}))
     generated, observed = 0, 0
-    for turn in range(MAX_TURNS):
+    for turn in range(settings.get("max_actions", MAX_TURNS)):
         if stop.is_set() or _now() >= deadline:
             row["failure"] = "screen_stopped"
             break
         remaining = episode_units - generated - observed
-        allowance = min(4096, remaining, context_units - counter.context(messages))
+        allowance = min(settings.get("max_generation_per_call", 4096), remaining, context_units - counter.context(messages))
         if allowance < 1:
             row["failure"] = "episode_budget_exhausted"
             break
@@ -259,10 +265,10 @@ def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadli
         try:
             value = json.loads(content)
             if type(value) is dict and set(value) == {"finish"} and value["finish"] is True:
-                value = {"op": "submit"}
+                value = {"content": ""} if direct else {"op": "submit"}
             elif type(value) is dict and set(value) == {"action"}:
                 value = value["action"]
-            action = RepairAction.model_validate(value)
+            action = action_type.model_validate(value)
         except Exception:
             row["failure"] = "invalid_json_action"
             break
@@ -323,7 +329,7 @@ def _execute(deadline, args, profile):
                       ROOT / "integrations/software-repair/scripts/screen_deadline.py",
                       *sorted((ROOT / "integrations/software-repair/repair_env").glob("*.py"))]},
         "tokenizer_sha256": TOKENIZER_SHA, "thinking_requested": True, "thinking_verified": False,
-        "max_calls": len(groups) * samples * MAX_TURNS, "max_turns_per_rollout": MAX_TURNS, "no_retry": True,
+        "max_calls": profile["max_calls"], "max_turns_per_rollout": profile["sampling_settings"].get("max_actions", MAX_TURNS), "no_retry": True,
         "arena_budget_matched": False, "checkpoint_attested": False,
         "is_training": False, "private_arena_score": None,
         "worker_supervision": {"required": True, "wall_seconds": profile["sampling_settings"]["stage_wall_seconds"]},
@@ -374,7 +380,8 @@ def main(argv=None):
         "--profile",
         choices=("release", "replay_compare", "merge_compare", "merge_probe",
                  "repair_reliability", "release_witness", "release_witness_capacity",
-                 "release_generalization", "release_stream_probe", "release_generalization_stream"),
+                 "release_generalization", "release_stream_probe", "release_generalization_stream",
+                 "direct_release", "direct_release_control"),
         default="release",
     )
     parser.add_argument("--stage", choices=("screen", "confirm"), default="screen")
