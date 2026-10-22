@@ -30,7 +30,11 @@ CURRICULA = {"kv": (TASK, SEEDS), "linear": ("software_repair-linear-d2",
              "ignore": ("software_repair-ignore-d2",
              {"screen":[1250000,1250100],"confirm":[1251000,1251100]}),
              "ignore_control": ("software_repair-ignore-d1",
-             {"screen":[1250000,1250100],"confirm":[1251000,1251100]})}
+             {"screen":[1250000,1250100],"confirm":[1251000,1251100]}),
+             "ignore_modular": ("software_repair-ignore-d2",
+             {"screen":[1300000,1300100],"confirm":[1301000,1301100]}),
+             "ignore_modular_control": ("software_repair-ignore-d1",
+             {"screen":[1300000,1300100],"confirm":[1301000,1301100]})}
 
 
 def plan(stage, curriculum="kv"):

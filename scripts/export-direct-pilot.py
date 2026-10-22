@@ -34,6 +34,9 @@ CURRICULA = {
     "ignore": ("software_repair-ignore-d2",{"train":(1260000,128),"validation":(1270000,32),"test":(1280000,64)},
                "decision-ledger-ignore-v9-20261022","Decision Ledger: ignore-rule software implementation",
                "docs/software-ignore-curriculum-2026-10-22.md"),
+    "ignore_modular": ("software_repair-ignore-d2",{"train":(1260000,128),"validation":(1270000,32),"test":(1280000,64)},
+               "decision-ledger-ignore-v10-20261022","Decision Ledger: ignore-rule software implementation",
+               "docs/software-ignore-modularity-2026-10-22.md"),
 }
 
 
@@ -101,7 +104,7 @@ def export(output, image, source, curriculum="kv"):
             archive.writestr(entry,path.read_bytes())
     description = ("Repair a versioned key/value command processor: atomic rollback, idempotency, tombstones, sequential checks and audit records. "
                    if curriculum=="kv" else "Implement a small root Gitignore-subset classifier: ordered rules, negation, directory pruning, anchoring, globstars and escaped spaces. "
-                   if curriculum=="ignore" else "Repair a concurrency-history checker: real-time precedence, pending operations, read/CAS observations, backtracking and canonical replay witnesses. ")
+                   if curriculum in ("ignore","ignore_modular") else "Repair a concurrency-history checker: real-time precedence, pending operations, read/CAS observations, backtracking and canonical replay witnesses. ")
     (output / "README.md").write_text("---\nlicense: mit\ntask_categories:\n- reinforcement-learning\nconfigs:\n- config_name: "+curriculum+"_repair\n  data_files:\n  - split: train\n    path: train.jsonl\n  - split: validation\n    path: validation.jsonl\n  - split: test\n    path: test.jsonl\n---\n\n# "+title+" candidate\n\n" + description +
         "One code response is scored by the bounded interpreter against independently generated hidden cases. "
         "No imports, host execution or private benchmark data. The initial module has seeded semantic defects. "

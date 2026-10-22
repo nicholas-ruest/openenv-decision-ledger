@@ -118,8 +118,8 @@ class Program:
             if any(isinstance(n, ast.FunctionDef) for stmt in node.body for n in ast.walk(stmt)):
                 raise Rejected("nested functions unsupported")
             self.functions[node.name] = node
-        if not 1 <= len(self.functions) <= 4:
-            raise Rejected("one to four functions required")
+        if not 1 <= len(self.functions) <= 16:
+            raise Rejected("one to sixteen functions required")
         parents = {id(child): parent for parent in nodes for child in ast.iter_child_nodes(parent)}
         for node in nodes:
             if isinstance(node, (ast.Break, ast.Continue)):
@@ -374,7 +374,7 @@ class Program:
                                "startswith": value.startswith, "endswith": value.endswith,
                                "replace": value.replace, "strip": value.strip,
                                "lstrip": value.lstrip, "rstrip": value.rstrip,
-                               "find": value.find, "count": value.count,
+                               "find": value.find, "rfind": value.rfind, "count": value.count,
                                "join": value.join, "lower": value.lower, "upper": value.upper}
                     if node.func.attr in methods:
                         return bounded(methods[node.func.attr](*args))

@@ -49,6 +49,16 @@ def test_ignore_primary_control_and_confirmation_are_predeclared_and_disjoint():
     assert max(seeds(a)|seeds(c))<1260000 and a['max_calls']==10
 
 
+def test_modular_language_revision_does_not_reuse_old_prompts_or_fixture_seeds():
+    a=fresh.plan('screen','ignore_modular');b=fresh.plan('confirm','ignore_modular')
+    seeds=lambda p:{s for g in p['groups'] for s in g}
+    old=seeds(fresh.plan('screen','ignore'))|seeds(fresh.plan('confirm','ignore'))
+    assert not seeds(a)&(seeds(b)|old) and not seeds(b)&old
+    assert min(seeds(a)|seeds(b))>1299999
+    assert a['groups']==fresh.plan('screen','ignore_modular_control')['groups']
+    assert a['task_id']=='software_repair-ignore-d2'
+
+
 def test_first_four_valid_selection_is_completion_order_not_best_reward():
     seeds=list(range(5)); rows=[row(2,0,'completion_truncated'),row(4,.25),row(1,1),row(3,1),row(0,1)]
     x=fresh.assess(rows,seeds)

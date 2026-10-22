@@ -12,6 +12,7 @@ from repair_env.runner import Program, Rejected
     ("x.lstrip(' ')",[' a '],'a '),
     ("x.rstrip(' ')",[' a '],' a'),
     ("x.find('bc')",['abc'],1),
+    ("x.rfind('/')",['a/b/c'],3),
     ("x.count('a')",['aba'],2),
     ("x.join(['a','b'])",['/'],'a/b'),
     ("x.lower()",['AbC'],'abc'),

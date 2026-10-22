@@ -17,7 +17,7 @@ spec.loader.exec_module(replay)
 def test_reset_documents_function_limit_and_direct_file_reads():
     env = RepairEnvironment()
     reset = env.reset(task_id="software_repair-release-d1", seed=1010000)
-    assert "one to four top-level named functions" in reset.prompt
+    assert "one to sixteen top-level named functions" in reset.prompt
     assert "Start with read path 'src/solution.py'" in reset.prompt
     direct = env.step(RepairAction(op="read", path="src/solution.py"))
     assert direct.content == env._task.initial_source
