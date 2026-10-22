@@ -11,7 +11,7 @@ fresh = importlib.util.module_from_spec(spec); spec.loader.exec_module(fresh)
 
 def row(seed, reward, failure=None):
     return {"seed":seed,"reward":reward,"failure":failure,"prompt_sha256":str(seed),
-            "calls":[{"provider_response_id_sha256":"response"+str(seed)}]}
+            "calls":[{"client_call_label":"call"+str(seed),"provider_response_id_sha256":"response"+str(seed)}]}
 
 
 def test_declared_fresh_seeds_are_unique_and_disjoint_from_splits_and_previous_probes():
@@ -49,6 +49,13 @@ def test_preview_never_executes_or_requires_credentials(monkeypatch,capsys):
     monkeypatch.delenv('HF_TOKEN',raising=False)
     assert fresh.main([])==0
     assert '"max_calls": 10' in capsys.readouterr().out
+
+
+def test_sampling_provenance_is_checked_across_group_boundaries():
+    rows=[row(i,1) for i in range(10)]
+    assert fresh.independent(rows)
+    rows[-1]['calls']=rows[0]['calls']
+    assert not fresh.independent(rows)
 
 
 def test_bounded_executor_launches_exactly_ten_fresh_instances_and_preserves_every_record(monkeypatch,tmp_path):

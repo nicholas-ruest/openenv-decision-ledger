@@ -53,6 +53,15 @@ def assess(rows, expected_seeds):
             "productive": len(chosen) == 4 and any(x == 1 for x in rewards) and any(0 <= x < 1 for x in rewards)}
 
 
+def independent(records):
+    prompts = [r["prompt_sha256"] for r in records if r.get("prompt_sha256")]
+    calls = [c for r in records for c in r.get("calls", [])]
+    labels = [c.get("client_call_label") for c in calls]
+    responses = [c["provider_response_id_sha256"] for c in calls if c.get("provider_response_id_sha256")]
+    return (len(prompts) == len(set(prompts)) and all(labels) and len(labels) == len(set(labels))
+            and len(responses) == len(set(responses)))
+
+
 def execute(deadline, args):
     declared = plan(args.stage)
     args.output.mkdir(exist_ok=False)
@@ -77,7 +86,7 @@ def execute(deadline, args):
                 "thinking_verified": False, "checkpoint_attested": False}
     (args.output / "protocol.json").write_text(json.dumps(protocol, indent=2))
     stop = threading.Event()
-    results = []
+    results, records = [], []
     with (args.output / "episodes.jsonl").open("x") as stream:
         for index, seeds in enumerate(declared["groups"]):
             group = []
@@ -88,12 +97,14 @@ def execute(deadline, args):
                     row = future.result()
                     row["fresh_group"] = index
                     group.append(row)
+                    records.append(row)
                     stream.write(json.dumps(row) + "\n"); stream.flush(); os.fsync(stream.fileno())
             results.append(assess(group, seeds))
             if stop.is_set():
                 break
     summary = {"groups": results, "unique_prompts": sum(x["observed"] for x in results),
-               "signal_gate": len(results) == 2 and all(x["productive"] for x in results),
+               "independent_sampling_identities": independent(records),
+               "signal_gate": len(results) == 2 and independent(records) and all(x["productive"] for x in results),
                "confirmation_required": args.stage == "screen", "is_training": False,
                "arena_trainer_attested": False}
     (args.output / "complete.json").write_text(json.dumps(summary, indent=2))
