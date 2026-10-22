@@ -83,7 +83,7 @@ class RepairEnvironment(Environment[RepairAction, RepairObservation, State]):
         self._task = make_task(task_id, seed)
         self._files = visible_files(self._task)
         self._original = Program(self._task.initial_source)
-        component_reward = self._task.task_id.startswith("software_repair-kv-")
+        component_reward = self._task.task_id.startswith(("software_repair-kv-", "software_repair-linear-"))
         self._baseline, baseline_details = check(self._original, self._task, self._task.hidden, details=component_reward)
         self._component_baseline = semantic_fields(baseline_details) if component_reward else None
         self._component_total = sum(len(row["expected"]) for row in baseline_details) if component_reward else None

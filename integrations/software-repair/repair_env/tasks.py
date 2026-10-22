@@ -10,6 +10,7 @@ from . import (
     release_curriculum,
     release_synthesis,
     kv_repair,
+    linear_repair,
 )
 
 FAMILIES = ("clamp", "overlap", "chunks", "unique", "counts", "prefix") + hard_tasks.FAMILIES
@@ -23,6 +24,7 @@ TASK_IDS.append("software_repair-release-d4")
 TASK_IDS.append("software_repair-replay-d3")
 TASK_IDS.append("software_repair-merge-d3")
 TASK_IDS.extend(("software_repair-kv-d1", "software_repair-kv-d2"))
+TASK_IDS.extend(("software_repair-linear-d1", "software_repair-linear-d2"))
 TRAINING_TASK_IDS = [f"software_repair-{family}-d{d}" for family in hard_tasks.FAMILIES for d in (1, 2)]
 SOURCE_PATH = "src/solution.py"
 
@@ -47,6 +49,8 @@ class Task:
 
 def reference(family, args):
     """Trusted independent specification; never exposed as an environment tool."""
+    if family == "linear":
+        return linear_repair.reference(args)
     if family == "kv":
         return kv_repair.reference(args)
     if family == "clamp":
@@ -84,9 +88,12 @@ _SPECS = {
 }
 _SPECS.update(hard_tasks.SPECS)
 _SPECS["kv"] = ("replay_store", kv_repair.INSTRUCTIONS, kv_repair.REFERENCE)
+_SPECS["linear"] = ("check_history", linear_repair.INSTRUCTIONS, linear_repair.REFERENCE)
 
 
 def _initial(family, source, difficulty, seed=None):
+    if family == "linear":
+        return linear_repair.initial(seed, difficulty)
     if family == "kv":
         return kv_repair.initial(seed, difficulty)
     if family in ("replay", "merge") and difficulty == 3:
@@ -122,6 +129,10 @@ def _initial(family, source, difficulty, seed=None):
 
 
 def _inputs(family, rng, count, difficulty, *, visible=False):
+    if family == "linear":
+        for args in linear_repair.inputs(rng, count):
+            yield Case(args, linear_repair.reference(args))
+        return
     if family == "kv":
         for args in kv_repair.inputs(rng, count):
             yield Case(args, kv_repair.reference(args))
@@ -184,7 +195,8 @@ def make_task(task_id, seed):
     # The synthesis/control comparison intentionally shares case inputs and the
     # oracle while changing the original source. Existing d3 stays byte-frozen.
     case_task_id = ("software_repair-release-d3" if task_id == "software_repair-release-d4" else
-                    "software_repair-kv-d1" if task_id == "software_repair-kv-d2" else task_id)
+                    "software_repair-kv-d1" if task_id == "software_repair-kv-d2" else
+                    "software_repair-linear-d1" if task_id == "software_repair-linear-d2" else task_id)
     material = f"decision-ledger-code-repair-v1|{case_task_id}|{seed}"
     # Independent streams: neither hidden inputs nor answers derive from public tests.
     public_rng = random.Random(int.from_bytes(hashlib.sha256((material + "|public").encode()).digest(), "big"))

@@ -15,6 +15,7 @@ from .tasks import SOURCE_PATH, compact_literal
 DIRECT_TASK_IDS = ("software_repair-release-d2", "software_repair-release-d3")
 SYNTHESIS_TASK_ID = "software_repair-release-d4"
 KV_TASK_IDS = ("software_repair-kv-d1", "software_repair-kv-d2")
+LINEAR_TASK_IDS = ("software_repair-linear-d1", "software_repair-linear-d2")
 
 
 class DirectRepairAction(Action):
@@ -49,7 +50,7 @@ class DirectRepairEnvironment(Environment[DirectRepairAction, DirectRepairObserv
 
     def reset(self, seed=None, episode_id=None, **kwargs):
         task_id = kwargs.get("task_id", DIRECT_TASK_IDS[-1])
-        if task_id not in DIRECT_TASK_IDS + (SYNTHESIS_TASK_ID,) + KV_TASK_IDS:
+        if task_id not in DIRECT_TASK_IDS + (SYNTHESIS_TASK_ID,) + KV_TASK_IDS + LINEAR_TASK_IDS:
             raise ValueError("direct pilot requires a declared release or kv task")
         self._core.reset(seed=seed, episode_id=episode_id, task_id=task_id)
         self._terminal = None

@@ -22,6 +22,16 @@ def test_declared_fresh_seeds_are_unique_and_disjoint_from_splits_and_previous_p
     assert max(a|b)<1160000 and screen['max_calls']==10 and screen['no_retry']
 
 
+def test_linear_curriculum_has_disjoint_frozen_fresh_groups_and_same_capacity():
+    a=fresh.plan('screen','linear');b=fresh.plan('confirm','linear')
+    seeds=lambda p:{s for g in p['groups'] for s in g}
+    assert a['task_id']=='software_repair-linear-d2'
+    assert len(seeds(a))==len(seeds(b))==10 and not seeds(a)&seeds(b)
+    assert not (seeds(a)|seeds(b))&seeds(fresh.plan('screen'))
+    assert max(seeds(a)|seeds(b))<1210000
+    assert a['max_calls']==10 and a['selection']==fresh.plan('screen')['selection']
+
+
 def test_first_four_valid_selection_is_completion_order_not_best_reward():
     seeds=list(range(5)); rows=[row(2,0,'completion_truncated'),row(4,.25),row(1,1),row(3,1),row(0,1)]
     x=fresh.assess(rows,seeds)
@@ -77,3 +87,19 @@ def test_bounded_executor_launches_exactly_ten_fresh_instances_and_preserves_eve
     assert summary['signal_gate'] and all(g['observed']==5 for g in summary['groups'])
     assert protocol['max_calls']==10 and protocol['source_files_sha256']
     with pytest.raises(FileExistsError):fresh.execute(fresh.base._now()+30,args)
+    fresh.verify_screen(args.output,'kv')
+    confirm=Namespace(stage='confirm',screen=args.output,output=tmp_path/'confirm',
+                      budget_receipt=args.budget_receipt,tokenizer=args.tokenizer)
+    fresh.execute(fresh.base._now()+30,confirm)
+    verified=json.loads((confirm.output/'complete.json').read_text())
+    assert verified['signal_gate'] and verified['independent_from_primary']
+    summary['signal_gate']=False
+    (args.output/'complete.json').write_text(json.dumps(summary))
+    with pytest.raises(ValueError,match='not productive'):fresh.verify_screen(args.output,'kv')
+
+
+def test_confirmation_requires_frozen_primary_and_disjoint_actual_identities():
+    with pytest.raises(ValueError,match='primary screen'):fresh.verify_screen(None,'linear')
+    rows=[row(i,1) for i in range(5)]
+    assert not fresh.disjoint(rows,rows)
+    assert fresh.disjoint(rows,[row(i,1) for i in range(5,10)])
