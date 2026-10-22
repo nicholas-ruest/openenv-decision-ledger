@@ -91,6 +91,17 @@ def test_actual_async_deadline_cancels_stalled_body_and_closes_transport():
     assert channel.closed
 
 
+def test_extended_wait_remains_bounded_without_changing_transport_or_usage_checks():
+    channel = Bytes(valid_bytes())
+    transport = httpx.MockTransport(lambda req: httpx.Response(200,
+        headers={'content-type': 'text/event-stream'}, stream=channel))
+    reply = asyncio.run(stream.stream_call('offline-placeholder', {}, 360, transport=transport))
+    assert reply['usage']['completion_tokens'] == 20 and channel.closed
+    for timeout in (0, -1, 361, float('inf'), float('nan'), True):
+        with pytest.raises(ValueError, match='bounded'):
+            asyncio.run(stream.stream_call('offline-placeholder', {}, timeout, transport=transport))
+
+
 def test_stream_bytes_and_line_limits_remain_bounded(monkeypatch):
     monkeypatch.setattr(stream, 'MAX_BYTES', 80)
     with pytest.raises(stream.StreamProtocolError, match='too large'):

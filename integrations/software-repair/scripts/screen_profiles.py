@@ -51,6 +51,12 @@ def get_profile(name, stage):
         def groups(part):
             return [["software_repair-release-d3", 1102000]] if part == "screen" else []
         targets = ["software_repair-release-d3"]
+    elif name in ("direct_synthesis", "direct_capacity_control"):
+        def groups(part):
+            seeds = (1113000, 1113100) if part == "screen" else (1114000, 1114100)
+            task = "software_repair-release-d4" if name == "direct_synthesis" else "software_repair-release-d3"
+            return [[task, seed] for seed in seeds]
+        targets = ["software_repair-release-d4" if name == "direct_synthesis" else "software_repair-release-d3"]
     elif name in ("direct_release", "direct_release_control"):
         def groups(part):
             seeds = (1111000, 1111100) if part == "screen" else (1112000, 1112100)
@@ -78,6 +84,11 @@ def get_profile(name, stage):
     selected = groups(stage)
     samples = 2 if name in ("repair_reliability", "release_stream_probe") else SAMPLES
     settings = sampling_settings()
+    if name in ("direct_synthesis", "direct_capacity_control"):
+        settings.update(interface="direct_code", max_actions=1,
+            max_generation_per_call=8192, episode_generation_observation_units=12288,
+            context_units=24576, provider_streaming=True,
+            request_timeout_seconds=360)
     if name in ("direct_release", "direct_release_control"):
         settings.update(interface="direct_code" if name == "direct_release" else "interactive",
             max_actions=1 if name == "direct_release" else MAX_TURNS,
@@ -90,11 +101,11 @@ def get_profile(name, stage):
         settings["provider_streaming"] = True
     if name in ("repair_reliability", "release_stream_probe"):
         settings["stage_wall_seconds"] = 600
-    return {**({"required_productive_groups": 2} if name in ("release_generalization_stream", "direct_release", "direct_release_control") else {}),
+    return {**({"required_productive_groups": 2} if name in ("release_generalization_stream", "direct_release", "direct_release_control", "direct_synthesis", "direct_capacity_control") else {}),
             "profile": name, "stage": stage, "groups": selected,
             "planned_confirmation_groups": groups("confirm"), "signal_task_ids": targets,
             "samples_per_group": samples, "max_calls": len(selected) * samples * settings["max_actions"],
             "sampling_settings": settings,
             "purpose": "reliability_only" if name in ("repair_reliability", "release_stream_probe") else "signal_screen",
-            "execution_enabled": name in ("release", "merge_probe", "repair_reliability", "release_witness", "release_witness_capacity", "release_generalization", "release_generalization_stream", "direct_release", "direct_release_control")
+            "execution_enabled": name in ("release", "merge_probe", "repair_reliability", "release_witness", "release_witness_capacity", "release_generalization", "release_generalization_stream", "direct_release", "direct_release_control", "direct_synthesis", "direct_capacity_control")
                 or (name == "release_stream_probe" and stage == "screen")}

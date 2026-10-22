@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from . import (
     hard_tasks, cycle_plan, release_plan, replay_curriculum, merge_curriculum,
     release_curriculum,
+    release_synthesis,
 )
 
 FAMILIES = ("clamp", "overlap", "chunks", "unique", "counts", "prefix") + hard_tasks.FAMILIES
@@ -17,6 +18,7 @@ TASK_IDS.append("software_repair-plan-d4")
 TASK_IDS.append("software_repair-release-d1")
 TASK_IDS.append("software_repair-release-d2")
 TASK_IDS.append("software_repair-release-d3")
+TASK_IDS.append("software_repair-release-d4")
 TASK_IDS.append("software_repair-replay-d3")
 TASK_IDS.append("software_repair-merge-d3")
 TRAINING_TASK_IDS = [f"software_repair-{family}-d{d}" for family in hard_tasks.FAMILIES for d in (1, 2)]
@@ -83,6 +85,8 @@ def _initial(family, source, difficulty, seed=None):
     if family in ("replay", "merge") and difficulty == 3:
         return hard_tasks.initial(family, source, 2)
     if family == "release":
+        if difficulty == 4:
+            return release_synthesis.initial()
         return release_plan.initial(seed)
     if family == "plan" and difficulty == 4:
         return cycle_plan.mutated_initial(seed)
@@ -120,7 +124,7 @@ def _inputs(family, rng, count, difficulty, *, visible=False):
             yield Case(args, hard_tasks.reference(family, args))
         return
     if family == "release":
-        if difficulty == 3:
+        if difficulty in (3, 4):
             generated = release_curriculum.generalized_inputs(rng, count, visible=visible)
         else:
             generator = release_curriculum.inputs if difficulty == 2 else release_plan.inputs
@@ -166,12 +170,17 @@ def make_task(task_id, seed):
         raise ValueError("known repair task ID and unsigned64 seed required")
     _, family, level = task_id.split("-")
     difficulty = int(level[1:])
-    material = f"decision-ledger-code-repair-v1|{task_id}|{seed}"
+    # The synthesis/control comparison intentionally shares case inputs and the
+    # oracle while changing the original source. Existing d3 stays byte-frozen.
+    case_task_id = "software_repair-release-d3" if task_id == "software_repair-release-d4" else task_id
+    material = f"decision-ledger-code-repair-v1|{case_task_id}|{seed}"
     # Independent streams: neither hidden inputs nor answers derive from public tests.
     public_rng = random.Random(int.from_bytes(hashlib.sha256((material + "|public").encode()).digest(), "big"))
     hidden_rng = random.Random(int.from_bytes(hashlib.sha256((material + "|hidden").encode()).digest(), "big"))
     if family == "release":
         name, instructions, source = "plan_release", release_plan.INSTRUCTIONS, release_plan.REFERENCE
+        if difficulty == 4:
+            instructions += release_synthesis.INSTRUCTIONS
     else:
         name, instructions, source = ("build_plan", cycle_plan.INSTRUCTIONS, cycle_plan.REFERENCE) if family == "plan" and difficulty in (3, 4) else _SPECS[family]
     if family == "plan" and difficulty == 4:

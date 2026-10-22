@@ -84,7 +84,7 @@ class Accumulator:
 
 
 async def stream_call(token, payload, timeout, *, transport=None):
-    if type(timeout) not in (int, float) or not math.isfinite(timeout) or not 0 < timeout <= 180:
+    if type(timeout) not in (int, float) or not math.isfinite(timeout) or not 0 < timeout <= 360:
         raise ValueError('bounded stream deadline required')
     body = {**payload, 'stream': True, 'stream_options': {'include_usage': True}}
     accumulator = Accumulator()

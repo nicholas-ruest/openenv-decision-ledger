@@ -9,7 +9,7 @@ import urllib.request
 from websockets.sync.client import connect
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from repair_env.direct_environment import DIRECT_TASK_IDS, DirectRepairAction
+from repair_env.direct_environment import DIRECT_TASK_IDS, SYNTHESIS_TASK_ID, DirectRepairAction
 from repair_env.environment import RepairAction, RepairEnvironment
 from repair_env.tasks import SOURCE_PATH, make_task
 
@@ -31,10 +31,13 @@ def replay(url):
     assert schema["action"] == DirectRepairAction.model_json_schema()
     ws = ("wss" if parsed.scheme == "https" else "ws") + "://" + parsed.netloc + parsed.path.rstrip("/") + "/ws"
     records = []
-    for task_id in DIRECT_TASK_IDS:
+    tasks = DIRECT_TASK_IDS + (SYNTHESIS_TASK_ID,)
+    for task_id in tasks:
         for seed in (1110000, 1110100, 1110200, 1110300):
             task = make_task(task_id, seed)
-            partial = task.initial_source.replace("if cost < budget:", "if cost <= budget:")
+            partial = (task.reference_source.replace('"cycles": sorted(cycles)', '"cycles": []')
+                       if task_id == SYNTHESIS_TASK_ID else
+                       task.initial_source.replace("if cost < budget:", "if cost <= budget:"))
             for control, code in (("reference", task.reference_source),
                                   ("unchanged", task.initial_source), ("empty", ""),
                                   ("local_partial_control", partial),
@@ -44,7 +47,7 @@ def replay(url):
                 expected = float(core.step(RepairAction(op="submit")).reward)
                 with connect(ws, proxy=None, open_timeout=10, close_timeout=3, max_size=1_048_576) as socket:
                     initial = exchange(socket, "reset", {"task_id": task_id, "seed": seed})
-                    assert initial["source"] == task.initial_source and not initial["done"]
+                    assert initial["observation"]["source"] == task.initial_source and not initial["done"]
                     result = exchange(socket, "step", {"content": code})
                     assert result["done"] and result["reward"] == expected
                 if control == "reference":
@@ -53,7 +56,7 @@ def replay(url):
                     assert expected == 0
                 records.append({"task_id": task_id, "seed": seed, "control": control,
                                 "reward": expected, "passed": True})
-    return {"status": "passed", "episodes_passed": len(records), "episodes_expected": 40,
+    return {"status": "passed", "episodes_passed": len(records), "episodes_expected": len(tasks) * 4 * 5,
             "records": records, "model_solves": False, "training": False}
 
 

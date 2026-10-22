@@ -191,7 +191,10 @@ def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadli
             if quote(opener, token, request_timeout(deadline, 15, now=_now())) != frozen:
                 stop.set()
                 raise ValueError("selected metadata or quote changed")
-            request_timeout(deadline, REQUEST_TIMEOUT_S, now=_now())  # No reservation after deadline.
+            call_timeout = settings.get("request_timeout_seconds", REQUEST_TIMEOUT_S)
+            if type(call_timeout) not in (int, float) or not 0 < call_timeout <= 360:
+                raise ValueError("bounded provider wait required")
+            request_timeout(deadline, call_timeout, now=_now())  # No reservation after deadline.
             if stop.is_set():
                 raise DeadlineExceeded("screen stopped before reservation")
             # UTF8 bytes plus overhead is a deliberately conservative billing reservation.
@@ -208,7 +211,7 @@ def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadli
                 "messages": messages, "temperature": 0.7, "max_tokens": allowance,
                 "response_format": {"type": "json_object"},
                 "chat_template_kwargs": {"enable_thinking": True}},
-                request_timeout(deadline, REQUEST_TIMEOUT_S, now=_now()))
+                request_timeout(deadline, call_timeout, now=_now()))
         except Exception as exc:
             if isinstance(exc, DeadlineExceeded):
                 row["failure"] = "screen_stopped"
@@ -381,7 +384,7 @@ def main(argv=None):
         choices=("release", "replay_compare", "merge_compare", "merge_probe",
                  "repair_reliability", "release_witness", "release_witness_capacity",
                  "release_generalization", "release_stream_probe", "release_generalization_stream",
-                 "direct_release", "direct_release_control"),
+                 "direct_release", "direct_release_control", "direct_synthesis", "direct_capacity_control"),
         default="release",
     )
     parser.add_argument("--stage", choices=("screen", "confirm"), default="screen")
