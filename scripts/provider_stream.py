@@ -15,8 +15,24 @@ MAX_BYTES = 2_000_000
 MAX_LINE_BYTES = 100_000
 
 
+# Fixed codes only: never expose provider text, payloads or credentials.
+STREAM_FAILURE_CODES = {
+    message: "stream_" + message.replace(" ", "_")
+    for message in (
+        "data after terminal marker", "provider stream error", "response identity changed",
+        "ambiguous stream usage", "ambiguous stream choice", "unexpected stream choice",
+        "unsupported stream delta", "invalid text delta", "invalid finish marker",
+        "incomplete stream", "unverified stream usage", "expected SSE response",
+        "stream response too large", "stream line too large", "invalid SSE field",
+        "unterminated SSE event",
+    )
+}
+
+
 class StreamProtocolError(ValueError):
-    pass
+    @property
+    def safe_code(self):
+        return STREAM_FAILURE_CODES.get(str(self), "stream_protocol_error")
 
 
 class Accumulator:

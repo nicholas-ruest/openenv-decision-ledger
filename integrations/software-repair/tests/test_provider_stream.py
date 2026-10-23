@@ -110,3 +110,18 @@ def test_stream_bytes_and_line_limits_remain_bounded(monkeypatch):
     monkeypatch.setattr(stream, 'MAX_LINE_BYTES', 30)
     with pytest.raises(stream.StreamProtocolError, match='line too large'):
         request(b'data: ' + b'x' * 31)
+
+
+def test_protocol_failure_codes_are_fixed_and_do_not_disclose_provider_text():
+    for message, code in stream.STREAM_FAILURE_CODES.items():
+        assert stream.StreamProtocolError(message).safe_code == code
+        assert code.startswith("stream_")
+    private = "untrusted body with Bearer sentinel-secret"
+    assert stream.StreamProtocolError(private).safe_code == "stream_protocol_error"
+    assert private not in stream.StreamProtocolError(private).safe_code
+
+
+def test_incomplete_stream_still_rejected_with_precise_code():
+    with pytest.raises(stream.StreamProtocolError) as error:
+        stream.Accumulator().result()
+    assert error.value.safe_code == "stream_incomplete_stream"

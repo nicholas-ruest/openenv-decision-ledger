@@ -24,7 +24,7 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
-from provider_stream import provider_call as stream_provider_call
+from provider_stream import provider_call as stream_provider_call, StreamProtocolError
 sys.path.insert(0, str(ROOT / "integrations/software-repair"))
 from repair_env.environment import RepairAction, RepairEnvironment, check  # noqa: E402
 from repair_env.direct_environment import DirectRepairAction, DirectRepairEnvironment
@@ -236,7 +236,8 @@ def _episode(task_id, seed, sample, token, counter, budget, frozen, stop, deadli
                 "bound route unavailable": "bound_provider_unavailable",
                 "selected provider price outside frozen screen bounds": "quote_outside_bounds",
                 "selected metadata or quote changed": "selected_provenance_changed"}
-            row["failure_code"] = safe_codes.get(str(exc), type(exc).__name__)
+            row["failure_code"] = (exc.safe_code if isinstance(exc, StreamProtocolError)
+                                   else safe_codes.get(str(exc), type(exc).__name__))
             if isinstance(exc, urllib.error.HTTPError):
                 row["provider_http_status"] = exc.code
             break
