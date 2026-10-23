@@ -1,0 +1,1582 @@
+{
+  "audit_version": 2,
+  "seed_start": 1080000,
+  "seed_count_per_task": 8,
+  "unique_task_instances": 16,
+  "summary": {
+    "software_repair-merge-d2": {
+      "instances": 8,
+      "in_provisional_training_mix": true,
+      "baseline_public_passed": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "baseline_hidden_passed": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "controlled_variants": 16,
+      "controlled_execution_failures": 0,
+      "valid_zero_reward": 8,
+      "valid_partial_reward": 8,
+      "valid_full_reward": 0,
+      "public_full_hidden_incomplete": 3,
+      "isolated_catalogued_defects": 16,
+      "isolated_public_semantic_detections": 13,
+      "isolated_hidden_semantic_activations": 16,
+      "isolated_hidden_active_public_missed": 3,
+      "isolated_execution_failures": 0
+    },
+    "software_repair-merge-d3": {
+      "instances": 8,
+      "in_provisional_training_mix": false,
+      "baseline_public_passed": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "baseline_hidden_passed": [
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10
+      ],
+      "controlled_variants": 16,
+      "controlled_execution_failures": 0,
+      "valid_zero_reward": 0,
+      "valid_partial_reward": 16,
+      "valid_full_reward": 0,
+      "public_full_hidden_incomplete": 0,
+      "isolated_catalogued_defects": 16,
+      "isolated_public_semantic_detections": 16,
+      "isolated_hidden_semantic_activations": 16,
+      "isolated_hidden_active_public_missed": 0,
+      "isolated_execution_failures": 0
+    }
+  },
+  "rows": [
+    {
+      "task_id": "software_repair-merge-d2",
+      "seed": 1080000,
+      "task_fingerprint": "3ae23182a057f40928ede4ff04ffca7304d37b43e35355c6aedfd19a75f79630",
+      "baseline": {
+        "public_passed": 0,
+        "public_errors": {},
+        "hidden_passed": 1,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 2,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "nested_end"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 27,
+          "hidden_errors": {},
+          "formula_reward": 0.896551724137931,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "touching_flag"
+          ],
+          "public_passed": 0,
+          "public_errors": {},
+          "hidden_passed": 1,
+          "hidden_errors": {},
+          "formula_reward": 0.0,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "nested_end",
+          "public_passed": 0,
+          "public_errors": {},
+          "hidden_passed": 1,
+          "hidden_errors": {},
+          "public_wrong_answers": 6,
+          "hidden_wrong_answers": 29,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "touching_flag",
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 27,
+          "hidden_errors": {},
+          "public_wrong_answers": 3,
+          "hidden_wrong_answers": 3,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 548,
+        "tests/test_public.py": 1148,
+        "README.md": 2121,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 4031,
+        "source": 548,
+        "individual_public_cases": [
+          204,
+          177,
+          187,
+          181,
+          196,
+          187
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-merge-d2",
+      "seed": 1080001,
+      "task_fingerprint": "be3a2bfbcb9bf90831931e77705a4cec6f32d69a8d495e60e258895a8e4a9ec7",
+      "baseline": {
+        "public_passed": 0,
+        "public_errors": {},
+        "hidden_passed": 0,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 2,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "nested_end"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 24,
+          "hidden_errors": {},
+          "formula_reward": 0.8,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "touching_flag"
+          ],
+          "public_passed": 0,
+          "public_errors": {},
+          "hidden_passed": 0,
+          "hidden_errors": {},
+          "formula_reward": 0.0,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "nested_end",
+          "public_passed": 0,
+          "public_errors": {},
+          "hidden_passed": 0,
+          "hidden_errors": {},
+          "public_wrong_answers": 6,
+          "hidden_wrong_answers": 30,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "touching_flag",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 24,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 6,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 548,
+        "tests/test_public.py": 1140,
+        "README.md": 2121,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 4023,
+        "source": 548,
+        "individual_public_cases": [
+          209,
+          175,
+          190,
+          170,
+          205,
+          175
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-merge-d2",
+      "seed": 1080002,
+      "task_fingerprint": "1c875c79a854c87a542e6f26bc27de9eb1f632ea7f107c0f0dfe3ffc2ab60ad0",
+      "baseline": {
+        "public_passed": 0,
+        "public_errors": {},
+        "hidden_passed": 0,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 2,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "nested_end"
+          ],
+          "public_passed": 6,
+          "public_errors": {},
+          "hidden_passed": 25,
+          "hidden_errors": {},
+          "formula_reward": 0.8333333333333334,
+          "public_full_hidden_incomplete": true
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "touching_flag"
+          ],
+          "public_passed": 0,
+          "public_errors": {},
+          "hidden_passed": 0,
+          "hidden_errors": {},
+          "formula_reward": 0.0,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "nested_end",
+          "public_passed": 0,
+          "public_errors": {},
+          "hidden_passed": 0,
+          "hidden_errors": {},
+          "public_wrong_answers": 6,
+          "hidden_wrong_answers": 30,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "touching_flag",
+          "public_passed": 6,
+          "public_errors": {},
+          "hidden_passed": 25,
+          "hidden_errors": {},
+          "public_wrong_answers": 0,
+          "hidden_wrong_answers": 5,
+          "public_semantic_detection": false,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": true
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 548,
+        "tests/test_public.py": 1130,
+        "README.md": 2121,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 4013,
+        "source": 548,
+        "individual_public_cases": [
+          178,
+          186,
+          180,
+          202,
+          181,
+          187
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-merge-d2",
+      "seed": 1080003,
+      "task_fingerprint": "f0d77ed930ae19a38dea6ba582d091682b7f0521923b24d8069a1c95095b7e90",
+      "baseline": {
+        "public_passed": 0,
+        "public_errors": {},
+        "hidden_passed": 0,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 2,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "nested_end"
+          ],
+          "public_passed": 5,
+          "public_errors": {},
+          "hidden_passed": 28,
+          "hidden_errors": {},
+          "formula_reward": 0.9333333333333333,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "touching_flag"
+          ],
+          "public_passed": 0,
+          "public_errors": {},
+          "hidden_passed": 0,
+          "hidden_errors": {},
+          "formula_reward": 0.0,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "nested_end",
+          "public_passed": 0,
+          "public_errors": {},
+          "hidden_passed": 0,
+          "hidden_errors": {},
+          "public_wrong_answers": 6,
+          "hidden_wrong_answers": 30,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "touching_flag",
+          "public_passed": 5,
+          "public_errors": {},
+          "hidden_passed": 28,
+          "hidden_errors": {},
+          "public_wrong_answers": 1,
+          "hidden_wrong_answers": 2,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 548,
+        "tests/test_public.py": 1120,
+        "README.md": 2121,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 4003,
+        "source": 548,
+        "individual_public_cases": [
+          190,
+          196,
+          186,
+          175,
+          175,
+          182
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-merge-d2",
+      "seed": 1080004,
+      "task_fingerprint": "4dee6fdd122f2e00081b15a288f3fb36aab7294af121b60bf6440d7cde73e570",
+      "baseline": {
+        "public_passed": 0,
+        "public_errors": {},
+        "hidden_passed": 0,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 2,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "nested_end"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 27,
+          "hidden_errors": {},
+          "formula_reward": 0.9,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "touching_flag"
+          ],
+          "public_passed": 0,
+          "public_errors": {},
+          "hidden_passed": 0,
+          "hidden_errors": {},
+          "formula_reward": 0.0,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "nested_end",
+          "public_passed": 0,
+          "public_errors": {},
+          "hidden_passed": 0,
+          "hidden_errors": {},
+          "public_wrong_answers": 6,
+          "hidden_wrong_answers": 30,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "touching_flag",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 27,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 3,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 548,
+        "tests/test_public.py": 1132,
+        "README.md": 2121,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 4015,
+        "source": 548,
+        "individual_public_cases": [
+          174,
+          180,
+          205,
+          179,
+          197,
+          181
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-merge-d2",
+      "seed": 1080005,
+      "task_fingerprint": "c664e5d052d3f09e06098547b5d1b70553fa17a677fbcf979287849d78c4a965",
+      "baseline": {
+        "public_passed": 0,
+        "public_errors": {},
+        "hidden_passed": 0,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 2,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "nested_end"
+          ],
+          "public_passed": 6,
+          "public_errors": {},
+          "hidden_passed": 24,
+          "hidden_errors": {},
+          "formula_reward": 0.8,
+          "public_full_hidden_incomplete": true
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "touching_flag"
+          ],
+          "public_passed": 0,
+          "public_errors": {},
+          "hidden_passed": 0,
+          "hidden_errors": {},
+          "formula_reward": 0.0,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "nested_end",
+          "public_passed": 0,
+          "public_errors": {},
+          "hidden_passed": 0,
+          "hidden_errors": {},
+          "public_wrong_answers": 6,
+          "hidden_wrong_answers": 30,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "touching_flag",
+          "public_passed": 6,
+          "public_errors": {},
+          "hidden_passed": 24,
+          "hidden_errors": {},
+          "public_wrong_answers": 0,
+          "hidden_wrong_answers": 6,
+          "public_semantic_detection": false,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": true
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 548,
+        "tests/test_public.py": 1093,
+        "README.md": 2121,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 3976,
+        "source": 548,
+        "individual_public_cases": [
+          186,
+          181,
+          178,
+          182,
+          177,
+          173
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-merge-d2",
+      "seed": 1080006,
+      "task_fingerprint": "f8ee83cb0cf01ebea5c0be632ae6dfc056f73f42213146488f2f72dc2efee3c0",
+      "baseline": {
+        "public_passed": 0,
+        "public_errors": {},
+        "hidden_passed": 0,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 2,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "nested_end"
+          ],
+          "public_passed": 6,
+          "public_errors": {},
+          "hidden_passed": 26,
+          "hidden_errors": {},
+          "formula_reward": 0.8666666666666667,
+          "public_full_hidden_incomplete": true
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "touching_flag"
+          ],
+          "public_passed": 0,
+          "public_errors": {},
+          "hidden_passed": 0,
+          "hidden_errors": {},
+          "formula_reward": 0.0,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "nested_end",
+          "public_passed": 0,
+          "public_errors": {},
+          "hidden_passed": 0,
+          "hidden_errors": {},
+          "public_wrong_answers": 6,
+          "hidden_wrong_answers": 30,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "touching_flag",
+          "public_passed": 6,
+          "public_errors": {},
+          "hidden_passed": 26,
+          "hidden_errors": {},
+          "public_wrong_answers": 0,
+          "hidden_wrong_answers": 4,
+          "public_semantic_detection": false,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": true
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 548,
+        "tests/test_public.py": 1080,
+        "README.md": 2121,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 3963,
+        "source": 548,
+        "individual_public_cases": [
+          173,
+          186,
+          177,
+          176,
+          175,
+          177
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-merge-d2",
+      "seed": 1080007,
+      "task_fingerprint": "e75b9b46520f925b5404b906cc64fb8d9a5531428ade100bb2d136c97687f448",
+      "baseline": {
+        "public_passed": 0,
+        "public_errors": {},
+        "hidden_passed": 0,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 2,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "nested_end"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 25,
+          "hidden_errors": {},
+          "formula_reward": 0.8333333333333334,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "touching_flag"
+          ],
+          "public_passed": 0,
+          "public_errors": {},
+          "hidden_passed": 0,
+          "hidden_errors": {},
+          "formula_reward": 0.0,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "nested_end",
+          "public_passed": 0,
+          "public_errors": {},
+          "hidden_passed": 0,
+          "hidden_errors": {},
+          "public_wrong_answers": 6,
+          "hidden_wrong_answers": 30,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "touching_flag",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 25,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 5,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 548,
+        "tests/test_public.py": 1128,
+        "README.md": 2121,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 4011,
+        "source": 548,
+        "individual_public_cases": [
+          184,
+          183,
+          181,
+          178,
+          205,
+          181
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-merge-d3",
+      "seed": 1080000,
+      "task_fingerprint": "3b5f1978e4b52375cde6409335897cf1503bee627fe85caf405e108c7d05850c",
+      "baseline": {
+        "public_passed": 2,
+        "public_errors": {},
+        "hidden_passed": 10,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 2,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "nested_end"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "touching_flag"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "nested_end",
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "public_wrong_answers": 3,
+          "hidden_wrong_answers": 15,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "touching_flag",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 548,
+        "tests/test_public.py": 2055,
+        "README.md": 2121,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 4938,
+        "source": 548,
+        "individual_public_cases": [
+          282,
+          376,
+          362,
+          361,
+          311,
+          347
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-merge-d3",
+      "seed": 1080001,
+      "task_fingerprint": "d6e813c73aa218dcef85ce4e0a3fa7fb8d9861d77fa06696e3c43abdf2a3a44e",
+      "baseline": {
+        "public_passed": 2,
+        "public_errors": {},
+        "hidden_passed": 10,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 2,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "nested_end"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "touching_flag"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "nested_end",
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "public_wrong_answers": 3,
+          "hidden_wrong_answers": 15,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "touching_flag",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 548,
+        "tests/test_public.py": 2051,
+        "README.md": 2121,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 4934,
+        "source": 548,
+        "individual_public_cases": [
+          320,
+          376,
+          362,
+          319,
+          311,
+          347
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-merge-d3",
+      "seed": 1080002,
+      "task_fingerprint": "9abe43ab269aaf8cf65fb617572bf3f516cfcd10316baecbb861798f144ad2f0",
+      "baseline": {
+        "public_passed": 2,
+        "public_errors": {},
+        "hidden_passed": 10,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 2,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "nested_end"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "touching_flag"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "nested_end",
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "public_wrong_answers": 3,
+          "hidden_wrong_answers": 15,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "touching_flag",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 548,
+        "tests/test_public.py": 2003,
+        "README.md": 2121,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 4886,
+        "source": 548,
+        "individual_public_cases": [
+          320,
+          332,
+          362,
+          355,
+          311,
+          307
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-merge-d3",
+      "seed": 1080003,
+      "task_fingerprint": "7883829232f178c32808f29d24cf54a7fdcb49b6bd0df02da0794a54d0359ca9",
+      "baseline": {
+        "public_passed": 2,
+        "public_errors": {},
+        "hidden_passed": 10,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 2,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "nested_end"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "touching_flag"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "nested_end",
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "public_wrong_answers": 3,
+          "hidden_wrong_answers": 15,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "touching_flag",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 548,
+        "tests/test_public.py": 2043,
+        "README.md": 2121,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 4926,
+        "source": 548,
+        "individual_public_cases": [
+          362,
+          332,
+          362,
+          361,
+          311,
+          299
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-merge-d3",
+      "seed": 1080004,
+      "task_fingerprint": "9b94f713bca9ac76caceebd0c9914a8f91dde6bc96d03073d6ac999162f42787",
+      "baseline": {
+        "public_passed": 2,
+        "public_errors": {},
+        "hidden_passed": 10,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 2,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "nested_end"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "touching_flag"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "nested_end",
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "public_wrong_answers": 3,
+          "hidden_wrong_answers": 15,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "touching_flag",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 548,
+        "tests/test_public.py": 2060,
+        "README.md": 2121,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 4943,
+        "source": 548,
+        "individual_public_cases": [
+          362,
+          332,
+          320,
+          361,
+          322,
+          347
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-merge-d3",
+      "seed": 1080005,
+      "task_fingerprint": "2fd3fc7b14cf31104ce79a60dca0a137dea17d13106d532b34a65b660360aa62",
+      "baseline": {
+        "public_passed": 2,
+        "public_errors": {},
+        "hidden_passed": 10,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 2,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "nested_end"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "touching_flag"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "nested_end",
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "public_wrong_answers": 3,
+          "hidden_wrong_answers": 15,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "touching_flag",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 548,
+        "tests/test_public.py": 1967,
+        "README.md": 2121,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 4850,
+        "source": 548,
+        "individual_public_cases": [
+          278,
+          376,
+          320,
+          319,
+          351,
+          307
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-merge-d3",
+      "seed": 1080006,
+      "task_fingerprint": "38523d7e356ec6bac9e50acc2402076bcd9994ef9cf835c474293ff4c84cdc26",
+      "baseline": {
+        "public_passed": 2,
+        "public_errors": {},
+        "hidden_passed": 10,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 2,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "nested_end"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "touching_flag"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "nested_end",
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "public_wrong_answers": 3,
+          "hidden_wrong_answers": 15,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "touching_flag",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 548,
+        "tests/test_public.py": 2053,
+        "README.md": 2121,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 4936,
+        "source": 548,
+        "individual_public_cases": [
+          362,
+          376,
+          362,
+          319,
+          311,
+          307
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-merge-d3",
+      "seed": 1080007,
+      "task_fingerprint": "9dcf53c15e9b0249815ceb39f144f1fa95786116cfe80e25f29d19db45bd4ecd",
+      "baseline": {
+        "public_passed": 2,
+        "public_errors": {},
+        "hidden_passed": 10,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 2,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "nested_end"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "touching_flag"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "nested_end",
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "public_wrong_answers": 3,
+          "hidden_wrong_answers": 15,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "touching_flag",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 548,
+        "tests/test_public.py": 1983,
+        "README.md": 2121,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 4866,
+        "source": 548,
+        "individual_public_cases": [
+          320,
+          376,
+          332,
+          281,
+          351,
+          307
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    }
+  ],
+  "cohort_diversity": {
+    "case_occurrences": 576,
+    "distinct_input_keys": 576,
+    "repeated_input_occurrences": 0,
+    "duplicated_input_keys": 0,
+    "cross_seed_duplicate_input_keys": 0,
+    "cross_task_duplicate_input_keys": 0,
+    "public_hidden_overlap_input_keys": 0,
+    "conflicting_expected_label_keys": 0,
+    "seed_independent_content_suites": 16,
+    "duplicated_content_suites": {},
+    "duplicate_input_owners": {},
+    "conflicting_label_owners": {},
+    "identity_limitations": [
+      "Input dict insertion order is preserved; expected dict order is ignored.",
+      "Exact typed inputs are compared within the same reference-AST contract, not up to renaming.",
+      "Seed and source comments are excluded from suite signatures; these are not observed prompt hashes.",
+      "Cross-level reuse is reported, not automatically classified as data leakage."
+    ]
+  },
+  "new_model_calls": 0,
+  "is_training": false,
+  "training_mix_changed": false,
+  "limitations": [
+    "Controlled edits are constructed diagnostics, not model actions.",
+    "The environment reward formula is reproduced; native parity is tested separately.",
+    "No within-prompt model variance, training or ranking gain is established.",
+    "Single-edit tasks have no proper nonempty edit subset.",
+    "Component controls for empty stubs are not local-edit subsets.",
+    "Byte counts reproduce read content only, not observation envelopes or tokenizer costs.",
+    "Isolated mutants measure catalogued defect detection, not arbitrary candidate-code coverage."
+  ],
+  "source_revision": "ee9b16dac99b5e568333aac5314e2a7c43c0f6ad",
+  "source_files_sha256": {
+    "scripts/audit-software-curriculum.py": "9d12dcd2dced97b99df2e250e31cd1f0338d4602c8644b1231a8587b3eeb36ec",
+    "integrations/software-repair/repair_env/__init__.py": "aecafe955038a15f8cbbca11f39b4166adca30cc7ca0027d530d90942c80b52f",
+    "integrations/software-repair/repair_env/app.py": "973f5ef06580f7ad6cce0f7ba7557578a491e97b157d155457bb0de8b714ceb3",
+    "integrations/software-repair/repair_env/cycle_plan.py": "f56d5d65809deb0580df3a4a07b0fc797c27096cf761fbbb3d078d5889ae32eb",
+    "integrations/software-repair/repair_env/environment.py": "c1e6dee6b7cd55f65d7e84c95860c0399d1fdea7388971436e2c49f1a468002e",
+    "integrations/software-repair/repair_env/hard_tasks.py": "6093bd954ae91e5806c8b65db42aa99263a2f214f7454a73ac100a3ccef01d4f",
+    "integrations/software-repair/repair_env/merge_curriculum.py": "6bb63a1648f104fcc8fc3dde72396a0674233ea0dd1c200975ad320e96b86d12",
+    "integrations/software-repair/repair_env/release_plan.py": "b5e549f78d167259f81a141dd43c685453124cdab3889308445f71c2ee9da0bf",
+    "integrations/software-repair/repair_env/replay_curriculum.py": "96fb75dfb6946bb36f1c9f3d5509ae3e7ce7368ffd139cab168dbe5e96002ca5",
+    "integrations/software-repair/repair_env/runner.py": "8b6c5d9e6d75fad912c7e179bdaf8284c3bbb15ecfa8a95250e539714474d8cc",
+    "integrations/software-repair/repair_env/tasks.py": "461f5dd18a27095179bd43c1819e1d7930cefac68abda906fd13fe2787e70acb"
+  }
+}

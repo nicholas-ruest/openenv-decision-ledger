@@ -1,0 +1,33 @@
+{
+  "kind": "trusted_native_controls_not_model_evaluation",
+  "target": "software_repair-linear-d3",
+  "matched_control": "software_repair-linear-d4",
+  "unique_case_suites": 224,
+  "duplicates": 0,
+  "oracle_reference_cases_passed": 8064,
+  "baseline_wrong_on_every_suite": true,
+  "execution_errors": 0,
+  "baseline_full_case_min": 0,
+  "baseline_full_case_max": 21,
+  "elapsed_seconds": 34.461192261998804,
+  "source_files_sha256": {
+    "direct_app.py": "16320040a3c67273cac7c3c6aa1247f1fd3918603f2288196105c721fd2fa18d",
+    "release_synthesis.py": "387949807eab2a2a4a5f5c6806d7889e16ed94bfc4f8788979bb95ce2fba999d",
+    "runner.py": "6188bfe58fec11466e544f365587c4f65ff81a52af8a6e1db6561673059c5fb6",
+    "kv_repair.py": "d2c582caffc0f4eaa2beeac9e256b55b6211f243f038bdda427c22d63612a855",
+    "app.py": "973f5ef06580f7ad6cce0f7ba7557578a491e97b157d155457bb0de8b714ceb3",
+    "release_curriculum.py": "61f479cf7e575dbcece7b35e500b213bc8f0cdb08d4ea7114839e769feb15f49",
+    "__init__.py": "aecafe955038a15f8cbbca11f39b4166adca30cc7ca0027d530d90942c80b52f",
+    "merge_curriculum.py": "6bb63a1648f104fcc8fc3dde72396a0674233ea0dd1c200975ad320e96b86d12",
+    "environment.py": "ef17eae22178f4e59ebcbca01ef456d859a077fb415367b0571082af3180ab65",
+    "release_plan.py": "b5e549f78d167259f81a141dd43c685453124cdab3889308445f71c2ee9da0bf",
+    "hard_tasks.py": "6093bd954ae91e5806c8b65db42aa99263a2f214f7454a73ac100a3ccef01d4f",
+    "replay_curriculum.py": "96fb75dfb6946bb36f1c9f3d5509ae3e7ce7368ffd139cab168dbe5e96002ca5",
+    "cycle_plan.py": "f56d5d65809deb0580df3a4a07b0fc797c27096cf761fbbb3d078d5889ae32eb",
+    "tasks.py": "423244bfe4ca4b5a289a95230528d176db88b5c23cd23a08082efe82db91c0dd",
+    "direct_environment.py": "118c0f88a3141b55469a9386949d94969d94398635434bad3d5bb3d19af85ea0",
+    "linear_repair.py": "fae8d7160b2707e0f87d5128d74cb93f45f07f20c2971a2413139255d2a05eaa"
+  },
+  "is_training": false,
+  "learning_or_ranking_improvement": false
+}

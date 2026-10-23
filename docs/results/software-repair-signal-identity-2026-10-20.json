@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-20",
+  "change": "Require complete per-rollout call identities and disjoint identities between screen and confirmation.",
+  "local_targeted_tests_passed": 24,
+  "local_targeted_test_seconds": 0.06,
+  "ci_validation": "pending",
+  "covered_cases": [
+    "Missing call records, labels or response IDs cannot establish a signal.",
+    "Malformed response hashes cannot establish a signal.",
+    "A request or response reused across screen and confirmation cannot confirm a signal.",
+    "Legacy missing-identity archives retain descriptive scores without confirmation eligibility.",
+    "Negative, incorrectly typed or reward-inconsistent grader diagnostics are rejected."
+  ],
+  "public_identity_fields": "Client labels are hashed; provider response IDs were already stored as hashes.",
+  "runtime_source_unchanged": "7156868d300b29037440f69361ceca5b02da5724",
+  "validated_image_retained": "sha256:8e0e98807f74fb6c587f8e36aba14fdc6ee8f917693cf7b6bd6e0f7e6c77e263",
+  "new_model_calls": 0,
+  "is_training": false,
+  "ranking_improvement": null,
+  "arena_submission": false
+}

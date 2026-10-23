@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-19",
+  "source_core": "9fe4faac6ae905dfe7cb2730cdd99a569b8c725d",
+  "previous_source": "c1fef287aa8bb03e6a9275f1d4f15b3d82a369d5",
+  "change": "Read tests/test_public.py#case=N for one complete public example. Detailed failure feedback links to these views. All six examples remain in the full test file.",
+  "tokenizer_sha256": "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3",
+  "schema_sha256_before_and_after": "dca991d0ed88c4fcdc3c86d66b306ef2a3efd23128cebe95976837231d83f852",
+  "offline_observation_tokens": [
+    {"seed": 1030000, "task_fingerprint": "6d4d68d5a0c7e235b3490205c7cb6379ef3651e33100ebacbc67ae75139a3515", "full_example_file": 2657, "individual_cases": [410, 493, 490, 524, 392, 518]},
+    {"seed": 1030100, "task_fingerprint": "fd0a79f5d3fba8513a5d1a0d752d0a21190c3a02529438d145984bc45a60b5c1", "full_example_file": 2864, "individual_cases": [484, 511, 562, 512, 361, 590]}
+  ],
+  "measurement_limit": "One example contains less information than six. Reading all six focused views can cost more than the full file. Model choice and live benefit are unmeasured.",
+  "measured_task_fingerprints_unchanged": true,
+  "interpreter_limits_changed": false,
+  "reward_changed": false,
+  "schema_changed": false,
+  "offline_tests_passed": 217,
+  "offline_test_seconds": 120.76,
+  "default_training_mix_changed": false,
+  "new_call_audit": {"client_labels_recorded": true, "provider_response_ids_hashed_when_available": true, "raw_provider_ids_stored": false, "duplicate_labels_or_ids_disqualify_signal": true, "legacy_missing_ids_remain_unavailable": true},
+  "screen_groups": [1030000, 1030100],
+  "planned_disjoint_confirmation_groups": [1031000, 1031100],
+  "samples_per_prompt": 4,
+  "model_screen_started": false,
+  "learning_signal_confirmed": false,
+  "is_training": false,
+  "ranking_improvement": null,
+  "arena_submission": false
+}

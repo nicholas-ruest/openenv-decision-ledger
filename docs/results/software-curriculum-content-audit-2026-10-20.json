@@ -1,0 +1,59 @@
+{
+  "kind": "offline_constructed_software_curriculum_audit",
+  "date": "2026-10-20",
+  "audit_version": 2,
+  "source_revision": "Use the containing commit and raw source hashes; raw archives record the parent checkout with local audit-v2 code.",
+  "parent_checkout": "69f350020fa20ac9c685077698dfe4e5a029fe81",
+  "audit_source_sha256": "adfcbb8b9ba44193fa147f653bd0a0759a7ac8d5e74e3fc85fc69b17f5ade45d",
+  "cohorts": [
+    {"seeds": [1074000, 1074007], "task_instances": 96, "raw_archive": "software-curriculum-content-cohort-a-2026-10-20.json", "sha256": "fc52b05204873bdd0326cb84bd74ceddd48f2c2f6fdd9db85a98ac5ea8e525cb"},
+    {"seeds": [1075000, 1075007], "task_instances": 96, "raw_archive": "software-curriculum-content-cohort-b-2026-10-20.json", "sha256": "f515e82b3f497e1a2892ab602216f12eadafa7cd1a9d1976f2bd837e35f16d71"}
+  ],
+  "scope": {"provisional_task_ids": 8, "separate_diagnostic_task_ids": 4, "task_instances": 192},
+  "combined_content_audit": {
+    "case_occurrences": 6912,
+    "distinct_typed_input_keys": 6912,
+    "seed_independent_content_suites": 192,
+    "cross_seed_duplicate_input_keys": 0,
+    "cross_task_duplicate_input_keys": 0,
+    "public_hidden_overlap_input_keys": 0,
+    "conflicting_expected_label_keys": 0,
+    "reference_oracle_checks_passed": 6912
+  },
+  "constructed_controls": {
+    "partial_repair_variants": 448,
+    "isolated_catalogued_defects": 320,
+    "public_semantic_detections": 278,
+    "hidden_semantic_activations": 308,
+    "hidden_active_public_missed": 30,
+    "hidden_inactive_catalogued_defects": 12,
+    "execution_failures": 0
+  },
+  "coverage_findings": [
+    {"task_id": "software_repair-merge-d2", "defect": "touching_flag", "controls": 16, "public_detected": 9, "hidden_active": 16, "public_missed": 7},
+    {"task_id": "software_repair-plan-d3", "defect": "ready_order", "controls": 16, "public_detected": 12, "hidden_active": 16, "public_missed": 4},
+    {"task_id": "software_repair-plan-d4", "defect": "component_order", "controls": 8, "public_detected": 0, "hidden_active": 8, "public_missed": 8},
+    {"task_id": "software_repair-plan-d4", "defect": "cycles_order", "controls": 8, "public_detected": 0, "hidden_active": 8, "public_missed": 8},
+    {"task_id": "software_repair-release-d1", "defect": "inclusive_budget", "controls": 9, "public_detected": 6, "hidden_active": 9, "public_missed": 3},
+    {"task_id": "software_repair-release-d1", "defect": "suite_tie_break", "controls": 12, "public_detected": 0, "hidden_active": 0, "public_missed": 0}
+  ],
+  "read_content_utf8_byte_ranges": {
+    "read_all": [3808, 13384], "source_only": [100, 3203], "individual_public_case": [142, 1276],
+    "includes_observation_envelope_or_tokenizer_cost": false
+  },
+  "implementation_regression": "Isolate defects by applying all other forward fixes at unique original sites; inverse replacement of correct planner loop text is ambiguous. Three planner-d4 regression seeds pass.",
+  "local_tests": {"passed": 30, "skipped_native_sdk_unavailable": 6, "seconds": 6.20},
+  "native_ci": "Pending at publication; verified outcome and actual counts are recorded in PR3 follow-up.",
+  "decision": "Retain the current runtime and mix. Prioritize a reviewable touching-interval witness diagnostic; review planner ordering and release boundary/tie witnesses separately. Do not remove hidden checks, alter reward, or count failures as productive difficulty.",
+  "limitations": [
+    "Constructed repairs and oracle controls are not model solves or live same-prompt signal.",
+    "Content signatures are reference-AST/typed-input identities, not general semantic equivalence or observed prompt hashes.",
+    "Zero duplicates in two finite cohorts does not prove uniqueness across all seeds or training partitions.",
+    "Public cases are examples, not a complete specification; a detection gap is not proof of reward unsoundness.",
+    "No runtime generator, reward, default mix, calibration profile or submission request was changed."
+  ],
+  "new_model_calls": 0,
+  "is_training": false,
+  "mix_adoption": false,
+  "arena_submission_authorized": false
+}

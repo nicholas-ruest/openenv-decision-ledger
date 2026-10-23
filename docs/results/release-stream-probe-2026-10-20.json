@@ -1,0 +1,40 @@
+{
+  "runner_source": "43b548debcb469af196a282bad07fc3bd8d33b15",
+  "purpose": "transport_reliability_only",
+  "rollouts": 2,
+  "unique_prompts": 1,
+  "valid_full": 0,
+  "valid_partial": 0,
+  "valid_wrong": 0,
+  "failures": {
+    "provider_or_reservation_failure": 1,
+    "invalid_json_action": 1
+  },
+  "failure_types": [
+    "ValueError",
+    null
+  ],
+  "verified_returned_stream_responses": 4,
+  "sampling_identity_verified": true,
+  "genuine_signal_screened": false,
+  "confirmation_launched": false,
+  "is_training": false,
+  "postrun_readonly_catalog_observation": {
+    "at_utc": "2026-10-20T22:58:02Z",
+    "rows": 135,
+    "exact_selected_model_rows": 0,
+    "selected_model": "Qwen/Qwen3.8-27B"
+  },
+  "interpretation": "Three usage-verified responses in one rollout and one in the other; the next model attempt was not reserved. The failed row retained only ValueError. Read-only quote checks immediately reproduced selected-model absence; this is consistent with a pre-call selected-model check failure, rather than proof of streaming efficacy.",
+  "archive_sha256": {
+    "protocol.json": "6a902a292ac168f6f9257a63b5bc67735c72380cdd8ec45f5669dae8803040b6",
+    "episodes.jsonl": "208cd78ee131cc79243c11708be6962d4f65e7348267a938ec2543e8333f91c3",
+    "complete.json": "1215292635c4ebd3291f42abd9b2a8b59d12f668bd84c8c4e42ed388be40c2ea",
+    "analysis.json": "c21ae52b5c29ad28fecbf350792c7c2cb093b34de066c6ebfc93652ab1d83722"
+  },
+  "limits": [
+    "No HTTP504 observed in four returned responses; sample too small for a causal reliability claim.",
+    "One schema-copy failure remains.",
+    "No task-mix adoption, promotion, training or Arena submission."
+  ]
+}

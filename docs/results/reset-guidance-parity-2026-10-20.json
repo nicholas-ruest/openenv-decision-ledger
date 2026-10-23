@@ -1,0 +1,13 @@
+{
+  "baseline_source": "45f5c29f66362d286be1e855707af4fcb12887aa",
+  "candidate_source": "e40473cb64cccac51884731b4fa4e5f8508b6e89",
+  "seeds": "1088000-1088007",
+  "task_instances": 64,
+  "task_spec_and_oracles_unchanged": 64,
+  "non_readme_workspace_files_unchanged": 64,
+  "readme_changed": 64,
+  "readme_added_utf8_bytes": [
+    159
+  ],
+  "model_calls": 0
+}

@@ -1,0 +1,91 @@
+{
+  "source_revision": "45f5c29f66362d286be1e855707af4fcb12887aa",
+  "profile": "merge_probe",
+  "task": "software_repair-merge-d3",
+  "seed": 1082000,
+  "unique_prompts": 1,
+  "independent_samples": 4,
+  "thinking_requested": true,
+  "thinking_verified": false,
+  "provider_checkpoint_and_arena_wrapper_attested": false,
+  "model": "Qwen/Qwen3.8-27B",
+  "provider": "deepinfra",
+  "temperature": 0.7,
+  "response_format": "json_object",
+  "request_timeout_seconds": 90,
+  "genuine_signal_screened": false,
+  "prompt_identity_verified": true,
+  "groups": [
+    {
+      "task_id": "software_repair-merge-d3",
+      "seed": 1082000,
+      "samples": 4,
+      "valid": 1,
+      "full": 1,
+      "partial": 0,
+      "wrong": 0,
+      "valid_rewards": [
+        1
+      ],
+      "valid_reward_std": 0,
+      "failures": {
+        "provider_or_reservation_failure": 2,
+        "invalid_json_action": 1
+      },
+      "prompt_sha256": "5ac3f8bc13a8806d53693cfd5212a55a05baddd87305e5466ac760befc559420",
+      "prompt_identity_verified": true,
+      "prompt_identity_unavailable_samples": 0,
+      "productive": false
+    }
+  ],
+  "rows": [
+    {
+      "sample": 0,
+      "reward": 0,
+      "solved": false,
+      "failure": "provider_or_reservation_failure",
+      "failure_type": "TimeoutError",
+      "hidden_wrong_answers": null,
+      "hidden_execution_rejections": null,
+      "returned_responses": 2
+    },
+    {
+      "sample": 1,
+      "reward": 0,
+      "solved": false,
+      "failure": "provider_or_reservation_failure",
+      "failure_type": "TimeoutError",
+      "hidden_wrong_answers": null,
+      "hidden_execution_rejections": null,
+      "returned_responses": 2
+    },
+    {
+      "sample": 2,
+      "reward": 0,
+      "solved": false,
+      "failure": "invalid_json_action",
+      "failure_type": null,
+      "hidden_wrong_answers": null,
+      "hidden_execution_rejections": null,
+      "returned_responses": 1
+    },
+    {
+      "sample": 3,
+      "reward": 1,
+      "solved": true,
+      "failure": null,
+      "failure_type": null,
+      "hidden_wrong_answers": 0,
+      "hidden_execution_rejections": 0,
+      "returned_responses": 5
+    }
+  ],
+  "archive_sha256": {
+    "protocol.json": "9b707d4af0bc3bef3135917cec1c5d84a83e36c2f82f3c9058d557171b6f40f1",
+    "episodes.jsonl": "02698ced74a0a89e3a930bf39872db69f57f12f1876bfebaa19cb07a74356d39",
+    "complete.json": "bcc8d62fe6809aa9ff4bf1bf9f721515c88428b19eebf0c7439f7649a4f8e83a"
+  },
+  "model_training": false,
+  "arena_submission": false,
+  "learning_or_ranking_improvement": false
+}
