@@ -47,13 +47,17 @@ jobs:
         run: |
           TAG="ghcr.io/nicholas-ruest/openenv-decision-ledger:software-repair-$SOURCE_SHA"
           docker tag software-repair:candidate "$TAG"
-          docker push "$TAG"
-          IMAGE=$(docker image inspect "$TAG" --format '{{index .RepoDigests 0}}')
+          docker push "$TAG" | tee repair-push.txt
+          DIGEST=$(sed -n 's/.*digest: \(sha256:[0-9a-f]\{64\}\).*/\1/p' repair-push.txt)
+          [[ "$DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
+          IMAGE="ghcr.io/nicholas-ruest/openenv-decision-ledger@$DIGEST"
           echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
           DIRECT_TAG="ghcr.io/nicholas-ruest/openenv-decision-ledger:software-direct-$SOURCE_SHA"
           docker tag software-direct:candidate "$DIRECT_TAG"
-          docker push "$DIRECT_TAG"
-          DIRECT_IMAGE=$(docker image inspect "$DIRECT_TAG" --format '{{index .RepoDigests 0}}')
+          docker push "$DIRECT_TAG" | tee direct-push.txt
+          DIRECT_DIGEST=$(sed -n 's/.*digest: \(sha256:[0-9a-f]\{64\}\).*/\1/p' direct-push.txt)
+          [[ "$DIRECT_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
+          DIRECT_IMAGE="ghcr.io/nicholas-ruest/openenv-decision-ledger@$DIRECT_DIGEST"
           echo "direct_image=$DIRECT_IMAGE" >> "$GITHUB_OUTPUT"
   anonymous-direct:
     needs: test-publish
