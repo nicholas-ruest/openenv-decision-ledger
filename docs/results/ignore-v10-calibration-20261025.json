@@ -1,0 +1,15 @@
+{
+  "source": "164cb2b1fdd9217093cc7182c1801b571908decc",
+  "rollouts": 10,
+  "distinct_prompts": 10,
+  "full": 1,
+  "semantic_partial_rewards": [
+    0.7
+  ],
+  "provider_stream_failures": 8,
+  "signal_gate": false,
+  "confirmed": false,
+  "is_training": false,
+  "ranking_improvement": false,
+  "limitation": "Provider failures prevent learning-signal confirmation; this is an exploratory candidate, not demonstrated improvement."
+}

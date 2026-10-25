@@ -1,0 +1,41 @@
+{
+  "source": "164cb2b1fdd9217093cc7182c1801b571908decc",
+  "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:77e34e465b514ef619ad2c02db57451c815bb478cf054eb16ce885516bd3ab7a",
+  "task": "software_repair-ignore-d2",
+  "rows": 224,
+  "unique_observations": 224,
+  "oracle_reference_cases_passed": 8064,
+  "unique_hidden_suites": 224,
+  "source_archive_deterministic": true,
+  "baseline_has_semantic_defects": true,
+  "candidate_execution_errors": 0,
+  "splits": {
+    "train": [
+      1260000,
+      128
+    ],
+    "validation": [
+      1270000,
+      32
+    ],
+    "test": [
+      1280000,
+      64
+    ]
+  },
+  "manifest": {
+    "README.md": "945eddb7c515141c5a53e35efc82358df47efbd06f6758e890faccace3a7ca6d",
+    "environment-source.zip": "7ebf3d5bbeb9a4f014a9576ee436542cc722f96a034a6144d7f5854c52d1cc96",
+    "submission-candidate.json": "997010fc4e8b27f260630eb5c728b7ae157adaf8d73c852ba946511d88196971",
+    "test.jsonl": "4959a78b5c1dccdf08e4a1039b6b66aa300198fcade61d9976acb724aa55613c",
+    "train.jsonl": "daa1578c4122101b2adb2270c2b9efb556f5af9577bcf9731e4f0baa8075b8ff",
+    "validation.jsonl": "ba61657f5a644ebdaa308b7fec2441861e9dfaa03d3d69097981ee9a448e1814"
+  },
+  "request_sha256": "997010fc4e8b27f260630eb5c728b7ae157adaf8d73c852ba946511d88196971",
+  "public_matching_dataset_publication_required": true,
+  "approved": false,
+  "submitted": false,
+  "trained": false,
+  "model_calls": 0,
+  "learning_or_ranking_improvement": false
+}
