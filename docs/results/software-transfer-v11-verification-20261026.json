@@ -1,0 +1,35 @@
+{
+  "verified": true,
+  "rows_by_split": {
+    "train": 384,
+    "validation": 96,
+    "test": 192
+  },
+  "unique_seeds": 672,
+  "unique_observations": 672,
+  "reference_case_controls": 24192,
+  "per_task": [
+    {
+      "task": "software_repair-release-d4",
+      "rows": 224,
+      "oracle_reference_cases_passed": 8064,
+      "candidate_execution_errors": 0
+    },
+    {
+      "task": "software_repair-kv-d2",
+      "rows": 224,
+      "oracle_reference_cases_passed": 8064,
+      "candidate_execution_errors": 0
+    },
+    {
+      "task": "software_repair-ignore-d2",
+      "rows": 224,
+      "oracle_reference_cases_passed": 8064,
+      "candidate_execution_errors": 0
+    }
+  ],
+  "request_sha256": "9e747c343c609047ce5c3e891abb7e1db443fff604b160957cbb8b72f0d1388a",
+  "file_hashes_verified": 6,
+  "model_calls": 0,
+  "trained": false
+}

@@ -1,0 +1,158 @@
+{
+  "source": "164cb2b1fdd9217093cc7182c1801b571908decc",
+  "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:77e34e465b514ef619ad2c02db57451c815bb478cf054eb16ce885516bd3ab7a",
+  "tasks": [
+    "software_repair-release-d4",
+    "software_repair-kv-d2",
+    "software_repair-ignore-d2"
+  ],
+  "rows": 672,
+  "controls": [
+    {
+      "source": "164cb2b1fdd9217093cc7182c1801b571908decc",
+      "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:77e34e465b514ef619ad2c02db57451c815bb478cf054eb16ce885516bd3ab7a",
+      "task": "software_repair-release-d4",
+      "rows": 224,
+      "unique_observations": 224,
+      "oracle_reference_cases_passed": 8064,
+      "unique_hidden_suites": 224,
+      "source_archive_deterministic": true,
+      "baseline_has_semantic_defects": true,
+      "candidate_execution_errors": 0,
+      "splits": {
+        "train": [
+          1400000,
+          128
+        ],
+        "validation": [
+          1410000,
+          32
+        ],
+        "test": [
+          1420000,
+          64
+        ]
+      },
+      "manifest": {
+        "README.md": "8d08adf8bed443817e602a3f9e2498f5be214e233f0b17c7087e8679ba8c7b4a",
+        "environment-source.zip": "7ebf3d5bbeb9a4f014a9576ee436542cc722f96a034a6144d7f5854c52d1cc96",
+        "submission-candidate.json": "f66e3edf82e32894e29b17b44fc0c997ebe7919fcee3ffecf757c3d560e07586",
+        "test.jsonl": "5240ca8b84794de780a45450339344d88f75e838d13ef669efef5ea7e4fe648e",
+        "train.jsonl": "4c4fb10cdcbc8966d1587181e7cefd2ca7b2c432b22f60ce515457723a467feb",
+        "validation.jsonl": "0806fcb4bad1e2c1f2db6fedd71c4b4e498646243d27c31890c24c66147d11d7"
+      },
+      "request_sha256": "f66e3edf82e32894e29b17b44fc0c997ebe7919fcee3ffecf757c3d560e07586",
+      "public_matching_dataset_publication_required": true,
+      "approved": false,
+      "submitted": false,
+      "trained": false,
+      "model_calls": 0,
+      "learning_or_ranking_improvement": false
+    },
+    {
+      "source": "164cb2b1fdd9217093cc7182c1801b571908decc",
+      "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:77e34e465b514ef619ad2c02db57451c815bb478cf054eb16ce885516bd3ab7a",
+      "task": "software_repair-kv-d2",
+      "rows": 224,
+      "unique_observations": 224,
+      "oracle_reference_cases_passed": 8064,
+      "unique_hidden_suites": 224,
+      "source_archive_deterministic": true,
+      "baseline_has_semantic_defects": true,
+      "candidate_execution_errors": 0,
+      "splits": {
+        "train": [
+          1500000,
+          128
+        ],
+        "validation": [
+          1510000,
+          32
+        ],
+        "test": [
+          1520000,
+          64
+        ]
+      },
+      "manifest": {
+        "README.md": "277b48fc6c0a8342a4fda805348a6488b23d95ec85140db9103a7807bd8ddc56",
+        "environment-source.zip": "7ebf3d5bbeb9a4f014a9576ee436542cc722f96a034a6144d7f5854c52d1cc96",
+        "submission-candidate.json": "f4b7b9997ad3a8cc9f250e1e2b8ce76642e1a1f5af97c0d92fbd56a6ee29670d",
+        "test.jsonl": "85823325b6fc4ce99ae974fb5bfbcf7c3815be4a8ded8f0a70999f28e17c67f3",
+        "train.jsonl": "8e34987a1fcc066a79e56077cb36e4bbd71509f20dc3037dda3fd153c062d1f9",
+        "validation.jsonl": "a8dd50812cfc3de01253c68722a4c568943077d98c0ffb14ba8219ce7104456e"
+      },
+      "request_sha256": "f4b7b9997ad3a8cc9f250e1e2b8ce76642e1a1f5af97c0d92fbd56a6ee29670d",
+      "public_matching_dataset_publication_required": true,
+      "approved": false,
+      "submitted": false,
+      "trained": false,
+      "model_calls": 0,
+      "learning_or_ranking_improvement": false
+    },
+    {
+      "source": "164cb2b1fdd9217093cc7182c1801b571908decc",
+      "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:77e34e465b514ef619ad2c02db57451c815bb478cf054eb16ce885516bd3ab7a",
+      "task": "software_repair-ignore-d2",
+      "rows": 224,
+      "unique_observations": 224,
+      "oracle_reference_cases_passed": 8064,
+      "unique_hidden_suites": 224,
+      "source_archive_deterministic": true,
+      "baseline_has_semantic_defects": true,
+      "candidate_execution_errors": 0,
+      "splits": {
+        "train": [
+          1600000,
+          128
+        ],
+        "validation": [
+          1610000,
+          32
+        ],
+        "test": [
+          1620000,
+          64
+        ]
+      },
+      "manifest": {
+        "README.md": "18ca9b4b5b1ac3f9fa0e35e6b3e7cfe025f60b95b7238684330d349095cc2f6b",
+        "environment-source.zip": "7ebf3d5bbeb9a4f014a9576ee436542cc722f96a034a6144d7f5854c52d1cc96",
+        "submission-candidate.json": "a0f3b6734f0ef716897e0842ebac44b03c287027b6cc20d11019065179290fec",
+        "test.jsonl": "cf86b89c11cb13233707dbf6bf99fdcfc9971c916fd08cd36e60b5571c4f241d",
+        "train.jsonl": "31b6b6d70eb162f07c7366020372da64ee6c89a582127dc8013d8a8697730e7e",
+        "validation.jsonl": "f1b8e64488c256263f5e49d1463e51ce986770a7da55c2836832b619b7af3523"
+      },
+      "request_sha256": "a0f3b6734f0ef716897e0842ebac44b03c287027b6cc20d11019065179290fec",
+      "public_matching_dataset_publication_required": true,
+      "approved": false,
+      "submitted": false,
+      "trained": false,
+      "model_calls": 0,
+      "learning_or_ranking_improvement": false
+    }
+  ],
+  "manifest": {
+    "README.md": "4fef3252f06f556694b88f3dcc13ff6e853db45365f1b5a3537e8bc5544b9ee9",
+    "environment-source.zip": "7ebf3d5bbeb9a4f014a9576ee436542cc722f96a034a6144d7f5854c52d1cc96",
+    "submission-candidate.json": "9e747c343c609047ce5c3e891abb7e1db443fff604b160957cbb8b72f0d1388a",
+    "train.jsonl": "7706af735cf556b1280c1c1ceb7e23fc5ebc4b8ab90ed9dc1e2ebe371a1bd4df",
+    "validation.jsonl": "539a0ccf85b5e6719dc59fc53feea54f257ba0fd22506fa09b40936dd6bc56b3",
+    "test.jsonl": "7ef34125eeae79c5f5fa0bc08d4ff2d89289e2c16831cd325c0c66438a207ade"
+  },
+  "request_sha256": "9e747c343c609047ce5c3e891abb7e1db443fff604b160957cbb8b72f0d1388a",
+  "approved": false,
+  "submitted": false,
+  "model_calls": 0,
+  "trained": false,
+  "hypothesis": "Cross-structure SOFTWARE coverage improves held-out transfer. Not demonstrated.",
+  "success_criteria": {
+    "private_software_solved_min": 1,
+    "private_total_solved_min": 4
+  },
+  "limits": [
+    "No access to trained weights for local matched evaluation",
+    "Prior proxy failures prevent signal confirmation",
+    "One evaluation draw is noisy; no ranking guarantee"
+  ]
+}
