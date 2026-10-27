@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+  packages: write
 concurrency:
   group: media-build-${{ github.ref }}
   cancel-in-progress: false
@@ -34,3 +35,44 @@ jobs:
             sleep 1
           done
           docker exec media-tcp python /app/tcp_controls.py
+          docker exec media-tcp openenv validate --url http://127.0.0.1:8000
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish exclusive media tag after controls
+        id: publish
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          TAG="ghcr.io/nicholas-ruest/openenv-decision-ledger:media-$SOURCE_SHA"
+          docker tag decision-ledger-media:test "$TAG"
+          docker push "$TAG" | tee media-push.txt
+          DIGEST=$(sed -n 's/.*digest: \(sha256:[0-9a-f]\{64\}\).*/\1/p' media-push.txt)
+          [[ "$DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
+          mkdir -p evidence
+          echo "ghcr.io/nicholas-ruest/openenv-decision-ledger@$DIGEST" > evidence/image.txt
+          echo "$SOURCE_SHA" > evidence/source.txt
+      - name: Anonymous pinned pull and normal entrypoint replay
+        run: |
+          IMAGE=$(cat evidence/image.txt)
+          export DOCKER_CONFIG=$(mktemp -d)
+          docker pull "$IMAGE"
+          docker run -d --name media-anonymous "$IMAGE"
+          trap 'docker logs media-anonymous; docker rm -f media-anonymous' EXIT
+          for n in $(seq 1 30); do
+            if docker exec media-anonymous python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health',timeout=1)" 2>/dev/null; then break; fi
+            sleep 1
+          done
+          docker exec media-anonymous openenv validate --url http://127.0.0.1:8000
+          docker exec media-anonymous python /app/tcp_controls.py > evidence/anonymous-tcp.json
+          docker exec media-anonymous python -m pip freeze > evidence/packages.txt
+          docker exec media-anonymous python -c "import json,urllib.request; print(json.dumps(json.load(urllib.request.urlopen('http://127.0.0.1:8000/schema'))))" > evidence/schema.json
+          docker image inspect "$IMAGE" > evidence/image-inspect.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: attributed-media-image-evidence
+          retention-days: 7
+          path: evidence/
