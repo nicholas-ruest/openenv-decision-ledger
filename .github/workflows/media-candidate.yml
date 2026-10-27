@@ -1,0 +1,27 @@
+name: Attributed media candidate build
+on:
+  push:
+    branches: ['research/software-stage-calibration-20261027']
+    paths: ['integrations/media-candidate/**', '.github/workflows/media-candidate.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: media-build-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build-test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download frozen licensed source
+        run: |
+          mkdir qe-upstream
+          curl -fsSL --retry 2 https://codeload.github.com/proffesor-for-testing/openenv-qe-arena/tar.gz/958198e55299eb18ad812f438a6b2ca6abaa7f5c | tar -xz --strip-components=1 -C qe-upstream
+          python integrations/media-candidate/prepare_context.py --source qe-upstream --output media-context
+      - name: Build amd64 test image
+        run: docker build --platform linux/amd64 -f media-context/Dockerfile.media -t decision-ledger-media:test media-context
+      - name: App protocol and upstream UID isolation tests
+        run: |
+          docker run --rm --entrypoint python decision-ledger-media:test -m pytest -q /app/server_controls.py /app/tests/test_shell_isolation.py
