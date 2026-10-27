@@ -18,8 +18,10 @@ def sha(value):
     return value
 
 
-def assess(rows, phase):
-    expected = {(task, seed, sample) for task in TASKS for seed in SEEDS[phase] for sample in range(4)}
+def assess(rows, phase, tasks=TASKS):
+    if tuple(tasks) not in (TASKS, TASKS[1:]):
+        raise ValueError("declared full or scaffold-only protocol required")
+    expected = {(task, seed, sample) for task in tasks for seed in SEEDS[phase] for sample in range(4)}
     observed, calls, responses = set(), set(), set()
     groups = defaultdict(list)
     settings = set()
@@ -73,17 +75,18 @@ def assess(rows, phase):
                         "productive": len(valid) == 4 and 1 in valid and any(v < 1 for v in valid)})
     if any(len(v) != 1 for v in case_by_seed.values()) or len(set.union(*case_by_seed.values())) != 2:
         raise ValueError("unmatched cases across tasks or duplicate procedural prompts")
-    return {"phase": phase, "groups": results, "settings_sha256": next(iter(settings)),
+    return {"phase": phase, "tasks": list(tasks), "joint_model_baseline": TASKS[0] in tasks,
+            "groups": results, "settings_sha256": next(iter(settings)),
             "case_ids": sorted(set.union(*case_by_seed.values())), "prompt_ids": sorted(prompt_ids),
             "call_ids": sorted(calls), "response_ids": sorted(responses),
-            "provisional_productive_tasks": [t for t in TASKS if all(g["productive"] for g in results if g["task_id"] == t)],
+            "provisional_productive_tasks": [t for t in tasks if all(g["productive"] for g in results if g["task_id"] == t)],
             "limitation": "Saved-row checks require separate raw-record attestation; no learning/promotion claim."}
 
 
-def confirm(screen_rows, confirmation_rows):
+def confirm(screen_rows, confirmation_rows, tasks=TASKS):
     # Re-derive from samples; never trust a caller's productive-summary flag.
-    screen = assess(screen_rows, "screen")
-    confirmation = assess(confirmation_rows, "confirmation")
+    screen = assess(screen_rows, "screen", tasks)
+    confirmation = assess(confirmation_rows, "confirmation", tasks)
     if screen["settings_sha256"] != confirmation["settings_sha256"]:
         raise ValueError("matched confirmation settings required")
     for field in ("case_ids", "prompt_ids", "call_ids", "response_ids"):
@@ -98,5 +101,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--phase", choices=tuple(SEEDS), required=True)
     parser.add_argument("--records", type=Path, required=True)
+    parser.add_argument("--scaffolds-only", action="store_true")
     args = parser.parse_args()
-    print(json.dumps(assess([json.loads(x) for x in args.records.read_text().splitlines() if x], args.phase), indent=2))
+    print(json.dumps(assess([json.loads(x) for x in args.records.read_text().splitlines() if x],
+                           args.phase, TASKS[1:] if args.scaffolds_only else TASKS), indent=2))

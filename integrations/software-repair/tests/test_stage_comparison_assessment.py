@@ -69,3 +69,12 @@ def test_confirmation_settings_and_identity_leakage_rejected():
     b[0]["provider_response_id_sha256"] = a[0]["provider_response_id_sha256"]
     with pytest.raises(ValueError):
         MODULE.confirm(a, b)
+
+
+def test_smaller_declared_protocol_never_counts_missing_joint_as_productive():
+    rows = [r for r in records() if r["task_id"] in MODULE.TASKS[1:]]
+    with pytest.raises(ValueError):
+        MODULE.assess(rows, "screen")
+    value = MODULE.assess(rows, "screen", MODULE.TASKS[1:])
+    assert len(value["groups"]) == 4 and not value["joint_model_baseline"]
+    assert MODULE.TASKS[0] not in value["provisional_productive_tasks"]
