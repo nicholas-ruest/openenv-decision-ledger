@@ -24,4 +24,13 @@ jobs:
         run: docker build --platform linux/amd64 -f media-context/Dockerfile.media -t decision-ledger-media:test media-context
       - name: App protocol and upstream UID isolation tests
         run: |
-          docker run --rm --entrypoint python decision-ledger-media:test -m pytest -q /app/server_controls.py /app/tests/test_shell_isolation.py
+          docker run --rm decision-ledger-media:test python -m pytest -q /app/server_controls.py /app/tests/test_shell_isolation.py
+      - name: Normal entrypoint and real TCP reference controls
+        run: |
+          docker run -d --name media-tcp decision-ledger-media:test
+          trap 'docker logs media-tcp; docker rm -f media-tcp' EXIT
+          for n in $(seq 1 30); do
+            if docker exec media-tcp python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health',timeout=1)"; then break; fi
+            sleep 1
+          done
+          docker exec media-tcp python /app/tcp_controls.py
