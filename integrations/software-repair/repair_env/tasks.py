@@ -28,6 +28,7 @@ TASK_IDS.extend(("software_repair-kv-d1", "software_repair-kv-d2"))
 TASK_IDS.extend(("software_repair-linear-d1", "software_repair-linear-d2"))
 TASK_IDS.extend(("software_repair-linear-d3", "software_repair-linear-d4"))
 TASK_IDS.extend(("software_repair-ignore-d1", "software_repair-ignore-d2"))
+TASK_IDS.extend(("software_repair-ignore-d3", "software_repair-ignore-d4"))
 TRAINING_TASK_IDS = [f"software_repair-{family}-d{d}" for family in hard_tasks.FAMILIES for d in (1, 2)]
 SOURCE_PATH = "src/solution.py"
 
@@ -209,7 +210,7 @@ def make_task(task_id, seed):
     case_task_id = ("software_repair-release-d3" if task_id == "software_repair-release-d4" else
                     "software_repair-kv-d1" if task_id == "software_repair-kv-d2" else
                     "software_repair-linear-d1" if task_id in ("software_repair-linear-d2", "software_repair-linear-d3", "software_repair-linear-d4") else
-                    "software_repair-ignore-d1" if task_id == "software_repair-ignore-d2" else task_id)
+                    "software_repair-ignore-d1" if task_id in ("software_repair-ignore-d2", "software_repair-ignore-d3", "software_repair-ignore-d4") else task_id)
     material = f"decision-ledger-code-repair-v1|{case_task_id}|{seed}"
     # Independent streams: neither hidden inputs nor answers derive from public tests.
     public_rng = random.Random(int.from_bytes(hashlib.sha256((material + "|public").encode()).digest(), "big"))
@@ -222,6 +223,12 @@ def make_task(task_id, seed):
         name, instructions, source = ("build_plan", cycle_plan.INSTRUCTIONS, cycle_plan.REFERENCE) if family == "plan" and difficulty in (3, 4) else _SPECS[family]
     if family == "linear" and difficulty in (3,4):
         instructions = linear_repair.UNGUIDED_INSTRUCTIONS
+    if family == "ignore" and difficulty in (3, 4):
+        missing = "classify_ignore" if difficulty == 3 else "rule_mode"
+        supplied = "rule_mode" if difficulty == 3 else "classify_ignore"
+        instructions += (f" Prerequisite stage: {supplied} is supplied complete. "
+                         f"Implement the placeholder {missing}; preserve the full contract. "
+                         "The d3/d4 labels identify separate scaffolds, not harder levels.")
     if family == "plan" and difficulty == 4:
         instructions += " Existing code has several semantic defects. Visible examples do not cover every graph shape in the contract; reason about the complete specification."
     case_id = hashlib.sha256(material.encode()).hexdigest()[:12]

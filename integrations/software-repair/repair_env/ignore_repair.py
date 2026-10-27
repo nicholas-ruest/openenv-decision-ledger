@@ -110,6 +110,18 @@ def classify_ignore(ignore_lines, entries):
 
 
 def initial(seed, difficulty):
+    if difficulty == 3:
+        # Prerequisite stage: rule matching is supplied; implement aggregation.
+        return HELPERS + RULE + '''
+def classify_ignore(ignore_lines, entries):
+    return {entry["path"]: False for entry in entries}
+'''
+    if difficulty == 4:
+        # Prerequisite stage: aggregation is supplied; implement rule matching.
+        return HELPERS + '''
+def rule_mode(line, path, is_dir):
+    return -1
+''' + CLASSIFIER
     if difficulty == 2:
         return SCAFFOLD
     # An executable parent-pruning defect, exercised by every witness suite.
