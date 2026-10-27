@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-19",
+  "source": "5529bb817ba9b1daabc12650fe9bce38b33e7c65",
+  "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:4bb83cac910c855f0f136a2d2c38026459e01f88bb78f74a4d24ddb2279b979e",
+  "ci": "https://github.com/nicholas-ruest/openenv-decision-ledger/actions/runs/39280953109",
+  "task_id": "software_repair-release-d1",
+  "seeds": [1010000, 1010100],
+  "rollouts": 8,
+  "unique_prompts": 2,
+  "valid_full": 0,
+  "valid_partial": 0,
+  "valid_wrong": 0,
+  "failures": {"completion_truncated": 5, "episode_budget_exceeded": 2, "invalid_json_action": 1},
+  "genuine_signal_screened": false,
+  "confirmation_launched": false,
+  "within_group_identity_and_sources_verified": true,
+  "raw_records_sha256": "1f83dd0ffb8c4a995739c0907372d89f5296aba3af041710b845fbe68b68fc4c",
+  "offline_finish_replay": {
+    "new_model_calls": 0,
+    "live_solve_count_changed": false,
+    "fully_repaired_saved_workspaces": 2,
+    "execution_failed_saved_workspaces": 5,
+    "unchanged_saved_workspaces": 1,
+    "note": "Two saved workspaces pass all 30 hidden cases under a posthoc submit. Original failed rollout labels are retained. One fractional finish reward includes 18 execution errors and is not a genuine partial semantic answer."
+  },
+  "diagnosis": [
+    "Models read all files, repeating README instructions already sent at reset.",
+    "Full rewrites plus detailed test observations consumed the shared 8192 token completion/observation allowance before explicit submission.",
+    "Two rewritten modules exceeded the existing four-function limit, which was absent from README guidance."
+  ],
+  "next_change": "Document the existing function-count limit, guide direct source reads, and avoid repeating input arguments in test feedback; retain complete examples in the visible test file.",
+  "default_training_mix_changed": false,
+  "is_training": false,
+  "ranking_improvement": null,
+  "arena_submission": false,
+  "limitations": ["Posthoc finish diagnostics are not new model solves.", "Hosted checkpoint/thinking and Arena wrapper equivalence remain unattested."]
+}

@@ -1,0 +1,1343 @@
+{
+  "audit_version": 2,
+  "seed_start": 1090400,
+  "seed_count_per_task": 4,
+  "unique_task_instances": 8,
+  "summary": {
+    "software_repair-release-d1": {
+      "instances": 4,
+      "in_provisional_training_mix": false,
+      "baseline_public_passed": [
+        2,
+        3,
+        1,
+        2
+      ],
+      "baseline_hidden_passed": [
+        6,
+        7,
+        10,
+        7
+      ],
+      "controlled_variants": 24,
+      "controlled_execution_failures": 0,
+      "valid_zero_reward": 4,
+      "valid_partial_reward": 17,
+      "valid_full_reward": 3,
+      "public_full_hidden_incomplete": 1,
+      "isolated_catalogued_defects": 12,
+      "isolated_public_semantic_detections": 8,
+      "isolated_hidden_semantic_activations": 9,
+      "isolated_hidden_active_public_missed": 1,
+      "isolated_execution_failures": 0
+    },
+    "software_repair-release-d2": {
+      "instances": 4,
+      "in_provisional_training_mix": false,
+      "baseline_public_passed": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "baseline_hidden_passed": [
+        10,
+        10,
+        10,
+        10
+      ],
+      "controlled_variants": 24,
+      "controlled_execution_failures": 0,
+      "valid_zero_reward": 0,
+      "valid_partial_reward": 24,
+      "valid_full_reward": 0,
+      "public_full_hidden_incomplete": 0,
+      "isolated_catalogued_defects": 12,
+      "isolated_public_semantic_detections": 12,
+      "isolated_hidden_semantic_activations": 12,
+      "isolated_hidden_active_public_missed": 0,
+      "isolated_execution_failures": 0
+    }
+  },
+  "rows": [
+    {
+      "task_id": "software_repair-release-d1",
+      "seed": 1090400,
+      "task_fingerprint": "ec9c580984f4bd5d52b4b37f518a6ee93f57fc9265d83df3c89b18f873ab2796",
+      "baseline": {
+        "public_passed": 2,
+        "public_errors": {},
+        "hidden_passed": 6,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 3,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage"
+          ],
+          "public_passed": 2,
+          "public_errors": {},
+          "hidden_passed": 7,
+          "hidden_errors": {},
+          "formula_reward": 0.041666666666666664,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 16,
+          "hidden_errors": {},
+          "formula_reward": 0.4166666666666667,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "inclusive_budget"
+          ],
+          "public_passed": 2,
+          "public_errors": {},
+          "hidden_passed": 6,
+          "hidden_errors": {},
+          "formula_reward": 0.0,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage",
+            "coverage_before_cost"
+          ],
+          "public_passed": 6,
+          "public_errors": {},
+          "hidden_passed": 27,
+          "hidden_errors": {},
+          "formula_reward": 0.875,
+          "public_full_hidden_incomplete": true
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage",
+            "inclusive_budget"
+          ],
+          "public_passed": 2,
+          "public_errors": {},
+          "hidden_passed": 7,
+          "hidden_errors": {},
+          "formula_reward": 0.041666666666666664,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost",
+            "inclusive_budget"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 19,
+          "hidden_errors": {},
+          "formula_reward": 0.5416666666666666,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "buildable_coverage",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 19,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 11,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "coverage_before_cost",
+          "public_passed": 2,
+          "public_errors": {},
+          "hidden_passed": 7,
+          "hidden_errors": {},
+          "public_wrong_answers": 4,
+          "hidden_wrong_answers": 23,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "inclusive_budget",
+          "public_passed": 6,
+          "public_errors": {},
+          "hidden_passed": 27,
+          "hidden_errors": {},
+          "public_wrong_answers": 0,
+          "hidden_wrong_answers": 3,
+          "public_semantic_detection": false,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": true
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 3196,
+        "tests/test_public.py": 5673,
+        "README.md": 3802,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 13000,
+        "source": 3196,
+        "individual_public_cases": [
+          744,
+          1128,
+          1060,
+          1056,
+          759,
+          910
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-release-d1",
+      "seed": 1090401,
+      "task_fingerprint": "0de5ed44c6b53038204b2309f11c4530aa878dd4545b77527e77ee47deb19a45",
+      "baseline": {
+        "public_passed": 3,
+        "public_errors": {},
+        "hidden_passed": 7,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 3,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost"
+          ],
+          "public_passed": 5,
+          "public_errors": {},
+          "hidden_passed": 26,
+          "hidden_errors": {},
+          "formula_reward": 0.8260869565217391,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "inclusive_budget"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 8,
+          "hidden_errors": {},
+          "formula_reward": 0.043478260869565216,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "suite_tie_break"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 7,
+          "hidden_errors": {},
+          "formula_reward": 0.0,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost",
+            "inclusive_budget"
+          ],
+          "public_passed": 6,
+          "public_errors": {},
+          "hidden_passed": 30,
+          "hidden_errors": {},
+          "formula_reward": 1.0,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost",
+            "suite_tie_break"
+          ],
+          "public_passed": 5,
+          "public_errors": {},
+          "hidden_passed": 26,
+          "hidden_errors": {},
+          "formula_reward": 0.8260869565217391,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "inclusive_budget",
+            "suite_tie_break"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 8,
+          "hidden_errors": {},
+          "formula_reward": 0.043478260869565216,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "coverage_before_cost",
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 8,
+          "hidden_errors": {},
+          "public_wrong_answers": 3,
+          "hidden_wrong_answers": 22,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "inclusive_budget",
+          "public_passed": 5,
+          "public_errors": {},
+          "hidden_passed": 26,
+          "hidden_errors": {},
+          "public_wrong_answers": 1,
+          "hidden_wrong_answers": 4,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "suite_tie_break",
+          "public_passed": 6,
+          "public_errors": {},
+          "hidden_passed": 30,
+          "hidden_errors": {},
+          "public_wrong_answers": 0,
+          "hidden_wrong_answers": 0,
+          "public_semantic_detection": false,
+          "hidden_semantic_activation": false,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 3184,
+        "tests/test_public.py": 5515,
+        "README.md": 3802,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 12828,
+        "source": 3184,
+        "individual_public_cases": [
+          692,
+          1014,
+          1157,
+          966,
+          831,
+          839
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-release-d1",
+      "seed": 1090402,
+      "task_fingerprint": "b3511fde755985a8c1f71f3fdceaa271591e21048ed25c2525797dfbca4d3073",
+      "baseline": {
+        "public_passed": 1,
+        "public_errors": {},
+        "hidden_passed": 10,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 3,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 11,
+          "hidden_errors": {},
+          "formula_reward": 0.05,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 22,
+          "hidden_errors": {},
+          "formula_reward": 0.6,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "suite_tie_break"
+          ],
+          "public_passed": 1,
+          "public_errors": {},
+          "hidden_passed": 10,
+          "hidden_errors": {},
+          "formula_reward": 0.0,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage",
+            "coverage_before_cost"
+          ],
+          "public_passed": 6,
+          "public_errors": {},
+          "hidden_passed": 30,
+          "hidden_errors": {},
+          "formula_reward": 1.0,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage",
+            "suite_tie_break"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 11,
+          "hidden_errors": {},
+          "formula_reward": 0.05,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost",
+            "suite_tie_break"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 22,
+          "hidden_errors": {},
+          "formula_reward": 0.6,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "buildable_coverage",
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 22,
+          "hidden_errors": {},
+          "public_wrong_answers": 3,
+          "hidden_wrong_answers": 8,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "coverage_before_cost",
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 11,
+          "hidden_errors": {},
+          "public_wrong_answers": 3,
+          "hidden_wrong_answers": 19,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "suite_tie_break",
+          "public_passed": 6,
+          "public_errors": {},
+          "hidden_passed": 30,
+          "hidden_errors": {},
+          "public_wrong_answers": 0,
+          "hidden_wrong_answers": 0,
+          "public_semantic_detection": false,
+          "hidden_semantic_activation": false,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 3203,
+        "tests/test_public.py": 6217,
+        "README.md": 3802,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 13551,
+        "source": 3203,
+        "individual_public_cases": [
+          875,
+          1106,
+          1085,
+          1254,
+          953,
+          928
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-release-d1",
+      "seed": 1090403,
+      "task_fingerprint": "6e31f4c3e56587c7cb4a6ba6f83c42ad2438885395f0a852f4ecf5e4656c8ba7",
+      "baseline": {
+        "public_passed": 2,
+        "public_errors": {},
+        "hidden_passed": 7,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 3,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 12,
+          "hidden_errors": {},
+          "formula_reward": 0.21739130434782608,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5652173913043478,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "suite_tie_break"
+          ],
+          "public_passed": 2,
+          "public_errors": {},
+          "hidden_passed": 7,
+          "hidden_errors": {},
+          "formula_reward": 0.0,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage",
+            "coverage_before_cost"
+          ],
+          "public_passed": 6,
+          "public_errors": {},
+          "hidden_passed": 30,
+          "hidden_errors": {},
+          "formula_reward": 1.0,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage",
+            "suite_tie_break"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 12,
+          "hidden_errors": {},
+          "formula_reward": 0.21739130434782608,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost",
+            "suite_tie_break"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5652173913043478,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "buildable_coverage",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "coverage_before_cost",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 12,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 18,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "suite_tie_break",
+          "public_passed": 6,
+          "public_errors": {},
+          "hidden_passed": 30,
+          "hidden_errors": {},
+          "public_wrong_answers": 0,
+          "hidden_wrong_answers": 0,
+          "public_semantic_detection": false,
+          "hidden_semantic_activation": false,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 3203,
+        "tests/test_public.py": 6265,
+        "README.md": 3802,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 13599,
+        "source": 3203,
+        "individual_public_cases": [
+          955,
+          878,
+          1202,
+          1228,
+          782,
+          1204
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-release-d2",
+      "seed": 1090400,
+      "task_fingerprint": "eff6105c9601d0d4bf0e58b72ef8e9e5e91e85385beb17c5e227b11865fcb9cf",
+      "baseline": {
+        "public_passed": 2,
+        "public_errors": {},
+        "hidden_passed": 10,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 3,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "inclusive_budget"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage",
+            "coverage_before_cost"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage",
+            "inclusive_budget"
+          ],
+          "public_passed": 5,
+          "public_errors": {},
+          "hidden_passed": 25,
+          "hidden_errors": {},
+          "formula_reward": 0.75,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost",
+            "inclusive_budget"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "buildable_coverage",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "coverage_before_cost",
+          "public_passed": 5,
+          "public_errors": {},
+          "hidden_passed": 25,
+          "hidden_errors": {},
+          "public_wrong_answers": 1,
+          "hidden_wrong_answers": 5,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "inclusive_budget",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 3196,
+        "tests/test_public.py": 4377,
+        "README.md": 3802,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 11704,
+        "source": 3196,
+        "individual_public_cases": [
+          745,
+          650,
+          575,
+          838,
+          1007,
+          546
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-release-d2",
+      "seed": 1090401,
+      "task_fingerprint": "ce6a8fa9860510917669a5a5fb0d24fba3333b6b19aa9d5808ddb858fb8612a5",
+      "baseline": {
+        "public_passed": 2,
+        "public_errors": {},
+        "hidden_passed": 10,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 3,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "inclusive_budget"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "suite_tie_break"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost",
+            "inclusive_budget"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost",
+            "suite_tie_break"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "inclusive_budget",
+            "suite_tie_break"
+          ],
+          "public_passed": 5,
+          "public_errors": {},
+          "hidden_passed": 25,
+          "hidden_errors": {},
+          "formula_reward": 0.75,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "coverage_before_cost",
+          "public_passed": 5,
+          "public_errors": {},
+          "hidden_passed": 25,
+          "hidden_errors": {},
+          "public_wrong_answers": 1,
+          "hidden_wrong_answers": 5,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "inclusive_budget",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "suite_tie_break",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 3184,
+        "tests/test_public.py": 4378,
+        "README.md": 3802,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 11691,
+        "source": 3184,
+        "individual_public_cases": [
+          747,
+          656,
+          576,
+          838,
+          995,
+          550
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-release-d2",
+      "seed": 1090402,
+      "task_fingerprint": "784aa2680c8b7a113a1063667e2af8b3859d9777b37c5f0c7d3cb001a42db9e5",
+      "baseline": {
+        "public_passed": 2,
+        "public_errors": {},
+        "hidden_passed": 10,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 3,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "suite_tie_break"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage",
+            "coverage_before_cost"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage",
+            "suite_tie_break"
+          ],
+          "public_passed": 5,
+          "public_errors": {},
+          "hidden_passed": 25,
+          "hidden_errors": {},
+          "formula_reward": 0.75,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost",
+            "suite_tie_break"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "buildable_coverage",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "coverage_before_cost",
+          "public_passed": 5,
+          "public_errors": {},
+          "hidden_passed": 25,
+          "hidden_errors": {},
+          "public_wrong_answers": 1,
+          "hidden_wrong_answers": 5,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "suite_tie_break",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 3203,
+        "tests/test_public.py": 4371,
+        "README.md": 3802,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 11705,
+        "source": 3203,
+        "individual_public_cases": [
+          744,
+          647,
+          575,
+          832,
+          1008,
+          549
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    },
+    {
+      "task_id": "software_repair-release-d2",
+      "seed": 1090403,
+      "task_fingerprint": "350d7a59511ec35d115b7f3382cc907a68057bb199ef42884c78084bf8c23be4",
+      "baseline": {
+        "public_passed": 2,
+        "public_errors": {},
+        "hidden_passed": 10,
+        "hidden_errors": {}
+      },
+      "reference": {
+        "public_passed": 6,
+        "public_errors": {},
+        "hidden_passed": 30,
+        "hidden_errors": {}
+      },
+      "local_edit_count": 3,
+      "controlled_variants": [
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "suite_tie_break"
+          ],
+          "public_passed": 3,
+          "public_errors": {},
+          "hidden_passed": 15,
+          "hidden_errors": {},
+          "formula_reward": 0.25,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage",
+            "coverage_before_cost"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "buildable_coverage",
+            "suite_tie_break"
+          ],
+          "public_passed": 5,
+          "public_errors": {},
+          "hidden_passed": 25,
+          "hidden_errors": {},
+          "formula_reward": 0.75,
+          "public_full_hidden_incomplete": false
+        },
+        {
+          "kind": "local_edit_subset",
+          "edits": [
+            "coverage_before_cost",
+            "suite_tie_break"
+          ],
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "formula_reward": 0.5,
+          "public_full_hidden_incomplete": false
+        }
+      ],
+      "isolated_defects": [
+        {
+          "defect": "buildable_coverage",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "coverage_before_cost",
+          "public_passed": 5,
+          "public_errors": {},
+          "hidden_passed": 25,
+          "hidden_errors": {},
+          "public_wrong_answers": 1,
+          "hidden_wrong_answers": 5,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        },
+        {
+          "defect": "suite_tie_break",
+          "public_passed": 4,
+          "public_errors": {},
+          "hidden_passed": 20,
+          "hidden_errors": {},
+          "public_wrong_answers": 2,
+          "hidden_wrong_answers": 10,
+          "public_semantic_detection": true,
+          "hidden_semantic_activation": true,
+          "hidden_active_public_missed": false
+        }
+      ],
+      "isolated_defect_scope": "catalogued local edits only; empty-stub component controls excluded",
+      "workspace_utf8_bytes": {
+        "src/solution.py": 3203,
+        "tests/test_public.py": 4364,
+        "README.md": 3802,
+        "pyproject.toml": 97
+      },
+      "read_content_utf8_bytes": {
+        "all": 11698,
+        "source": 3203,
+        "individual_public_cases": [
+          747,
+          655,
+          575,
+          830,
+          989,
+          552
+        ]
+      },
+      "public_hidden_disjoint": true,
+      "counts_as_model_rollout": false
+    }
+  ],
+  "cohort_diversity": {
+    "case_occurrences": 288,
+    "distinct_input_keys": 288,
+    "repeated_input_occurrences": 0,
+    "duplicated_input_keys": 0,
+    "cross_seed_duplicate_input_keys": 0,
+    "cross_task_duplicate_input_keys": 0,
+    "public_hidden_overlap_input_keys": 0,
+    "conflicting_expected_label_keys": 0,
+    "seed_independent_content_suites": 8,
+    "duplicated_content_suites": {},
+    "duplicate_input_owners": {},
+    "conflicting_label_owners": {},
+    "identity_limitations": [
+      "Input dict insertion order is preserved; expected dict order is ignored.",
+      "Exact typed inputs are compared within the same reference-AST contract, not up to renaming.",
+      "Seed and source comments are excluded from suite signatures; these are not observed prompt hashes.",
+      "Cross-level reuse is reported, not automatically classified as data leakage."
+    ]
+  },
+  "new_model_calls": 0,
+  "is_training": false,
+  "training_mix_changed": false,
+  "limitations": [
+    "Controlled edits are constructed diagnostics, not model actions.",
+    "The environment reward formula is reproduced; native parity is tested separately.",
+    "No within-prompt model variance, training or ranking gain is established.",
+    "Single-edit tasks have no proper nonempty edit subset.",
+    "Component controls for empty stubs are not local-edit subsets.",
+    "Byte counts reproduce read content only, not observation envelopes or tokenizer costs.",
+    "Isolated mutants measure catalogued defect detection, not arbitrary candidate-code coverage."
+  ],
+  "source_revision": "e40473cb64cccac51884731b4fa4e5f8508b6e89",
+  "source_files_sha256": {
+    "scripts/audit-software-curriculum.py": "c50892f638fae6b0c8ee673042a72f7a16074a4bd1b941609cbed3264e069cc8",
+    "integrations/software-repair/repair_env/__init__.py": "aecafe955038a15f8cbbca11f39b4166adca30cc7ca0027d530d90942c80b52f",
+    "integrations/software-repair/repair_env/app.py": "973f5ef06580f7ad6cce0f7ba7557578a491e97b157d155457bb0de8b714ceb3",
+    "integrations/software-repair/repair_env/cycle_plan.py": "f56d5d65809deb0580df3a4a07b0fc797c27096cf761fbbb3d078d5889ae32eb",
+    "integrations/software-repair/repair_env/environment.py": "c1e6dee6b7cd55f65d7e84c95860c0399d1fdea7388971436e2c49f1a468002e",
+    "integrations/software-repair/repair_env/hard_tasks.py": "6093bd954ae91e5806c8b65db42aa99263a2f214f7454a73ac100a3ccef01d4f",
+    "integrations/software-repair/repair_env/merge_curriculum.py": "6bb63a1648f104fcc8fc3dde72396a0674233ea0dd1c200975ad320e96b86d12",
+    "integrations/software-repair/repair_env/release_curriculum.py": "a93320745e6e59c770eb6d35c34f6dcb327139cea79044e7073fa581bb9e4d5f",
+    "integrations/software-repair/repair_env/release_plan.py": "b5e549f78d167259f81a141dd43c685453124cdab3889308445f71c2ee9da0bf",
+    "integrations/software-repair/repair_env/replay_curriculum.py": "96fb75dfb6946bb36f1c9f3d5509ae3e7ce7368ffd139cab168dbe5e96002ca5",
+    "integrations/software-repair/repair_env/runner.py": "8b6c5d9e6d75fad912c7e179bdaf8284c3bbb15ecfa8a95250e539714474d8cc",
+    "integrations/software-repair/repair_env/tasks.py": "c354c4ac1261ac3e65ea188c5afd474db9029a5a6a7c50528b2388ce66d4020c"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-19",
+  "source_revision": "8b0fa7d136830944e22a0a7d0a828a25ce230479",
+  "task_id": "software_repair-plan-d4",
+  "design": "three seeded semantic defects sampled from six classes; same independent cycle-aware contract oracle",
+  "unit_tests_passed": 174,
+  "offline_probes": {
+    "seeds": [
+      1000000,
+      1000001,
+      1000002,
+      1000003,
+      1000004,
+      1000005,
+      1000006,
+      1000007,
+      1000008,
+      1000009,
+      1000010,
+      1000011,
+      1000012,
+      1000013,
+      1000014,
+      1000015,
+      1000016,
+      1000017,
+      1000018,
+      1000019,
+      1000020,
+      1000021,
+      1000022,
+      1000023
+    ],
+    "distinct_broken_code_variants": 13,
+    "independent_oracle_comparisons": 864,
+    "initial_hidden_passes_range": [
+      8,
+      18
+    ],
+    "hidden_cases_per_seed": 30,
+    "initial_execution_failures": 0,
+    "all_public_hidden_inputs_disjoint": true,
+    "prior_measured_d3_fingerprints_unchanged": true
+  },
+  "screen_plan": {
+    "seeds": [
+      1000000,
+      1000100
+    ],
+    "samples_per_prompt": 4,
+    "unique_prompts": 2,
+    "fresh_disjoint_confirmation_seeds": [
+      1001000,
+      1001100
+    ],
+    "confirmation_requires_genuine_full_and_valid_partial_or_wrong_outcomes": true,
+    "model_screen_started": false
+  },
+  "decision": {
+    "default_training_mix_changed": false,
+    "diagnostic_task_promoted": false,
+    "reward_or_interpreter_changed": false,
+    "model_calls_so_far": 0,
+    "is_training": false,
+    "ranking_improvement": null,
+    "arena_submission": false
+  },
+  "limits": [
+    "Oracle and mutation controls are not model solves.",
+    "Example tests deliberately cover selected shapes; the full contract explicitly includes additional graph shapes.",
+    "No evidence of productive same-prompt model reward variance yet.",
+    "Retain prior validated runtime as rollback until native image controls pass."
+  ]
+}

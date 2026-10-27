@@ -1,0 +1,33 @@
+{
+  "old_source": "c95e6fe79e44c9b1514fd59e186a0a70ac424858",
+  "current_runtime_source": "43b548debcb469af196a282bad07fc3bd8d33b15",
+  "dataset": "GlobalBusinessAdvisors/openenv-decision-ledger",
+  "dataset_revision": "063900b75ac26423166a80d11e814092b1d05627",
+  "public_tasks_sha256": "d197b7ffe06f8a2913d2cdf38943fb4b858a1c3e3200ab9971edc8e2faca2b64",
+  "task_instances": 128,
+  "same_task_seed_keys": true,
+  "exact_typed_task_content_matches": 128,
+  "old_source_alignment": {
+    "rows": 128,
+    "exact_visible_files": 128,
+    "exact_instructions": 128,
+    "exact_initial_source": 128,
+    "exact_readme": 128,
+    "exact_test_rendering": 128
+  },
+  "current_runtime_alignment": {
+    "rows": 128,
+    "exact_visible_files": 0,
+    "exact_instructions": 128,
+    "exact_initial_source": 128,
+    "exact_readme": 0,
+    "exact_test_rendering": 0
+  },
+  "source_archive_matches_current_runtime": false,
+  "workspace_interface_and_documentation_differ": true,
+  "interpretation": "Public task content is unchanged; the historical runtime archive, action interface and workspace rendering must not be described as the current runtime.",
+  "is_learning_evidence": false,
+  "is_submission_approval": false,
+  "new_model_calls": 0,
+  "submitted": false
+}

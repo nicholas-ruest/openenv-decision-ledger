@@ -1,0 +1,139 @@
+{
+  "date": "2026-10-20",
+  "source_parent": "2a9f79f9eb00c1677c7a096319638be6ccd727c0",
+  "validated_review_runtime_retained": "7156868d300b29037440f69361ceca5b02da5724",
+  "audit_source_content_hashes": {
+    "scripts/audit-software-curriculum.py": "43c83f8e1c2dc0c794ec9283a3edd9a98eb029734fd65e4872bb27d2723cd08d",
+    "integrations/software-repair/repair_env/__init__.py": "aecafe955038a15f8cbbca11f39b4166adca30cc7ca0027d530d90942c80b52f",
+    "integrations/software-repair/repair_env/app.py": "973f5ef06580f7ad6cce0f7ba7557578a491e97b157d155457bb0de8b714ceb3",
+    "integrations/software-repair/repair_env/cycle_plan.py": "f56d5d65809deb0580df3a4a07b0fc797c27096cf761fbbb3d078d5889ae32eb",
+    "integrations/software-repair/repair_env/environment.py": "c1e6dee6b7cd55f65d7e84c95860c0399d1fdea7388971436e2c49f1a468002e",
+    "integrations/software-repair/repair_env/hard_tasks.py": "6093bd954ae91e5806c8b65db42aa99263a2f214f7454a73ac100a3ccef01d4f",
+    "integrations/software-repair/repair_env/release_plan.py": "b5e549f78d167259f81a141dd43c685453124cdab3889308445f71c2ee9da0bf",
+    "integrations/software-repair/repair_env/replay_curriculum.py": "96fb75dfb6946bb36f1c9f3d5509ae3e7ce7368ffd139cab168dbe5e96002ca5",
+    "integrations/software-repair/repair_env/runner.py": "8b6c5d9e6d75fad912c7e179bdaf8284c3bbb15ecfa8a95250e539714474d8cc",
+    "integrations/software-repair/repair_env/tasks.py": "7f9b86a3b34ee0a46d09f26c8ed40ef2ed79d664093338ff38bb258c0be8e05f"
+  },
+  "archives": [
+    {
+      "name": "replay-curriculum-diagnostic-screen-20261020.json",
+      "sha256": "7ef4cd142842c308a45cc6796b88a49f17e6ae454dc61e6df563499b82817f12",
+      "seed_start": 1052000,
+      "seed_count_per_task": 8,
+      "source_files_sha256": {
+        "scripts/audit-software-curriculum.py": "43c83f8e1c2dc0c794ec9283a3edd9a98eb029734fd65e4872bb27d2723cd08d",
+        "integrations/software-repair/repair_env/__init__.py": "aecafe955038a15f8cbbca11f39b4166adca30cc7ca0027d530d90942c80b52f",
+        "integrations/software-repair/repair_env/app.py": "973f5ef06580f7ad6cce0f7ba7557578a491e97b157d155457bb0de8b714ceb3",
+        "integrations/software-repair/repair_env/cycle_plan.py": "f56d5d65809deb0580df3a4a07b0fc797c27096cf761fbbb3d078d5889ae32eb",
+        "integrations/software-repair/repair_env/environment.py": "c1e6dee6b7cd55f65d7e84c95860c0399d1fdea7388971436e2c49f1a468002e",
+        "integrations/software-repair/repair_env/hard_tasks.py": "6093bd954ae91e5806c8b65db42aa99263a2f214f7454a73ac100a3ccef01d4f",
+        "integrations/software-repair/repair_env/release_plan.py": "b5e549f78d167259f81a141dd43c685453124cdab3889308445f71c2ee9da0bf",
+        "integrations/software-repair/repair_env/replay_curriculum.py": "96fb75dfb6946bb36f1c9f3d5509ae3e7ce7368ffd139cab168dbe5e96002ca5",
+        "integrations/software-repair/repair_env/runner.py": "8b6c5d9e6d75fad912c7e179bdaf8284c3bbb15ecfa8a95250e539714474d8cc",
+        "integrations/software-repair/repair_env/tasks.py": "7f9b86a3b34ee0a46d09f26c8ed40ef2ed79d664093338ff38bb258c0be8e05f"
+      }
+    },
+    {
+      "name": "replay-curriculum-diagnostic-recheck-20261020.json",
+      "sha256": "b6901af36cc6466f21d68848acaf18e65730791722963e0e9ec945542f6c549d",
+      "seed_start": 1055000,
+      "seed_count_per_task": 8,
+      "source_files_sha256": {
+        "scripts/audit-software-curriculum.py": "43c83f8e1c2dc0c794ec9283a3edd9a98eb029734fd65e4872bb27d2723cd08d",
+        "integrations/software-repair/repair_env/__init__.py": "aecafe955038a15f8cbbca11f39b4166adca30cc7ca0027d530d90942c80b52f",
+        "integrations/software-repair/repair_env/app.py": "973f5ef06580f7ad6cce0f7ba7557578a491e97b157d155457bb0de8b714ceb3",
+        "integrations/software-repair/repair_env/cycle_plan.py": "f56d5d65809deb0580df3a4a07b0fc797c27096cf761fbbb3d078d5889ae32eb",
+        "integrations/software-repair/repair_env/environment.py": "c1e6dee6b7cd55f65d7e84c95860c0399d1fdea7388971436e2c49f1a468002e",
+        "integrations/software-repair/repair_env/hard_tasks.py": "6093bd954ae91e5806c8b65db42aa99263a2f214f7454a73ac100a3ccef01d4f",
+        "integrations/software-repair/repair_env/release_plan.py": "b5e549f78d167259f81a141dd43c685453124cdab3889308445f71c2ee9da0bf",
+        "integrations/software-repair/repair_env/replay_curriculum.py": "96fb75dfb6946bb36f1c9f3d5509ae3e7ce7368ffd139cab168dbe5e96002ca5",
+        "integrations/software-repair/repair_env/runner.py": "8b6c5d9e6d75fad912c7e179bdaf8284c3bbb15ecfa8a95250e539714474d8cc",
+        "integrations/software-repair/repair_env/tasks.py": "7f9b86a3b34ee0a46d09f26c8ed40ef2ed79d664093338ff38bb258c0be8e05f"
+      }
+    }
+  ],
+  "summary": {
+    "software_repair-replay-d2": {
+      "unique_instances": 16,
+      "baseline_hidden_passed": [
+        0
+      ],
+      "reference_case_agreements": 576,
+      "controlled_single_fix_variants": 32,
+      "valid_zero_reward": 32,
+      "valid_partial_reward": 0,
+      "valid_full_reward": 0,
+      "rewards": [
+        0.0
+      ],
+      "hidden_execution_errors": 0,
+      "workspace_utf8_bytes": {
+        "minimum": 9065,
+        "maximum": 9286,
+        "mean": 9195.9375
+      }
+    },
+    "software_repair-replay-d3": {
+      "unique_instances": 16,
+      "baseline_hidden_passed": [
+        0
+      ],
+      "reference_case_agreements": 576,
+      "controlled_single_fix_variants": 32,
+      "valid_zero_reward": 0,
+      "valid_partial_reward": 32,
+      "valid_full_reward": 0,
+      "rewards": [
+        0.3333333333333333,
+        0.5
+      ],
+      "hidden_execution_errors": 0,
+      "workspace_utf8_bytes": {
+        "minimum": 9199,
+        "maximum": 9248,
+        "mean": 9226
+      }
+    }
+  },
+  "unique_task_instances": 32,
+  "reference_oracle_case_agreements": 1152,
+  "case_identity_checks": {
+    "distinct_task_fingerprints": 32,
+    "public_hidden_disjoint_in_every_instance": true
+  },
+  "preserved": [
+    "Initial source AST and reference source match replay-d2.",
+    "Task instructions, independent oracle and reward formula unchanged.",
+    "Each case contains18 events in both tasks.",
+    "Interpreter/resource limits unchanged.",
+    "Default eight-task export unchanged; replay-d3 is diagnostic only."
+  ],
+  "local_tests": {
+    "passed": 43,
+    "native_parity_skipped": 5,
+    "reason": "OpenEnv not installed locally; actual native environment parity requires CI."
+  },
+  "new_model_calls": 0,
+  "is_training": false,
+  "model_signal_confirmed": false,
+  "mix_adoption": false,
+  "ranking_improvement": null,
+  "limitations": [
+    "Repairs are constructed controls, not sampled model actions or GRPO groups.",
+    "Case distributions and visible workspace differ between tasks; this is not a matched-prompt causal model comparison.",
+    "Different procedural seeds confirm an offline generator property, not model learning.",
+    "UTF8 workspace bytes are not tokenizer counts; wrapper/checkpoint/thinking equivalence to Arena is unattested.",
+    "Passing native controls validates environment behavior, not model signal or mix adoption."
+  ],
+  "ci_verification": {
+    "run": 39371163213,
+    "conclusion": "SUCCESS",
+    "source_revision": "9f424db15ba9d8ebb4090863e8f990bffa134aee",
+    "tests_passed": 290,
+    "test_seconds": 68.96,
+    "native_parity_checks_ran": true,
+    "anonymous_native_controls": 120,
+    "sdk_validation": "SUCCESS",
+    "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:442932a2cdc0906726c77db3c7cf2d15ff8314eab74b95a4a6c96680f082243e"
+  }
+}

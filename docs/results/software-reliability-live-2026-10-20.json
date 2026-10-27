@@ -1,0 +1,72 @@
+{
+  "source_revision": "e40473cb64cccac51884731b4fa4e5f8508b6e89",
+  "profile": "repair_reliability",
+  "purpose": "reliability_only",
+  "task": "software_repair-merge-d3",
+  "seed": 1086000,
+  "unique_prompts": 1,
+  "independent_samples": 2,
+  "thinking_requested": true,
+  "thinking_verified": false,
+  "checkpoint_and_arena_wrapper_attested": false,
+  "model": "Qwen/Qwen3.8-27B",
+  "provider": "deepinfra",
+  "request_timeout_seconds": 180,
+  "worker_wall_seconds": 600,
+  "genuine_signal_screened": false,
+  "sampling_identity_verified": true,
+  "groups": [
+    {
+      "task_id": "software_repair-merge-d3",
+      "seed": 1086000,
+      "samples": 2,
+      "valid": 1,
+      "full": 1,
+      "partial": 0,
+      "wrong": 0,
+      "valid_rewards": [
+        1
+      ],
+      "valid_reward_std": 0,
+      "failures": {
+        "provider_or_reservation_failure": 1
+      },
+      "prompt_sha256": "3075725b61e8bede5f52e319f6716c24b832d1efaa5c12d6f369e2b0b181a9b7",
+      "prompt_identity_verified": true,
+      "prompt_identity_unavailable_samples": 0,
+      "productive": false
+    }
+  ],
+  "rows": [
+    {
+      "sample": 0,
+      "reward": 0,
+      "solved": false,
+      "failure": "provider_or_reservation_failure",
+      "failure_type": "HTTPError",
+      "hidden_wrong_answers": null,
+      "hidden_execution_rejections": null,
+      "returned_responses": 2
+    },
+    {
+      "sample": 1,
+      "reward": 1,
+      "solved": true,
+      "failure": null,
+      "failure_type": null,
+      "hidden_wrong_answers": 0,
+      "hidden_execution_rejections": 0,
+      "returned_responses": 5
+    }
+  ],
+  "archive_sha256": {
+    "protocol.json": "1893fb32675906149556b439c40b9372f54a23ef2ee2888dbc5c6af4cc856a6e",
+    "episodes.jsonl": "aa399bfcb6e015ce3b9aa5d45d9b7211000256a91d5ce4a7762e9bbb6053b4a0",
+    "complete.json": "6f4b4b9a1021858caeae2f12353f0ffc57ec1e2ebb3c582544b3c3bf65679f5b"
+  },
+  "model_training": false,
+  "arena_submission": false,
+  "learning_or_ranking_improvement": false,
+  "causal_before_after_comparison": false,
+  "limits": "Different prompt and sample count; one valid completion only. HTTP status was not recorded; no attribution to quota, rate limit or upstream outage is justified."
+}
