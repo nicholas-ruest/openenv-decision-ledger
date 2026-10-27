@@ -1,0 +1,28 @@
+{
+  "status": "passed",
+  "row_counts": {
+    "train": 384,
+    "validation": 96,
+    "test": 192
+  },
+  "unique_seeds": 672,
+  "unique_hidden_suites": 672,
+  "source_files_verified_against_public_frozen_source": 19,
+  "oracle_reference_checks": 24192,
+  "manifest": {
+    "README.md": "de054546de12f4b28fd71e7cd6aa3b37fab112934ad0944f16d50e58bd271b4d",
+    "environment-source.zip": "88bd8604c4827396257a0e2ed8c5699191cb68f1b54997b1606a779d814ec3be",
+    "submission-candidate.json": "afcd5e2f0d72eb164d6ed9b97ee715c045af17ef2e0db4d5cfab490201857648",
+    "train.jsonl": "38bd8e187534a49ec06c09ae3e202437a5218e5ae5810d4e1c9acbf409208411",
+    "validation.jsonl": "4c05d3a659c04b690ab7a6740f3697a0e6ad0db0d6d36b12f966e938b914ccb0",
+    "test.jsonl": "a352fdcf56d0c7ba5f03734d7028eb81269649643b5b5f3deb701e069463c3db"
+  },
+  "request_sha256": "afcd5e2f0d72eb164d6ed9b97ee715c045af17ef2e0db4d5cfab490201857648",
+  "runtime_ci": 40471693914,
+  "runtime_tests": 638,
+  "anonymous_direct_controls": 260,
+  "packet_tests": 33,
+  "approved": false,
+  "submitted": false,
+  "model_calls": 0
+}

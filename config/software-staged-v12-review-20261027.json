@@ -1,0 +1,149 @@
+{
+  "submission_id": "decision-ledger-software-staged-v12-20261027",
+  "name": "Decision Ledger: staged software implementation",
+  "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:9455e57ef88fe99d94a0f0b32651c1f52472f9aba6da68c11a68db18c936ed22",
+  "source": "https://github.com/nicholas-ruest/openenv-decision-ledger/tree/0b8ccc3ca70a67fed5fc5837b69022261cc60497",
+  "dataset": "GlobalBusinessAdvisors/openenv-decision-ledger",
+  "schema": {
+    "action": {
+      "additionalProperties": false,
+      "properties": {
+        "metadata": {
+          "additionalProperties": true,
+          "description": "Additional metadata for the action",
+          "title": "Metadata",
+          "type": "object"
+        },
+        "content": {
+          "description": "Complete repaired Python module, without markdown fences.",
+          "maxLength": 8192,
+          "title": "Content",
+          "type": "string"
+        }
+      },
+      "required": [
+        "content"
+      ],
+      "title": "DirectRepairAction",
+      "type": "object"
+    },
+    "observation": {
+      "additionalProperties": false,
+      "properties": {
+        "done": {
+          "default": false,
+          "description": "Whether the episode has terminated",
+          "title": "Done",
+          "type": "boolean"
+        },
+        "reward": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Reward signal from the last action",
+          "title": "Reward"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "description": "Additional metadata for the observation",
+          "title": "Metadata",
+          "type": "object"
+        },
+        "task_id": {
+          "default": "",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "prompt": {
+          "default": "",
+          "title": "Prompt",
+          "type": "string"
+        },
+        "source": {
+          "default": "",
+          "title": "Source",
+          "type": "string"
+        },
+        "examples": {
+          "default": "",
+          "title": "Examples",
+          "type": "string"
+        },
+        "error": {
+          "default": "",
+          "title": "Error",
+          "type": "string"
+        }
+      },
+      "title": "DirectRepairObservation",
+      "type": "object"
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "software_repair-ignore-d3",
+      "split": "train",
+      "reset_wall_s": 120,
+      "rollout_wall_s": 600,
+      "verifier_wall_s": 30,
+      "tool_wall_s": 20,
+      "tool_calls_total": 1,
+      "tool_calls_per_minute": 60,
+      "completion_tokens": 8192,
+      "context_tokens": 24576,
+      "cpu_floor_vcpus": 1,
+      "memory_gib": 2,
+      "workspace_gib": 2
+    },
+    {
+      "task_id": "software_repair-ignore-d4",
+      "split": "train",
+      "reset_wall_s": 120,
+      "rollout_wall_s": 600,
+      "verifier_wall_s": 30,
+      "tool_wall_s": 20,
+      "tool_calls_total": 1,
+      "tool_calls_per_minute": 60,
+      "completion_tokens": 8192,
+      "context_tokens": 24576,
+      "cpu_floor_vcpus": 1,
+      "memory_gib": 2,
+      "workspace_gib": 2
+    },
+    {
+      "task_id": "software_repair-ignore-d2",
+      "split": "train",
+      "reset_wall_s": 120,
+      "rollout_wall_s": 600,
+      "verifier_wall_s": 30,
+      "tool_wall_s": 20,
+      "tool_calls_total": 1,
+      "tool_calls_per_minute": 60,
+      "completion_tokens": 8192,
+      "context_tokens": 24576,
+      "cpu_floor_vcpus": 1,
+      "memory_gib": 2,
+      "workspace_gib": 2
+    }
+  ],
+  "example_actions": [
+    {
+      "content": ""
+    }
+  ],
+  "finish_action": {
+    "content": ""
+  }
+}
