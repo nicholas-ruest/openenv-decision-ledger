@@ -84,7 +84,8 @@ def build_plan(base, runner, phase):
                        'case_sha256': baseline['case_sha256'],
                        'workspace_sha256': baseline['workspace_sha256'],
                        'arms': {arm: {'prompt_sha256': captured[arm][len(groups)]['prompt_sha256'],
-                                     'prompt_bound': captured[arm][len(groups)]['prompt_bound']}
+                                     'prompt_bound': captured[arm][len(groups)]['prompt_bound'],
+                                     'reset_sha256': captured[arm][len(groups)]['reset_sha256']}
                                 for arm in ARMS}})
     return {'phase': phase, 'arms': ARMS, 'groups': groups, 'calls_required': 32,
             'samples_per_arm_group': 4, 'unique_procedural_cases': 2,
