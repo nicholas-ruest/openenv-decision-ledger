@@ -1,0 +1,26 @@
+{
+  "status": "research_only_not_submission",
+  "category": "media-content-production",
+  "source_repository": "proffesor-for-testing/openenv-qe-arena",
+  "source_commit": "958198e55299eb18ad812f438a6b2ca6abaa7f5c",
+  "license": "MIT",
+  "upstream_media_tests_passed": 15,
+  "tasks": [
+    "qe_skill-media-d1",
+    "qe_skill-media-d2"
+  ],
+  "preserve_software": true,
+  "modify_v12": false,
+  "paid_calls": 0,
+  "trained": false,
+  "submitted": false,
+  "source_evidence_media_solves": 4,
+  "source_evidence_draws": 7,
+  "independent_redraw_media_solves": 0,
+  "limitations": [
+    "observational draw series",
+    "mixed science/math/media original request",
+    "media-only adaptation untested",
+    "combined interface integration not implemented"
+  ]
+}
