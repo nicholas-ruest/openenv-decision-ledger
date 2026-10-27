@@ -37,6 +37,10 @@ def replay(url):
             task = make_task(task_id, seed)
             partial = (task.reference_source.replace('"cycles": sorted(cycles)', '"cycles": []')
                        if task_id == SYNTHESIS_TASK_ID else
+                       task.reference_source.replace('            if ignored:\n                break', '            if False:\n                break')
+                       if task_id == "software_repair-ignore-d3" else
+                       task.reference_source.replace('negative = line[0] == "!"', 'negative = False')
+                       if task_id == "software_repair-ignore-d4" else
                        task.initial_source.replace("if cost < budget:", "if cost <= budget:"))
             for control, code in (("reference", task.reference_source),
                                   ("unchanged", task.initial_source), ("empty", ""),
@@ -54,6 +58,9 @@ def replay(url):
                     assert expected == 1
                 if control in ("unchanged", "empty", "host_access_rejected"):
                     assert expected == 0
+                if control == "local_partial_control" and task_id in (
+                        "software_repair-ignore-d3", "software_repair-ignore-d4"):
+                    assert 0 < expected < 1, "semantic stage control must earn partial credit"
                 records.append({"task_id": task_id, "seed": seed, "control": control,
                                 "reward": expected, "passed": True})
     return {"status": "passed", "episodes_passed": len(records), "episodes_expected": len(tasks) * 4 * 5,
