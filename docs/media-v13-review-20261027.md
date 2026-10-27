@@ -10,3 +10,7 @@ Exact proposed request is `config/media-v13-review-20261027.json`, SHA256`e8ddb0
 The image adapts Dragan Spiridonov / Profa-QE's MIT958198e55299eb18ad812f438a6b2ca6abaa7f5c public source. It is not a verified Ruv swarm recipe. Public mixed v7 media draws motivate a hypothesis; removing the five science/math task cells changes the recipe. No media-only model confirmation or causal transfer improvement exists. Binary grades can saturate; no productive model-group variance on these media tasks has been established. The existing software calibration demonstrates prerequisite variation, not a private software gain.
 
 No paid inference, training, HF replacement or Arena POST occurred in this preparation. The next submission requires Nick's explicit approval of the final exact request. Approval pending does not stop independent software/media research.
+
+## Final independent qualification
+
+Fresh-runner CI40599576931 succeeded on788dc3247570f82f4da5c4623111c5bb965ccd4e. It downloaded the immutable image without registry credentials, verified linux/amd64 and tini ENTRYPOINT, passed six OpenEnv CLI checks, two real TCP reference episodes with enabled UID shell, exact schema equality, and all31 app/isolation tests. Artifact12777817220 preserves logs/schema/image evidence. The request SHA above is unchanged. The staged dataset packet's12 archived files and every dataset-file hash also verified on ruOS. This is environment readiness for review, not training or proof of media transfer.
