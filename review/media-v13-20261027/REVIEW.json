@@ -1,0 +1,25 @@
+{
+  "approved": false,
+  "dataset_replaced": false,
+  "evidence_files": {
+    "anonymous-tcp.json": "bf7ca5291322611ce99c2ff0a15d3ffde9bc891068c8ba574f7c228c0b5a01ed",
+    "image-inspect.json": "02b99c10747cd14efa642177185fd33838eb2957667988e9d34e9ea0b6960a5b",
+    "image.txt": "d16b541beca97e05b862f3c8048623f3b1d17fe5177909d80cfe56068ab024c2",
+    "packages.txt": "940110b7823a1b6dc34b15fccffea223b3812e0692515235fefa5257c24b745d",
+    "schema.json": "eea30e31f5b46c67b25209ce84c69a594072c6be454cd4e55110aea828cd7e28",
+    "source.txt": "4ccad3484868328fe622165e01f78010a9d131b76d0a383ccb9897c8e6e19ed8"
+  },
+  "hypothesis": "Media-only specialization; removes five science/math cells from the public mixed v7 recipe. Causal benefit unconfirmed.",
+  "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:b80078c2cc8a05d3222fe22ee91321d29d881afff912097c6601a8cffd84c4e6",
+  "prior_runtime_ci": 40592567666,
+  "remaining": [
+    "Fresh-runner qualification must pass and exact image/schema remain matched.",
+    "Dataset source/attribution packet must be reviewed before replacement.",
+    "Nick must explicitly approve this exact request before HF replacement or Arena POST."
+  ],
+  "request_sha256": "e8ddb0bffeec2009c2fcfc7c4fb82f87eb664335526b1641e645f07f21763766",
+  "runtime_source": "74a8727fa14270e29cf363fc2ad79b0f7f9cbce1",
+  "software_v12_changed": false,
+  "submitted": false,
+  "upstream_source": "958198e55299eb18ad812f438a6b2ca6abaa7f5c"
+}

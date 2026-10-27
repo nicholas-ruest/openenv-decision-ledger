@@ -1,0 +1,9 @@
+{
+  "runtime_source": "74a8727fa14270e29cf363fc2ad79b0f7f9cbce1",
+  "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:b80078c2cc8a05d3222fe22ee91321d29d881afff912097c6601a8cffd84c4e6",
+  "upstream": "proffesor-for-testing/openenv-qe-arena",
+  "upstream_revision": "958198e55299eb18ad812f438a6b2ca6abaa7f5c",
+  "license": "MIT",
+  "request_sha256": "e8ddb0bffeec2009c2fcfc7c4fb82f87eb664335526b1641e645f07f21763766",
+  "approved": false
+}

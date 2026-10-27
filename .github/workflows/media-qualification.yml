@@ -1,0 +1,46 @@
+name: Frozen media image qualification
+on:
+  push:
+    branches: ['research/software-stage-calibration-20261027']
+    paths: ['.github/workflows/media-qualification.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: media-qualified-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  anonymous-fresh-runner:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      IMAGE: ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:b80078c2cc8a05d3222fe22ee91321d29d881afff912097c6601a8cffd84c4e6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Full anonymous pull on fresh runner and qualification
+        run: |
+          export DOCKER_CONFIG=$(mktemp -d)
+          mkdir evidence
+          docker pull "$IMAGE"
+          docker image inspect "$IMAGE" > evidence/image-inspect.json
+          python -c "import json; d=json.load(open('evidence/image-inspect.json'))[0]; assert d['Architecture']=='amd64' and d['Os']=='linux'; assert d['Config']['Entrypoint']==['/usr/bin/tini','--']"
+          docker run -d --name media "$IMAGE"
+          trap 'docker logs media; docker rm -f media' EXIT
+          for n in $(seq 1 60); do
+            if docker exec media python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health',timeout=1)" 2>/dev/null; then break; fi
+            sleep 1
+          done
+          docker exec media openenv validate --url http://127.0.0.1:8000 | tee evidence/sdk.txt
+          docker exec media python /app/tcp_controls.py > evidence/tcp.json
+          docker exec media python -c "import json,urllib.request; print(json.dumps(json.load(urllib.request.urlopen('http://127.0.0.1:8000/schema'))))" > evidence/schema.json
+          python -c "import json; assert json.load(open('evidence/schema.json'))==json.load(open('docs/results/media-image-20261027/schema.json'))"
+          docker exec media python -m pytest -q /app/server_controls.py /app/tests/test_shell_isolation.py | tee evidence/controls.txt
+          echo "$IMAGE" > evidence/image.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: media-fresh-anonymous-evidence
+          retention-days: 7
+          path: evidence/
