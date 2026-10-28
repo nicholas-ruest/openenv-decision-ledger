@@ -1,0 +1,151 @@
+{
+  "project": "GlobalBusinessAdvisors",
+  "run": "a3274296c46341a847407f97",
+  "public_source": {
+    "space": "openenvarena/training",
+    "revision": "362671b590eb2536f86d86bd211b44f7af61bd04",
+    "logging_source_sha256": "6e0b05d65f48966b69363a517469920d18b9d3bbb5aa59e58da58f0fbac0acbf",
+    "trackio_dependency": {
+      "version": "0.40.0",
+      "sha256": "d3815222da697432cd4232f254b5b2b60aaa1e5b87bfff8f41101807b3fe7bc1",
+      "url": "https://files.pythonhosted.org/packages/8f/60/69c8baac61bab8be099d54bc227cc5db845f7f2deaa69a3105e45fbca8c5/trackio-0.40.0-py3-none-any.whl"
+    },
+    "observed_at_utc": "2026-10-28T03:11:45.825932+00:00",
+    "training_time_source_attested": false,
+    "raw_log_response_sha256": "b2251b2d1587bce6907b16fa4096e5d5519679fa9641545d688340fc53f9205a",
+    "alert_bodies_published": false
+  },
+  "audit": {
+    "raw_log_rows": 148,
+    "raw_fields": [
+      "clip_ratio/high_max",
+      "clip_ratio/high_mean",
+      "clip_ratio/low_mean",
+      "clip_ratio/low_min",
+      "clip_ratio/region_mean",
+      "completions/clipped_ratio",
+      "completions/max_length",
+      "completions/max_terminated_length",
+      "completions/mean_length",
+      "completions/mean_terminated_length",
+      "completions/min_length",
+      "completions/min_terminated_length",
+      "entropy",
+      "epoch",
+      "frac_reward_zero_std",
+      "grad_norm",
+      "learning_rate",
+      "loss",
+      "num_tokens",
+      "reward",
+      "reward_std",
+      "rewards/reward/mean",
+      "rewards/reward/std",
+      "sampling/importance_sampling_ratio/max",
+      "sampling/importance_sampling_ratio/mean",
+      "sampling/importance_sampling_ratio/min",
+      "sampling/sampling_logp_difference/max",
+      "sampling/sampling_logp_difference/mean",
+      "step",
+      "step/collection_seconds",
+      "step/retries",
+      "step/task",
+      "step/tasks",
+      "step/wall_seconds",
+      "step_time",
+      "timestamp"
+    ],
+    "optimizer_step_min": 1,
+    "optimizer_step_max": 148,
+    "metric_values_cross_checked": 1036,
+    "numeric_task_ids": [
+      "1",
+      "2",
+      "3"
+    ],
+    "explicit_task_labels": {},
+    "mapping_complete": false,
+    "mapping_inferred_from_rotation": false,
+    "reweighting_by_named_family_supported": false,
+    "current_logging_config_fields": {
+      "STRING_CONFIG": [
+        "model",
+        "model_revision",
+        "participant",
+        "recipe",
+        "run_id",
+        "submission_id"
+      ],
+      "NUMBER_CONFIG": [
+        "num_updates",
+        "train_tasks"
+      ]
+    },
+    "training_time_logging_source_attested": false,
+    "raw_logs_sha256": "443f811e9b61b52f77f6b10425d2111941ab8851e22fb15bf6a2608f262b30b9",
+    "records_sha256": "b47821117c75aed14b679275e9494e87080879ae880fc3b769550d09ff4903c6",
+    "is_training_or_improvement_claim": false
+  },
+  "groups": {
+    "1": {
+      "task_name": null,
+      "recorded_steps": 50,
+      "incomplete_steps": 0,
+      "retried_steps": 0,
+      "clean_steps": 50,
+      "productive_clean_steps": 38,
+      "zero_variance_clean_steps": 12,
+      "saturated_clean_steps": 0,
+      "first10_clean_reward": 0.1889285698533058,
+      "last10_clean_reward": 0.15357142686843872,
+      "mean_clean_reward": 0.15814285539090633
+    },
+    "2": {
+      "task_name": null,
+      "recorded_steps": 49,
+      "incomplete_steps": 0,
+      "retried_steps": 1,
+      "clean_steps": 48,
+      "productive_clean_steps": 38,
+      "zero_variance_clean_steps": 10,
+      "saturated_clean_steps": 10,
+      "first10_clean_reward": 0.6509534776210785,
+      "last10_clean_reward": 0.8644268155097962,
+      "mean_clean_reward": 0.7704996435592572
+    },
+    "3": {
+      "task_name": null,
+      "recorded_steps": 49,
+      "incomplete_steps": 0,
+      "retried_steps": 1,
+      "clean_steps": 48,
+      "productive_clean_steps": 45,
+      "zero_variance_clean_steps": 3,
+      "saturated_clean_steps": 0,
+      "first10_clean_reward": 0.4208333283662796,
+      "last10_clean_reward": 0.4074999958276749,
+      "mean_clean_reward": 0.38958333286185126
+    }
+  },
+  "events": {
+    "alert_rows": 4,
+    "distinct_alert_steps": [
+      65,
+      133
+    ],
+    "optimizer_retry_steps": [
+      66,
+      134
+    ],
+    "same_number_overlap": [],
+    "alert_to_task_attribution": null,
+    "inferred_offset_applied": false
+  },
+  "productive_zero_retry_updates": 121,
+  "zero_retry_updates": 146,
+  "new_model_calls": 0,
+  "named_family_reweighting_authorized": false,
+  "model_improvement_claim": false,
+  "v12_changed": false,
+  "v13_changed": false
+}

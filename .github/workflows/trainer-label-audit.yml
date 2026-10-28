@@ -1,0 +1,21 @@
+name: Public trainer task label audit
+on:
+  push:
+    branches: ['research/software-stage-calibration-20261027']
+    paths: ['research/trackio-label-audit-20261027/**', '.github/workflows/trainer-label-audit.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-reproduction:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s research/trackio-label-audit-20261027 -p 'test_*.py'
+      - run: python research/trackio-label-audit-20261027/replay_public_audit.py
