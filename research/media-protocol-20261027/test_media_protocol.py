@@ -9,7 +9,7 @@ class ProtocolTests(unittest.TestCase):
             for task,seeds in tasks.items():
                 for position,seed in enumerate(seeds):
                     for repeat in range(2):
-                        self.rows.append({'phase':phase,'task_id':task,'seed':seed,'repeat':repeat,'family':FAMILIES[task][position],'image':IMAGE,'runtime_source':RUNTIME,'uid_shell':True,'reset_observation':{'done':False,'success':True,'instruction':f'{task}:{seed}'},'workspace':{'input.json':{'sha256':digest(f'{task}:{seed}'),'bytes':10}}})
+                        self.rows.append({'phase':phase,'task_id':task,'seed':seed,'repeat':repeat,'family':FAMILIES[task][position],'image':IMAGE,'runtime_source':RUNTIME,'uid_shell':True,'reset_transport':{'done':False,'reward':0,'observation':{'success':True,'instruction':f'{task}:{seed}'}},'workspace':{'input.json':{'sha256':digest(f'{task}:{seed}'),'bytes':10}}})
     def run_plan(self):return build(self.rows,self.schema)
     def test_complete_offline_identity_plan(self):
         p=self.run_plan();self.assertEqual(p['native_reset_controls'],16);self.assertFalse(p['budget_admitted']);self.assertFalse(p['model_phase_executed']);self.assertEqual(p['phases']['screen']['future_rollouts'],16)
@@ -20,7 +20,7 @@ class ProtocolTests(unittest.TestCase):
         self.rows[-1]=copy.deepcopy(self.rows[0])
         with self.assertRaises(ValueError):self.run_plan()
     def test_prompt_nondeterminism(self):
-        self.rows[1]['reset_observation']['instruction']='changed'
+        self.rows[1]['reset_transport']['observation']['instruction']='changed'
         with self.assertRaises(ValueError):self.run_plan()
     def test_workspace_nondeterminism(self):
         self.rows[1]['workspace']['input.json']['sha256']='f'*64
@@ -41,7 +41,7 @@ class ProtocolTests(unittest.TestCase):
         self.rows[0]['workspace']['input.json']['sha256']='short'
         with self.assertRaises(ValueError):self.run_plan()
     def test_failed_reset(self):
-        self.rows[0]['reset_observation']['done']=True
+        self.rows[0]['reset_transport']['done']=True
         with self.assertRaises(ValueError):self.run_plan()
 
 if __name__=='__main__':unittest.main()

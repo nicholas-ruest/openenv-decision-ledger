@@ -35,8 +35,8 @@ jobs:
             if docker exec media python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health',timeout=1)" 2>/dev/null; then break; fi
             sleep 1
           done
-          docker exec media python /capture/capture_media.py > evidence/media-plan-native.json
-          python -c "import json; d=json.load(open('evidence/media-plan-native.json')); p=d['plan']; assert p['native_reset_controls']==16 and p['new_model_calls']==0 and p['budget_admitted'] is False; print({k:p[k] for k in ['native_reset_controls','new_model_calls','budget_admitted']})"
+          docker exec media python /capture/capture_media.py > evidence/native-captures.json
+          PYTHONPATH=research/media-protocol-20261027 python -c "import json; from media_protocol import build; d=json.load(open('evidence/native-captures.json')); p=build(d['captures'],d['schema']); json.dump(p,open('evidence/media-plan-native.json','w'),sort_keys=True,indent=2); assert p['native_reset_controls']==16 and p['new_model_calls']==0 and p['budget_admitted'] is False; print({k:p[k] for k in ['native_reset_controls','new_model_calls','budget_admitted']})"
       - uses: actions/upload-artifact@v4
         if: always()
         with:

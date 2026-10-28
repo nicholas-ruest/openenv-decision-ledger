@@ -28,8 +28,8 @@ def build(captures,schema):
         seen.add(key)
         if c['image']!=IMAGE or c['runtime_source']!=RUNTIME or c['uid_shell'] is not True:
             raise ValueError('frozen image/source and enabled UID shell required')
-        observation=c['reset_observation']
-        if observation.get('done') is not False or observation.get('success') is not True:
+        observation=c['reset_transport']
+        if observation.get('done') is not False or observation.get('observation',{}).get('success') is not True:
             raise ValueError('successful nonterminal native reset required')
         workspace=c['workspace']
         if not isinstance(workspace,dict) or not workspace:

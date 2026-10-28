@@ -49,8 +49,7 @@ def main():
                         expected={name:{'sha256':hashlib.sha256(text.encode()).hexdigest(),'bytes':len(text.encode())} for name,text in native.files.items()}
                         workspace=json.loads(out['observation']['output'])
                         if workspace!=expected:raise ValueError('actual TCP workspace differs from native generator')
-                        captures.append({'phase':phase,'task_id':task,'seed':seed,'repeat':repeat,'family':native.kind,'image':IMAGE,'runtime_source':RUNTIME,'uid_shell':True,'reset_observation':reset['observation'],'workspace':workspace})
-    plan=build(captures,schema)
-    print(json.dumps({'plan':plan,'captures':captures,'schema':schema},sort_keys=True,indent=2))
+                        captures.append({'phase':phase,'task_id':task,'seed':seed,'repeat':repeat,'family':native.kind,'image':IMAGE,'runtime_source':RUNTIME,'uid_shell':True,'reset_transport':reset,'workspace':workspace})
+    print(json.dumps({'captures':captures,'schema':schema},sort_keys=True,indent=2))
 
 if __name__=='__main__':main()
