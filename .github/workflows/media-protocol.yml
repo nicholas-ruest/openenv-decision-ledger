@@ -1,0 +1,45 @@
+name: Frozen media protocol capture
+on:
+  push:
+    branches: ['research/software-stage-calibration-20261027']
+    paths: ['research/media-protocol-20261027/**', '.github/workflows/media-protocol.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: media-protocol-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  native-protocol:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      IMAGE: ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:b80078c2cc8a05d3222fe22ee91321d29d881afff912097c6601a8cffd84c4e6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Offline protocol rejection tests
+        run: python -m unittest discover -s research/media-protocol-20261027 -p 'test_*.py'
+      - name: Frozen image native TCP identity capture (no inference)
+        run: |
+          export DOCKER_CONFIG=$(mktemp -d)
+          mkdir evidence
+          docker pull "$IMAGE"
+          docker run -d --name media -v "$PWD/research/media-protocol-20261027:/capture:ro" "$IMAGE"
+          trap 'docker logs media; docker rm -f media' EXIT
+          for n in $(seq 1 60); do
+            if docker exec media python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health',timeout=1)" 2>/dev/null; then break; fi
+            sleep 1
+          done
+          docker exec media python /capture/capture_media.py > evidence/media-plan-native.json
+          python -c "import json; d=json.load(open('evidence/media-plan-native.json')); p=d['plan']; assert p['native_reset_controls']==16 and p['new_model_calls']==0 and p['budget_admitted'] is False; print({k:p[k] for k in ['native_reset_controls','new_model_calls','budget_admitted']})"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: media-plan-native
+          retention-days: 7
+          path: evidence/
