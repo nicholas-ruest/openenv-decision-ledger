@@ -147,5 +147,9 @@
   "named_family_reweighting_authorized": false,
   "model_improvement_claim": false,
   "v12_changed": false,
-  "v13_changed": false
+  "v13_changed": false,
+  "validation_ci": 40625440267,
+  "validation_status": "success",
+  "audit_source": "d75c9ecede74bcfb8c6d74236ea30e10c384a2ce",
+  "unit_tests": 14
 }

@@ -24,3 +24,5 @@ Public sources:
 - https://pypi.org/project/trackio/0.40.0/
 
 Next require an explicit run-bound task map before labeling these numeric groups. Independently continue the media trajectory assessor and preserve both reviewed candidates. These measurements do not establish software transfer or a new ranking.
+
+CI40625440267 passed on source d75c9ecede74bcfb8c6d74236ea30e10c384a2ce:14 tests and reproduction from the preserved public numeric fixtures. Live public reads and the1036-value cross-check were performed separately before publication; CI did not request model inference or new training.
