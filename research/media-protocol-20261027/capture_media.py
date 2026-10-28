@@ -4,7 +4,11 @@ from pathlib import Path
 from urllib.request import urlopen
 from websockets.sync.client import connect
 from media_protocol import IMAGE,RUNTIME,TASKS,SEEDS,build
+import sys
+sys.path.insert(0,'/app')
 from qe_arena import skills
+if not Path(skills.__file__).resolve().is_relative_to(Path('/app/qe_arena')):
+    raise ValueError('native frozen package path required')
 
 # Trusted inspection in the visible episode cwd, executed as the episode UID.
 INSPECT="""import pathlib,hashlib,json
