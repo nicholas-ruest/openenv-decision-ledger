@@ -45,7 +45,10 @@ class AccountedPhaseTests(unittest.TestCase):
         self.f=fixtures.PhaseTests();self.f.setUp();self.addCleanup(self.f.tmp.cleanup)
     def run_phase(self,completion=4096,context=8192):
         f=self.f
-        return accounted_phase.run_phase(f.root,f.plan,f.schema,'screen','test',100,True,lambda:f.time,f.open_env,f.reserve,lambda:f.ledger,f.dispatch,f.replay,
+        def reserve(label,history,remaining):
+            f.reserve(label,history,remaining)
+            if not getattr(self,'undersized_prompt',False):f.ledger[-1]['prompt_bound']=SyntheticByteCounter().context(history)
+        return accounted_phase.run_phase(f.root,f.plan,f.schema,'screen','test',100,True,lambda:f.time,f.open_env,reserve,lambda:f.ledger,f.dispatch,f.replay,
             accounting_factory=lambda history:EpisodeBudget(SyntheticByteCounter(),history,completion=completion,context=context))
     def test_normal_phase_preserves_old_semantic_outcomes_and_records_costs(self):
         report=self.run_phase();self.assertEqual(report['counts'],{'full':16})
@@ -79,6 +82,10 @@ class AccountedPhaseTests(unittest.TestCase):
         def overreserve(label,history,remaining):
             original(label,history,remaining);self.f.ledger[-1]['generation_bound']=remaining+1
         self.f.reserve=overreserve
+        with self.assertRaises(ValueError):self.run_phase()
+        self.assertEqual(self.f.dispatched,[])
+    def test_prompt_reservation_cannot_be_smaller_than_local_context(self):
+        self.undersized_prompt=True
         with self.assertRaises(ValueError):self.run_phase()
         self.assertEqual(self.f.dispatched,[])
 

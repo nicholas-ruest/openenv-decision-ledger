@@ -77,7 +77,7 @@ def run_phase(root, plan, schema, phase, prefix, deadline, admitted, now,
                     ledger=reservations();matches=[r for r in ledger if r['label']==label]
                     require(len(matches)==1,'exact existing reservation required before dispatch')
                     b=matches[0]
-                    require(type(b['prompt_bound']) is int and b['prompt_bound']>0 and type(b['generation_bound']) is int and 0<b['generation_bound']<=allowance and b['prompt_bound']+b['generation_bound']<=8192,'bounded reservation required before dispatch')
+                    require(type(b['prompt_bound']) is int and b['prompt_bound']>=accounting.context_used and b['prompt_bound']>0 and type(b['generation_bound']) is int and 0<b['generation_bound']<=allowance and b['prompt_bound']+b['generation_bound']<=8192,'bounded measured-context reservation required before dispatch')
                     audit_episode({**episode,'events':episode['events']+[{'kind':'budget','reason':'actions'}]},plan,schema,ledger,replay)
                     deadline_check(deadline,now)
                     stem=f'{seq:02d}-{action_index:02d}'
