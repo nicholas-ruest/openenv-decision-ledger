@@ -1,0 +1,15 @@
+{
+  "source": "7718f7458a88c0819bcf19859e01f00fd21c7e2d",
+  "initial_source": "8292d0c4a410ac10785f4b7342b3090cc1d60257",
+  "unit_tests_ruos": 9,
+  "new_unit_tests": 4,
+  "saved_partial_responses": 4,
+  "replay_controls": 8,
+  "partial_controls": 8,
+  "native_grades_preserved": true,
+  "new_model_calls": 0,
+  "matched_model_trial": false,
+  "confirmation": false,
+  "frozen_requests_changed": false,
+  "private_root": "/home/ruv/arena-software-terminal-audit-v2-20261028-1800"
+}
