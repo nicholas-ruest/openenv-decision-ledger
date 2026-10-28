@@ -20,3 +20,13 @@ jobs:
           export DOCKER_CONFIG=$(mktemp -d)
           docker pull "$IMAGE"
           docker run --rm --entrypoint python -v "$PWD:/research:ro" -e PYTHONPATH=/research/research/software-revision-candidate-20261028:/research/research/software-public-check-20261028:/app "$IMAGE" -m unittest discover -s /research/research/software-revision-candidate-20261028 -p 'test_*.py'
+      - name: Scripted native WebSocket controls over the experimental app
+        run: |
+          export DOCKER_CONFIG=$(mktemp -d)
+          docker run -d --name revision --entrypoint python -v "$PWD:/research:ro" -e PYTHONPATH=/research/research/software-revision-candidate-20261028:/research/research/software-public-check-20261028:/app "$IMAGE" -m uvicorn revision_app:app --host 0.0.0.0 --port 8000
+          trap 'docker logs revision; docker rm -f revision' EXIT
+          for n in $(seq 1 60); do
+            if docker exec revision python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health',timeout=1)" 2>/dev/null; then break; fi
+            sleep 1
+          done
+          timeout 75s docker exec revision python /research/research/software-revision-candidate-20261028/native_ws_controls.py
