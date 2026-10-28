@@ -1,0 +1,14 @@
+{
+  "source": "c90d0d28315bdf03c822bc80992b1fdcdc56309a",
+  "ci": 40723734766,
+  "ci_status": "success",
+  "unit_tests": 7,
+  "ruos_unit_tests": 7,
+  "saved_responses_checked_public_only": 16,
+  "hidden_case_access": false,
+  "private_feedback_published": false,
+  "new_model_calls": 0,
+  "revised_responses": 0,
+  "training": false,
+  "improvement_claim": false
+}
