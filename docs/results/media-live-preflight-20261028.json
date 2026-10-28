@@ -1,0 +1,22 @@
+{
+  "source": "e0daa24ea96aa0a40d93307e6ddd53cded840061",
+  "ci": 40662286243,
+  "job": 122728002405,
+  "status": "success",
+  "unit_tests": 12,
+  "account_data_fictional_tests_only": true,
+  "existing_admission_helper": "scripts/stage-phase-admission.py",
+  "whole_phase_call_bound": 512,
+  "episode_generation_bound": 65536,
+  "execution_authorized": false,
+  "reservation_performed": false,
+  "new_cap_created": false,
+  "counters_reset": false,
+  "actual_billing_reconciled": false,
+  "provider_authenticated": false,
+  "new_model_calls": 0,
+  "new_training": false,
+  "model_improvement_claim": false,
+  "v12_changed": false,
+  "v13_changed": false
+}
