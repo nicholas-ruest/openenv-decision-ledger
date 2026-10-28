@@ -1,0 +1,17 @@
+{
+  "source_verified": "a8e6a9eb493363ca01238ee7684c1069ff94eaf3",
+  "private_archive_sha256": "63603a0bd8fb648cc23b5505e11dbdcca76546166f1a8e97dc3dc3400bd72188",
+  "private_archive_persisted": true,
+  "archive_readonly_verified": true,
+  "scripted_attempts_verified": 16,
+  "metaharness_tests_repeated_on_persisted_host": 9,
+  "additional_model_samples": 0,
+  "new_model_calls": 0,
+  "new_training": false,
+  "model_improvement_claim": false,
+  "board_message": 407,
+  "observation_completion_accounting_bound": false,
+  "arena_wrapper_equivalent": false,
+  "v12_changed": false,
+  "v13_changed": false
+}
