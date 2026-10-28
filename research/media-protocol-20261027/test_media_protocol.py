@@ -34,6 +34,9 @@ class ProtocolTests(unittest.TestCase):
     def test_family_mismatch(self):
         self.rows[0]['family']='assets'
         with self.assertRaises(ValueError):self.run_plan()
+    def test_shared_instruction_prefix_is_reported(self):
+        for i in (8,9):self.rows[i]['reset_transport']=copy.deepcopy(self.rows[0]['reset_transport'])
+        p=self.run_plan();self.assertFalse(p['initial_prompts_disjoint']);self.assertEqual(len(p['shared_initial_prompt_hashes']),1)
     def test_cross_phase_case_leakage(self):
         for i in (8,9):self.rows[i]['workspace']=copy.deepcopy(self.rows[0]['workspace'])
         with self.assertRaises(ValueError):self.run_plan()

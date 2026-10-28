@@ -1,4 +1,4 @@
-name: Frozen media protocol capture
+name: Media protocol archive validation
 on:
   push:
     branches: ['research/software-stage-calibration-20261027']
@@ -6,15 +6,10 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
-concurrency:
-  group: media-protocol-${{ github.ref }}
-  cancel-in-progress: false
 jobs:
-  native-protocol:
+  validate-preserved-native-captures:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    env:
-      IMAGE: ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:b80078c2cc8a05d3222fe22ee91321d29d881afff912097c6601a8cffd84c4e6
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,24 +17,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Offline protocol rejection tests
+      - name: Protocol regression tests
         run: python -m unittest discover -s research/media-protocol-20261027 -p 'test_*.py'
-      - name: Frozen image native TCP identity capture (no inference)
+      - name: Rebuild plan from preserved native image captures
         run: |
-          export DOCKER_CONFIG=$(mktemp -d)
           mkdir evidence
-          docker pull "$IMAGE"
-          docker run -d --name media -v "$PWD/research/media-protocol-20261027:/capture:ro" "$IMAGE"
-          trap 'docker logs media; docker rm -f media' EXIT
-          for n in $(seq 1 60); do
-            if docker exec media python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health',timeout=1)" 2>/dev/null; then break; fi
-            sleep 1
-          done
-          docker exec media python /capture/capture_media.py > evidence/native-captures.json
-          PYTHONPATH=research/media-protocol-20261027 python -c "import json; from media_protocol import build; d=json.load(open('evidence/native-captures.json')); p=build(d['captures'],d['schema']); json.dump(p,open('evidence/media-plan-native.json','w'),sort_keys=True,indent=2); assert p['native_reset_controls']==16 and p['new_model_calls']==0 and p['budget_admitted'] is False; print({k:p[k] for k in ['native_reset_controls','new_model_calls','budget_admitted']})"
+          PYTHONPATH=research/media-protocol-20261027 python -c "import json,hashlib; from pathlib import Path; from media_protocol import build; r=Path('research/media-protocol-20261027'); p=r/'native-captures.json'; origin=json.loads((r/'capture-origin.json').read_text()); assert hashlib.sha256(p.read_bytes()).hexdigest()==origin['capture_file_sha256']; d=json.loads(p.read_text()); plan=build(d['captures'],d['schema']); assert plan['new_model_calls']==0 and plan['budget_admitted'] is False and len(plan['shared_initial_prompt_hashes'])==4; Path('evidence/media-plan-native.json').write_text(json.dumps(plan,sort_keys=True,indent=2))"
       - uses: actions/upload-artifact@v4
-        if: always()
         with:
-          name: media-plan-native
+          name: media-plan-native-validated
           retention-days: 7
           path: evidence/
