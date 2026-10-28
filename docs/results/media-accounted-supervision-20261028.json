@@ -1,0 +1,20 @@
+{
+  "source": "8b4cffb34344c1dc5ddc4320348211b65520702f",
+  "ci": 40703847603,
+  "ci_status": "success",
+  "unit_tests": 9,
+  "ruos_unit_tests": 9,
+  "native_attempts_recomputed": 16,
+  "scripted_counts": {
+    "full": 8,
+    "wrong": 7,
+    "provider": 1
+  },
+  "workspace_set_restored": true,
+  "counter_synthetic": true,
+  "provider_responses_scripted": true,
+  "artifact_id": 12823830569,
+  "artifact_sha256": "fd54b17c3f54292712084593a96a3e570049e63e4a4ba0159e17d30ee6797272",
+  "new_model_calls": 0,
+  "arena_wrapper_equivalent": false
+}
