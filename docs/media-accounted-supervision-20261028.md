@@ -1,0 +1,9 @@
+# Accounted phase supervision — 2026-10-28
+
+The new supervisor requires a second, separately pinned verifier process after the phase worker exits. It freezes the external accounting configuration before launch and requires an independent complete-archive proof bound to that configuration and the final16-attempt assessment. Zero exit status alone, a pre-seeded proof, changed expected configuration, altered costs or a stalled verifier cannot count as a verified phase. Worker and verifier share a single bounded deadline and inherited process-group cleanup. The original supervisor, phase implementations, and reviewed softwarev12/media-v13 requests remain unchanged.
+
+Nine local tests passed, including actual worker/verifier processes and a TERM-resistant timed-out verifier checked by argv/start-ticks identity. Synthetic provider/native/counter fixtures are explicitly marked. A separate CI integration runs both processes against the unchanged qualified media image; results are recorded after completion.
+
+The verifier is a trusted pinned entrypoint, not an adversarial sandbox. Its immutable dependencies, counter, external ledger and replay adapter must be independently supplied and reviewed. Hashes and output proofs do not authenticate provider execution, account truth or remote billing termination. The native integration uses a synthetic byte counter and scripted provider responses, not model inference or production-tokenizer equivalence. It preserves private raw archives in CI artifacts and publishes only this sanitized summary.
+
+No model calls, training, ranking result, submission, HF replacement or public channel message is part of this work. Routine Slack and Arena board posts are stopped at Nick's request. Source/results remain reproducible in the research branch; no PR conversation comment is sent for this implementation milestone.
