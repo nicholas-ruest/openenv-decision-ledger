@@ -8,9 +8,10 @@ import sys
 
 ROOT=Path(__file__).resolve().parents[2]
 sys.path[:0]=[str(ROOT/p) for p in ('research/software-revision-candidate-20261028',
-    'research/software-public-check-20261028','integrations/software-repair')]
+    'research/software-public-check-20261028','research/software-terminal-audit-20261028','integrations/software-repair')]
 from revision_environment import RevisionEnvironment,RevisionAction,RevisionObservation
 from pydantic import ValidationError
+from terminal_audit import classify
 
 
 def canonical(x):return json.dumps(x,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False)
@@ -65,12 +66,17 @@ class Trial:
         native=self.env.step(action).model_dump();self.native.append(native)
         self.messages += [dict(role='assistant',content=reply),dict(role='user',content=canonical(native))]
         if native['done']:
-            self.closed=True;r=native['reward']
-            category=('execution' if native['error'] else 'full' if r==1 else 'partial' if 0<r<1 else 'wrong')
-            return dict(category=category,stage=self.turn,done=True,native_reward=r)
+            self.closed=True
+            return dict(classify(self.env,native),stage=self.turn,done=True)
         if self.turn!=1 or native['stage']!='revision' or native['remaining_responses']!=1 or native['reward']!=0:
             self.closed=True;raise ValueError('native intermediate contract mismatch')
         return dict(category='awaiting_revision',stage=1,done=False,native_reward=0)
+
+
+    def abort(self,category):
+        if self.closed or category not in ('provider','budget','execution'):raise ValueError('open attempt and external failure category required')
+        self.closed=True
+        return dict(category=category,stage=self.turn+1,done=True,native_reward=None,semantic_reward=None)
 
 
 def freeze(output,namespace):
