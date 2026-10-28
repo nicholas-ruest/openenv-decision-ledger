@@ -1,0 +1,26 @@
+{
+  "source": "fbf7c8766bb214e41120bb1fc9ef697744474da5",
+  "ci": 40670671637,
+  "status": "success",
+  "upstream_repo": "ruvnet/metaharness",
+  "upstream_revision": "b8c3d38de41203faf633ef6dceb8452a4727b0ea",
+  "upstream_files_unmodified": true,
+  "upstream_public_bytes_verified": true,
+  "source_hashes": {
+    "fitness.mjs": "852da62a33b833bc0a8cbc015891e3030d769b40fa41bf9793da84bdadfff130",
+    "confirm.mjs": "fd765ce849bbf5c75925da7427464a96f8d70f43b24308d9802f287a861dd81d"
+  },
+  "new_compatibility_tests_ci": 9,
+  "existing_upstream_fitness_tests_local": 15,
+  "new_fixtures_synthetic": true,
+  "actual_scoring_modules_executed": true,
+  "direct_confirmation_supported": false,
+  "replaces_protocol_assessor": false,
+  "darwin_search_executed": false,
+  "flywheel_receipt_created": false,
+  "new_model_calls": 0,
+  "new_training": false,
+  "model_improvement_claim": false,
+  "v12_changed": false,
+  "v13_changed": false
+}
