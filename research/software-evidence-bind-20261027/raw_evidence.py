@@ -31,6 +31,8 @@ def bind(jobs, records, reservations, runtime, settings_sha, capture, replay, cl
     Each job binds arm/task/seed/sample/planned_call_label to raw returned fields.
     capture(arm,task,seed) must produce a *fresh frozen native* snapshot.
     replay(arm,task,seed,assistant_message) must run the saved action natively.
+    For transcripts ending in an environment observation, return both reward and
+    observation; otherwise a scalar native reward is accepted.
     Callers must attest source/policy dependencies separately. No file is edited.
     """
     if runtime != "0b8ccc3ca70a67fed5fc5837b69022261cc60497" or not isinstance(settings_sha,str) or len(settings_sha)!=64 or any(c not in "0123456789abcdef" for c in settings_sha):
@@ -92,7 +94,7 @@ def bind(jobs, records, reservations, runtime, settings_sha, capture, replay, cl
                 responses.add(response)
         reward = raw.get('reward')
         if failure is None:
-            if not calls or response is None or len(messages)!=3 or messages[-1].get('role')!='assistant':
+            if not calls or response is None or len(messages) not in (3,4) or messages[2].get('role')!='assistant' or (len(messages)==4 and messages[3].get('role')!='user'):
                 raise ValueError('valid result needs actual saved assistant response')
             if type(reward) not in (int,float) or not math.isfinite(reward) or not 0<=reward<=1:
                 raise ValueError('finite semantic reward required')
@@ -101,8 +103,12 @@ def bind(jobs, records, reservations, runtime, settings_sha, capture, replay, cl
             for usage,bound in (('prompt_tokens','prompt_bound'),('completion_tokens','generation_bound')):
                 if type(call.get(usage)) is not int or type(reserved.get(bound)) is not int or not 0<=call[usage]<=reserved[bound]:
                     raise ValueError('valid result needs usage within its reservation')
-            native = replay(*group,messages[-1])
-            if type(native) not in (int,float) or not math.isfinite(native) or native != reward:
+            native = replay(*group,messages[2])
+            if len(messages)==4:
+                if not isinstance(native,dict) or json.loads(messages[3]['content']) != native.get('observation'):
+                    raise ValueError('saved environment observation differs from native replay')
+            native_reward = native.get('reward') if isinstance(native,dict) else native
+            if type(native_reward) not in (int,float) or not math.isfinite(native_reward) or native_reward != reward:
                 raise ValueError('saved answer native reward mismatch')
             replayed += 1
         elif failure not in {'format','provider','truncation','execution','budget'}:

@@ -1,4 +1,5 @@
 import copy
+import json
 import unittest
 from raw_evidence import bind,digest
 R='0b8ccc3ca70a67fed5fc5837b69022261cc60497';S='a'*64
@@ -72,6 +73,14 @@ class RawTests(unittest.TestCase):
         with self.assertRaises(ValueError):self.run_bind()
     def test_length_finish_not_valid_semantic(self):
         self.raw['calls'][0]['finish_reason']='length'
+        with self.assertRaises(ValueError):self.run_bind()
+    def test_actual_four_message_transcript(self):
+        self.raw['messages'].append({'role':'user','content':json.dumps({'done':True,'reward':.75})})
+        self.reward={'reward':.75,'observation':{'done':True,'reward':.75}}
+        self.assertEqual(self.run_bind()['native_replayed_valid_answers'],1)
+    def test_environment_observation_tampering(self):
+        self.raw['messages'].append({'role':'user','content':json.dumps({'done':True,'reward':1})})
+        self.reward={'reward':.75,'observation':{'done':True,'reward':.75}}
         with self.assertRaises(ValueError):self.run_bind()
     def test_unknown_failure_rejected(self):
         self.raw['failure']='mystery'

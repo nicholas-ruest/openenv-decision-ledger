@@ -46,7 +46,7 @@ def main():
         if set(action)=={'action'}:action=action['action']
         obs=env.step(base.DirectRepairAction.model_validate(action))
         if not obs.done or obs.error:raise ValueError('saved native action failed')
-        return float(obs.reward)
+        return {'reward':float(obs.reward),'observation':obs.model_dump()}
     report=bind(jobs,normalized,rows(a.ledger),runner.RUNTIME,settings,capture,replay,runner.classify)
     report.update(legacy_archive=True,new_provider_calls=0,paired_phase=False,all_source_pins_match=True)
     with a.output.open('x') as f:json.dump(report,f,indent=2)
