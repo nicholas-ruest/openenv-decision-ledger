@@ -10,7 +10,7 @@ class TerminalTests(unittest.TestCase):
         self.assertEqual(r['category'],'execution');self.assertTrue(r['compile_rejected'])
         self.assertEqual(r['native_reward'],0);self.assertIsNone(r['semantic_reward'])
     def test_runtime_failure_and_valid_wrong_are_separate(self):
-        t=self.trial();r=t.consume(json.dumps({'content':'def classify_ignore(a,b):\n    return 1/0','submit':True}))
+        t=self.trial();r=t.consume(json.dumps({'content':'def classify_ignore(a,b):\n    return 1//0','submit':True}))
         self.assertEqual(r['category'],'execution');self.assertGreater(r['hidden_execution_errors'],0)
         t=self.trial();r=t.consume('{"submit":true}')
         self.assertEqual(r['category'],'wrong');self.assertEqual(r['hidden_execution_errors'],0)
