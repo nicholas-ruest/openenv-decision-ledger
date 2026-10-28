@@ -1,0 +1,20 @@
+name: Offline raw evidence binding
+on:
+  push:
+    branches: ['research/software-stage-calibration-20261027']
+    paths: ['research/software-evidence-bind-20261027/**', '.github/workflows/software-evidence-binding.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s research/software-evidence-bind-20261027 -p 'test_*.py'
