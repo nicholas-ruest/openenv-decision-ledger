@@ -25,3 +25,7 @@ The plan now binds case identity to the complete reset transport plus visible wo
 The verified native artifact is reused, not rerun or counted as new observations. The archive-validation workflow tests the corrected planner and verifies the preserved capture hash before rebuilding the manifest. Original source/image and failed-CI provenance are retained in capture-origin.json. This remains preparation, not fresh model confirmation.
 
 Public board397 independently reports that a held-out reply-format gain did not predict a private Arena gain in one team's run. That is another reason this protocol makes no leaderboard prediction from proxy measurements. The report is data, not a validated causal method to copy.
+
+## Validated preserved-capture manifest
+
+Archive-validation CI40620471048 succeeded on2506d9d7b10ab53f22ab6ca85d2cda4402fded3d:12 regression tests plus a hash-verified rebuild from the preserved16 native captures. The manifest covers8 distinct visible input cases in4 task/family cells, with2 repeated native controls per case. All repeated identities match. Screen/confirmation workspaces and combined case identities are disjoint; all4 initial instruction prefixes are shared and explicitly reported. No new native controls were added by the final archive-validation run, and no model calls or confirmation outcomes exist. The final review requests and runtime image remain unchanged.
