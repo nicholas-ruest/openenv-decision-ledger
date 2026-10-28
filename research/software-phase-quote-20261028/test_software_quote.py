@@ -10,7 +10,8 @@ class QuoteTests(unittest.TestCase):
         self.assertEqual(r['generation_token_bound'],131072)
         self.assertFalse(r['execution_authorized']);self.assertFalse(r['reservation_performed'])
     def test_insufficient_remaining_does_not_shrink_or_reuse_calls(self):
-        r=quote(PLAN,{'input':'.2','output':'2.5'},'.115546440')
+        # Fictional remaining-allocation fixture, not account evidence.
+        r=quote(PLAN,{'input':'.2','output':'2.5'},'.10')
         self.assertFalse(r['budget_feasible']);self.assertEqual(r['calls_bound'],64)
     def test_changed_phase_or_nonfinite_amount_is_refused(self):
         with self.assertRaises(ValueError):quote(dict(PLAN,max_model_calls_per_phase=32),{'input':1,'output':1},1)
