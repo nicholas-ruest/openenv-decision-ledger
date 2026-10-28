@@ -1,0 +1,17 @@
+{
+  "source": "98a4d0290f71577c303c1ffb32371eca73af1533",
+  "ci": 40694731465,
+  "job": 122838359635,
+  "ci_status": "success",
+  "unit_tests": 15,
+  "ruos_tests": 15,
+  "actual_cached_tokenizer": true,
+  "tokenizers_version": "0.23.3",
+  "scripted_phase_attempts_recomputed": 16,
+  "cost_tampering_rejected": true,
+  "provider_native_callbacks_synthetic": true,
+  "arena_wrapper_equivalent": false,
+  "new_model_calls": 0,
+  "is_training": false,
+  "submission_performed": false
+}
