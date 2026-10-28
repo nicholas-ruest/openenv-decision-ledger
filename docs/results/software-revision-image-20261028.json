@@ -1,0 +1,19 @@
+{
+  "source": "ae301b0a4071b5a376d6eeef6812060fac789534",
+  "ci": 40742200919,
+  "ci_status": "success",
+  "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:a842e4ec292f9aa5067514a7eb8a85b5fa1e43edda61ef2bb53b9704603f8144",
+  "anonymous_pull": true,
+  "unit_tests": 9,
+  "sdk_checks": 6,
+  "schema_sha256": "b2828883f206a3976c8ed82f53380f5984a30e16ab88ed06d116233a6bee9814",
+  "scripted_native_episodes": 4,
+  "uid": "10001",
+  "entrypoint": "tini",
+  "artifact_id": 12838783850,
+  "artifact_sha256": "26a4010dc642fbaad726c7dcd18bf13d389e660ba0673d8052acf314f9b0ebdd",
+  "new_model_calls": 0,
+  "training": false,
+  "submission": false,
+  "reviewed_requests_unchanged": true
+}
