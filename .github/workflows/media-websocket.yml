@@ -1,0 +1,45 @@
+name: Bounded media WebSocket native adapter
+on:
+  push:
+    branches: ['research/software-stage-calibration-20261027']
+    paths: ['research/media-websocket-20261028/**', '.github/workflows/media-websocket.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  frozen-native-session:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      IMAGE: ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:b80078c2cc8a05d3222fe22ee91321d29d881afff912097c6601a8cffd84c4e6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install websockets==17.2
+      - run: PYTHONPATH=research/media-protocol-20261027:research/media-trajectory-audit-20261028 python -m unittest discover -s research/media-websocket-20261028 -p 'test_*.py'
+      - name: Frozen image native sessions and server cleanup
+        run: |
+          export DOCKER_CONFIG=$(mktemp -d)
+          mkdir evidence
+          docker pull "$IMAGE"
+          docker run -d --name media "$IMAGE"
+          trap 'docker logs media > evidence/server.log 2>&1; docker rm -f media' EXIT
+          for n in $(seq 1 60); do
+            if docker exec media python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health',timeout=1)" 2>/dev/null; then break; fi
+            sleep 1
+          done
+          docker exec media mkdir -m 700 /adapter
+          for name in native_session.py image_controls.py; do docker cp "research/media-websocket-20261028/$name" "media:/adapter/$name"; done
+          docker cp research/media-trajectory-audit-20261028/trajectory_audit.py media:/adapter/trajectory_audit.py
+          for name in media_protocol.py native-captures.json; do docker cp "research/media-protocol-20261027/$name" "media:/adapter/$name"; done
+          timeout 120s docker exec media python /adapter/image_controls.py > evidence/native-adapter.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: media-websocket-adapter-evidence
+          path: evidence/
+          retention-days: 7
