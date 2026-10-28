@@ -1,0 +1,13 @@
+# Saved generation and observation accounting verification — 2026-10-28
+
+The preceding parent verifier checked record hashes and final assessments but trusted the worker's saved accounting totals. A separate phase variant now writes the exact local accounting configuration before opening a native environment, and binds its hash into the claim, resets and pre-dispatch intents. The earlier phase implementation and both reviewed requests remain unchanged.
+
+The configuration freezes completion/context limits, serialization, tokenizer bytes and package version, special-token/padding/truncation flags, counter implementation and relevant source-file hashes. A factory with different limits or implementation fails before reservation/dispatch. Synthetic counters are explicitly marked.
+
+`accounting_archive.verify_archive` takes an external trusted configuration, counter, ledger and replay adapter. It reconstructs histories from saved raw provider/native events; independently adds generation and full post-reset observation costs; checks each reservation against the reconstructed allowance; re-runs the semantic auditor; reconstructs the overflow classification and final 16-attempt assessment. It does not call the runtime budget's accounting/projection methods. Raw native rewards remain preserved. Saved provider records, event records, resets and intents must agree with the episode archive.
+
+Fifteen offline tests pass locally: valid multi-action and failed-provider phases; initial and post-action overflows; changes to saved costs/configuration/source manifest/intent/provider records/classification; mismatched budget factories; failed configuration persistence; duplicate JSON keys and symlinks. All callbacks and counter values in these tests are synthetic. CI and existing-tokenizer validation are recorded separately once completed.
+
+The verifier shares the pinned counter, canonical serializer and semantic auditor; it is independent arithmetic and history reconstruction, not an independent tokenizer implementation or cryptographic proof of provider execution. Source/configuration hashes bind the supplied local method, not dispatch chronology or account truth. The replay callback is caller-supplied and must itself be bounded/trusted. Only complete archives are accepted; this is not a resume mechanism. The parent supervisor has not yet been wired to require this verifier for accounted phases.
+
+Arena chat-template/special-token/hidden-reasoning and observation-wrapper equivalence remain unverified. This is a local proxy accounting method, not a production equivalence claim. No model calls, new training, improvement estimate, submission or HF replacement occurred. Software v12 and media v13 stay frozen and unapproved.
