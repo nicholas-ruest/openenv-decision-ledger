@@ -1,0 +1,20 @@
+{
+  "source": "bc43573e77475e6d423487d4fd37093ae4fe8282",
+  "ci": 40613609137,
+  "ci_status": "success",
+  "new_tests": 17,
+  "existing_raw_binding_tests": 22,
+  "combined_tests": 39,
+  "test_workers": "synthetic only; no model/provider driver",
+  "real_process_kill_test": true,
+  "real_existing_coordinator_used": true,
+  "real_existing_paired_assessor_used": true,
+  "complete_synthetic_attempts": 32,
+  "new_provider_calls": 0,
+  "paid_launcher_implemented": false,
+  "is_training": false,
+  "model_improvement_claim": false,
+  "v12_changed": false,
+  "v13_changed": false,
+  "submitted": false
+}
