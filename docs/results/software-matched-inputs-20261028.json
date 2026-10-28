@@ -1,0 +1,13 @@
+{
+  "source": "d786ea1f297fb71f6a8e35d47bf391c5b50be208",
+  "unit_tests_ruos": 5,
+  "screen_attempts": 32,
+  "confirmation_attempts": 32,
+  "unique_screen_prompts": 4,
+  "inputs_sha256": "fe01a53d45c54b77c6e9e6050b775481d5e41acb0321bde0298b151a2e1dc1fc",
+  "confirmation_observations_materialized": false,
+  "new_model_calls": 0,
+  "provider_identities_attested": false,
+  "paid_execution_authorized": false,
+  "model_improvement": false
+}
