@@ -1,0 +1,22 @@
+name: Media local supervision and native HTTP bounds
+on:
+  push:
+    branches: ['research/software-stage-calibration-20261027']
+    paths: ['research/media-supervision-20261028/**', '.github/workflows/media-supervision.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-supervision:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install httpx==0.28.1
+      - name: Bounded native preflight and real process-group cleanup tests
+        run: PYTHONPATH=research/media-supervision-20261028:research/media-durable-phase-20261028:research/media-protocol-20261027:research/media-trajectory-audit-20261028:research/software-evidence-bind-20261027:. python -m unittest discover -s research/media-supervision-20261028 -p 'test_*.py'
