@@ -204,10 +204,10 @@ def reconciliation(path, receipt):
 
 class LiveBackend:
     scripted = False
-    def __init__(self, receipt, audit, tokenizer):
+    def __init__(self, receipt, audit, tokenizer, amendment_sha256):
         self.credit = reconciliation(audit, receipt)
         self.base = load('frozen_software_caller_base', ROOT/'scripts/repair-signal-screen.py')
-        self.budget = self.base.DollarReservations(receipt)
+        self.budget = self.base.DollarReservations(receipt, amendment_sha256=amendment_sha256)
         self.counter = self.base.helper.load_counter(argparse.Namespace(accounting='arena', tokenizer_json=tokenizer, tokenizer_sha256=self.base.TOKENIZER_SHA))
         self.token = os.environ.get('HF_TOKEN', '')
         if not self.token:
@@ -239,7 +239,7 @@ class LiveBackend:
 
 
 def execute(deadline, args):
-    backend = LiveBackend(args.receipt, args.reconciliation, args.tokenizer)
+    backend = LiveBackend(args.receipt, args.reconciliation, args.tokenizer, args.amendment_sha256)
     bundle = json.loads(args.inputs.read_text())
     phase(bundle, args.inputs_sha256, args.output, backend, backend.counter, deadline)
     return 0
@@ -250,7 +250,7 @@ def main():
     p.add_argument('--execute', action='store_true')
     for key in ('inputs', 'receipt', 'reconciliation', 'tokenizer', 'output'):
         p.add_argument('--'+key, type=Path)
-    p.add_argument('--inputs-sha256'); p.add_argument('--expected-source')
+    p.add_argument('--amendment-sha256'); p.add_argument('--inputs-sha256'); p.add_argument('--expected-source')
     args = p.parse_args()
     if not args.execute:
         print(json.dumps(dict(assigned_screen_attempts=32, max_model_calls=32, retries=0, paid_calls=0, live_execution=False)))

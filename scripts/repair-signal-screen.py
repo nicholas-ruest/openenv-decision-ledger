@@ -76,7 +76,7 @@ def quote(opener, token, timeout=15):
 
 class DollarReservations:
     """Append-before-call reservations never refunded, even for provider failures."""
-    def __init__(self, receipt):
+    def __init__(self, receipt, *, amendment_sha256=None):
         self.path = Path(receipt)
         value = json.loads(self.path.read_text())
         if value.get("closed_for_new_calls") is True:
@@ -87,7 +87,9 @@ class DollarReservations:
         prior = Decimal(str(value["prior_spend_usd"]))
         balance = Decimal(str(value["prepaid_balance_usd"]))
         total = Decimal(str(value["total_authorized_usd"]))
-        if not 0 <= age <= 7200 or not 0 < cap <= 2 or prior + cap > total or cap > balance:
+        from allocation_amendment import verified_cap_ceiling
+        ceiling = verified_cap_ceiling(self.path, value, amendment_sha256)
+        if not 0 <= age <= 7200 or not 0 < cap <= ceiling or prior + cap > total or cap > balance:
             raise ValueError("fresh reconciled existing inference allocation required")
         self.cap, self.local_lock = cap, threading.Lock()
         self.checked_at = checked
