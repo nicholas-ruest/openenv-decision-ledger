@@ -1,0 +1,26 @@
+{
+  "status": "confirmation_failed",
+  "intervention": "mental_public_example_self_tracing",
+  "computed_feedback": false,
+  "helper_intervention": false,
+  "is_training": false,
+  "screen": {
+    "assigned": 8,
+    "per_arm": 4,
+    "baseline_full": 0,
+    "candidate_full": 2
+  },
+  "confirmation": {
+    "assigned": 8,
+    "per_arm": 4,
+    "baseline_full": 1,
+    "candidate_full": 1,
+    "full_rate_delta": 0,
+    "semantic_mean_delta": 0.058333333333333404
+  },
+  "all_assignments_retained": true,
+  "raw_identities_disjoint_and_native_replayed": true,
+  "promotion": false,
+  "model_improvement": false,
+  "leaderboard_gain": false
+}
