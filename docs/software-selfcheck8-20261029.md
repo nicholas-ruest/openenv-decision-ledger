@@ -1,0 +1,9 @@
+# Eight-call public-example self-tracing prompt screen
+
+This separately frozen bounded replacement preserves the earlier self-checking hypothesis, with one case per phase. The prior 16-call/2,400-second preparation was not live-admissible: the existing supervisor correctly retains its 1,200-second maximum. No paid self-check call was made with it. Its in-process native tests did not cover that CLI boundary. That source and preparation archive are retained.
+
+Screen: ignore-d3 seed 2560000, four independent draws per arm, eight assigned calls total. Disjoint confirmation seed 2570000 is unmaterialized. Both arms use the unchanged full-module runtime, source, contract, examples, schema, sampling, SSE transport and resource limits. The treatment requests tracing all six public examples and comparing every field; the control requests neutral contract review. Internal tracing is requested and unobservable, not executed test feedback. No helper-preservation or loop-else compatibility change is included.
+
+Generation maximum 4,000; total completion including terminal observations 4,096; context 8,192. Eight calls, zero retries, existing 1,200-second supervisor, fixed 23:00 Toronto stop. All assigned outcomes remain in the denominator. Unknown usage stops later dispatch and withholds affected fitness. Whole-phase admission and existing amendment-bound financial guards remain required.
+
+Selection requires no unknown usage, positive full-solve delta and nonnegative native semantic mean delta. Four samples per same-prompt arm permit the pinned actual MetaHarness fitness function; the one-case scope cannot establish broad transfer. Freeze selection before fresh confirmation. No model-training or leaderboard claim, runtime replacement, Arena POST, HF replacement, purchase, new cap or new automation is included.
