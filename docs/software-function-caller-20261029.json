@@ -1,0 +1,19 @@
+{
+  "implementation": "manual bounded screen caller; default plan only",
+  "local_python_compilation": "passed",
+  "local_default_plan": "passed, live_execution false",
+  "local_pure_reconciliation_tests": 3,
+  "fixtures": "temporary fictional receipts only",
+  "scripted_native_tests_authored": 5,
+  "scripted_native_tests_result": "unverified; remote transport timed out",
+  "attempted_native_source": "0c4b0c7fae9da5405279bed0ee4d1d97a44d3e7d",
+  "duplicate_launch_performed": false,
+  "live_provider_phase_launched": false,
+  "new_model_calls": 0,
+  "actual_fund_reservations": 0,
+  "new_training": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "frozen_treatments_modified": false,
+  "private_state_sync_pending": true
+}

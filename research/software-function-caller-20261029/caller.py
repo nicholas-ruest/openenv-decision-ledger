@@ -182,8 +182,15 @@ def reconciliation(path, receipt):
     if not fresh(billing['observed_at']) or billing['automatic_recharge'] not in (False, 'OFF', 'off'):
         raise ValueError('fresh actual billing observation required')
     known = value['all_known_receipts']
-    if len(known) < 10:
-        raise ValueError('all known receipts required, not a new empty allocation')
+    inventory = value['inventory']
+    known_paths = {str(Path(item['receipt']).resolve()) for item in known}
+    inventory_paths = {str(Path(item['path']).resolve()) for item in inventory}
+    if (not known or len(known_paths) != len(known) or
+            len(inventory_paths) != len(inventory) or known_paths != inventory_paths):
+        raise ValueError('complete nonduplicated audited receipt inventory required')
+    for item in inventory:
+        if sha(item['path']) != item['sha256']:
+            raise ValueError('audited inventory changed')
     selected = False
     for item in known:
         p = Path(item['receipt']); ledger = p.with_suffix('.reservations.jsonl')
