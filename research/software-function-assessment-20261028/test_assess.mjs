@@ -73,3 +73,28 @@ test('confirmation scoring and improvement claims remain unsupported',()=>{
   const r=assess(bundle,rows);assert.equal(r.fresh_confirmation_verified,false);
   assert.equal(r.provider_attestation_verified,false);assert.equal(r.promotion,false);assert.equal(r.leaderboard_gain,false);
 });
+test('unknown failure usage preserves assigned denominator without invented MetaHarness cost',()=>{
+  const {bundle,rows}=fixture([0,0,0,0]);
+  Object.assign(rows[0],{category:'provider',semantic_reward:null,terminal_reward_observed:null,
+    generation_tokens:null,finish_reason:null,response_id:null});
+  Object.assign(rows[1],{category:'budget',semantic_reward:null,terminal_reward_observed:null,
+    generation_tokens:0,finish_reason:null,call_id:null,response_id:null,reservation_label:null});
+  const before=structuredClone(rows);const r=assess(bundle,rows);
+  assert.equal(r.attempts,32);assert.equal(r.attempts_per_arm,16);
+  assert.equal(r.groups[0].native_categories.provider,1);
+  assert.equal(r.groups[0].native_categories.budget,1);
+  assert.equal(r.groups[0].metaharness,null);
+  assert.equal(r.groups[0].metaharness_unavailable_reason,'unknown_generation_usage');
+  assert.equal(r.metaharness_groups_scored,7);assert.equal(r.metaharness_complete,false);
+  assert.equal(r.unknown_generation_usage_attempts,1);assert.equal(r.full_rate_delta,0);
+  assert.throws(()=>project(rows[0]));assert.deepEqual(rows,before);
+});
+test('unknown semantic usage remains invalid and wholly unavailable usage invokes no fitness',()=>{
+  const {bundle,rows}=fixture();rows[0].generation_tokens=null;
+  assert.throws(()=>assess(bundle,rows));
+  for(const row of rows)Object.assign(row,{category:'provider',semantic_reward:null,
+    terminal_reward_observed:null,generation_tokens:null,finish_reason:null,response_id:null});
+  const r=assess(bundle,rows);assert.equal(r.actual_module,null);
+  assert.equal(r.metaharness_groups_scored,0);assert.equal(r.unknown_generation_usage_attempts,32);
+  assert.equal(r.full_rate_delta,0);assert.equal(r.model_improvement_claim,false);
+});

@@ -10,9 +10,10 @@ const failure={format:'invalid_json_action',edit_rejection:'invalid_json_action'
   execution:'environment_step_failed',provider:'provider_request_failed',
   budget:'global_token_budget_exhausted',truncation:'completion_truncated'};
 
-export function project(row){
+function validate(row){
   need(row&&[...semantic,...Object.keys(failure)].includes(row.category),'audited category required');
-  need(count(row.generation_tokens),'observed generation token count required');
+  need(count(row.generation_tokens)||(row.generation_tokens===null&&!semantic.includes(row.category)),
+    'observed generation count required for semantic results; failures may explicitly retain unknown usage');
   const r=row.semantic_reward;
   if(row.category==='full')need(r===1,'full reward mismatch');
   else if(row.category==='wrong')need(r===0,'wrong reward mismatch');
@@ -21,6 +22,12 @@ export function project(row){
   need(row.terminal_reward_observed===null||(Number.isFinite(row.terminal_reward_observed)&&row.terminal_reward_observed>=0&&row.terminal_reward_observed<=1),'observed native reward required or explicit null');
   if(semantic.includes(row.category))need(row.terminal_reward_observed===r,'semantic/native mismatch');
   need(row.finish_reason===null||typeof row.finish_reason==='string','observed finish reason or explicit null required');
+}
+
+export function project(row){
+  validate(row);
+  need(count(row.generation_tokens),'unknown usage cannot be projected into MetaHarness token accounting');
+  const r=row.semantic_reward;
   // Failure precedence is explicit: a budget auto-grade of 1 is never solved.
   // Unknown finish reason is kept unknown; no manufactured stop metric.
   return {type:'episode',seed:row.seed,attempt:row.sample,reward:r??0,
@@ -58,22 +65,27 @@ export function assess(bundle,rows,phase='screen'){
     }
     // IDs are supplied evidence, not independently verified provider attestations.
     // Provider failures may have no response ID; budget failures may have no call.
-    for(const [field,ids,emptyAllowed] of [['call_id',callIDs,row.category==='budget'],['response_id',responseIDs,['provider','budget'].includes(row.category)],['reservation_label',reservations,false]]){
+    for(const [field,ids,emptyAllowed] of [['call_id',callIDs,row.category==='budget'],['response_id',responseIDs,['provider','budget'].includes(row.category)],['reservation_label',reservations,row.category==='budget'&&row.call_id===null]]){
       if(row[field]===null&&emptyAllowed)continue;
       need(typeof row[field]==='string'&&row[field]&&!ids.has(row[field]),'missing or reused '+field);ids.add(row[field]);
     }
-    project(row);observed.set(row.attempt_id,row);
+    validate(row);observed.set(row.attempt_id,row);
   }
   const scored=[...groups.values()].map(jobs=>{
     const rs=jobs.map(j=>observed.get(j.attempt_id));
     need(new Set(rs.map(r=>r.prompt_sha256)).size===1&&new Set(rs.map(r=>r.problem_sha256)).size===1,'not a same-prompt sample group');
-    const score=scoreCell(rs.map(project));
+    const unknownUsage=rs.filter(r=>r.generation_tokens===null).length;
+    // Descriptive outcomes survive missing usage. Never invent a cost just to
+    // obtain an upstream fitness score or silently drop the failed attempt.
+    const score=unknownUsage===0?scoreCell(rs.map(project)):null;
     return {task_id:rs[0].task_id,seed:rs[0].seed,arm:rs[0].arm,
       problem_sha256:rs[0].problem_sha256,attempts:4,full:rs.filter(r=>r.category==='full').length,
       semantic_sum:rs.reduce((a,r)=>a+(r.semantic_reward??0),0),
       native_categories:Object.fromEntries([...semantic,...Object.keys(failure)].map(c=>[c,rs.filter(r=>r.category===c).length])),
-      metaharness:{signal:score.signal,eligible:score.eligible,solved:score.solved,partial:score.partial,
-        reasoning:score.reasoning,format:score.format,truncation:score.truncation,infra:score.infra}};
+      unknown_generation_usage_attempts:unknownUsage,
+      metaharness_unavailable_reason:unknownUsage?'unknown_generation_usage':null,
+      metaharness:score?{signal:score.signal,eligible:score.eligible,solved:score.solved,partial:score.partial,
+        reasoning:score.reasoning,format:score.format,truncation:score.truncation,infra:score.infra}:null};
   });
   const pairs=scored.filter(g=>g.arm===arms[0]).map(a=>{
     const b=scored.find(g=>g.task_id===a.task_id&&g.seed===a.seed&&g.arm===arms[1]);
@@ -85,7 +97,10 @@ export function assess(bundle,rows,phase='screen'){
     procedural_seeds:new Set(jobs.map(j=>j.seed)).size,groups:scored,pairs,
     full_rate_delta:pairs.reduce((a,p)=>a+p.full_rate_delta,0)/4,
     semantic_mean_delta:pairs.reduce((a,p)=>a+p.semantic_mean_delta,0)/4,
-    metaharness_source:PIN,actual_module:'fitness.mjs:scoreCell',
+    metaharness_source:PIN,actual_module:scored.some(g=>g.metaharness)?'fitness.mjs:scoreCell':null,
+    metaharness_groups_scored:scored.filter(g=>g.metaharness).length,
+    metaharness_complete:scored.every(g=>g.metaharness!==null),
+    unknown_generation_usage_attempts:rows.filter(r=>r.generation_tokens===null).length,
     all_assigned_attempts_in_denominator:true,provider_attestation_verified:false,
     fresh_confirmation_verified:false,model_improvement_claim:false,leaderboard_gain:false,
     promotion:false,is_training:false};

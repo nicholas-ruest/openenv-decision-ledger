@@ -9,6 +9,7 @@ It executes `scoreCell` from the existing unmodified MIT MetaHarness `fitness.mj
 - Requires all 32 assigned results, four samples per arm/task/seed, and the two frozen software tasks and two screen seeds. Checks result identity, prompt/problem hashes against screen inputs, and non-reused supplied call/response/reservation IDs.
 - Scores eight same-prompt groups separately. Different procedural cases are never pooled to manufacture reward variation.
 - Retains native partial credit and separates valid wrong/partial/full from format, edit rejection, execution, provider, budget and truncation failures. A failure with an observed native reward of one is projected as failure for analysis. Raw records remain unchanged.
+- A failed attempt may explicitly retain unknown generation usage. It remains in descriptive outcome denominators; its group has no MetaHarness fitness score until accounting is known. Unknown usage is never projected as zero. Semantic outcomes still require known usage. An uncalled budget failure may explicitly lack call/response/reservation identities; a reservation label is not invented for an unreserved call.
 - Preserves unknown finish reasons. Under upstream classification an invalid-format response with unknown termination is conservatively truncation, rather than inventing a normal stop.
 - Reports full-rate and semantic-mean differences over all 16 assigned attempts per arm, with per-task/seed paired differences. Failed attempts remain in both denominators. These point estimates are not statistical confirmation. Four prompt groups across two procedural seeds are not 32 independent cases.
 - Supplied identities/accounting are checked for consistency, not independently attested. The caller must authenticate archives and bind the exact frozen input digest before using this module. No provider implementation, paid-call admission, automatic selection, promotion, or submission is included.
@@ -16,7 +17,7 @@ It executes `scoreCell` from the existing unmodified MIT MetaHarness `fitness.mj
 
 ## Verification
 
-Seven local Node tests passed using explicitly fictional results. They cover partial-credit signal, failure precedence, unknown termination, rejection breakdown, within-case grouping, all-attempt paired denominators, identity/coverage errors and refused confirmation. They execute the real pinned upstream fitness module. No saved private responses were used and no new model responses were generated.
+Nine local Node tests passed using explicitly fictional results. They cover partial-credit signal, failure precedence, unknown termination, rejection breakdown, within-case grouping, all-attempt paired denominators, identity/coverage errors, refused confirmation and unavailable usage. They execute the real pinned upstream fitness module only for groups with known usage. If every group has unknown usage, the report explicitly says no fitness module was executed. No saved private responses were used and no new model responses were generated.
 
 Reproduce from the repository root:
 
