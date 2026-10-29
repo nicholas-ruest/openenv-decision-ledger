@@ -1,0 +1,16 @@
+{
+  "local_node_tests": 7,
+  "fixtures": "explicitly fictional results only",
+  "metaharness_revision": "b8c3d38de41203faf633ef6dceb8452a4727b0ea",
+  "upstream_fitness_sha256": "852da62a33b833bc0a8cbc015891e3030d769b40fa41bf9793da84bdadfff130",
+  "actual_execution": "unmodified fitness.mjs scoreCell through hash-checked compatibility import",
+  "ruos_validation_pending": true,
+  "native_environment_executed_this_step": false,
+  "new_model_calls": 0,
+  "training_runs": 0,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "confirmation_scoring_supported": false,
+  "paid_execution_authorized": false,
+  "frozen_candidates_modified": false
+}
