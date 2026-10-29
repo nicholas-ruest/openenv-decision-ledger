@@ -22,7 +22,7 @@ class FunctionTests(unittest.TestCase):
             if isinstance(n,ast.FunctionDef) and n.name!=target:
                 self.assertEqual(definition(o.source,n.name),definition(merged,n.name))
     def test_invalid_target_multi_function_and_host_code_are_not_executed(self):
-        for code in ['def unrelated(a): return a','import os','def classify_ignore(a,b): return {}\ndef extra(): return 1']:
+        for code in ['def unrelated(a): return a','import os','def classify_ignore(a,b): return {}\ndef classify_ignore(a,b): return {}']:
             e,o=self.env();r=e.step(FunctionEditAction(content=code))
             self.assertTrue(r.done);self.assertEqual(r.reward,0);self.assertTrue(r.error)
     def test_zero_reward_unchanged_and_terminal_idempotence(self):
@@ -32,6 +32,12 @@ class FunctionTests(unittest.TestCase):
         self.assertEqual(e.state.step_count,1)
     def test_same_existing_complete_source_byte_limit(self):
         e,o=self.env();r=e.step(FunctionEditAction(content='def classify_ignore(a,b):\n    return "'+'é'*4000+'"'))
+        self.assertEqual(r.reward,0);self.assertTrue(r.error)
+    def test_new_helpers_are_allowed_but_supplied_helpers_stay_unchanged(self):
+        e,o=self.env();ref=e._direct._task.reference_source
+        code=definition(ref,'classify_ignore').replace('def classify_ignore(','def new_aggregation(')+'\ndef classify_ignore(a,b):\n    return new_aggregation(a,b)\n'
+        self.assertEqual(e.step(FunctionEditAction(content=code)).reward,1)
+        e,o=self.env();r=e.step(FunctionEditAction(content=definition(ref,'classify_ignore')+definition(ref,'rule_mode')))
         self.assertEqual(r.reward,0);self.assertTrue(r.error)
     def test_reset_scope_and_empty_finish(self):
         e,o=self.env();self.assertEqual(e.step(FunctionEditAction()).reward,0)

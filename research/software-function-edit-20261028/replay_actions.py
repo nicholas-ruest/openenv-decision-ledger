@@ -24,7 +24,12 @@ def main(archive,output,expected_sha):
     for r in rows:
         a=json.loads(next(m['content'] for m in r['messages'] if m['role']=='assistant'))
         if set(a)=={'action'}:a=a['action']
-        code=a['content'];definition=target_definition(code,TARGETS[r['task_id']]);observed={}
+        code=a['content'];definition=target_definition(code,TARGETS[r['task_id']])
+        from repair_env.tasks import make_task
+        supplied={n.name for n in ast.parse(make_task(r['task_id'],r['seed']).initial_source).body if isinstance(n,ast.FunctionDef)}
+        for n in ast.parse(code).body:
+            if isinstance(n,ast.FunctionDef) and n.name not in supplied:definition+='\n'+target_definition(code,n.name)
+        observed={}
         for mode,text in [('module',code),('function',definition)]:
             e=FunctionEditEnvironment();e.reset(task_id=r['task_id'],seed=r['seed'])
             n=e.step(FunctionEditAction(mode=mode,content=text))
