@@ -4,6 +4,7 @@ import ast
 import json
 from pathlib import Path
 import tempfile
+import sys
 import time
 import unittest
 from caller import ROOT, load, modules, phase, reconciliation
@@ -44,6 +45,7 @@ class CallerTests(unittest.TestCase):
         protocol.freeze(Path(cls.cache.name)/'inputs', 'scripted-caller-control')
         cls.bundle = json.loads((Path(cls.cache.name)/'inputs/inputs.json').read_text())
         cls.digest = protocol.digest(cls.bundle)
+        sys.path.insert(0, str(ROOT/'integrations/openenv-arena'))
         helper = load('caller_control_tokenizer', ROOT/'integrations/openenv-arena/scripts/calibrate.py')
         cls.counter = helper.load_counter(argparse.Namespace(accounting='arena',
             tokenizer_json=Path('/home/ruv/arena-tokenizer.json'),
