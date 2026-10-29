@@ -1,0 +1,25 @@
+{
+  "public_repository": "benchflow-ai/posttrainarena",
+  "revision": "4fffddff36d8c321bce5cab0d3b4a8d270f277e9",
+  "revision_date": "2026-09-30",
+  "source_blobs": [
+    {
+      "path": "pipelines/benchflow-task-posttrain/src/posttrainarena/benchflow_pipeline/grpo.py",
+      "git_blob": "4713247cd671c7472cbb97778ba8b57b27f3a7e5"
+    },
+    {
+      "path": "pipelines/benchflow-task-posttrain/src/posttrainarena/benchflow_pipeline/pipeline.py",
+      "git_blob": "2dd8af923c8110df3e69c768c574bcf46fc43bef"
+    },
+    {
+      "path": "pipelines/benchflow-task-posttrain/src/posttrainarena/benchflow_pipeline/publishing.py",
+      "git_blob": "d37112102ebd98c0d2d6ad3cff8e7c7148e05c54"
+    }
+  ],
+  "named_records_path": "train_metrics.json:rollouts / per-attempt rollout.json",
+  "actual_run_revision_attested": false,
+  "run_specific_records_recovered": false,
+  "task_mapping_attested": false,
+  "numeric_rotation_inference": false,
+  "new_model_calls": 0
+}
