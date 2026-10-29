@@ -1,6 +1,8 @@
 """Scripted native tests only, no provider or real receipt operations."""
 import argparse
 import json
+import subprocess
+import sys
 from pathlib import Path
 import tempfile
 import time
@@ -19,6 +21,22 @@ class NativeTests(unittest.TestCase):
             x=dict(a['request']);y=dict(b['request']);x.pop('max_tokens');y.pop('max_tokens')
             self.assertEqual(x,y);self.assertEqual({a['max_tokens'],b['max_tokens']},{2048,4000})
         self.assertFalse(value['confirmation']);self.assertFalse(value['promotion'])
+
+    def test_cli_supervision_refuses_missing_audit_before_any_provider_call(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);inputs=root/'inputs.json';inputs.write_text(json.dumps(f.plan()))
+            head=subprocess.check_output(['git','-C',str(f.ROOT),'rev-parse','HEAD'],text=True).strip()
+            argv=[sys.executable,str(Path(f.__file__)), '--inputs',str(inputs),
+                  '--inputs-sha256',f.protocol.digest(f.plan()),'--receipt',str(root/'missing-receipt'),
+                  '--audit',str(root/'missing-audit'),'--tokenizer',str(root/'missing-tokenizer'),
+                  '--output',str(root/'out'),'--expected-source',head,'--amendment-sha256','0'*64]
+            result=subprocess.run(argv,capture_output=True,text=True,timeout=30)
+            self.assertTrue((root/'out.supervision.jsonl').exists(),result.stderr)
+            events=[json.loads(x) for x in (root/'out.supervision.jsonl').read_text().splitlines()]
+            self.assertEqual(events[-1]['event'],'terminal')
+            self.assertTrue(events[-1]['shutdown_verified'])
+            self.assertNotEqual(events[-1]['worker_exitcode'],0)
+            self.assertFalse((root/'out').exists())
 
     def run_phase(self, fail=False):
         from repair_env.tasks import make_task

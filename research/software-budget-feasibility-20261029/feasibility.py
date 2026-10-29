@@ -13,7 +13,7 @@ from decimal import Decimal
 ROOT=Path(__file__).resolve().parents[2]
 sys.path[:0]=[str(ROOT/p) for p in ('research/software-function-caller-20261029',
     'research/software-function-block-protocol-20261028','research/software-terminal-audit-20261028',
-    'integrations/software-repair','scripts')]
+    'integrations/software-repair','integrations/software-repair/scripts','scripts')]
 from caller import LiveBackend,record,load
 from failure_diagnostics import safe_failure
 import protocol
