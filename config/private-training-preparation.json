@@ -1,0 +1,19 @@
+{
+  "runtime_source_revision": "088f6e035cb9696ce1128a643ed5a85d21e22144",
+  "environment_source_sha256": "d15540b12193fe5c1fbf9b43ed2f88cc469c302f15658d8295c5998f08472d93",
+  "task_source_sha256": "94bb0a0636f7d5a0770b9543991cc8f8a0be093200c5f6f0b8d7b2b9ac444cd6",
+  "task_ids": ["software_change-d2"],
+  "model_revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+  "model_path": "/model",
+  "model_manifest_path": "/app/config/target-model-manifest.json",
+  "model_manifest_sha256": "63b9fdde4d71496a26649624c4258debaef5a9da8e6c244b4c715e3f20ed9856",
+  "tokenizer_sha256": "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3",
+  "task_mix_confirmed": false,
+  "target_hardware_smoke_verified": false,
+  "train_seeds": {"start": 900000, "count": 128},
+  "validation_seeds": {"start": 910000, "count": 32},
+  "test_seeds": {"start": 920000, "count": 64},
+  "num_generations": 4,
+  "max_wall_seconds": 3000,
+  "thinking": true
+}

@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-19",
+  "source": "c1fef287aa8bb03e6a9275f1d4f15b3d82a369d5",
+  "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:31e4ac82859fdf06687969761c0903567a8d094e4e74a6e3758e1878ad9f9009",
+  "ci": "https://github.com/nicholas-ruest/openenv-decision-ledger/actions/runs/39288944624",
+  "task_id": "software_repair-release-d1",
+  "seeds": [1020000, 1020100],
+  "rollouts": 8,
+  "unique_prompts": 2,
+  "valid_full": 4,
+  "valid_partial": 0,
+  "valid_wrong": 0,
+  "failures": {"episode_budget_exceeded": 2, "completion_truncated": 1, "provider_timeout": 1},
+  "valid_rewards_by_prompt": [[1], [1, 1, 1]],
+  "within_group_reset_workspace_and_frozen_source_verified": true,
+  "genuine_signal_screened": false,
+  "confirmation_launched": false,
+  "raw_records_sha256": "0746c4c452c190d0d527df56413b1dbb8a80e704c59480fafe696bab879bd072",
+  "request_audit": {
+    "distinct_assistant_transcript_hashes": 8,
+    "provider_response_ids_recorded": false,
+    "limitation": "Client attempted separate samples with no retries; old records cannot attest distinct provider response identities. Future screens will record hashed response IDs."
+  },
+  "workflow_observations": {
+    "rollouts_reading_source_first": 8,
+    "rollouts_reading_all_six_examples": 8,
+    "rollouts_using_patch": 2,
+    "patch_using_rollouts_fully_solved": 2,
+    "remaining_bottleneck": "Full public-example reads and repeated reads consume observation budget."
+  },
+  "interpretation": "Valid completions all solved fully, so no clean semantic reward variation. These are fresh prompts, not a matched before/after experiment; no causal guidance or patch benefit is established.",
+  "default_training_mix_changed": false,
+  "is_training": false,
+  "ranking_improvement": null,
+  "arena_submission": false,
+  "next_change": "Read individual complete public examples through focused views; preserve all six examples and interpreter/reward limits."
+}

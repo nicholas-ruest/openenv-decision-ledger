@@ -1,0 +1,160 @@
+{
+  "arena_wrapper_equivalent": false,
+  "budget_admitted": false,
+  "case_identity": "reset transport hash plus visible workspace hash; instruction prefix may repeat",
+  "confirmation_requirement": "disjoint screen/confirmation visible cases and observed calls (instruction prefixes may repeat); each sampled task/family cell needs productive prompts in both phases before provisional cell-signal claims",
+  "confirmation_seed_selection": "first unused seed in2300000..2301023 matching the screen family; chosen solely from native generator labels before any model outcomes",
+  "failure_classes": [
+    "format",
+    "provider",
+    "truncation",
+    "execution",
+    "budget"
+  ],
+  "fresh_provider_fingerprint_required": true,
+  "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:b80078c2cc8a05d3222fe22ee91321d29d881afff912097c6601a8cffd84c4e6",
+  "initial_prompts_disjoint": false,
+  "is_training": false,
+  "maximum_provider_calls_per_phase": 512,
+  "model_phase_executed": false,
+  "native_capture_origin": {
+    "artifact_id": 12787395298,
+    "artifact_zip_sha256": "dfc971ad277fca2de101efa012b49b15c86a46a53a7be07b840167e79a1e7923",
+    "capture_file_sha256": "8e17393bbc79961d1ef0c9b36ab0cbe401fa51b2cb1ba313c7938eefad282f97",
+    "capture_reused": true,
+    "native_capture_ci": 40620041861,
+    "native_capture_controls": 16,
+    "native_capture_source": "eb111146875eb4c2c4e8a15f7cb42e55f72363eb",
+    "new_model_calls": 0,
+    "original_ci_status": "failed: initial-instruction-only disjointness guard; raw captures preserved"
+  },
+  "native_reset_controls": 16,
+  "new_model_calls": 0,
+  "partial_semantic_reward_supported": false,
+  "phases": {
+    "confirmation": {
+      "executed": false,
+      "future_rollouts": 16,
+      "groups": [
+        {
+          "case_sha256": "a86ff649e64a97afae3eb8cf53063580b708551a56ccdecf258b6a62f508704c",
+          "family": "catalogue",
+          "prompt_sha256": "bb478b13cf40d96c1c839e85b15cf4f2917db01453c4268f504c1ac93c196898",
+          "reset_sha256": "62697d22cd833f36217602e69623ef42d282191a9c658561e50971c2794d37ab",
+          "seed": 2300004,
+          "task_id": "qe_skill-media-d1",
+          "workspace_sha256": "4192f221cbbe194f0dc36ecee5afa09d5285d78a8bc571f26f6c05879688e4fa"
+        },
+        {
+          "case_sha256": "156e6285f6f01b9c33d864a1ba390cb9610f3543c719e46a491afb044863291c",
+          "family": "timecode",
+          "prompt_sha256": "0ed65e59537988f8b9e9902f99393e4562612805a33a834ac863da49ae0446e8",
+          "reset_sha256": "b4a521373f343f8d2f0404539e83a952d2bc27db51d50420c60dd865b5042de5",
+          "seed": 2300000,
+          "task_id": "qe_skill-media-d1",
+          "workspace_sha256": "05204a81b59425dc2acf88e4aeb9f2cf37dec51a938691776ab45b5b89758e2b"
+        },
+        {
+          "case_sha256": "365143952728724708503faca0f6a02ab3e6728ae89ad18fc26862bc19470e88",
+          "family": "subtitles",
+          "prompt_sha256": "22e0f19f8cac3477d910943049821d7e116eb052bbc574d40b581f8476a5de9a",
+          "reset_sha256": "f8fbe0221577f314ce5dda5419902d7a0f8826d98a7e6b48b7ab9fdb81afa961",
+          "seed": 2300009,
+          "task_id": "qe_skill-media-d2",
+          "workspace_sha256": "f1eece0d223c427e95d60e5f7d4b638370cc96cbc7f91825f5eb47abef2ec6c3"
+        },
+        {
+          "case_sha256": "77da79e35a53b34c7ef068b5589360835ea8984e320c903ae0c2d1f3eb1e02b1",
+          "family": "catalogue",
+          "prompt_sha256": "a401075591e6740c5645abe52827d36f83c1671cefb00fdbe27546a8af96232c",
+          "reset_sha256": "4c9a2f7d31641d12275ec63d83436a643fc7ad57479cfea50761761a5a3e7fba",
+          "seed": 2300002,
+          "task_id": "qe_skill-media-d2",
+          "workspace_sha256": "3a5b9efbad7ddabcf5770ed3fb8e8d1f247ee8d875d04137c9b496d1a099f9a4"
+        }
+      ],
+      "native_reset_controls_per_prompt": 2,
+      "samples_per_prompt": 4
+    },
+    "screen": {
+      "executed": false,
+      "future_rollouts": 16,
+      "groups": [
+        {
+          "case_sha256": "30c13c272b09c8eebc24b1020ee4837bb13ffe390f412480f79da52e923d2abb",
+          "family": "catalogue",
+          "prompt_sha256": "bb478b13cf40d96c1c839e85b15cf4f2917db01453c4268f504c1ac93c196898",
+          "reset_sha256": "62697d22cd833f36217602e69623ef42d282191a9c658561e50971c2794d37ab",
+          "seed": 2290000,
+          "task_id": "qe_skill-media-d1",
+          "workspace_sha256": "eb8d3427d923223412950c0e5fd1f28a2e7eeb68c95bfca292567f6ad994ac42"
+        },
+        {
+          "case_sha256": "d1bec875728d034dfc8b13f46e6be6e690bc29a569cfa14088ff923cde9cddd2",
+          "family": "timecode",
+          "prompt_sha256": "0ed65e59537988f8b9e9902f99393e4562612805a33a834ac863da49ae0446e8",
+          "reset_sha256": "b4a521373f343f8d2f0404539e83a952d2bc27db51d50420c60dd865b5042de5",
+          "seed": 2290100,
+          "task_id": "qe_skill-media-d1",
+          "workspace_sha256": "887dd55fe2ef9f6a6cee2faec61441fd0c12a7a6c1cb63fab0278c46f6e47bef"
+        },
+        {
+          "case_sha256": "65862ea21ecc423802fa4e3358ceaffee609b5d622fa3cbdc8df61aaa52667d4",
+          "family": "subtitles",
+          "prompt_sha256": "22e0f19f8cac3477d910943049821d7e116eb052bbc574d40b581f8476a5de9a",
+          "reset_sha256": "f8fbe0221577f314ce5dda5419902d7a0f8826d98a7e6b48b7ab9fdb81afa961",
+          "seed": 2290000,
+          "task_id": "qe_skill-media-d2",
+          "workspace_sha256": "0a38dfcf6b73d2a372dc2504efe20a3ab81ca1f14816a6b8b5e3cca9c697f6ad"
+        },
+        {
+          "case_sha256": "c6f1dd4d4c8a58b4b1c9673053fe007853cf9b765dd56d676379d92a08f2f708",
+          "family": "catalogue",
+          "prompt_sha256": "a401075591e6740c5645abe52827d36f83c1671cefb00fdbe27546a8af96232c",
+          "reset_sha256": "4c9a2f7d31641d12275ec63d83436a643fc7ad57479cfea50761761a5a3e7fba",
+          "seed": 2290100,
+          "task_id": "qe_skill-media-d2",
+          "workspace_sha256": "aea8d865568520775afcf098fcef38cc04a1e63efcff925b9536d5c2d978c22f"
+        }
+      ],
+      "native_reset_controls_per_prompt": 2,
+      "samples_per_prompt": 4
+    }
+  },
+  "productive_group_definition": "same prompt contains both valid reward0 and valid reward1; failures never substitute for semantic wrong",
+  "promotion": false,
+  "provider_checkpoint_attested": false,
+  "runtime_source": "74a8727fa14270e29cf363fc2ad79b0f7f9cbce1",
+  "sampling": {
+    "context_units": 8192,
+    "episode_generation_units": 4096,
+    "max_actions": 32,
+    "max_generation_per_call": 4096,
+    "model": "Qwen/Qwen3.8-27B",
+    "response_format": {
+      "type": "json_object"
+    },
+    "retries": 0,
+    "route": "deepinfra",
+    "temperature": 0.7,
+    "thinking": true
+  },
+  "sampling_sha256": "3d3dbe5764e63a8f67c379b9ee0e4458effb9acb5d89351345eb7bc155fdf2d5",
+  "schema_sha256": "f756772d59ca78d8f271302df3e94fb757c75c9629705cb5fb04d7fd6092af4f",
+  "scope": "four sampled task/family cells; no whole-task, unsampled-family or training-readiness claim",
+  "semantic_rewards": [
+    0,
+    1
+  ],
+  "shared_initial_prompt_hashes": [
+    "0ed65e59537988f8b9e9902f99393e4562612805a33a834ac863da49ae0446e8",
+    "22e0f19f8cac3477d910943049821d7e116eb052bbc574d40b581f8476a5de9a",
+    "a401075591e6740c5645abe52827d36f83c1671cefb00fdbe27546a8af96232c",
+    "bb478b13cf40d96c1c839e85b15cf4f2917db01453c4268f504c1ac93c196898"
+  ],
+  "thinking_attested": false,
+  "validation_ci": 40620471048,
+  "validation_source": "2506d9d7b10ab53f22ab6ca85d2cda4402fded3d",
+  "validation_status": "success",
+  "whole_phase_reservation_required": true
+}

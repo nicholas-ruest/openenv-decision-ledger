@@ -1,0 +1,75 @@
+{
+  "runner_source": "dce94bbabb6fe218572e8edcc1d9f9a8c86382b0",
+  "profile": "release_generalization",
+  "rollouts": 8,
+  "unique_prompts": 2,
+  "valid_full": 1,
+  "valid_partial": 0,
+  "valid_wrong": 0,
+  "failures": {
+    "invalid_json_action": 4,
+    "provider_or_reservation_failure": 3
+  },
+  "http_statuses": {
+    "504": 3
+  },
+  "groups": [
+    {
+      "task_id": "software_repair-release-d3",
+      "seed": 1100000,
+      "samples": 4,
+      "valid": 1,
+      "full": 1,
+      "partial": 0,
+      "wrong": 0,
+      "valid_rewards": [
+        1
+      ],
+      "valid_reward_std": 0,
+      "failures": {
+        "invalid_json_action": 1,
+        "provider_or_reservation_failure": 2
+      },
+      "prompt_sha256": "12fa94ffdb282f80c918e043637bb01412c487fc0942b658cbc2eed291e58b78",
+      "prompt_identity_verified": true,
+      "prompt_identity_unavailable_samples": 0,
+      "productive": false
+    },
+    {
+      "task_id": "software_repair-release-d3",
+      "seed": 1100100,
+      "samples": 4,
+      "valid": 0,
+      "full": 0,
+      "partial": 0,
+      "wrong": 0,
+      "valid_rewards": [],
+      "valid_reward_std": null,
+      "failures": {
+        "invalid_json_action": 3,
+        "provider_or_reservation_failure": 1
+      },
+      "prompt_sha256": "764196229e59bb1b4d5caad603082ed33be20ebdafe94f984b7f76752da22fd6",
+      "prompt_identity_verified": true,
+      "prompt_identity_unavailable_samples": 0,
+      "productive": false
+    }
+  ],
+  "sampling_identity_verified": true,
+  "recorded_responses": 17,
+  "genuine_signal_screened": false,
+  "confirmation_launched": false,
+  "is_training": false,
+  "source_hashes_verified": true,
+  "archive_sha256": {
+    "protocol.json": "48ea69b460c97ba5270149b986bf2327bba03c877db05b2fdc3f4df84009119a",
+    "episodes.jsonl": "51f9fa0d4068de6325a7fe376188f83758110c348a18028612f1209778b29421",
+    "complete.json": "5588ca04cc89ebf4eba07155038bd882ec3cef43d2d448dd2af00befa890e925",
+    "analysis.json": "cacea66fddf4f3690e8e687c1fa277942cf72547c0a3466dff88d7291000efc5"
+  },
+  "limitations": [
+    "All valid rewards1; failures never count as semantic variation.",
+    "Hosted checkpoint/thinking/Arena wrapper equivalence unattested.",
+    "No ranking improvement, task mix adoption or model training."
+  ]
+}

@@ -1,0 +1,19 @@
+name: Public example check intervention
+on:
+  push:
+    branches: ['research/software-stage-calibration-20261027']
+    paths: ['research/software-public-check-20261028/**', '.github/workflows/software-public-check.yml']
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s research/software-public-check-20261028 -p 'test_*.py'

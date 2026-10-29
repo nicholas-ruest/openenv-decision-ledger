@@ -1,0 +1,90 @@
+{
+  "runner_source": "45d7f3bd82dabebcb3afe5a1fda0d596c6bcf854",
+  "runtime_source": "7c3b6fcabaa32ddf784b7d692959a5019e6b802e",
+  "profile": "release_witness",
+  "model": "Qwen/Qwen3.8-27B:deepinfra",
+  "rollouts": 8,
+  "unique_prompts": 2,
+  "valid_full": 1,
+  "valid_partial": 0,
+  "valid_wrong": 0,
+  "failures": {
+    "provider_or_reservation_failure": 3,
+    "episode_budget_exceeded": 2,
+    "completion_truncated": 1,
+    "invalid_json_action": 1
+  },
+  "http_statuses": {
+    "504": 3
+  },
+  "recorded_responses": 27,
+  "generation_tokens": 21814,
+  "observation_tokens": 21983,
+  "groups": [
+    {
+      "task_id": "software_repair-release-d2",
+      "seed": 1091000,
+      "samples": 4,
+      "valid": 0,
+      "full": 0,
+      "partial": 0,
+      "wrong": 0,
+      "valid_rewards": [],
+      "valid_reward_std": null,
+      "failures": {
+        "provider_or_reservation_failure": 2,
+        "episode_budget_exceeded": 1,
+        "completion_truncated": 1
+      },
+      "prompt_sha256": "981373762510b6c2a36b0f7410e8116183d4934406bccde066734ecb8670caee",
+      "prompt_identity_verified": true,
+      "prompt_identity_unavailable_samples": 0,
+      "productive": false
+    },
+    {
+      "task_id": "software_repair-release-d2",
+      "seed": 1091100,
+      "samples": 4,
+      "valid": 1,
+      "full": 1,
+      "partial": 0,
+      "wrong": 0,
+      "valid_rewards": [
+        1
+      ],
+      "valid_reward_std": 0,
+      "failures": {
+        "invalid_json_action": 1,
+        "episode_budget_exceeded": 1,
+        "provider_or_reservation_failure": 1
+      },
+      "prompt_sha256": "0059f28c82b8541ddf6926dbcfedc6ec850cab67efa1b1ec8494a946de3fe4ac",
+      "prompt_identity_verified": true,
+      "prompt_identity_unavailable_samples": 0,
+      "productive": false
+    }
+  ],
+  "sampling_identity_verified": true,
+  "genuine_signal_screened": false,
+  "confirmation_launched": false,
+  "is_training": false,
+  "image_adopted": false,
+  "archive_sha256": {
+    "protocol.json": "11a8acf500f892d6325629af2b09a35101a224f105a615a117947e976fb0538e",
+    "episodes.jsonl": "1b59ff78579868da419dbd7b16814f4bb8be2949bc4288cec5963400db6bfd3b",
+    "complete.json": "4340968eda9f744b5b9145d35978d91fb193260ff21211de6302edd984b75876",
+    "analysis.json": "f1527e3b2e72784da6ece881930f82e461df830118f314b21136878b57ebc3af"
+  },
+  "post_failure_terminal_rewards": {
+    "0.0": 5,
+    "0.5": 1,
+    "1.0": 1
+  },
+  "post_failure_counts_as_valid": false,
+  "limitations": [
+    "Proxy checkpoint/thinking/Arena wrapper equivalence remains unattested.",
+    "A failed attempt's local terminal diagnostic is not a valid model completion.",
+    "Different-seed capacity follow-up is adaptive, not a matched causal estimate.",
+    "No training, ranking improvement, task-mix adoption or Arena submission."
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "raw_sha256": "1b59ff78579868da419dbd7b16814f4bb8be2949bc4288cec5963400db6bfd3b",
+  "replay_sha256": "e382a4e7098fe460c8957a7fc3192755ba47b67368b26f71fe2a50e3e7bcdc22",
+  "counts": {
+    "unchanged": 4,
+    "valid_partial": 1,
+    "valid_full": 2,
+    "execution_failure": 1
+  },
+  "rewards": [
+    0,
+    0.5,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1
+  ],
+  "labels_preserved": true,
+  "new_model_calls": 0
+}

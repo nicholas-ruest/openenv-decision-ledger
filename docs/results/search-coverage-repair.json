@@ -1,0 +1,32 @@
+{
+  "status": "repair_verified_new_calibration_running",
+  "cause": "The global hosted model catalog changed during the run, changing serverSha while envSourceSha, runnerSha and runnerArgsSha stayed identical. Cached unchanged cells were invalidated and the evaluator requested eight fresh cells against the driver's one-cell allowance.",
+  "repair": "Fingerprint selected model metadata and explicitly bound DeepInfra route. Keep the full catalog in diagnostic detail; selected-model disappearance or root/context changes still invalidate/fail closed.",
+  "verification": {
+    "targeted_regression": "passed",
+    "upstream_darwin_tests_passed": 80,
+    "skipped": 3,
+    "failed": 0
+  },
+  "new_search": "runs/provenance-fixed-darwin-20261012",
+  "harder_task_probe": {
+    "families": [
+      "office_reconciliation",
+      "finance_ledger",
+      "math_route",
+      "media_timeline"
+    ],
+    "difficulty": 3,
+    "thinking_requested": "on",
+    "seed_base": 840000,
+    "episodes_per_family": 4,
+    "token_reservation_limit": 500000
+  },
+  "limits": [
+    "Hosted checkpoint identity remains unverified",
+    "New provenance keys intentionally do not reuse old catalog-derived cache entries",
+    "Four cases per family are a preliminary signal screen, not confirmation",
+    "Runtime image/reward code unchanged; no training or submission"
+  ],
+  "task_mix": "pending_measured_signal_and_fresh_seed_confirmation"
+}

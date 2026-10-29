@@ -1,0 +1,251 @@
+{
+  "submission_id": "decision-ledger-software-repair-v3-20261020",
+  "name": "Decision Ledger: software repair workflow candidate",
+  "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:b515cb39fe160d81c972a4b62808e9b94056905f29d9a12c8e20aac55f38e42c",
+  "source": "https://github.com/nicholas-ruest/openenv-decision-ledger/tree/c95e6fe79e44c9b1514fd59e186a0a70ac424858",
+  "dataset": "GlobalBusinessAdvisors/openenv-decision-ledger",
+  "schema": {
+    "action": {
+      "additionalProperties": false,
+      "properties": {
+        "metadata": {
+          "additionalProperties": true,
+          "description": "Additional metadata for the action",
+          "title": "Metadata",
+          "type": "object"
+        },
+        "op": {
+          "enum": [
+            "list",
+            "read",
+            "write",
+            "test",
+            "submit"
+          ],
+          "title": "Op",
+          "type": "string"
+        },
+        "path": {
+          "default": "",
+          "title": "Path",
+          "type": "string"
+        },
+        "content": {
+          "default": "",
+          "maxLength": 8192,
+          "title": "Content",
+          "type": "string"
+        }
+      },
+      "required": [
+        "op"
+      ],
+      "title": "RepairAction",
+      "type": "object"
+    },
+    "observation": {
+      "additionalProperties": false,
+      "properties": {
+        "done": {
+          "default": false,
+          "description": "Whether the episode has terminated",
+          "title": "Done",
+          "type": "boolean"
+        },
+        "reward": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Reward signal from the last action",
+          "title": "Reward"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "description": "Additional metadata for the observation",
+          "title": "Metadata",
+          "type": "object"
+        },
+        "task_id": {
+          "default": "",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "prompt": {
+          "default": "",
+          "title": "Prompt",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Files",
+          "type": "array"
+        },
+        "content": {
+          "default": "",
+          "title": "Content",
+          "type": "string"
+        },
+        "error": {
+          "default": "",
+          "title": "Error",
+          "type": "string"
+        },
+        "remaining_steps": {
+          "default": 0,
+          "title": "Remaining Steps",
+          "type": "integer"
+        }
+      },
+      "title": "RepairObservation",
+      "type": "object"
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "software_repair-plan-d1",
+      "split": "train",
+      "reset_wall_s": 120,
+      "rollout_wall_s": 600,
+      "verifier_wall_s": 30,
+      "tool_wall_s": 20,
+      "tool_calls_total": 12,
+      "tool_calls_per_minute": 60,
+      "completion_tokens": 8192,
+      "context_tokens": 16384,
+      "cpu_floor_vcpus": 1,
+      "memory_gib": 2,
+      "workspace_gib": 2
+    },
+    {
+      "task_id": "software_repair-plan-d2",
+      "split": "train",
+      "reset_wall_s": 120,
+      "rollout_wall_s": 600,
+      "verifier_wall_s": 30,
+      "tool_wall_s": 20,
+      "tool_calls_total": 12,
+      "tool_calls_per_minute": 60,
+      "completion_tokens": 8192,
+      "context_tokens": 16384,
+      "cpu_floor_vcpus": 1,
+      "memory_gib": 2,
+      "workspace_gib": 2
+    },
+    {
+      "task_id": "software_repair-cover-d1",
+      "split": "train",
+      "reset_wall_s": 120,
+      "rollout_wall_s": 600,
+      "verifier_wall_s": 30,
+      "tool_wall_s": 20,
+      "tool_calls_total": 12,
+      "tool_calls_per_minute": 60,
+      "completion_tokens": 8192,
+      "context_tokens": 16384,
+      "cpu_floor_vcpus": 1,
+      "memory_gib": 2,
+      "workspace_gib": 2
+    },
+    {
+      "task_id": "software_repair-cover-d2",
+      "split": "train",
+      "reset_wall_s": 120,
+      "rollout_wall_s": 600,
+      "verifier_wall_s": 30,
+      "tool_wall_s": 20,
+      "tool_calls_total": 12,
+      "tool_calls_per_minute": 60,
+      "completion_tokens": 8192,
+      "context_tokens": 16384,
+      "cpu_floor_vcpus": 1,
+      "memory_gib": 2,
+      "workspace_gib": 2
+    },
+    {
+      "task_id": "software_repair-merge-d1",
+      "split": "train",
+      "reset_wall_s": 120,
+      "rollout_wall_s": 600,
+      "verifier_wall_s": 30,
+      "tool_wall_s": 20,
+      "tool_calls_total": 12,
+      "tool_calls_per_minute": 60,
+      "completion_tokens": 8192,
+      "context_tokens": 16384,
+      "cpu_floor_vcpus": 1,
+      "memory_gib": 2,
+      "workspace_gib": 2
+    },
+    {
+      "task_id": "software_repair-merge-d2",
+      "split": "train",
+      "reset_wall_s": 120,
+      "rollout_wall_s": 600,
+      "verifier_wall_s": 30,
+      "tool_wall_s": 20,
+      "tool_calls_total": 12,
+      "tool_calls_per_minute": 60,
+      "completion_tokens": 8192,
+      "context_tokens": 16384,
+      "cpu_floor_vcpus": 1,
+      "memory_gib": 2,
+      "workspace_gib": 2
+    },
+    {
+      "task_id": "software_repair-replay-d1",
+      "split": "train",
+      "reset_wall_s": 120,
+      "rollout_wall_s": 600,
+      "verifier_wall_s": 30,
+      "tool_wall_s": 20,
+      "tool_calls_total": 12,
+      "tool_calls_per_minute": 60,
+      "completion_tokens": 8192,
+      "context_tokens": 16384,
+      "cpu_floor_vcpus": 1,
+      "memory_gib": 2,
+      "workspace_gib": 2
+    },
+    {
+      "task_id": "software_repair-replay-d2",
+      "split": "train",
+      "reset_wall_s": 120,
+      "rollout_wall_s": 600,
+      "verifier_wall_s": 30,
+      "tool_wall_s": 20,
+      "tool_calls_total": 12,
+      "tool_calls_per_minute": 60,
+      "completion_tokens": 8192,
+      "context_tokens": 16384,
+      "cpu_floor_vcpus": 1,
+      "memory_gib": 2,
+      "workspace_gib": 2
+    }
+  ],
+  "example_actions": [
+    {
+      "op": "read",
+      "path": "*"
+    },
+    {
+      "op": "submit"
+    }
+  ],
+  "finish_action": {
+    "op": "submit"
+  }
+}

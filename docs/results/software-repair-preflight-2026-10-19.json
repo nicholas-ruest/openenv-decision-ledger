@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-19",
+  "source_revision": "d35261cf1fadd336ec063fa15f3eecb3a0bbc566",
+  "status": "offline_native_passed_container_validation_pending",
+  "category": "software_only",
+  "families": 6,
+  "task_ids": 12,
+  "unit_tests_passed": 64,
+  "unique_control_cases": 192,
+  "native_websocket_controls_passed": 48,
+  "native_websocket_controls_expected": 48,
+  "pinned_openenv_validate": "PASS 6/6",
+  "test_log_sha256": "e1d382491c9c1119768aef0608cd45cce5a7867b5884ac2c6e11fbd4bcea82ee",
+  "native_report_sha256": "2a1882ef48db41334c29ca1efa90832fe49d1666fe7ca007c770acd7b77e243b",
+  "test_server_cleanup_verified": true,
+  "reference_controls_are_model_solves": false,
+  "target_model_calls": 0,
+  "arena_submission_sent": false,
+  "first_submitted_runtime_changed": false,
+  "limitations": [
+    "No target-model calibration, training or transfer evidence for this candidate",
+    "Bounded Python subset; no real terminal or arbitrary Python execution",
+    "Container/anonymous pull gates remain pending",
+    "Candidate dataset update and explicit exact-request approval required before submission"
+  ]
+}

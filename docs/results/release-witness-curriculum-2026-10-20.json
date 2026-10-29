@@ -1,0 +1,49 @@
+{
+  "task": "software_repair-release-d2",
+  "status": "offline_curriculum_candidate_not_model_confirmed",
+  "task_instances": 16,
+  "new_task_instances": 8,
+  "seeds": [
+    [
+      1090300,
+      1090303
+    ],
+    [
+      1090400,
+      1090403
+    ]
+  ],
+  "reference_checks_passed": 576,
+  "old": {
+    "isolated_catalogued_defects": 24,
+    "public_detections": 15,
+    "hidden_active_public_misses": 2,
+    "constructed_proper_subset_variants": 48,
+    "zero_reward": 10,
+    "partial_reward": 31,
+    "full_reward": 7
+  },
+  "candidate": {
+    "isolated_catalogued_defects": 24,
+    "public_detections": 24,
+    "hidden_active_public_misses": 0,
+    "constructed_proper_subset_variants": 48,
+    "zero_reward": 0,
+    "partial_reward": 48,
+    "full_reward": 0
+  },
+  "execution_failures": 0,
+  "within_cohort_duplicate_inputs": 0,
+  "within_cohort_public_hidden_overlap": 0,
+  "default_eight_task_mix_changed": false,
+  "contract_oracle_source_mutations_and_interpreter_limits_changed": false,
+  "new_model_calls": 0,
+  "is_training": false,
+  "limitations": [
+    "Reference and constructed-mutant controls are not model solves or measured GRPO variance.",
+    "The raw audits record parent checkout e40473c plus exact audited source-file SHA256s; audited working content is published with this report.",
+    "Cross-cohort content is reproducible from fresh procedural seeds; isolated defect coverage does not measure arbitrary code coverage.",
+    "No adoption or promotion without live candidate-specific sampling and disjoint confirmation."
+  ],
+  "reproduce": "python scripts/audit-software-curriculum.py --seed SEED --count 4 --tasks software_repair-release-d1 software_repair-release-d2 --output FRESH.json"
+}

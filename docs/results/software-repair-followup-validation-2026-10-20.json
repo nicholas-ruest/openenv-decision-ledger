@@ -1,0 +1,28 @@
+{
+  "runtime_source": "43b548debcb469af196a282bad07fc3bd8d33b15",
+  "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:de25fc0311120f5eac114439fcf13be1b4d4f0bfc98289e29a03db1f013c396d",
+  "ci_run": 39511155304,
+  "ci_conclusion": "success",
+  "tests_passed": 459,
+  "anonymous_native_controls_passed": 143,
+  "sdk_checks_passed": 6,
+  "platform": "linux/amd64",
+  "diagnostics_adopted_into_default_mix": false,
+  "model_learning_or_ranking_improvement_established": false,
+  "retained_previous_runtime": {
+    "source": "7c3b6fcabaa32ddf784b7d692959a5019e6b802e",
+    "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:5fde5f1e675fa3c22a1a93cdefd8903d4b23629e5e10ab4630487345d74cf0c2"
+  },
+  "rollout_volume": {
+    "main_screens": 24,
+    "main_unique_prompts": 6,
+    "stream_probe_rollouts": 2,
+    "stream_probe_unique_prompts": 1,
+    "configurations_are_matched": false,
+    "full_valid_repairs_main_screens": 7
+  },
+  "no_confirmation": true,
+  "no_training": true,
+  "no_merge": true,
+  "no_submission": true
+}

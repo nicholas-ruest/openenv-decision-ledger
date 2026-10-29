@@ -1,0 +1,13 @@
+{
+  "environment_upstream": {
+    "repo": "https://github.com/ruvnet/metaharness",
+    "commit": "36db9a71451c1425733f02bfce43f8ab21ae1276"
+  },
+  "metaharness_commit": "b8c3d38de41203faf633ef6dceb8452a4727b0ea",
+  "openenv_commit": "86a180ede21e044f7929b9a7783ad83aa67d83a3",
+  "core_memory_guidance_commit": "f57cc3deebe89f2ec0fa2369e05ddf76a56db965",
+  "hf_account": "GlobalBusinessAdvisors",
+  "github_account": "nicholas-ruest",
+  "submission_mode": "human-review-only",
+  "gpu_rental_authorized": false
+}

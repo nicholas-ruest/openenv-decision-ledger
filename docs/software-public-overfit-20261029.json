@@ -1,0 +1,19 @@
+{
+  "tested_source": "2f46837febfb99177a5b5c46c1477ab1a7e3ed2b",
+  "scripted_negative_control": true,
+  "tasks": [
+    "software_repair-ignore-d3",
+    "software_repair-ignore-d4"
+  ],
+  "seed": 2470000,
+  "public_passed_per_task": 6,
+  "native_reward_per_task": 0,
+  "source_sha256": "67886ec6c50151817470bb1329d9a8835beb243c815c978c9cdf666738b2bc77",
+  "source_bytes": 1978,
+  "same_visible_examples_and_lookup_source_across_tasks": true,
+  "independent_problem_cases": 1,
+  "model_calls": 0,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "frozen_requests_changed": false
+}

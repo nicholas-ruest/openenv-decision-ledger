@@ -1,0 +1,20 @@
+{
+  "source": "358a0dc3cda0b4da6bd24f9e96686c4e51bf2cfa",
+  "ci": 40648125357,
+  "job": 122681608482,
+  "status": "success",
+  "unit_tests": 7,
+  "websockets_version": "17.2",
+  "native_scripted_episodes": 2,
+  "unfinished_session_cleanup_checks": 10,
+  "cleanup_bound_seconds": 2,
+  "artifact_id": 12798089084,
+  "artifact_zip_sha256": "d3cd40099b2c3f19744b8e409ca8f1e2541ae23c6df64d8c87850361ff015518",
+  "native_result_sha256": "9f3b10fc7afb5737bb795256222535e6af2b8e7d3c318f97b7f7bf63ff0ea81d",
+  "new_model_calls": 0,
+  "new_training": false,
+  "model_improvement_claim": false,
+  "remote_billing_termination_verified": false,
+  "v12_changed": false,
+  "v13_changed": false
+}

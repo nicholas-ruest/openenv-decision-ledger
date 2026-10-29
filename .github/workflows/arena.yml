@@ -1,0 +1,79 @@
+name: Arena image and anonymous replay
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'integrations/openenv-arena/**'
+      - '.github/workflows/arena.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      digest: ${{ steps.publish.outputs.digest }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned runtime
+        run: python -m pip install -r integrations/openenv-arena/requirements.lock -r integrations/openenv-arena/requirements-dev.lock
+      - name: Environment and verifier tests
+        working-directory: integrations/openenv-arena
+        run: python -m pytest -q tests
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        id: publish
+        with:
+          context: integrations/openenv-arena
+          platforms: linux/amd64
+          push: true
+          tags: ghcr.io/nicholas-ruest/openenv-decision-ledger:v2-${{ github.sha }}
+      - name: Export public task dataset
+        working-directory: integrations/openenv-arena
+        run: python -m scripts.export_dataset ../../dataset --seeds 16 --tasks-json tasks.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dataset-export
+          path: dataset
+  anonymous-replay:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r integrations/openenv-arena/requirements.lock -r integrations/openenv-arena/requirements-dev.lock
+      - name: Pull public pinned image without registry login
+        env:
+          IMAGE: ghcr.io/nicholas-ruest/openenv-decision-ledger@${{ needs.build.outputs.digest }}
+        run: |
+          docker logout ghcr.io || true
+          docker pull "$IMAGE"
+          docker run -d --name decision-ledger -p 8000:8000 "$IMAGE"
+          for n in $(seq 1 60); do curl -fsS http://127.0.0.1:8000/health && break || sleep 2; done
+          openenv validate --url http://127.0.0.1:8000
+          mkdir -p evidence
+          curl -fsS http://127.0.0.1:8000/schema > evidence/schema.json
+          PYTHONPATH=integrations/openenv-arena python integrations/openenv-arena/scripts/replay_native.py --url http://127.0.0.1:8000 --output evidence/anonymous-replay.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arena-validation
+          path: evidence
+      - name: Cleanup
+        if: always()
+        run: docker rm -f decision-ledger || true

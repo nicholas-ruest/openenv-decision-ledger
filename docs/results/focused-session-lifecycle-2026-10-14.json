@@ -1,0 +1,81 @@
+{
+  "checked_at": "2026-10-14T07:54:00Z",
+  "source_revision": "739bd12908319f868355cfef682d70ce9b7680b0",
+  "scope": "software_change-d2 preparation",
+  "tests": {
+    "passed": 23,
+    "failed": 0,
+    "device": "CPU",
+    "offline": true
+  },
+  "session_checks": {
+    "model": "tiny random Qwen3.5 hybrid-attention + LoRA",
+    "scripted_off_policy_fixture": true,
+    "completed": {
+      "optimizer_steps": 1,
+      "adapter_changed": true,
+      "reload_equal": true,
+      "report_sha256": "f8a7163a86dd0328e47384cb97faa433a94f906e54ae111ca4de1ff9a68ad65d"
+    },
+    "deadline": {
+      "status": "interrupted",
+      "optimizer_steps": 0,
+      "reload_equal": true,
+      "checkpoint_exported": true,
+      "report_sha256": "0332d223d9b9ea67d99cae8bd9ec8d5feb6aec1f9a10475f03c1faf11443b1bd"
+    },
+    "failure": {
+      "status": "failed",
+      "optimizer_steps": 0,
+      "reload_equal": true,
+      "checkpoint_exported": true,
+      "report_sha256": "35ea333dade28f2afb561226490dabbc566514d8c197ff621c7451a5f7c20792"
+    }
+  },
+  "lifecycle_checks": [
+    "Minute-rounded quote including advisory two-minute startup allowance rejects over-cap plans",
+    "Process-group deadline kills forked descendant and preserves recovery file",
+    "Export includes only allowlisted checkpoint files, excludes trainer pickle/model card, rejects unexpected files and symlinks",
+    "Mocked completed/error/deleted provider states cause no cancellation",
+    "Mocked deadline cancellation is confirmed only after an observed terminal state; unconfirmed stop is reported explicitly",
+    "Paid CLI remains locked before model loading"
+  ],
+  "production_scope": {
+    "worker_core_written": true,
+    "target_loader_written": true,
+    "target_loader_executed": false,
+    "cli_paid_execution_enabled": false,
+    "job_request_preview_only": true,
+    "provider_lifecycle_tests": "mocked; no live API calls",
+    "cuda_image_built": false,
+    "durable_remote_export_configured": false,
+    "target_gpu_fit_verified": false
+  },
+  "ci": {
+    "run_id": 38531255336,
+    "url": "https://github.com/nicholas-ruest/openenv-decision-ledger/actions/runs/38531255336",
+    "last_observed": "completed",
+    "conclusion": "success"
+  },
+  "new_paid_inference_calls": 0,
+  "gpu_jobs_created": 0,
+  "target_training_started": false,
+  "arena_submitted": false,
+  "training_ready": false,
+  "remaining": [
+    "Build and freeze CUDA image/dependencies and review mounted inputs/durable outputs",
+    "Prepare separate budgeted hardware preflight path without requiring preflight success before its approval",
+    "Reconcile authorized inference spend before focused multi-prompt signal confirmation",
+    "Validate production model loading/memory/throughput only after separate GPU budget approval"
+  ],
+  "limits": [
+    "No learning/ranking improvement inferred from scripted diagnostic",
+    "Local process cleanup is not provider billing shutdown",
+    "Mocked provider terminal states are not a real cancellation or reconciled invoice",
+    "Existing inference authorization does not authorize GPU jobs"
+  ],
+  "sources": [
+    "https://huggingface.co/docs/trl/grpo_trainer",
+    "https://huggingface.co/docs/huggingface_hub/guides/jobs"
+  ]
+}

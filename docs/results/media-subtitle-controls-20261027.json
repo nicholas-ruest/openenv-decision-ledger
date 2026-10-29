@@ -1,0 +1,238 @@
+{
+  "source_repository": "proffesor-for-testing/openenv-qe-arena",
+  "source_commit": "958198e55299eb18ad812f438a6b2ca6abaa7f5c",
+  "license": "MIT; copyright2026 Dragan Spiridonov",
+  "fixtures": [
+    {
+      "seed": 2220000,
+      "reference_reward": 1.0,
+      "wrong_method_rewards": {
+        "wrong_sign": 0.0,
+        "no_sort": 0.0,
+        "no_rate": 0.0,
+        "inverted_rate": 0.0,
+        "shift_first": 0.0,
+        "no_gap": 0.0
+      },
+      "visible_files_bytes": 752,
+      "case_sha256": "1f8216795e8cf23002d87b2663cb6453c06f321485c1c9989650e35b0618293b"
+    },
+    {
+      "seed": 2220001,
+      "reference_reward": 1.0,
+      "wrong_method_rewards": {
+        "wrong_sign": 0.0,
+        "no_sort": 0.0,
+        "no_rate": 0.0,
+        "inverted_rate": 0.0,
+        "shift_first": 0.0,
+        "no_gap": 0.0
+      },
+      "visible_files_bytes": 776,
+      "case_sha256": "0318376a1d4ef023423a7c7a34f78d6a00454064df45231d20af843a202852ca"
+    },
+    {
+      "seed": 2220002,
+      "reference_reward": 1.0,
+      "wrong_method_rewards": {
+        "wrong_sign": 0.0,
+        "no_sort": 0.0,
+        "no_rate": 0.0,
+        "inverted_rate": 0.0,
+        "shift_first": 0.0,
+        "no_gap": 0.0
+      },
+      "visible_files_bytes": 909,
+      "case_sha256": "955be2ebe775bdd3974cba2ca654a9bab4cfeead69670f90e84b8c5bf36d27d2"
+    },
+    {
+      "seed": 2220003,
+      "reference_reward": 1.0,
+      "wrong_method_rewards": {
+        "wrong_sign": 0.0,
+        "no_sort": 0.0,
+        "no_rate": 0.0,
+        "inverted_rate": 0.0,
+        "shift_first": 0.0,
+        "no_gap": 0.0
+      },
+      "visible_files_bytes": 655,
+      "case_sha256": "9dbc497b1d4b8cbbdc1d00a93e0be789ecf00746c11f50955a076a3ab574fa1b"
+    },
+    {
+      "seed": 2220004,
+      "reference_reward": 1.0,
+      "wrong_method_rewards": {
+        "wrong_sign": 0.0,
+        "no_sort": 0.0,
+        "no_rate": 0.0,
+        "inverted_rate": 0.0,
+        "shift_first": 0.0,
+        "no_gap": 0.0
+      },
+      "visible_files_bytes": 783,
+      "case_sha256": "97f736a933cb5cd4a8660411703778d6f0e15d81fa6eef2d5cf11f43ab95ffc5"
+    },
+    {
+      "seed": 2220005,
+      "reference_reward": 1.0,
+      "wrong_method_rewards": {
+        "wrong_sign": 0.0,
+        "no_sort": 0.0,
+        "no_rate": 0.0,
+        "inverted_rate": 0.0,
+        "shift_first": 0.0,
+        "no_gap": 0.0
+      },
+      "visible_files_bytes": 791,
+      "case_sha256": "f327017e901fe328746708a322755f1df742278357d24d55afd2243783831007"
+    },
+    {
+      "seed": 2220006,
+      "reference_reward": 1.0,
+      "wrong_method_rewards": {
+        "wrong_sign": 0.0,
+        "no_sort": 0.0,
+        "no_rate": 0.0,
+        "inverted_rate": 0.0,
+        "shift_first": 0.0,
+        "no_gap": 0.0
+      },
+      "visible_files_bytes": 895,
+      "case_sha256": "9f8f2e4b8a534d679d757518f20d6fc14d6d06cdb8a14f5462e834f6815e70c1"
+    },
+    {
+      "seed": 2220007,
+      "reference_reward": 1.0,
+      "wrong_method_rewards": {
+        "wrong_sign": 0.0,
+        "no_sort": 0.0,
+        "no_rate": 0.0,
+        "inverted_rate": 0.0,
+        "shift_first": 0.0,
+        "no_gap": 0.0
+      },
+      "visible_files_bytes": 762,
+      "case_sha256": "2dc0bcece1e3f39f521b25feffbc5c939a2001a54e1e9676cfc589e093bbf152"
+    },
+    {
+      "seed": 2220008,
+      "reference_reward": 1.0,
+      "wrong_method_rewards": {
+        "wrong_sign": 0.0,
+        "no_sort": 0.0,
+        "no_rate": 0.0,
+        "inverted_rate": 0.0,
+        "shift_first": 0.0,
+        "no_gap": 0.0
+      },
+      "visible_files_bytes": 838,
+      "case_sha256": "ee0665c79c25f75f2ca27204ec45ff764cc952b7880c94a903ce8d1dac127dab"
+    },
+    {
+      "seed": 2220009,
+      "reference_reward": 1.0,
+      "wrong_method_rewards": {
+        "wrong_sign": 0.0,
+        "no_sort": 0.0,
+        "no_rate": 0.0,
+        "inverted_rate": 0.0,
+        "shift_first": 0.0,
+        "no_gap": 0.0
+      },
+      "visible_files_bytes": 727,
+      "case_sha256": "3ddfdbbd1eb2b13dfd28c73d07a7a2061daeef7635ee9ac5bb450e303f1b5115"
+    },
+    {
+      "seed": 2220010,
+      "reference_reward": 1.0,
+      "wrong_method_rewards": {
+        "wrong_sign": 0.0,
+        "no_sort": 0.0,
+        "no_rate": 0.0,
+        "inverted_rate": 0.0,
+        "shift_first": 0.0,
+        "no_gap": 0.0
+      },
+      "visible_files_bytes": 702,
+      "case_sha256": "fbcdf37ac844fccd3a8e4767142ca05a8aa7f99a4e26f8e1aae91329644c2c95"
+    },
+    {
+      "seed": 2220011,
+      "reference_reward": 1.0,
+      "wrong_method_rewards": {
+        "wrong_sign": 0.0,
+        "no_sort": 0.0,
+        "no_rate": 0.0,
+        "inverted_rate": 0.0,
+        "shift_first": 0.0,
+        "no_gap": 0.0
+      },
+      "visible_files_bytes": 690,
+      "case_sha256": "36aaac28060e207fa2cd74b4de40a09eac9a6d12a72ab6a5561afb24ad08d4be"
+    },
+    {
+      "seed": 2220012,
+      "reference_reward": 1.0,
+      "wrong_method_rewards": {
+        "wrong_sign": 0.0,
+        "no_sort": 0.0,
+        "no_rate": 0.0,
+        "inverted_rate": 0.0,
+        "shift_first": 0.0,
+        "no_gap": 0.0
+      },
+      "visible_files_bytes": 754,
+      "case_sha256": "b671ab1dede20c9fc3d00855502852a429c4bf77fd36f78c4400a2004bcbede0"
+    },
+    {
+      "seed": 2220013,
+      "reference_reward": 1.0,
+      "wrong_method_rewards": {
+        "wrong_sign": 0.0,
+        "no_sort": 0.0,
+        "no_rate": 0.0,
+        "inverted_rate": 0.0,
+        "shift_first": 0.0,
+        "no_gap": 0.0
+      },
+      "visible_files_bytes": 766,
+      "case_sha256": "aa9fd08f2f213c33f6b2127faa89698f9567e6279255037fb3efffd45e257131"
+    },
+    {
+      "seed": 2220014,
+      "reference_reward": 1.0,
+      "wrong_method_rewards": {
+        "wrong_sign": 0.0,
+        "no_sort": 0.0,
+        "no_rate": 0.0,
+        "inverted_rate": 0.0,
+        "shift_first": 0.0,
+        "no_gap": 0.0
+      },
+      "visible_files_bytes": 718,
+      "case_sha256": "05e345183c3dfb5723bf4b560ac0d0791893760a59063c4950ff812f8ec24568"
+    },
+    {
+      "seed": 2220015,
+      "reference_reward": 1.0,
+      "wrong_method_rewards": {
+        "wrong_sign": 0.0,
+        "no_sort": 0.0,
+        "no_rate": 0.0,
+        "inverted_rate": 0.0,
+        "shift_first": 0.0,
+        "no_gap": 0.0
+      },
+      "visible_files_bytes": 672,
+      "case_sha256": "36ad3029429b95d7936ec5df08d646f32733304a95c22884d70471b68896cff7"
+    }
+  ],
+  "model_calls": 0,
+  "is_training": false,
+  "model_improvement_claim": false,
+  "limitations": [
+    "binary grader; no partial reward",
+    "not terminal/container validation"
+  ]
+}

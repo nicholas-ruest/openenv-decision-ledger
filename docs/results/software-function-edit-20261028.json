@@ -1,0 +1,11 @@
+{
+  "source": "2c7d88fbb35d52d4d1f2311bda27aa829b832389",
+  "native_tests_ruos": 7,
+  "new_image": false,
+  "new_submission": false,
+  "new_model_calls": 0,
+  "fresh_confirmation": false,
+  "model_improvement": false,
+  "mode": "function block with additive new helpers; complete module alternative",
+  "feedback_intervention_combined": false
+}

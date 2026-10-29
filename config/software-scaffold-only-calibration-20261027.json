@@ -1,0 +1,38 @@
+{
+  "status": "alternative_prepared_not_executed",
+  "runtime_source": "0b8ccc3ca70a67fed5fc5837b69022261cc60497",
+  "tasks": [
+    "software_repair-ignore-d3",
+    "software_repair-ignore-d4"
+  ],
+  "screen_seeds": [
+    2180000,
+    2180100
+  ],
+  "confirmation_seeds": [
+    2190000,
+    2190100
+  ],
+  "samples_per_task_prompt": 4,
+  "screen_calls": 16,
+  "confirmation_calls": 16,
+  "retry": false,
+  "same_prompt_rule": "identical reset/prompt/workspace within task and seed; matched case inputs across tasks",
+  "selection": "all four samples, no posthoc exclusion of failures",
+  "admission_guards": [
+    "fresh actual billing and all existing reservation records reconciled",
+    "whole phase fits existing remaining reservation cap at conservative quoted rates",
+    "runtime/model/tokenizer/provider/thinking/action/budget settings frozen and hashed",
+    "no duplicate worker or output root; wall deadline fixed before launch",
+    "raw reset/workspace/request/response evidence separately attested before reporting measured variance"
+  ],
+  "hypothesis": "Prerequisite scaffolds offer productive model reward variance where joint implementation saturates or fails. Unconfirmed.",
+  "limits": [
+    "Model checkpoint and Arena wrapper equivalence must be attested or explicitly reported as proxy limitation.",
+    "Matched task rewards are learnability diagnostics, not a causal trained-policy comparison.",
+    "One screen prompt group is not four unique tasks.",
+    "No promotion or Arena submission is performed by assessor.",
+    "Scaffold-only phase omits joint-task model baseline; no causal scaffold-versus-joint benefit can be inferred."
+  ],
+  "joint_model_baseline": false
+}

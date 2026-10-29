@@ -1,0 +1,44 @@
+{
+  "runtime_source": "7156868d300b29037440f69361ceca5b02da5724",
+  "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:8e0e98807f74fb6c587f8e36aba14fdc6ee8f917693cf7b6bd6e0f7e6c77e263",
+  "platform": "linux/amd64",
+  "ci_run": 39304763223,
+  "task_rows": 128,
+  "task_ids": [
+    "software_repair-plan-d1",
+    "software_repair-plan-d2",
+    "software_repair-cover-d1",
+    "software_repair-cover-d2",
+    "software_repair-merge-d1",
+    "software_repair-merge-d2",
+    "software_repair-replay-d1",
+    "software_repair-replay-d2"
+  ],
+  "schema_sha256": "dca991d0ed88c4fcdc3c86d66b306ef2a3efd23128cebe95976837231d83f852",
+  "schema_origin": "Action/observation classes from the CI-validated runtime revision.",
+  "files_sha256": {
+    "submission-candidate.json": "c86ab2f06cf8d4fa09b1e3bc16f406a90f6bc43e0b7bca63979353491a3a6234",
+    "README.md": "8167c63607edfda3a2b9603f77763703cc2aad9990de98b1b87c08944683221c",
+    "tasks.jsonl": "4463b5b7dbbff33aacd50b30d2929b00eec9380f67a6168c53d7e97001300778",
+    "REVIEW.json": "681b06d531a6bd32e48929f1396a21c5923dbb50cba51e983fab61137d71d780",
+    "environment-source.zip": "9ec41922942b81a977da2a6079f6b84e21cb7ae0204e5ee890f0f5b5dd239ad1"
+  },
+  "packaged_source_files_sha256": {
+    "LICENSE": "09ed6717912f408da29e15b55170cd56c9658218a540b7c72e70909b9101274c",
+    "THIRD_PARTY.md": "1325afb7d03bae09c7a87bf5a06c0005ac844706ca16dba020b3fed3dfceb00d",
+    "integrations/openenv-arena/requirements.lock": "3fbed6fc6af3931cdacd290353a02ba1740222974c91a022145ec4e6a5f3a347",
+    "integrations/software-repair/Dockerfile": "bf3625226b42d0b779f4ea4b2650e266d42b0867f58f50e85577c459776a9f96",
+    "integrations/software-repair/README.md": "b37551b1c6018f288640df2db61ab136ee011f7db3140a1717351d291af4b78c",
+    "integrations/software-repair/openenv.yaml": "d81a151fa45ad25d59d81db0ff00fa40e33fdddec96d0a62923e760a864ecee8",
+    "integrations/software-repair/repair_env/__init__.py": "aecafe955038a15f8cbbca11f39b4166adca30cc7ca0027d530d90942c80b52f",
+    "integrations/software-repair/repair_env/app.py": "973f5ef06580f7ad6cce0f7ba7557578a491e97b157d155457bb0de8b714ceb3",
+    "integrations/software-repair/repair_env/cycle_plan.py": "f56d5d65809deb0580df3a4a07b0fc797c27096cf761fbbb3d078d5889ae32eb",
+    "integrations/software-repair/repair_env/environment.py": "c1e6dee6b7cd55f65d7e84c95860c0399d1fdea7388971436e2c49f1a468002e",
+    "integrations/software-repair/repair_env/hard_tasks.py": "6093bd954ae91e5806c8b65db42aa99263a2f214f7454a73ac100a3ccef01d4f",
+    "integrations/software-repair/repair_env/release_plan.py": "b5e549f78d167259f81a141dd43c685453124cdab3889308445f71c2ee9da0bf",
+    "integrations/software-repair/repair_env/runner.py": "8b6c5d9e6d75fad912c7e179bdaf8284c3bbb15ecfa8a95250e539714474d8cc",
+    "integrations/software-repair/repair_env/tasks.py": "65d6bb668c786bf98b8b8d533f07c6dfce438c5c7d143681494caa6f7922b568"
+  },
+  "submitted": false,
+  "approval_required": true
+}

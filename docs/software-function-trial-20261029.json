@@ -1,0 +1,18 @@
+{
+  "local_lifecycle_tests": 5,
+  "local_backend": "fictional binding only",
+  "native_integration_tests_authored": 3,
+  "native_integration_tests_executed": 3,
+  "ruos_total_tests_passed": 8,
+  "ruos_scripted_native_episodes": 5,
+  "tested_source": "14bf022bae338cb3f68053cb33667404b625588d",
+  "native_validation_pending": false,
+  "complete_phase_provider_driver_present": false,
+  "new_model_calls": 0,
+  "new_oracle_replays": 0,
+  "training_runs": 0,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "paid_execution_authorized": false,
+  "frozen_candidates_modified": false
+}

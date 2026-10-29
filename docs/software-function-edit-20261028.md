@@ -1,0 +1,13 @@
+# Separate function-block repair affordance
+
+Experimental source `2c7d88fbb35d52d4d1f2311bda27aa829b832389` adds a one-response software repair interface over the unchanged direct native grader. Seven native tests passed on ruOS in a fresh detached worktree. It has not been packaged as a new image or submitted.
+
+In function mode the action contains the declared missing function and optional **new** helper definitions. The environment splices the target definition into the supplied module and appends new helpers. Existing supplied helpers remain byte-identical. Duplicate definitions, edits to other supplied helpers, non-function top-level statements and source-limit violations are refused. No reference implementation or hidden cases are used in patch application. The original bounded interpreter and complete module byte limit still apply.
+
+Full-module mode remains available for alternate correct implementations, including ones that need coordinated helper edits. Both modes receive exactly the same original task contract, supplied source and public examples, and use the same original native grader. There is no computed feedback, second model response, extra hidden test access or oracle code substitution. This changes the action affordance, not just a preservation instruction; it is a separate hypothesis from both the earlier guidance-only policy and the public-example feedback candidate.
+
+The initial single-function form was too narrow to express solutions with additional helper functions. The revised form supports additive helpers without overwriting supplied ones. Tests cover reference-function/full-module grader equivalence, byte preservation, additive helper use, explicit rejection of conflicting helper definitions, malformed edits, unchanged code, terminal idempotence, reset scope and unchanged source-size limits.
+
+The generic replay utility re-encodes caller-supplied saved modules into the alternative action representation, retaining new helper definitions. An externally supplied archive checksum is required; no private archive identifier, raw response, account information or replay result is embedded in the public utility. Posthoc re-encoding changes an action after generation and is not a fresh model comparison. Raw replay records and results are not part of this public artifact.
+
+The candidate has no fresh disjoint model confirmation, private evaluation result or demonstrated ranking gain. No promotion or MetaHarness optimization execution is claimed. Frozen v12/v13/v14 requests and images, the HF dataset and the submitted rollback remain unchanged. No new automation or paid calls were introduced.

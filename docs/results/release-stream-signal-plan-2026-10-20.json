@@ -1,0 +1,39 @@
+{
+  "profile": "release_generalization_stream",
+  "status": "predeclared before model calls",
+  "runtime_source": "43b548debcb469af196a282bad07fc3bd8d33b15",
+  "image": "ghcr.io/nicholas-ruest/openenv-decision-ledger@sha256:de25fc0311120f5eac114439fcf13be1b4d4f0bfc98289e29a03db1f013c396d",
+  "task_id": "software_repair-release-d3",
+  "screen_seeds": [
+    1104000,
+    1104100
+  ],
+  "conditional_confirmation_seeds": [
+    1105000,
+    1105100
+  ],
+  "samples_per_prompt": 4,
+  "required_productive_groups": 2,
+  "provider": "deepinfra",
+  "model": "Qwen/Qwen3.8-27B",
+  "route_restoration_observed_at_utc": "2026-10-20T23:13:39Z",
+  "route_substituted": false,
+  "provider_streaming": true,
+  "episode_generation_observation_units": 12288,
+  "context_units": 24576,
+  "max_per_call_generation": 4096,
+  "max_actions": 12,
+  "request_total_deadline_seconds": 180,
+  "stage_wall_seconds": 1200,
+  "retries": 0,
+  "rule": "Each of both screen groups needs >=3 valid completions, >=1 full and >=1 genuine non-full reward, with verified prompt and independent call identities. Both fresh confirmation groups must satisfy the same rule. Requirements are protocol fields and may not be lowered between stages.",
+  "purpose": "Fresh semantic-signal screen after transport feasibility probe and restored selected-route metadata, not a causal comparison with prior arms.",
+  "spending": "Bounded privately reconciled allocation; all earlier ledgers retained.",
+  "no_cache_reuse": true,
+  "limitations": [
+    "Four samples of a prompt are not four unique tasks.",
+    "Failed/invalid/truncated/provider/budget rows do not supply semantic variance.",
+    "Hosted checkpoint/thinking/Arena wrapper equivalence remains unattested.",
+    "No model training, ranking improvement, promotion or Arena submission authorized."
+  ]
+}

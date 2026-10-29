@@ -1,0 +1,21 @@
+{
+  "scripted_native_trajectories": 96,
+  "public_cases": 48,
+  "tokenizer_sha256": "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3",
+  "new_model_calls": 0,
+  "production_wrapper_equivalent": false,
+  "model_improvement": false,
+  "max_completion": 2331,
+  "max_context": 5461,
+  "max_final_observation": 52,
+  "exceeding_4096": 0,
+  "exceeding_8192": 0,
+  "exceeding_context_8192": 0,
+  "exceeding_context_24576": 0,
+  "native_archive_sha256": "37fed5519ca727ba0cc52c1cd940f6cf1048b0cb15e44317294edda0377356ab",
+  "limits": "Scripted reference actions, canonical JSON full-frame counts; reconstructed message context omits unattested production system/schema/chat-template and model thinking. Not an upper bound for model trajectories, budget parity, training or provider billing.",
+  "source": "5da062ee9e2533be1b692da03d61e1280aecb9b9",
+  "unit_tests_ruos": 3,
+  "independent_raw_costs_verified": 96,
+  "worker_exited": true
+}

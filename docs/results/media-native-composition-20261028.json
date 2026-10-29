@@ -1,0 +1,33 @@
+{
+  "source": "f359d14f7d830d2651d2e6e03e4a3c30e65285ab",
+  "ci": 40654777970,
+  "job": 122703052566,
+  "status": "success",
+  "unit_tests": 3,
+  "complete_scripted_attempts": 16,
+  "scripted_provider_records": 31,
+  "scripted_outcomes": {
+    "full": 8,
+    "wrong": 7,
+    "provider": 1
+  },
+  "outcomes_are_scripted_not_model_measured": true,
+  "normal_archive_verified": true,
+  "independent_local_archive_verification": true,
+  "normal_native_resource_sessions_opened": 110,
+  "normal_native_resource_sessions_closed": 110,
+  "stalled_worker_deadline_observed": true,
+  "stalled_archive_verified": false,
+  "server_workspace_set_restored": true,
+  "artifact_id": 12801970041,
+  "artifact_zip_sha256": "63603a0bd8fb648cc23b5505e11dbdcca76546166f1a8e97dc3dc3400bd72188",
+  "artifact_files": 167,
+  "raw_archive_published": false,
+  "public_evidence_allowlisted": true,
+  "provider_billing_stop_verified": false,
+  "new_model_calls": 0,
+  "new_training": false,
+  "model_improvement_claim": false,
+  "v12_changed": false,
+  "v13_changed": false
+}
