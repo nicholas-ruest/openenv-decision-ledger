@@ -1,0 +1,83 @@
+"""Native-budget 16-call helper-affordance screen in four fresh bounded chunks."""
+import copy
+import importlib.util
+import json
+from pathlib import Path
+import sys
+from types import SimpleNamespace
+
+ROOT=Path(__file__).resolve().parents[2]
+sys.path[:0]=[str(ROOT/p) for p in ('research/software-function-block-protocol-20261028',
+    'research/software-function-edit-20261028','research/software-terminal-audit-20261028',
+    'integrations/software-repair')]
+import protocol as original
+from function_edit import FunctionEditEnvironment,FunctionEditAction,TARGETS
+from repair_env.direct_environment import DirectRepairEnvironment,DirectRepairAction
+from terminal_audit import classify
+
+canonical=original.canonical
+digest=original.digest
+ARMS=original.ARMS
+NAMESPACE='native-helper8k-20261029'
+SEEDS={'screen':(2640000,2640100),'confirmation':(2650000,2650100)}
+SAMPLING=copy.deepcopy(original.SAMPLING)
+SAMPLING['max_tokens']=8096
+
+def schedule(phase):
+    rows=[]
+    for sample in range(4):
+        for index,task in enumerate(TARGETS):
+            for arm in ARMS if sample%2==0 else reversed(ARMS):
+                identity=dict(namespace=NAMESPACE,phase=phase,sample=sample,
+                    task_id=task,seed=SEEDS[phase][index],arm=arm)
+                rows.append(dict(identity,attempt_id=digest(identity)))
+    return rows
+
+def capture(task,seed,arm):
+    value=original.capture(task,seed,arm)
+    value['request']=dict(copy.deepcopy(SAMPLING),messages=value['messages'])
+    return value
+
+def bundle(chunk=0):
+    if type(chunk) is not int or chunk not in range(4):raise ValueError('one of four immutable chunks required')
+    groups=[]
+    for index,task in enumerate(TARGETS):
+        seed=SEEDS['screen'][index]
+        arms={arm:capture(task,seed,arm) for arm in ARMS}
+        if arms[ARMS[0]]['problem']!=arms[ARMS[1]]['problem']:
+            raise ValueError('problem differs across arms')
+        groups.append(dict(task_id=task,seed=seed,
+            problem_sha256=arms[ARMS[0]]['problem_sha256'],arms=arms))
+    return dict(namespace=NAMESPACE,chunk=chunk,screen_jobs=[j for j in schedule('screen') if j['sample']==chunk],all_screen_jobs=schedule('screen'),
+        confirmation_jobs=schedule('confirmation'),screen_groups=groups,
+        confirmation_observations_materialized=False,sampling=SAMPLING,
+        max_calls=16,max_calls_per_chunk=4,retries=0,completion_with_observations=8192,context=24576,
+        transport='scripts/provider_stream.py',reserved_terminal_tokens=96,
+        treatment='Function-block action available versus full-module action; source/contract/examples match. No self-checking or feedback intervention. Prompts/schema differ.',
+        limitations='Two procedural cases, four samples per case/arm. No training or Arena wrapper equivalence. Screen alone cannot establish transfer or leaderboard gain.',
+        selection='All assigned attempts retained; unknown usage withholds fitness. Candidate proceeds only with no unknown-usage failures, positive full-solve delta, nonnegative native semantic mean delta and no negative per-task full-solve delta. Freeze selection before any fresh confirmation. No retry or redesign on confirmation.')
+
+class Binding:
+    def __init__(self,job):
+        if job not in schedule('screen'):
+            raise ValueError('only exact screen assignments admitted')
+        frozen=capture(job['task_id'],job['seed'],job['arm'])
+        self.env=DirectRepairEnvironment() if job['arm']=='full_module' else FunctionEditEnvironment()
+        self.action_type=DirectRepairAction if job['arm']=='full_module' else FunctionEditAction
+        obs=self.env.reset(task_id=job['task_id'],seed=job['seed']).model_dump()
+        if obs!=json.loads(frozen['messages'][1]['content']):raise ValueError('native reset changed')
+        self.messages=frozen['messages'];self.prompt_sha256=frozen['prompt_sha256']
+        self.problem_sha256=frozen['problem_sha256']
+        self.direct=job['arm']=='full_module'
+    def parse(self,text):return self.action_type.model_validate_json(text,strict=True)
+    def step(self,action):return self.env.step(action).model_dump()
+    def diagnose(self,native):
+        if native['error'].startswith('Invalid function edit;'):
+            return dict(category='edit_rejection',native_reward=native['reward'],semantic_reward=None)
+        return classify(SimpleNamespace(_direct=self.env) if self.direct else self.env,native)
+
+if __name__=='__main__':
+    import argparse
+    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--chunk',type=int,required=True);a=p.parse_args()
+    with a.output.open('x') as f:json.dump(bundle(a.chunk),f,indent=2)
+    print(digest(bundle(a.chunk)))
