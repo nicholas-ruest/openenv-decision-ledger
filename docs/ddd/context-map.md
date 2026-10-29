@@ -1,3 +1,0 @@
-# Bounded contexts
-Task generation owns seeded virtual evidence and hidden expected values. Independent solvers own offline control answers, recomputed from evidence. Episode execution owns per-session state and terminality. Reward verification owns strict full-answer matching. Calibration owns bounded model calls, transcripts and failure classification. Darwin owns candidate selection. Flywheel owns independently confirmed promotion evidence. Publication owns immutable images and dataset revisions. Submission is explicitly controlled by Nick.
-Only virtual evidence crosses the policy observation boundary; hidden expected answers never do. All optimization claims identify model revision, source hash, seed range, token budgets and whether execution was real or simulated.

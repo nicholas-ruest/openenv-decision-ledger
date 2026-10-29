@@ -1,6 +1,0 @@
-# Tested CPU preparation stack; this does not install/rent a GPU.
-# Install torch from the CPU wheel index before this file.
-torch==2.10.0
-trl==1.6.0
-transformers==5.19.0
-peft==0.19.0

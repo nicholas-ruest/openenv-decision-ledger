@@ -1,9 +1,0 @@
-# Public-example checking as a separate intervention
-
-The checker accepts only the examples field already visible in the original reset, proposed code, and the source-pinned bounded interpreter factory. Its API accepts no task object, hidden-case collection, reference solution or scoring environment. It returns public pass flags, at most two public counterexamples, and distinct compilation/execution failure types. It does not repair code or execute candidate code on the host. It bounds source, example parsing and serialized feedback.
-
-The separate matched protocol compares a neutral second review with computed public-example feedback. Both arms get at most two model replies and share the original completion/context capacities. Feedback observations consume completion budget. Helper-preservation guidance is excluded. This isolates computed feedback from the mere availability of an additional review opportunity; it does not isolate feedback-token cost, which must be reported.
-
-The protocol is an unadmitted research plan, not a provider driver, a new Arena request or a budget grant. First-turn messages must be frozen identically across arms, with fresh independent calls and counterbalanced order. Confirmation uses disjoint fresh seeds. Screen and confirmation each require up to64 provider calls; no paid calls are made by this implementation. The two-turn proxy differs from the frozen one-response Arena curriculum, so it cannot establish production-wrapper equivalence or training readiness.
-
-Seven offline unit tests pass locally. The same7 unit tests passed in a detached ruOS checkout. The public-only checker successfully processed all16 saved responses with the frozen interpreter; no hidden-case object was supplied to it. Per-response feedback remains private. CI40723734766 passed all7 tests. Private replies/results remain private. No routine Slack, Arena board or PR comment is posted. Reviewed softwarev12/media-v13 files are unchanged.
