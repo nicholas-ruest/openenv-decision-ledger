@@ -1,0 +1,112 @@
+{
+  "assigned_model_calls": 8,
+  "paired_runtime_grades": 16,
+  "shared_responses_are_not_independent_calls": true,
+  "full_solve_count_delta": 0,
+  "semantic_mean_delta": 0,
+  "groups": [
+    {
+      "runtime": "baseline",
+      "task_id": "software_repair-ignore-d3",
+      "attempts": 4,
+      "full": 0,
+      "semantic_sum": 0.7,
+      "categories": {
+        "partial": 1,
+        "execution": 3
+      },
+      "metaharness": {
+        "signal": 0,
+        "eligible": 1,
+        "solved": 0,
+        "partial": 1,
+        "reasoning": 0,
+        "format": 0,
+        "truncation": 0,
+        "infra": 3
+      }
+    },
+    {
+      "runtime": "baseline",
+      "task_id": "software_repair-ignore-d4",
+      "attempts": 4,
+      "full": 1,
+      "semantic_sum": 3.8499999999999996,
+      "categories": {
+        "full": 1,
+        "partial": 3
+      },
+      "metaharness": {
+        "signal": 1,
+        "eligible": 4,
+        "solved": 1,
+        "partial": 3,
+        "reasoning": 0,
+        "format": 0,
+        "truncation": 0,
+        "infra": 0
+      }
+    },
+    {
+      "runtime": "candidate",
+      "task_id": "software_repair-ignore-d3",
+      "attempts": 4,
+      "full": 0,
+      "semantic_sum": 0.7,
+      "categories": {
+        "partial": 1,
+        "execution": 3
+      },
+      "metaharness": {
+        "signal": 0,
+        "eligible": 1,
+        "solved": 0,
+        "partial": 1,
+        "reasoning": 0,
+        "format": 0,
+        "truncation": 0,
+        "infra": 3
+      }
+    },
+    {
+      "runtime": "candidate",
+      "task_id": "software_repair-ignore-d4",
+      "attempts": 4,
+      "full": 1,
+      "semantic_sum": 3.8499999999999996,
+      "categories": {
+        "full": 1,
+        "partial": 3
+      },
+      "metaharness": {
+        "signal": 1,
+        "eligible": 4,
+        "solved": 1,
+        "partial": 3,
+        "reasoning": 0,
+        "format": 0,
+        "truncation": 0,
+        "infra": 0
+      }
+    }
+  ],
+  "metaharness_source": "b8c3d38de41203faf633ef6dceb8452a4727b0ea",
+  "actual_module": "fitness.mjs:scoreCell",
+  "fresh_runtime_compatibility_confirmation": false,
+  "model_training": false,
+  "model_weight_improvement_claim": false,
+  "leaderboard_gain": false,
+  "promotion": false,
+  "runtime_baseline": "9d1a28a3357f87349bcbc81166a2c1191c2d03c6",
+  "runtime_candidate": "b3a8873a4629a1cb34d2dfd7b297895783d9af9e",
+  "source_driver": "f453217842e6a5ffed8dd42aafd3fa28b7615b80",
+  "source_assessment": "f20aab360410c3e2295810c44d761f3b94e7b008",
+  "inputs_sha256": "dc29f49ddc308f4df4ac194de5955adb41efd69af99090dd8a6a67167ea9e22f",
+  "max_observation_tokens": 34,
+  "max_accounted_context": 6159,
+  "max_generation": 3064,
+  "independent_response_ids": 8,
+  "retries": 0,
+  "unknown_usage": 0,
+  "paired_result_sha256": "645c8970ebcfa326366de996b593c48ec5b300a20b54ec1e9a9d089323276572"
+}
