@@ -5,7 +5,7 @@
   "local_pure_reconciliation_tests": 3,
   "fixtures": "temporary fictional receipts only",
   "scripted_native_tests_authored": 5,
-  "scripted_native_tests_result": "unverified; remote transport timed out",
+  "scripted_native_tests_result": "5 passed on ruOS",
   "attempted_native_source": "0c4b0c7fae9da5405279bed0ee4d1d97a44d3e7d",
   "duplicate_launch_performed": false,
   "live_provider_phase_launched": false,
@@ -15,5 +15,13 @@
   "model_improvement": false,
   "leaderboard_gain": false,
   "frozen_treatments_modified": false,
-  "private_state_sync_pending": true
+  "private_state_sync_pending": false,
+  "tested_source": "c5b69522f9f81c4a6017a715f2136a565a3702ed",
+  "financial_guard_tests_ruos": 3,
+  "total_tests_ruos": 8,
+  "test_seconds": 50.469,
+  "test_log_sha256": "d06a8046a1e64df73ffe394eb2c520a4f1884820e0eb33a814a8f7003c36c2dd",
+  "earlier_attempt_archive_created": false,
+  "test_import_fix": true,
+  "metadata_only_phase_quote_usd": "0.27628480"
 }
