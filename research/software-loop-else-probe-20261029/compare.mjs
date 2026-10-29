@@ -5,6 +5,7 @@ import {project} from '../software-function-assessment-20261028/assess.mjs';
 const [oldPath,newPath,output]=process.argv.slice(2);
 const old=JSON.parse(readFileSync(oldPath)),candidate=JSON.parse(readFileSync(newPath));
 const need=(x,m)=>{if(!x)throw Error(m);};
+need(old.live_archive_verified===true&&candidate.live_archive_verified===true&&old.scripted===false&&candidate.scripted===false,'scripted controls cannot confirm');
 need(old.assigned===8&&candidate.assigned===8&&old.rows.length===8&&candidate.rows.length===8,'complete eight-assignment grades required');
 need(old.inputs_sha256===candidate.inputs_sha256&&old.runtime==='9d1a28a3357f87349bcbc81166a2c1191c2d03c6'&&candidate.runtime==='b3a8873a4629a1cb34d2dfd7b297895783d9af9e','exact paired runtime/input pins required');
 const ids=new Set(),pairs=[];

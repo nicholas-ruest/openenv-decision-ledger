@@ -24,6 +24,11 @@ def main():
     counter=helper.load_counter(argparse.Namespace(accounting='arena',tokenizer_json=a.tokenizer,tokenizer_sha256='0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3'))
     bundle=json.loads((a.archive/'inputs.json').read_text())
     if digest(bundle)!=a.inputs_sha256:raise ValueError('frozen inputs changed')
+    completed=json.loads((a.archive/'live/complete.json').read_text())
+    if (completed.get('scripted') is not False or completed.get('assigned_attempts')!=8
+            or completed.get('recorded_attempts')!=8 or completed.get('observed_calls')!=8
+            or completed.get('source_inputs_sha256')!=a.inputs_sha256):
+        raise ValueError('complete live archive required; scripted controls cannot confirm')
     rows=[json.loads(x) for x in (a.archive/'live/records.jsonl').read_text().splitlines()]
     events=[json.loads(x) for x in (a.archive/'live/events.jsonl').read_text().splitlines()]
     if len(rows)!=8 or [x['attempt_id'] for x in rows]!=[j['attempt_id'] for j in bundle['screen_jobs']]:raise ValueError('complete exact assignments required')
@@ -51,7 +56,7 @@ def main():
             result.update(observation_tokens=obs_tokens,accounted_context=context)
             if row['generation_tokens']+obs_tokens>4096 or context>8192:result.update(category='budget',semantic_reward=None)
         out.append(result)
-    payload=dict(runtime=a.expected_runtime,inputs_sha256=a.inputs_sha256,assigned=8,rows=out,model_training=False,leaderboard_gain=False)
+    payload=dict(runtime=a.expected_runtime,inputs_sha256=a.inputs_sha256,assigned=8,rows=out,live_archive_verified=True,scripted=False,model_training=False,leaderboard_gain=False)
     with a.output.open('x') as f:json.dump(payload,f,indent=2)
     print(json.dumps(dict(assigned=8,responses=len(seen),full=sum(x['category']=='full' for x in out))))
 
