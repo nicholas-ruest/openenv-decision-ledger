@@ -1,0 +1,9 @@
+# Disjoint confirmation gate for the self-tracing prompt
+
+This source prepares no confirmation observation until a complete positive screen-selection receipt is supplied and hashed. The receipt must bind the exact eight-call screen source and input digest, all eight distinct observed response identities, native assessment and raw-event hashes, no unknown usage, positive full-solve delta and nonnegative semantic delta. Selection is frozen before preparation. Native controls require that external selection receipt explicitly; they are not model evidence.
+
+Confirmation uses the originally reserved ignore-d3 seed 2570000, four fresh draws per unchanged arm. The initial problem hash must differ from the screen case; a collision fails closed without an alternate seed. Task contract, schema, full-module runtime, source, self-tracing/control instructions, sampling, thinking request, route, SSE transport and 4,096 completion / 8,192 context budgets remain unchanged. There is no computed test feedback, helper preservation or runtime compatibility change.
+
+The same manual caller preserves the existing whole-phase financial admission, amendment-bound accounting, reserve-before-call ledger, no retries, unknown-usage stopping and 1,200-second supervisor. Every assigned result remains in the denominator. The assessor rejects response-identity reuse from the screen. It executes the same pinned actual MetaHarness fitness source for eligible four-response groups. Confirmation requires a positive full-solve delta and nonnegative semantic delta again after independently verifying all raw identities, usage and native outcomes.
+
+This is a local prompt-effect confirmation on one new procedural case. It cannot establish model training, broad software transfer, production-wrapper equivalence or leaderboard gain. No Arena request, image, dataset, purchase or spending cap is changed.
