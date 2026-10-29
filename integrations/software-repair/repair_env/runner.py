@@ -123,9 +123,13 @@ class Program:
         parents = {id(child): parent for parent in nodes for child in ast.iter_child_nodes(parent)}
         for node in nodes:
             if isinstance(node, (ast.Break, ast.Continue)):
-                parent = parents[id(node)]
-                while not isinstance(parent, (ast.FunctionDef, ast.For, ast.While)):
-                    parent = parents[id(parent)]
+                child = node
+                parent = parents[id(child)]
+                while not isinstance(parent, ast.FunctionDef):
+                    if isinstance(parent, (ast.For, ast.While)) and child in parent.body:
+                        break
+                    child = parent
+                    parent = parents[id(child)]
                 if isinstance(parent, ast.FunctionDef):
                     raise Rejected("loop control outside a lexical loop")
         self.fingerprint = ast.dump(tree, include_attributes=False)
@@ -210,8 +214,6 @@ class Program:
                 branch = node.body if self._expr(node.test, frame, depth) else node.orelse
                 self._block(branch, frame, depth)
             elif isinstance(node, ast.For):
-                if node.orelse:
-                    raise Rejected("loop else unsupported")
                 values = self._expr(node.iter, frame, depth)
                 if type(values) not in (list, tuple, str, dict, set, _Generator):
                     raise Rejected("iteration type unsupported")
@@ -224,9 +226,9 @@ class Program:
                         break
                     except _Continue:
                         continue
+                else:
+                    self._block(node.orelse, frame, depth)
             elif isinstance(node, ast.While):
-                if node.orelse:
-                    raise Rejected("loop else unsupported")
                 while self._expr(node.test, frame, depth):
                     self._tick()
                     try:
@@ -235,6 +237,8 @@ class Program:
                         break
                     except _Continue:
                         continue
+                else:
+                    self._block(node.orelse, frame, depth)
             elif isinstance(node, ast.Break):
                 raise _Break()
             elif isinstance(node, ast.Continue):
