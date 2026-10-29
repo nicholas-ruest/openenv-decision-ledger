@@ -12,7 +12,7 @@ For native terminal results, the existing terminal-only auditor distinguishes in
 
 Five local lifecycle tests passed against an explicitly fictional binding. They check input-hash rejection, single consumption, no retry after malformed/truncated replies, terminal external aborts, native-contract violations, and exclusion of diagnostic output from messages. These tests do **not** execute OpenEnv, the real grader, a model, or MetaHarness search.
 
-Three native integration tests are included but **have not been run**. They must be executed inside a fresh isolated checkout during permitted ruOS hours before this adapter is used. They exercise actual reference grading in both arms, function-edit rejection versus interpreter failure, and treatment full-module fallback.
+On 2026-10-29 the three native integration tests and five lifecycle tests **passed on ruOS** in a fresh isolated checkout at `14bf022bae338cb3f68053cb33667404b625588d`. The native tests exercised five scripted episodes: actual reference grading in both arms, function-edit rejection versus interpreter failure, and treatment full-module fallback. These are controls, not new model responses.
 
 From the repository root with native dependencies installed:
 
@@ -20,7 +20,7 @@ From the repository root with native dependencies installed:
 python -m unittest discover -s research/software-function-trial-20261029 -p 'test_*.py' -v
 ```
 
-Only the local fictional lifecycle subset was executed in this step:
+The earlier offline step executed only the fictional lifecycle subset:
 
 ```bash
 python -m unittest discover -s research/software-function-trial-20261029 -p 'test_lifecycle.py' -v
@@ -28,4 +28,4 @@ python -m unittest discover -s research/software-function-trial-20261029 -p 'tes
 
 The complete-phase caller remains missing. It must authenticate immutable input/source/provider records, bind real call and response IDs, reconcile the existing account/receipts, admit the full phase, reserve before each call, account for actual token/context costs and enforce hard deadlines. This module does not implement those mechanisms or replace the older runner. Its result fields still require a durable accounting/identity envelope before software assessment.
 
-No ruOS access occurred after its fixed stop. No new model calls, oracle replays, training, purchases, dataset replacements, submissions, automation or public conversation updates occurred. Fresh model and leaderboard improvement remain unmeasured.
+The offline implementation left ruOS asleep after its fixed stop; native validation resumed during the next permitted morning window. No new model calls, training, purchases, dataset replacements, submissions, automation or public conversation updates occurred. Fresh model and leaderboard improvement remain unmeasured.

@@ -25,4 +25,4 @@ Reproduce from the repository root:
 node --test research/software-function-assessment-20261028/test_assess.mjs
 ```
 
-The new files have not yet been tested inside ruOS. Work stayed offline after the fixed operating-hours stop. Fresh model screen and disjoint confirmation remain unexecuted. Native candidate tests from the prior step are separate evidence and do not validate this new assessor. No model or ranking improvement is claimed.
+On 2026-10-29 all nine assessor tests also passed inside ruOS at `14bf022bae338cb3f68053cb33667404b625588d`. The executed fitness source bytes matched the actual pinned MetaHarness vendor checkout. Inputs to these tests remain fictional; this is no model screen or confirmation. Work stayed offline after the fixed stop and resumed during the next morning window. No model or ranking improvement is claimed.
