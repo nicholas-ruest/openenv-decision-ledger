@@ -11,6 +11,7 @@ from pathlib import Path
 import subprocess
 import sys
 import time
+from failure_diagnostics import safe_failure
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -104,19 +105,24 @@ def phase(bundle, expected, output, backend, counter, deadline):
                 record(records, row); result.append(row); continue
             label = job['attempt_id']+':0'
             record(events, dict(event='intent', attempt_id=job['attempt_id'], label=label))
+            diagnostic_started = time.monotonic()
             try:
                 backend.reserve(label, bound, 2048, deadline)
-            except Exception:
+            except Exception as exc:
+                record(events, dict(event='failure', attempt_id=job['attempt_id'], **safe_failure(exc, 'reservation', time.monotonic()-diagnostic_started)))
                 stopped = True
                 record(records, row); result.append(row); continue
             row.update(reservation_label=label)
             record(events, dict(event='reserved', attempt_id=job['attempt_id'], label=label))
+            diagnostic_started = time.monotonic()
+            diagnostic_stage = 'provider'
             try:
                 if time.monotonic() >= deadline:
                     raise TimeoutError('local deadline')
                 row.update(call_id=label, generation_tokens=None, category='provider')
                 record(events, dict(event='calling', attempt_id=job['attempt_id'], call_id=label))
                 response = backend.call(copy.deepcopy(frozen['request']), min(180, deadline-time.monotonic()), job)
+                diagnostic_stage = 'response_validation'
                 # Entire reply is credential-checked before any raw data is saved.
                 backend.check_reply(response)
                 identity = response.get('id')
@@ -142,6 +148,7 @@ def phase(bundle, expected, output, backend, counter, deadline):
                 choice = choices[0]; message = choice['message']
                 row['finish_reason'] = choice.get('finish_reason')
                 backend.check_message(message)
+                diagnostic_stage = 'native_processing'
                 value = trial.consume(message.get('content'), finish_reason=row['finish_reason'])
                 row.update(category=value['category'], semantic_reward=value['semantic_reward'],
                            terminal_reward_observed=value['native_reward'])
@@ -152,7 +159,8 @@ def phase(bundle, expected, output, backend, counter, deadline):
                     context = max(counter.context(accounted), usage['prompt_tokens']+usage['completion_tokens']+row['observation_tokens'])
                     if usage['completion_tokens']+row['observation_tokens'] > 4096 or context > 8192:
                         row.update(category='budget', semantic_reward=None)
-            except Exception:
+            except Exception as exc:
+                record(events, dict(event='failure', attempt_id=job['attempt_id'], **safe_failure(exc, diagnostic_stage, time.monotonic()-diagnostic_started)))
                 # Do not log exception text (may contain credential/provider text).
                 # Unknown usage stays null and never becomes a free completion.
                 if row['generation_tokens'] is None:

@@ -78,6 +78,12 @@ class CallerTests(unittest.TestCase):
             self.assertEqual(rows[2]['category'],'provider'); self.assertIsNone(rows[2]['generation_tokens'])
             self.assertTrue(all(r['category']=='budget' and r['call_id'] is None and r['reservation_label'] is None for r in rows[3:]))
             self.assertEqual(len(backend.reservations),3)
+            events = [json.loads(x) for x in (Path(tmp)/'failed/events.jsonl').read_text().splitlines()]
+            failures = [e for e in events if e['event']=='failure']
+            self.assertEqual(len(failures),1)
+            self.assertEqual(failures[0]['code'],'timeout')
+            self.assertEqual(failures[0]['stage'],'provider')
+            self.assertNotIn('fictional provider failure',json.dumps(failures))
     def test_changed_input_digest_refuses_calls(self):
         backend = ScriptedBackend(self.counter)
         with tempfile.TemporaryDirectory() as tmp:
