@@ -15,7 +15,7 @@ def main():
     a=p.parse_args();root=a.runtime_root
     if subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD'],text=True).strip()!=a.expected_runtime:raise ValueError('runtime source changed')
     subprocess.run(['git','-C',str(root),'diff','--quiet','HEAD'],check=True)
-    sys.path[:0]=[str(root/x) for x in ['integrations/software-repair','research/software-function-edit-20261028','research/software-terminal-audit-20261028','research/software-function-block-protocol-20261028']]
+    sys.path[:0]=[str(root/x) for x in ['integrations/software-repair','integrations/openenv-arena','research/software-function-edit-20261028','research/software-terminal-audit-20261028','research/software-function-block-protocol-20261028']]
     from function_edit import FunctionEditEnvironment,FunctionEditAction
     from terminal_audit import classify
     from protocol import digest,canonical
