@@ -1,0 +1,7 @@
+# Separate public-example feedback comparison with thinking off requested
+
+The earlier thinking-requested required-review screen ended inconclusive on a provider timeout. The separate source-diagnostic thinking-off study established a feasible common profile, but its first pair had no source-diagnostic exposure. This candidate isolates computed checks on already supplied public examples versus neutral review, in the same required proposal/review/final protocol. It does not combine helper preservation or explanatory syntax diagnostics.
+
+Both arms request thinking off, with behavior still unattested, and retain identical first prompts, compiler, accepted syntax, full-contract grader, reward, model, temperature, 8192 completion including observations, 24576 context, at most two calls, first generation 6000, remaining second budget, 600-second attempt wall and 1200-second worker supervision. No artificial resource or interpreter difficulty. Fresh screen case 2740000, four samples per arm; reserved confirmation 2750000 unmaterialized.
+
+No paid execution is authorized by these files. Existing fresh complete financial reconciliation, actual credit, amendment-bound reservation, complete-phase quoting, reserve-before-call, no duplicate/retry/redraw, unknown-usage and operating-hours guards remain unchanged. Require complete positive actual screen evidence and fresh disjoint confirmation before improvement claims. No Arena POST, HF replacement, new cap, purchase, training or frozen-request changes.
