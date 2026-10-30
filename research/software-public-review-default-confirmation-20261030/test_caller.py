@@ -134,7 +134,7 @@ class NativeFeedbackTests(unittest.TestCase):
         source=subprocess.check_output(['git','-C',str(ROOT),'rev-parse','HEAD'],text=True).strip()
         with tempfile.TemporaryDirectory() as tmp:
             out=Path(tmp)/'live';inputs=Path(tmp)/'inputs.json';inputs.write_text(json.dumps(self.bundle))
-            args=[sys.executable,str(Path(__file__).with_name('caller.py')),'--execute','--expected-source',source,'--inputs',str(inputs),'--inputs-sha256',self.digest,'--receipt',str(Path(tmp)/'receipt'),'--reconciliation',str(Path(tmp)/'missing-audit'),'--tokenizer','/home/ruv/arena-tokenizer.json','--output',str(out),'--amendment-sha256','0'*64]
+            args=[sys.executable,str(Path(__file__).with_name('caller.py')),'--execute','--expected-source',source,'--inputs',str(inputs),'--inputs-sha256',self.digest,'--receipt',str(Path(tmp)/'receipt'),'--reconciliation',str(Path(tmp)/'missing-audit'),'--tokenizer','/home/ruv/arena-tokenizer.json','--output',str(out),'--amendment-sha256','0'*64,'--screen-gate',str(Path(tmp)/'missing-screen-gate'),'--screen-gate-sha256','0'*64]
             subprocess.run(args,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=20)
             self.assertFalse(out.exists())
             supervision=[json.loads(x) for x in out.with_suffix('.supervision.jsonl').read_text().splitlines()]
