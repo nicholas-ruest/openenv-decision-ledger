@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import sys
 from typing import Literal
-from pydantic import Field
+from pydantic import ConfigDict, Field
 from openenv.core.env_server.types import Action
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -58,6 +58,7 @@ def replace_blocks(original, replacement, expected_sha256):
 
 
 class FunctionRevisionAction(Action):
+    model_config = ConfigDict(extra='ignore')
     mode: Literal['module', 'functions'] = 'module'
     content: str = Field(default='', max_length=8192,
                          description='Complete module, or final replacement function definitions. Empty content retains the current module.')
