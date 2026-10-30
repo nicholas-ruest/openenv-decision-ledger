@@ -433,13 +433,15 @@ class Program:
                 name = node.func.id
                 if name in self.functions:
                     return self._call(name, args, depth)
+                if name == "bool" and name in frame:
+                    raise Rejected("local bool value is not callable")
                 if name == "range":
                     result = range(*args)
                     if len(result) > MAX_ITEMS:
                         raise Rejected("range size limit")
                     return list(result)
                 builtins = {"len": len, "min": min, "max": max, "sum": sum,
-                            "abs": abs, "sorted": sorted, "list": list, "set": set,
+                            "abs": abs, "bool": bool, "sorted": sorted, "list": list, "set": set,
                             "tuple": tuple, "dict": dict, "any": any, "all": all,
                             "enumerate": lambda *xs: list(enumerate(*xs)),
                             "zip": lambda *xs: list(zip(*xs))}
