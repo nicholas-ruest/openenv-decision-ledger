@@ -1,0 +1,25 @@
+{
+  "status": "closed_incomplete_provider_timeout_no_retry",
+  "source": "f5b5a87ecc303ffe111148e607b01502fd698546",
+  "assigned": 8,
+  "recorded_attempts": 6,
+  "known_terminal_model_attempts": 4,
+  "actual_calls": 9,
+  "known_replies": 8,
+  "unknown_usage_calls": 1,
+  "uncalled_assigned_attempts": 3,
+  "full_solves": {
+    "neutral_review": 1,
+    "public_review": 0
+  },
+  "known_execution_failures": {
+    "neutral_review": 1,
+    "public_review": 2
+  },
+  "selection_passed": false,
+  "confirmation_materialized": false,
+  "all_workers_stopped": true,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "clean_local_shutdown": true
+}
