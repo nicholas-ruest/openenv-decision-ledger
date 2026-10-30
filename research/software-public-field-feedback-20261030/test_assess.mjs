@@ -6,7 +6,7 @@ const hash=x=>createHash('sha256').update(x).digest('hex');
 const arms=['public_check','public_fields'];
 function fixture(rewards=[0,.25,.75,1]){
   const bundle={namespace:'fictional-test-only',confirmation_observations_materialized:false,screen_jobs:[],screen_groups:[]},rows=[];
-  for(const task of ['software_repair-ignore-d2'])for(const seed of [2760000]){
+  for(const task of ['software_repair-ignore-d2'])for(const seed of [2780000]){
     const problem_sha256=hash(task+seed),group={task_id:task,seed,problem_sha256,arms:{}};
     for(const arm of arms){
       const prompt_sha256=hash(task+seed);group.arms[arm]={prompt_sha256};
