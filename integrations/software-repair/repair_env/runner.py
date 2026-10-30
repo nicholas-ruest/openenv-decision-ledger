@@ -91,7 +91,8 @@ class Program:
                ast.UAdd, ast.USub, ast.Not, ast.And, ast.Or, ast.Eq, ast.NotEq,
                ast.Lt, ast.LtE, ast.Gt, ast.GtE, ast.In, ast.NotIn, ast.Is, ast.IsNot,
                ast.Attribute, ast.Break, ast.Continue, ast.Set, ast.BitAnd, ast.BitOr,
-               ast.LShift, ast.Pow, ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp, ast.comprehension)
+               ast.LShift, ast.Pow, ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp, ast.comprehension,
+               ast.keyword, ast.Lambda)
 
     def __init__(self, source: str):
         if type(source) is not str or len(source.encode()) > MAX_SOURCE:
@@ -122,6 +123,25 @@ class Program:
             raise Rejected("one to sixteen functions required")
         parents = {id(child): parent for parent in nodes for child in ast.iter_child_nodes(parent)}
         for node in nodes:
+            if isinstance(node, ast.keyword):
+                call = parents[id(node)]
+                is_method = (isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute)
+                             and call.func.attr == "sort" and not call.args)
+                is_sorted = (isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
+                             and call.func.id == "sorted" and "sorted" not in self.functions
+                             and len(call.args) == 1)
+                if (not (is_method or is_sorted)
+                        or node.arg not in ("key", "reverse")
+                        or len({item.arg for item in call.keywords}) != len(call.keywords)):
+                    raise Rejected("only list.sort/sorted key/reverse keywords supported")
+            if isinstance(node, ast.Lambda):
+                parent = parents[id(node)]
+                args = node.args
+                if (not isinstance(parent, ast.keyword) or parent.arg != "key"
+                        or len(args.args) != 1 or args.args[0].arg.startswith("__")
+                        or args.posonlyargs or args.kwonlyargs or args.vararg or args.kwarg
+                        or args.defaults or args.kw_defaults or args.args[0].annotation):
+                    raise Rejected("lambda only supported as a one-argument sort key")
             if isinstance(node, (ast.Break, ast.Continue)):
                 child = node
                 parent = parents[id(child)]
@@ -269,6 +289,29 @@ class Program:
                         raise Rejected("sequence multiplication limit")
         return bounded(fn(left, right))
 
+    def _sort_key(self, node, frame, depth):
+        if isinstance(node, ast.Constant) and node.value is None:
+            return None
+        if isinstance(node, ast.Lambda):
+            argument = node.args.args[0].arg
+            def evaluate(item):
+                self._tick()
+                return bounded(self._expr(node.body, ChainMap({argument: item}, frame), depth))
+            return evaluate
+        if isinstance(node, ast.Name):
+            name = node.id
+            if name in self.functions:
+                def evaluate(item):
+                    return bounded(self._call(name, [item], depth))
+                return evaluate
+            if name in ("len", "abs"):
+                function = len if name == "len" else abs
+                def evaluate(item):
+                    self._tick()
+                    return bounded(function(item))
+                return evaluate
+        raise Rejected("sort key must be None, a supported named function or a lambda")
+
     def _expr(self, node, frame, depth):
         self._tick()
         ev = lambda n: self._expr(n, frame, depth)
@@ -352,19 +395,53 @@ class Program:
                          ev(node.step) if node.step else None)
         if isinstance(node, ast.Subscript):
             return bounded(ev(node.value)[ev(node.slice)])
+        if (isinstance(node, ast.Call) and node.keywords
+                and ((isinstance(node.func, ast.Attribute) and node.func.attr == "sort")
+                     or (isinstance(node.func, ast.Name) and node.func.id == "sorted"))):
+            is_sorted = isinstance(node.func, ast.Name)
+            if is_sorted:
+                if len(node.args) != 1:
+                    raise Rejected("sorted requires one positional iterable")
+                value = ev(node.args[0])
+                if type(value) not in (list, tuple, str, dict, set):
+                    raise Rejected("sorted iterable unsupported")
+                value = list(value)
+            else:
+                value = ev(node.func.value)
+                if type(value) is not list or node.args:
+                    raise Rejected("sort receiver/arguments unsupported")
+            key = None
+            reverse = False
+            for keyword in node.keywords:
+                if keyword.arg == "key":
+                    key = self._sort_key(keyword.value, frame, depth)
+                elif keyword.arg == "reverse":
+                    reverse = ev(keyword.value)
+                    if type(reverse) not in (bool, int):
+                        raise Rejected("sort reverse must be an integer or bool")
+                else:
+                    raise Rejected("sort keyword unsupported")
+            # CPython supplies stable ordering and one key evaluation per item.
+            # The callback remains in this interpreter, sharing its step/depth
+            # limits; no submitted source is executed by the host Python VM.
+            value.sort(key=key, reverse=reverse)
+            bounded(value)
+            return value if is_sorted else None
         if isinstance(node, ast.Call) and not node.keywords:
             args = [ev(n) for n in node.args]
             if isinstance(node.func, ast.Name):
                 name = node.func.id
                 if name in self.functions:
                     return self._call(name, args, depth)
+                if name == "bool" and name in frame:
+                    raise Rejected("local bool value is not callable")
                 if name == "range":
                     result = range(*args)
                     if len(result) > MAX_ITEMS:
                         raise Rejected("range size limit")
                     return list(result)
                 builtins = {"len": len, "min": min, "max": max, "sum": sum,
-                            "abs": abs, "sorted": sorted, "list": list, "set": set,
+                            "abs": abs, "bool": bool, "sorted": sorted, "list": list, "set": set,
                             "tuple": tuple, "dict": dict, "any": any, "all": all,
                             "enumerate": lambda *xs: list(enumerate(*xs)),
                             "zip": lambda *xs: list(zip(*xs))}
