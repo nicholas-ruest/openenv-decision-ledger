@@ -68,8 +68,8 @@ test('incomplete, duplicated, misbound, reused, and contradictory records fail c
     x=>x.bundle.confirmation_jobs[1].sample=0,
   ]){const x=fixture();mutate(x);assert.throws(()=>assess(x.bundle,x.rows));}
 });
-test('confirmation scoring and improvement claims remain unsupported',()=>{
-  const {bundle,rows}=fixture();assert.throws(()=>assess(bundle,rows,'confirmation'));
+test('screen scoring and unverified improvement claims remain unsupported',()=>{
+  const {bundle,rows}=fixture();assert.throws(()=>assess(bundle,rows,'screen'));
   const r=assess(bundle,rows);assert.equal(r.fresh_confirmation_verified,false);
   assert.equal(r.provider_attestation_verified,false);assert.equal(r.promotion,false);assert.equal(r.leaderboard_gain,false);
 });
