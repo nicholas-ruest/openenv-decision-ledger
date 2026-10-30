@@ -1,0 +1,119 @@
+{
+  "kind": "completed-private-software-comparison",
+  "screen_source": "33c0c708e823bd42ae9de8150c025c78d5c8fe5b",
+  "confirmation_source": "ec20188b06dacc8eb48976628f36901b1a78ea6a",
+  "screen": {
+    "assigned_per_arm": 4,
+    "full": {
+      "neutral_review": 0,
+      "public_review": 3
+    },
+    "semantic_mean_delta": 0.75,
+    "actual_calls": 16,
+    "selected": true
+  },
+  "confirmation": {
+    "phase": "confirmation",
+    "attempts": 8,
+    "attempts_per_arm": 4,
+    "groups": [
+      {
+        "task_id": "software_repair-ignore-d3",
+        "seed": 2930000,
+        "arm": "neutral_review",
+        "problem_sha256": "7c33e5e7da1e580c1dfbdc5a70951a431fd1271a267e430a3304015df167b6a9",
+        "attempts": 4,
+        "full": 2,
+        "semantic_sum": 3.75,
+        "native_categories": {
+          "full": 2,
+          "partial": 2,
+          "wrong": 0,
+          "format": 0,
+          "edit_rejection": 0,
+          "execution": 0,
+          "provider": 0,
+          "budget": 0,
+          "truncation": 0
+        },
+        "unknown_generation_usage_attempts": 0,
+        "metaharness_unavailable_reason": null,
+        "metaharness": {
+          "signal": 1,
+          "eligible": 4,
+          "solved": 2,
+          "partial": 2,
+          "reasoning": 0,
+          "format": 0,
+          "truncation": 0,
+          "infra": 0
+        }
+      },
+      {
+        "task_id": "software_repair-ignore-d3",
+        "seed": 2930000,
+        "arm": "public_review",
+        "problem_sha256": "7c33e5e7da1e580c1dfbdc5a70951a431fd1271a267e430a3304015df167b6a9",
+        "attempts": 4,
+        "full": 1,
+        "semantic_sum": 1,
+        "native_categories": {
+          "full": 1,
+          "partial": 0,
+          "wrong": 0,
+          "format": 0,
+          "edit_rejection": 0,
+          "execution": 3,
+          "provider": 0,
+          "budget": 0,
+          "truncation": 0
+        },
+        "unknown_generation_usage_attempts": 0,
+        "metaharness_unavailable_reason": null,
+        "metaharness": {
+          "signal": 0,
+          "eligible": 1,
+          "solved": 1,
+          "partial": 0,
+          "reasoning": 0,
+          "format": 0,
+          "truncation": 0,
+          "infra": 3
+        }
+      }
+    ],
+    "full_rate_delta": -0.25,
+    "semantic_mean_delta": -0.6875,
+    "confirmation_passed": false,
+    "fresh_confirmation_verified": false,
+    "private_protocol_gain_confirmed": false,
+    "all_live_replies_verified": true,
+    "actual_calls": 16,
+    "max_accounted_context": 7646,
+    "max_completion_with_observations": 8083,
+    "model_improvement": false,
+    "leaderboard_gain": false,
+    "assessment_sha256": "d78e8384858934b58a1df91c9b5b225c3b2a0850486d36bcf9ec3f57d67a8f29",
+    "verification_sha256": [
+      "e2ead17fbde3df47a15adfd10375869563254eea94a3ba8884f3a6b443115877",
+      "9cda517568252c43ad3d287f112d63116a2d7ff2395e75e38163d16d7eb94a76",
+      "295cbb9a5f11dcb8b8d27c4fbc2b5e317ba9a7b1e6ad4e07a858e542542be69d",
+      "a27e82d2066e26cba586321166d370d5b507b2489a023a797a0acafd4292a0b1"
+    ],
+    "fresh_observations_verified": true
+  },
+  "screen_gate_sha256": "4f5ef3bba7d18ac25bd945024a58068329a30c93cb046ab00cf1180c7e5f1aea",
+  "all_assigned_attempts_retained": true,
+  "all_workers_stopped": true,
+  "actual_model_calls": 32,
+  "new_training_updates": 0,
+  "promotion": false,
+  "production_wrapper_equivalent": false,
+  "limitations": [
+    "One procedural case per phase, four stochastic samples per arm.",
+    "Provider-default reasoning observed; Arena trainer configuration remains unattested.",
+    "Native program-execution failures remain in the denominator; upstream infra projection is not a provider-outage claim.",
+    "First generation capped at 6000 inside unchanged aggregate 8192/24576 bounds.",
+    "No leaderboard or model-weight improvement claim."
+  ]
+}
