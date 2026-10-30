@@ -1,0 +1,20 @@
+{
+  "status": "stopped_for_posthoc_mathematical_futility",
+  "assigned": 16,
+  "observed": 8,
+  "uncalled": 8,
+  "baseline_full_observed": 4,
+  "candidate_full_observed": 0,
+  "candidate_best_possible_final_full": 4,
+  "baseline_worst_possible_final_full": 4,
+  "maximum_possible_final_full_rate_delta": 0,
+  "stopping_rule_preregistered": false,
+  "complete_screen": false,
+  "effect_estimate": null,
+  "independent_native_replay": true,
+  "actual_known_usage_responses": 8,
+  "selection_passed": false,
+  "confirmation": false,
+  "model_improvement": false,
+  "leaderboard_gain": false
+}
