@@ -1,0 +1,11 @@
+# Conditional disjoint confirmation preparation
+
+No confirmation observations or model calls may be materialized before an immutable positive selection receipt from the complete independently replayed screen. Import and gate tests never construct the reserved Native case. This code supplies no new execution, spending, training, submission or dataset-replacement authorization.
+
+The selected screen must be exact source `1e49f5d7398dd2329b7aba650b97fd715b77ab49`, all four frozen chunk inputs, eight assigned attempts, all actual distinct response identities and known usage, positive full-solve delta and nonnegative semantic delta. Raw archive/assessment hashes and the unchanged request profile must be bound in the immutable receipt. Selection is frozen before confirmation capture. Unknown/incomplete/nonpositive/wrong-source or modified receipts fail closed.
+
+The actual Native Trial class and all environment/model settings remain unchanged. Only the procedural case and phase identities change to reserved case 2690000. There are four samples per arm, four sequential manually launched two-attempt chunks, with identical first prompts, required review, and no helper-preservation intervention. The paid loop, route, financial reconciliation and accounting code are required by source-equality tests to match the tested screen caller.
+
+Budget remains 8192 total completion including observations, 24576 context, first generation maximum 6000 and the actual remaining second-response budget with 96 terminal tokens reserved, 600-second attempt wall and 1200-second worker supervision. All existing financial/operating guards remain; sixteen possible calls must fit the existing fully reconciled allocation and actual credit. No retry, resume, redraw or automatic confirmation launch.
+
+All eight confirmation assignments remain in the denominator. Independent replay must validate actual raw identities, disjointness from every screen response, usage, exact inputs and Native grades before effect confirmation. The actual pinned MetaHarness scorer remains hash checked. A local confirmed protocol effect would not establish trained-model transfer or leaderboard gain; Arena held-out results and separate exact interactive submission approval remain required.
