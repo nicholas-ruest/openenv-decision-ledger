@@ -36,6 +36,8 @@ class PortableAppTests(unittest.TestCase):
         with TestClient(app) as client,client.websocket_connect('/ws') as ws:
             reset=exchange(ws,'reset',dict(task_id=TASK,seed=SEED))
             self.assertIn('Empty content ends the episode at any point',reset['observation']['prompt'])
+            self.assertNotIn('The action contains only content.',reset['observation']['prompt'])
+            self.assertIn('mode, content and base_sha256',reset['observation']['prompt'])
             review=exchange(ws,'step',dict(content=ref))
             self.assertFalse(review['done']);self.assertEqual(review['reward'],0)
             feedback=json.loads(review['observation']['feedback'])

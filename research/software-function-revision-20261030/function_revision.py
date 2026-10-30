@@ -79,12 +79,16 @@ class FunctionRevisionEnvironment(DiagnosticEnvironment):
         self._revision_error = False
         self._applied_function_revision = False
         obs = super().reset(*args, **kwargs)
+        marker = 'The action contains only content.'
+        if marker not in obs.prompt:
+            raise ValueError('frozen inherited action guide changed')
+        prompt = obs.prompt.replace(marker, 'The action supports mode, content and base_sha256 as specified by its schema.')
         guide = (' First propose a complete module using mode="module". For the final response, '
                  'mode="functions" may replace any named top-level functions and add new helpers; '
                  'other current code is retained. Copy revision_base_sha256 from feedback to base_sha256 '
                  'for nonempty functions mode. Mode="module" remains available for a complete replacement. '
                  'Empty content in either mode retains the current module. Native source limits and grading are unchanged.')
-        return obs.model_copy(update={'prompt': obs.prompt+guide})
+        return obs.model_copy(update={'prompt': prompt+guide})
 
     def step(self, action, timeout_s=None, **kwargs):
         if self._terminal is not None:
