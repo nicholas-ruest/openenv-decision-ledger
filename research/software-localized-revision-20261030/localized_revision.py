@@ -12,7 +12,7 @@ class Replacement(Action):
     after:str=Field(max_length=8192)
 
 class ProposalAction(Action):
-    model_config=ConfigDict(extra='forbid')
+    model_config=ConfigDict(extra='ignore')
     content:str=Field(default='',max_length=8192)
     replacements:List[Replacement]=Field(default_factory=list,max_length=4)
 

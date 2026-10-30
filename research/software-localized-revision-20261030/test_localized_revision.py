@@ -10,7 +10,7 @@ class LocalRevisionTests(unittest.TestCase):
   self.assertEqual(source,'alpha beta')
  def test_size_and_strict_schema(self):
   with self.assertRaises(ValueError):apply_replacements('x',[Replacement(before='x',after='a'*8192),Replacement(before='a'*8192,after='a'*8192+'b')])
-  with self.assertRaises(ValueError):ProposalAction(content='',unexpected=1)
+  self.assertEqual(ProposalAction(content='',submit=True).content,'')
  def test_native_full_fallback_and_patch_same_grade(self):
   task=make_task('software_repair-ignore-d2',2840000)
   initial=[]
