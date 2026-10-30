@@ -9,7 +9,7 @@ function fixture(rewards=[0,.25,.75,1]){
   for(const task of ['software_repair-ignore-d3'])for(const seed of [2660000]){
     const problem_sha256=hash(task+seed),group={task_id:task,seed,problem_sha256,arms:{}};
     for(const arm of arms){
-      const prompt_sha256=hash(task+seed+arm);group.arms[arm]={prompt_sha256};
+      const prompt_sha256=hash(task+seed);group.arms[arm]={prompt_sha256};
       for(let sample=0;sample<4;sample++){
         const job={namespace:'fictional-test-only',phase:'screen',task_id:task,seed,sample,arm,attempt_id:hash(task+seed+sample+arm)};
         bundle.screen_jobs.push(job);
@@ -97,4 +97,11 @@ test('unknown semantic usage remains invalid and wholly unavailable usage invoke
   const r=assess(bundle,rows);assert.equal(r.actual_module,null);
   assert.equal(r.metaharness_groups_scored,0);assert.equal(r.unknown_generation_usage_attempts,8);
   assert.equal(r.full_rate_delta,0);assert.equal(r.model_improvement_claim,false);
+});
+
+test('computed-feedback first prompts cannot differ across arms',()=>{
+ const x=fixture();const changed=hash('different first prompt');
+ x.bundle.screen_groups[0].arms[arms[1]].prompt_sha256=changed;
+ for(const row of x.rows)if(row.arm===arms[1])row.prompt_sha256=changed;
+ assert.throws(()=>assess(x.bundle,x.rows),/identical first prompts/);
 });

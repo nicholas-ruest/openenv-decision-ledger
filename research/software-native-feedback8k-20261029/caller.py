@@ -15,6 +15,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'research/software-fun
 from failure_diagnostics import safe_failure
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0,str(ROOT/'integrations/openenv-arena'))
 
 
 def load(name, path):
@@ -76,7 +77,8 @@ def phase(bundle, expected, output, backend, counter, deadline):
                     row.update(category='budget',semantic_reward=None);stopped=True;break
                 payload=dict(copy.deepcopy(bundle['sampling']),messages=copy.deepcopy(trial.messages),max_tokens=limit)
                 label=job['attempt_id']+':'+str(turn)
-                record(events,dict(event='intent',attempt_id=job['attempt_id'],label=label,turn=turn,max_tokens=limit))
+                record(events,dict(event='intent',attempt_id=job['attempt_id'],label=label,turn=turn,max_tokens=limit,
+                    request_sha256=protocol.digest(payload),messages_sha256=protocol.digest(payload['messages'])))
                 started=time.monotonic();stage='reservation'
                 try:
                     backend.reserve(label,28672,limit,attempt_deadline)
@@ -120,7 +122,8 @@ def phase(bundle, expected, output, backend, counter, deadline):
                     # Any called turn lacking a fully validated response/usage is unknown,
                     # even if an earlier turn's cost is known. Preserve its reservation.
                     if len(row['call_ids'])>row['turns']:row['generation_tokens']=None
-                    row.update(category='provider' if stage!='reservation' else 'budget',semantic_reward=None)
+                    category='execution' if stage=='native_processing' else 'budget' if stage=='reservation' else 'provider'
+                    row.update(category=category,semantic_reward=None)
                     stopped=True;break
             if row['category']=='awaiting_revision':row.update(category='budget',semantic_reward=None);stopped=True
             record(records,row);rows.append(row)

@@ -62,6 +62,7 @@ export function assess(bundle,rows,phase='screen'){
     if(phase==='screen'){
       const g=bundle.screen_groups.find(g=>g.task_id===job.task_id&&g.seed===job.seed);
       need(g&&row.problem_sha256===g.problem_sha256&&row.prompt_sha256===g.arms[job.arm].prompt_sha256,'frozen input mismatch');
+      need(g.arms[arms[0]].prompt_sha256===g.arms[arms[1]].prompt_sha256,'computed-feedback arms require identical first prompts');
     }
     // IDs are supplied evidence, not independently verified provider attestations.
     // Provider failures may have no response ID; budget failures may have no call.

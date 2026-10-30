@@ -31,6 +31,8 @@ def verify_chunk(frozen,rows,events,counter):
             limit=min(6000 if turn==0 else 8096,8192-generation-observations-96)
             intent=next(e for e in emitted if e['event']=='intent' and e['turn']==turn)
             if intent['max_tokens']!=limit or usage['completion_tokens']>limit or usage['prompt_tokens']>28672:raise ValueError('request/usage budget changed')
+            request=dict(frozen['sampling'],messages=trial.messages,max_tokens=limit)
+            if intent['request_sha256']!=protocol.digest(request) or intent['messages_sha256']!=protocol.digest(trial.messages):raise ValueError('sent request binding changed')
             identities.append(identity);generation+=usage['completion_tokens'];context=max(context,usage['prompt_tokens']+usage['completion_tokens'])
             choice=reply['choices'][0];finish=choice.get('finish_reason')
             if finish=='length':category='truncation';break
