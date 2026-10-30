@@ -121,6 +121,27 @@ class NativeFeedbackTests(unittest.TestCase):
             changed=copy.deepcopy(events)
             next(e for e in changed if e['event']=='response')['response']['usage']['completion_tokens']+=1
             with self.assertRaises(ValueError):verify_chunk(self.bundle,rows,changed,self.counter)
+    def test_actual_function_payload_usage_replay_and_exposure(self):
+        from assemble import verify_chunk,diagnostic_exposure
+        class FunctionBackend(ScriptedBackend):
+            def call(self,payload,timeout,job):
+                response=super().call(payload,timeout,job)
+                if len(payload['messages'])>2:
+                    visible=json.loads(json.loads(payload['messages'][-1]['content'])['feedback'])
+                    choice=response['choices'][0]
+                    action=json.loads(choice['message']['content'])
+                    action.update(mode='functions',base_sha256=visible['revision_base_sha256'])
+                    choice['message']['content']=json.dumps(action)
+                    response['usage']['completion_tokens']=self.counter.count(choice['message']['content'])
+                return response
+        with tempfile.TemporaryDirectory() as tmp:
+            out=Path(tmp)/'chunk0'/'live';out.parent.mkdir()
+            b=FunctionBackend(self.counter)
+            rows=phase(self.bundle,self.digest,out,b,self.counter,time.monotonic()+90)
+            events=[json.loads(x) for x in (out/'events.jsonl').read_text().splitlines()]
+            verify_chunk(self.bundle,rows,events,self.counter)
+            self.assertTrue(all(r['category']=='full' for r in rows))
+            self.assertEqual(diagnostic_exposure([out]),dict(module_review=1,function_review=1))
     def test_whole_study_denial_precedes_any_call_or_archive(self):
         from decimal import Decimal
         from types import SimpleNamespace

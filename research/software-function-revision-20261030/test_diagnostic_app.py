@@ -22,7 +22,7 @@ class PortableAppTests(unittest.TestCase):
             self.assertEqual(response.json()['action'],ProposalAction.model_json_schema())
             self.assertEqual(response.json()['observation'],RevisionObservation.model_json_schema())
             self.assertNotIn('submit',response.json()['action']['properties'])
-            self.assertEqual(set(response.json()['action']['properties']), {'mode','content','base_sha256'})
+            self.assertEqual(set(response.json()['action']['properties']), {'metadata','mode','content','base_sha256'})
     def test_empty_finish_from_reset_reaches_unchanged_native_grade(self):
         direct=DirectRepairEnvironment();direct.reset(task_id=TASK,seed=SEED)
         expected=direct._core.step(RepairAction(op='submit')).reward
