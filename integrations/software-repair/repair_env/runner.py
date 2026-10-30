@@ -128,7 +128,8 @@ class Program:
                 is_method = (isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute)
                              and call.func.attr == "sort" and not call.args)
                 is_sorted = (isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
-                             and call.func.id == "sorted" and len(call.args) == 1)
+                             and call.func.id == "sorted" and "sorted" not in self.functions
+                             and len(call.args) == 1)
                 if (not (is_method or is_sorted)
                         or node.arg not in ("key", "reverse")
                         or len({item.arg for item in call.keywords}) != len(call.keywords)):

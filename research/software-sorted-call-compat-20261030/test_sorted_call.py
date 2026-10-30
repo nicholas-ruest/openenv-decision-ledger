@@ -11,6 +11,11 @@ class SortedCallTests(unittest.TestCase):
   actual=Program(source).run('solve',[value])
   self.assertEqual(actual,reference['solve'](copy.deepcopy(value)))
   self.assertEqual(value,original)
+ def test_user_function_named_sorted_keeps_existing_dispatch(self):
+  source='def sorted(xs):\n return [7]\ndef solve(xs):\n return sorted(xs)\n'
+  self.compare(source,[2,1])
+  with self.assertRaises(Rejected):
+   Program('def sorted(xs):\n return [7]\ndef solve(xs):\n return sorted(xs,key=None)\n')
  def test_stable_lambda_reverse_and_closure(self):
   for reverse in ('True','False','1','0'):
    self.compare('def solve(xs):\n factor=-1\n return sorted(xs,key=lambda x: factor*x[0],reverse='+reverse+')\n',[[2,'a'],[1,'b'],[2,'c']])
