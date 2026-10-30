@@ -3,7 +3,13 @@ import ast
 from repair_env.runner import Program,Rejected,MAX_SOURCE
 
 def diagnose(source):
-    if type(source) is not str or len(source.encode())>MAX_SOURCE:
+    if type(source) is not str:
+        return None
+    try:
+        encoded=source.encode()
+    except UnicodeError:
+        return None
+    if len(encoded)>MAX_SOURCE:
         return None
     try:
         Program(source)

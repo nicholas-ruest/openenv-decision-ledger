@@ -2,6 +2,8 @@
 import unittest
 from source_diagnostics import diagnose
 class SourceDiagnosticsTests(unittest.TestCase):
+ def test_invalid_unicode_is_not_a_diagnostic_crash(self):
+  self.assertIsNone(diagnose('\ud800'))
  def test_supported_module_has_no_diagnostic(self):
   self.assertIsNone(diagnose('def solve(x):\n    return x\n'))
  def test_real_keyword_rejection_names_only_submitted_node(self):
