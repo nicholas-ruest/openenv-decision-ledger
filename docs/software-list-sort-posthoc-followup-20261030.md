@@ -1,0 +1,7 @@
+# List-sort compatibility: additional posthoc replay
+
+The existing isolated list.sort key/reverse implementation at 56e087347005c089fdfe4b284944e905efa34613 was replayed against saved responses from the completed default-sampling screen and disjoint confirmation. No provider calls occurred, and neither frozen study or live runtime was modified.
+
+Of 16 assigned final outcomes, 14 complete final modules were replayable; two truncated completions remained failures and were not reconstructed. Four compilation outcomes changed. Independent Native grading recovered **one execution failure as a full solve** (public-review confirmation sample 2); the other 13 replayed rewards/categories were unchanged. This is a posthoc interpreter-compatibility recovery, not a fresh model solve, confirmed policy gain or leaderboard result. It does not reverse the original failed confirmation.
+
+The observed screen program using sorted(..., key=lambda ...) remains outside that existing patch, which supports list.sort keyword keys rather than general sorted keys. The recovered program is separate. The implementation does not become production-qualified from this replay: its earlier broad suite had 711 passes and one reproduced baseline test failure, and it has no fresh model comparison here. It remains separate from retention advice and the live portable-method study. No Native resource limits were increased.
