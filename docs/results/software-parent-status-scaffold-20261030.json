@@ -1,0 +1,102 @@
+{
+  "screen_selection_passed": false,
+  "phase": "screen",
+  "attempts": 8,
+  "attempts_per_arm": 4,
+  "paired_groups": 1,
+  "procedural_seeds": 1,
+  "groups": [
+    {
+      "task_id": "software_repair-ignore-d2",
+      "seed": 2800000,
+      "arm": "field_only",
+      "problem_sha256": "54be6edd1e5ba6a8785c4dcdfdc10adfe08e9f34db335952ed8585db92f55d39",
+      "attempts": 4,
+      "full": 0,
+      "semantic_sum": 1.6833333333333333,
+      "native_categories": {
+        "full": 0,
+        "partial": 2,
+        "wrong": 0,
+        "format": 0,
+        "edit_rejection": 0,
+        "execution": 2,
+        "provider": 0,
+        "budget": 0,
+        "truncation": 0
+      },
+      "unknown_generation_usage_attempts": 0,
+      "metaharness_unavailable_reason": null,
+      "metaharness": {
+        "signal": 0,
+        "eligible": 2,
+        "solved": 0,
+        "partial": 2,
+        "reasoning": 0,
+        "format": 0,
+        "truncation": 0,
+        "infra": 2
+      }
+    },
+    {
+      "task_id": "software_repair-ignore-d2",
+      "seed": 2800000,
+      "arm": "field_contract",
+      "problem_sha256": "54be6edd1e5ba6a8785c4dcdfdc10adfe08e9f34db335952ed8585db92f55d39",
+      "attempts": 4,
+      "full": 0,
+      "semantic_sum": 2.3833333333333333,
+      "native_categories": {
+        "full": 0,
+        "partial": 3,
+        "wrong": 0,
+        "format": 1,
+        "edit_rejection": 0,
+        "execution": 0,
+        "provider": 0,
+        "budget": 0,
+        "truncation": 0
+      },
+      "unknown_generation_usage_attempts": 0,
+      "metaharness_unavailable_reason": null,
+      "metaharness": {
+        "signal": 0,
+        "eligible": 3,
+        "solved": 0,
+        "partial": 3,
+        "reasoning": 0,
+        "format": 1,
+        "truncation": 0,
+        "infra": 0
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "task_id": "software_repair-ignore-d2",
+      "seed": 2800000,
+      "full_rate_delta": 0,
+      "semantic_mean_delta": 0.175
+    }
+  ],
+  "full_rate_delta": 0,
+  "semantic_mean_delta": 0.175,
+  "metaharness_source": "b8c3d38de41203faf633ef6dceb8452a4727b0ea",
+  "actual_module": "fitness.mjs:scoreCell",
+  "metaharness_groups_scored": 2,
+  "metaharness_complete": true,
+  "unknown_generation_usage_attempts": 0,
+  "all_assigned_attempts_in_denominator": true,
+  "provider_attestation_verified": false,
+  "fresh_confirmation_verified": false,
+  "model_improvement_claim": false,
+  "leaderboard_gain": false,
+  "promotion": false,
+  "is_training": false,
+  "all_live_replies_verified": true,
+  "actual_calls": 15,
+  "selection_passed": false,
+  "max_accounted_context": 7144,
+  "max_completion_with_observations": 4736,
+  "model_improvement": false
+}
