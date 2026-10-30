@@ -65,7 +65,7 @@ class NativeFeedbackTests(unittest.TestCase):
         self.assertEqual(feedback['total'],6)
         self.assertFalse(b.calls[0]['chat_template_kwargs']['enable_thinking'])
         self.assertFalse(b.calls[2]['chat_template_kwargs']['enable_thinking'])
-        self.assertNotEqual(json.loads(control['feedback'])['revision_advice'],feedback['revision_advice'])
+        self.assertEqual(json.loads(control['feedback'])['revision_advice'],feedback['revision_advice'])
         self.assertFalse(b.calls[1]['chat_template_kwargs']['enable_thinking'])
         self.assertFalse(b.calls[3]['chat_template_kwargs']['enable_thinking'])
         self.assertIn('contract_reminder',json.loads(control['feedback']))

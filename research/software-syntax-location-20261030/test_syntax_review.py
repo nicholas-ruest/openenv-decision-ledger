@@ -1,3 +1,5 @@
+from caller import modules
+modules()
 import unittest
 from syntax_review import Replacement,ProposalAction,apply_replacements,SyntaxReviewEnvironment
 from repair_env.tasks import make_task

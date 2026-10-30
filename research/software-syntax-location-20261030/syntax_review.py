@@ -1,4 +1,4 @@
-"""Literal revision actions with the same full-module fallback in both arms."""
+"""Same accepted actions; only source syntax location feedback differs."""
 from typing import List
 from pydantic import Field, ConfigDict
 from openenv.core.env_server.types import Action

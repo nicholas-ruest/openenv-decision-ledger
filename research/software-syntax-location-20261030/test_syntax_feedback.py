@@ -1,3 +1,5 @@
+from caller import modules
+modules()
 import copy,json,unittest
 from syntax_feedback import augment
 from syntax_review import SyntaxReviewEnvironment,ProposalAction
