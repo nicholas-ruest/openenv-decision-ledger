@@ -1,0 +1,41 @@
+{
+  "source": "31142aad48343ef10486916bc2ecb3ffaab334d1",
+  "seed": 3000000,
+  "assigned_programs": 4,
+  "actual_calls": 4,
+  "known_replies": 4,
+  "native_grades": 8,
+  "full": {
+    "baseline": 2,
+    "candidate": 2
+  },
+  "execution": {
+    "baseline": 2,
+    "candidate": 2
+  },
+  "semantic_mean": {
+    "baseline": 0.5,
+    "candidate": 0.5
+  },
+  "full_rate_delta": 0,
+  "semantic_mean_delta": 0,
+  "actual_compatibility_exposures": 1,
+  "lost_baseline_full_solves": 0,
+  "selection_passed": false,
+  "confirmation_materialized": false,
+  "all_replies_and_pairs_verified": true,
+  "cost_counted_once": true,
+  "max_context": 7658,
+  "max_generation_with_observations": 4885,
+  "observed_generation_tokens": 18810,
+  "metaharness": {
+    "revision": "b8c3d38de41203faf633ef6dceb8452a4727b0ea",
+    "baseline_signal": 0,
+    "candidate_signal": 0,
+    "eligible_each": 2
+  },
+  "all_workers_stopped": true,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "is_training": false
+}
