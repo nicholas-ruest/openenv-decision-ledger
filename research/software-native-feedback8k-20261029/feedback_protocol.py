@@ -9,7 +9,7 @@ ROOT=Path(__file__).resolve().parents[2]
 sys.path[:0]=[str(ROOT/p) for p in ('research/software-terminal-audit-20261028',
     'research/software-revision-candidate-20261028','research/software-public-check-20261028',
     'integrations/software-repair')]
-spec=importlib.util.spec_from_file_location('native_feedback_trial',ROOT/'research/software-terminal-audit-20261028/matched_inputs.py')
+spec=importlib.util.spec_from_file_location('native_feedback_trial',ROOT/'research/software-matched-inputs-20261028/matched_inputs.py')
 native=importlib.util.module_from_spec(spec);spec.loader.exec_module(native)
 Trial=native.Trial
 canonical=native.canonical
