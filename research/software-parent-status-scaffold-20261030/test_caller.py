@@ -47,7 +47,7 @@ class NativeFeedbackTests(unittest.TestCase):
         self.assertEqual([j for b in bundles for j in b['screen_jobs']],self.protocol.schedule('screen'))
         self.assertEqual(len({j['attempt_id'] for j in self.protocol.schedule('screen')}),8)
         arms=bundles[0]['screen_groups'][0]['arms']
-        self.assertEqual(arms['public_check'],arms['public_fields'])
+        self.assertEqual(arms['field_only'],arms['field_contract'])
         self.assertFalse(bundles[0]['confirmation_observations_materialized'])
         with self.assertRaises(ValueError):self.protocol.capture(self.protocol.schedule('confirmation')[0])
         with self.assertRaises(ValueError):self.protocol.bundle(True)
@@ -59,10 +59,12 @@ class NativeFeedbackTests(unittest.TestCase):
         control=json.loads(b.calls[1]['messages'][-1]['content'])
         treatment=json.loads(b.calls[3]['messages'][-1]['content'])
         self.assertEqual(control['reward'],0);self.assertEqual(treatment['reward'],0)
-        self.assertEqual(json.loads(control['feedback'])['kind'],'public_example_check')
+        self.assertEqual(json.loads(control['feedback'])['kind'],'public_field_check')
         self.assertEqual(json.loads(treatment['feedback'])['kind'],'public_field_check')
         feedback=json.loads(treatment['feedback']);self.assertTrue(feedback['public_only']);self.assertFalse(feedback['hidden_access'])
         self.assertEqual(feedback['total'],6)
+        self.assertNotIn('contract_reminder',json.loads(control['feedback']))
+        self.assertIn('contract_reminder',feedback)
         self.assertTrue(all(r['generation_tokens']+r['observation_tokens']<=8192 and r['max_context']<=24576 for r in rows))
         for first,second in [(0,1),(2,3)]:
             first_reply=self.counter.count(json.dumps(dict(content=json.loads(b.calls[first]['messages'][1]['content'])['source'],submit=False)))
