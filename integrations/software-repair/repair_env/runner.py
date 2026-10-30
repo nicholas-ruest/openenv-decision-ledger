@@ -125,11 +125,14 @@ class Program:
         for node in nodes:
             if isinstance(node, ast.keyword):
                 call = parents[id(node)]
-                if (not isinstance(call, ast.Call) or call.args
-                        or not isinstance(call.func, ast.Attribute) or call.func.attr != "sort"
+                is_method = (isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute)
+                             and call.func.attr == "sort" and not call.args)
+                is_sorted = (isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
+                             and call.func.id == "sorted" and len(call.args) == 1)
+                if (not (is_method or is_sorted)
                         or node.arg not in ("key", "reverse")
                         or len({item.arg for item in call.keywords}) != len(call.keywords)):
-                    raise Rejected("only list.sort key/reverse keywords supported")
+                    raise Rejected("only list.sort/sorted key/reverse keywords supported")
             if isinstance(node, ast.Lambda):
                 parent = parents[id(node)]
                 args = node.args
@@ -392,10 +395,20 @@ class Program:
         if isinstance(node, ast.Subscript):
             return bounded(ev(node.value)[ev(node.slice)])
         if (isinstance(node, ast.Call) and node.keywords
-                and isinstance(node.func, ast.Attribute) and node.func.attr == "sort"):
-            value = ev(node.func.value)
-            if type(value) is not list or node.args:
-                raise Rejected("sort receiver/arguments unsupported")
+                and ((isinstance(node.func, ast.Attribute) and node.func.attr == "sort")
+                     or (isinstance(node.func, ast.Name) and node.func.id == "sorted"))):
+            is_sorted = isinstance(node.func, ast.Name)
+            if is_sorted:
+                if len(node.args) != 1:
+                    raise Rejected("sorted requires one positional iterable")
+                value = ev(node.args[0])
+                if type(value) not in (list, tuple, str, dict, set):
+                    raise Rejected("sorted iterable unsupported")
+                value = list(value)
+            else:
+                value = ev(node.func.value)
+                if type(value) is not list or node.args:
+                    raise Rejected("sort receiver/arguments unsupported")
             key = None
             reverse = False
             for keyword in node.keywords:
@@ -412,7 +425,7 @@ class Program:
             # limits; no submitted source is executed by the host Python VM.
             value.sort(key=key, reverse=reverse)
             bounded(value)
-            return None
+            return value if is_sorted else None
         if isinstance(node, ast.Call) and not node.keywords:
             args = [ev(n) for n in node.args]
             if isinstance(node.func, ast.Name):

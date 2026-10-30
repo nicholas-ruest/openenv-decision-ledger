@@ -46,7 +46,6 @@ class SortKeyCompatibilityTests(unittest.TestCase):
 
     def test_unrelated_keywords_and_lambda_contexts_stay_rejected(self):
         for source in [
-            'def solve(xs):\n return sorted(xs, key=abs)\n',
             'def solve(xs):\n return lambda x: x\n',
             'def solve(xs):\n xs.sort(unrecognized=True)\n return xs\n',
             'def solve(xs):\n xs.sort(**{})\n return xs\n',
