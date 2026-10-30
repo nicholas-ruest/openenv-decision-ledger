@@ -20,7 +20,7 @@ The candidate's bool, sorting, string and tuple checks passed **44 tests with 29
 Protocol test transcript SHA256: `b4c8e3b79f30dc21314154271abb16e9a1e3cc35b93f1ab10b7731c61dbd2818`.
 Focused Native test log SHA256: `fc479f11fae05dc2866d7efe1fc8a385025cabd14e8ccb280725f69361cb8989`.
 
-Broad candidate regression and a production image are not qualified. The sorted baseline's existing full-suite result was 711 passes and one known supervision test failure, also present in its baseline. Those results do not substitute for broader bool-candidate qualification.
+The bool candidate's full Native suite completed: **717 passed, one failed, 14 subtests passed** in 674.10 seconds. The failure was `test_timeout_stops_descendant_ignoring_term`, also present in the previously measured baseline (711 passes, the same failure). Full bool-candidate log SHA256: `de8632ee479fc14357d683cbf5e8add34b146fb96072b2598c31373f697a7817`. The failure remains unresolved and a production image is not qualified.
 
 ## Saved-response analysis
 

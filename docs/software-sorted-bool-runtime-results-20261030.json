@@ -1,0 +1,62 @@
+{
+  "source": "e834c57a7dd16e43771755e047ee6d20bdaaebe3",
+  "native_baseline": "34ae9401ec3a9530e2a71916060ea3a4c75eaa72",
+  "native_candidate": "bc9a7fab8392c17a6f1d4bf27a6aa50c92df9ebb",
+  "assigned": 4,
+  "actual_model_calls": 4,
+  "known_replies": 4,
+  "native_grades": 8,
+  "full": {
+    "baseline": 1,
+    "candidate": 1
+  },
+  "partial": {
+    "baseline": 2,
+    "candidate": 3
+  },
+  "native_execution_failure": {
+    "baseline": 1,
+    "candidate": 0
+  },
+  "provider_failures": 0,
+  "format_failures": 0,
+  "truncations": 0,
+  "semantic_mean": {
+    "baseline": 0.725,
+    "candidate": 0.9625
+  },
+  "paired_full_delta": 0,
+  "paired_semantic_delta": 0.2375,
+  "compatibility_exposures": 1,
+  "lost_baseline_full_solves": 0,
+  "selection_passed": false,
+  "confirmation_materialized": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "is_training": false,
+  "all_identities_requests_usage_native_grades_verified": true,
+  "all_workers_stopped": true,
+  "actual_generation_tokens": 18927,
+  "max_context": 7711,
+  "max_generation_with_observations": 4941,
+  "cost_counted_once": true,
+  "metaharness": {
+    "pin": "b8c3d38de41203faf633ef6dceb8452a4727b0ea",
+    "descriptive_signal": {
+      "baseline": 0,
+      "candidate": 1
+    },
+    "eligible": {
+      "baseline": 3,
+      "candidate": 4
+    },
+    "limitation": "One procedural case. Native execution failure classification is not a provider outage. These are descriptive classifier values, not model improvement or GRPO updates."
+  },
+  "native_regression": {
+    "passed": 717,
+    "failed": 1,
+    "subtests": 14,
+    "known_failure": "test_timeout_stops_descendant_ignoring_term",
+    "log_sha256": "de8632ee479fc14357d683cbf5e8add34b146fb96072b2598c31373f697a7817"
+  }
+}
