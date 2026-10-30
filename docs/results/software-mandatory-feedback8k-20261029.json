@@ -1,0 +1,31 @@
+{
+  "source": "1e49f5d7398dd2329b7aba650b97fd715b77ab49",
+  "status": "inconclusive_unknown_usage_provider_timeout",
+  "assigned": 8,
+  "recorded_attempts": 6,
+  "actual_calls": 11,
+  "known_replies": 10,
+  "unknown_usage_calls": 1,
+  "uncalled_attempts": 2,
+  "observed_replies_independently_replayed": true,
+  "control": {
+    "full": 1,
+    "partial": 1,
+    "truncation": 1,
+    "uncalled": 1
+  },
+  "public_feedback": {
+    "execution": 2,
+    "provider_unknown_usage": 1,
+    "uncalled": 1
+  },
+  "full_effect_estimate": null,
+  "metaharness_group_fitness": null,
+  "max_accounted_context": 7973,
+  "max_completion_with_observations": 8096,
+  "selection_passed": false,
+  "fresh_confirmation": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "private_closure_sha256": "fd4638ab8b95a3aa07dc2429f995aa8c5b47497b5d71ca06b818b6d63e007e8a"
+}
