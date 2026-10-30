@@ -1,0 +1,11 @@
+# ignore-d3 revision-thinking confirmation qualification
+
+Execution source `4d69e68c55715d32699f155f068b38a77b8d6d8f` is a confirmation-only adapter for screen source `715c0d8f5854e920343eb5f09e208c7b2a97394c`. The completed screen produced 4/4 full solves versus 1/4. Its frozen 32-artifact selection gate is SHA256 `8b99e0797c0450e99b789da940316b5beffa44a8d838d050f7a26c20b397dde1`.
+
+Admission verifies every original artifact hash and exact screen-method digest, requires all eight live assigned outcomes with known usage and clean shutdowns, recomputes the actual pinned MetaHarness assessment, and requires the preregistered positive full-solve and nonnegative semantic deltas. It also compares native environment file hashes and frozen Trial, sampling function, namespace, arms, seed mapping and sampling constants against the selected screen. It cannot admit an incomplete or altered screen.
+
+The exact adapter passed 23 native tests and 10 assessment tests. The actual positive gate was accepted before confirmation inputs were materialized. Native log SHA256 `47241b11b57938e43ced9a2916041bbbea3264b19942a81ac60048a2cd7d7794`; assessment log SHA256 `ceb86a3ab48fc624ca90595d446e5ea8f7e15ebf34979a49eb63acb7fcfe3dd7`. The shared amendment-bound reservation gate remains `5e2f25daea0f59c248ab75e22a134b89259c6892d24335f3c9c4a1b807da7e8c`.
+
+All four confirmation bundles were frozen together after selection. The reserved confirmation case is disjoint from the screen and 32 earlier cases across 78 input files. Both arms retain the identical two-response content-only action contract, public-field feedback and parent-status reminder. Only treatment revision requests enable thinking; both first requests disable it. Total generation plus observations remains 8192 and context remains 24576. All assigned failures remain in the denominator; no retry or redesign is permitted. Cross-phase response/call identity freshness is checked separately from case disjointness.
+
+This is qualification, not a model result. Confirmation results must be reported separately. The earlier interrupted ignore-d2 confirmation remains closed and unconfirmed, and is not retried or pooled. Arena thinking-override portability remains unverified; no training, model improvement, production-image change, Arena POST, HF replacement or leaderboard gain is claimed.
