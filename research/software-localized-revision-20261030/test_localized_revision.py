@@ -24,3 +24,13 @@ class LocalRevisionTests(unittest.TestCase):
   env=LocalizedReviewEnvironment(arm='local_patch');env.reset(seed=2840000,task_id='software_repair-ignore-d2')
   with self.assertRaises(ValueError):env.step(ProposalAction(replacements=[Replacement(before='x',after='y')]))
   with self.assertRaises(ValueError):env.step(ProposalAction(content='x',replacements=[Replacement(before='x',after='y')]))
+
+ def test_native_literal_patch_repairs_only_selected_definition(self):
+  task=make_task('software_repair-ignore-d2',2840000)
+  good='def classify_ignore(';bad='def broken_classify_ignore('
+  self.assertEqual(task.reference_source.count(good),1)
+  proposal=task.reference_source.replace(good,bad)
+  env=LocalizedReviewEnvironment(arm='local_patch');env.reset(task_id=task.task_id,seed=2840000)
+  review=env.step(ProposalAction(content=proposal));self.assertFalse(review.done);self.assertEqual(review.reward,0)
+  final=env.step(ProposalAction(replacements=[Replacement(before=bad,after=good)]))
+  self.assertTrue(final.done);self.assertEqual(final.reward,1)
