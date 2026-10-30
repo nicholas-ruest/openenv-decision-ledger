@@ -27,7 +27,7 @@ def load(name, path):
 
 def modules():
     sys.path[:0] = [str(ROOT / p) for p in (
-        'research/software-joint-joint-public-review-off8k-20261029',
+        'research/software-joint-public-review-off8k-20261029',
         'research/software-function-trial-20261029')]
     import feedback_protocol
     return feedback_protocol, feedback_protocol.Trial
