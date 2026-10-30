@@ -12,7 +12,6 @@ sys.path[:0]=[str(ROOT/p) for p in ('research/software-terminal-audit-20261028',
 spec=importlib.util.spec_from_file_location('native_feedback_trial',ROOT/'research/software-matched-inputs-20261028/matched_inputs.py')
 native=importlib.util.module_from_spec(spec);spec.loader.exec_module(native)
 from mandatory_environment import ProposalAction
-sys.path.insert(0,str(ROOT/'research/software-finish-contract-20261030'))
 from portable_environment import PortableReviewEnvironment
 from terminal_audit import classify
 from pydantic import ValidationError
