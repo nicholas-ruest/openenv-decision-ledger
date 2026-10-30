@@ -1,0 +1,25 @@
+{
+  "baseline_source": "56e087347005c089fdfe4b284944e905efa34613",
+  "candidate_source": "34ae9401ec3a9530e2a71916060ea3a4c75eaa72",
+  "posthoc": true,
+  "original_assigned": 16,
+  "complete_modules_regraded": 14,
+  "original_truncations_retained": 2,
+  "full_before": 7,
+  "full_after": 8,
+  "unchanged_other_modules": 13,
+  "recovered_module_sha256": "5d0417b1339011698566beec909df5738e353cefb51fba99ef6490537af24729",
+  "fresh_model_calls": 0,
+  "fresh_improvement": false,
+  "leaderboard_gain": false,
+  "targeted_tests": 38,
+  "targeted_subtests": 15,
+  "full_suite": {
+    "passed": 711,
+    "failed": 1,
+    "failed_test": "test_timeout_stops_descendant_ignoring_term",
+    "baseline_reproduced": true
+  },
+  "production_image_built": false,
+  "production_image_qualified": false
+}
