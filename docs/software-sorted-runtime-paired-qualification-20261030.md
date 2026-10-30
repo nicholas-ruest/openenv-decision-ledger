@@ -1,0 +1,19 @@
+# Shared-program sorted-call comparison, October 30, 2026
+
+Frozen source: `31142aad48343ef10486916bc2ecb3ffaab334d1`, `research/software-sorted-runtime-paired-20261030`.
+
+This is an **execution-compatibility experiment**, not a training run or a comparison of learned policies. Four fresh model responses to the same one-response Native software prompt are each graded by both interpreter versions. Every paired grade uses the exact same generated program, task, public examples and hidden cases. There are four planned model calls, not eight. Provider usage and cost are counted once.
+
+The baseline is the pinned list-sort implementation at `56e087347005c089fdfe4b284944e905efa34613`, interpreter SHA-256 `f0e43ceadc7db6a63a536652bae9f7c64bda8021316cf305976ec5dc0bb9932f`. The candidate interpreter is from `34ae9401ec3a9530e2a71916060ea3a4c75eaa72`, SHA-256 `be2672ea479dc2520af5366b3cad6741e0195497cc6fdea1198232ab40a4e4a8`. The candidate package is an isolated copy of the exact baseline Native package with only `runner.py` replaced. Relative imports keep each version's parser, exceptions and grader internally consistent. There is no global interpreter monkeypatch and no host execution of model programs.
+
+Eight actual Native/caller controls passed, covering matching initial observations and schemas, separate Native classes, real sorted-call acceptance and Native rewards, one call per program, independent request/usage/paired-grade replay, tamper rejection, truncation without invented grades, unknown-usage stopping, and financial denial before calls/archive creation. Log SHA-256: `9f68f9aa652ec5e4ba8d5e569090e5275aa25d62b865601151ad4a0940d44f71`. Scripted Native reference controls are never model solves; the live assembler rejects scripted completions. An earlier replay edge for a truncated first response was corrected before any calls.
+
+The candidate interpreter separately passed 38 focused checks plus 15 subtests. Its full existing suite finished **711 passed, one failed**, reproducing the baseline's `test_timeout_stops_descendant_ignoring_term` failure in the older offline `paired_coordinator`. This caller uses the separately tested `screen_deadline.run_bounded`; it does not invoke that coordinator. No completely green suite or production container qualification is claimed.
+
+The screen is frozen at seed 3000000, four sampled programs, checked against actual inputs from **39 previous cases / 102 files**. Its source/examples SHA-256 is `cec8a53bd7a377e9f2862814079b9fb165a32b6c9062f03067c3defbb5be5b64`. Reserved confirmation seed 3010000 remains unmaterialized. The Arena guide was reread October 30 at 22:29 UTC, unchanged; the public message board returned 503. No message was posted.
+
+Each program has one response with the existing 6,000 first-generation limit, within unchanged 8,192 generation-plus-observation and 24,576 context caps. Sampling uses identical provider defaults. Existing reservation, parent-chain, amendment, freshness, cumulative accounting, no-duplicate-worker and operating-hours guards remain enforced. The exact previously tested admission gate is carried forward byte-for-byte (SHA-256 `5e2f25daea0f59c248ab75e22a134b89259c6892d24335f3c9c4a1b807da7e8c`).
+
+Frozen selection requires four known actual replies, independently verified Native pairings, positive paired full-solve delta, no lost baseline full solves, nonnegative semantic delta and at least one actual sorted-call compatibility exposure. Incomplete/unknown-usage runs cannot select. The pinned MetaHarness classifier is descriptive for each runtime; it creates no additional model calls or spending. A fresh disjoint confirmation is required before a compatibility-gain claim.
+
+No Arena POST, new dataset, reviewed v12 change, new automation, GPU job, purchase or production image replacement is authorized or performed.
