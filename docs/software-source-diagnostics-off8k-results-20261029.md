@@ -20,3 +20,12 @@ The immutable positive-selection receipt SHA256 is `fe11bd4ba23e4c31c2555e027333
 The preceding thinking-requested diagnostic phase `d18440e73c16a1f795b4fb161510ecda24fce60e` stopped on its first provider call after 360037 ms, with zero usable replies or diagnostic exposure, seven uncalled assignments and one retained unknown-usage reservation. Its closure proof SHA256 is `f9ec223ae02abd44d596914710d0ae612b3b92e42aee20e3eab2d2a7ccc36315`. The separate common-profile study is not a retry or an estimate of thinking-mode effects.
 
 No reviewed request, runtime image, dataset, spending cap, purchase or Arena submission changed. Private raw trajectories, receipts and account data remain private.
+
+
+## Fresh confirmation remained inconclusive
+
+Confirmation source `2d98aeda6adec239f943783982b8641caa1f9090` was qualified by six gate tests and twelve assessment tests. Its first actual provider call timed out after 360039 ms without an auditable reply or usage record. The supervisor verified clean shutdown. All eight confirmation assignments remain explicit: one called with unknown usage and seven uncalled. The reservation is retained; no retry, redraw or later chunk was launched. There is no confirmation full-rate effect estimate and no improvement claim.
+
+The confirmation case was materialized only after the immutable positive screen selection was frozen. Its problem hash differed from the screen and all 19 problem hashes found in 35 existing saved input files outside its own archive. This establishes the checked disjointness boundary, not a model-performance result. Private confirmation closure proof SHA256: `6ce109011be7b4b55cc59c836a24b6a13334236d826abe319e38cf70c981f5de`.
+
+The candidate remains unpromoted: a selected small screen with zero actual diagnostic exposure and an inconclusive fresh confirmation does not demonstrate a harness improvement. The separately frozen public-feedback-versus-neutral comparison proceeds independently.
