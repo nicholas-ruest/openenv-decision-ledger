@@ -11,7 +11,7 @@ sys.path[:0]=[str(ROOT/p) for p in ('research/software-terminal-audit-20261028',
     'integrations/software-repair')]
 spec=importlib.util.spec_from_file_location('native_feedback_trial',ROOT/'research/software-matched-inputs-20261028/matched_inputs.py')
 native=importlib.util.module_from_spec(spec);spec.loader.exec_module(native)
-from localized_revision import LocalizedReviewEnvironment,ProposalAction
+from localized_revision import LocalizedReviewEnvironment,ProposalAction,RevisionRejected
 from terminal_audit import classify
 from pydantic import ValidationError
 
@@ -29,7 +29,10 @@ class Trial:
             action=ProposalAction.model_validate_json(reply,strict=True)
         except (ValidationError,ValueError):
             self.closed=True;return dict(category='format',done=True,native_reward=None,semantic_reward=None)
-        obs=self.env.step(action).model_dump();self.native.append(obs)
+        try:obs=self.env.step(action).model_dump()
+        except RevisionRejected:
+            self.closed=True;return dict(category='edit_rejection',done=True,native_reward=None,semantic_reward=None)
+        self.native.append(obs)
         self.messages += [dict(role='assistant',content=reply),dict(role='user',content=native.canonical(obs))]
         if obs['done']:
             if self.turn!=2:raise ValueError('mandatory first review bypassed')

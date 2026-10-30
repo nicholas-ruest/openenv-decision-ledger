@@ -141,4 +141,19 @@ class NativeFeedbackTests(unittest.TestCase):
             supervision=[json.loads(x) for x in out.with_suffix('.supervision.jsonl').read_text().splitlines()]
             self.assertEqual(supervision[-1]['status'],'worker_failed');self.assertTrue(supervision[-1]['shutdown_verified'])
 
+    def test_invalid_literal_edit_ends_attempt_without_aborting_other_assignment(self):
+        class BadEdit(ScriptedBackend):
+            def call(self,payload,timeout,job):
+                response=super().call(payload,timeout,job)
+                if len(self.calls)==2:
+                    content=json.dumps(dict(replacements=[dict(before='__absent_literal_transaction_marker__',after='x')]))
+                    response['choices'][0]['message']['content']=content
+                    response['usage']['completion_tokens']=self.counter.count(content)
+                return response
+        b=BadEdit(self.counter);rows,summary=self.run_phase(b)
+        self.assertEqual(len(b.calls),4)
+        self.assertEqual([r['category'] for r in rows],['edit_rejection','full'])
+        self.assertTrue(all(r['generation_tokens'] is not None for r in rows))
+        self.assertEqual(summary['recorded_attempts'],2)
+
 if __name__=='__main__':unittest.main()

@@ -6,6 +6,9 @@ from mandatory_environment import RequiredReviewEnvironment, ProposalAction as C
 from repair_env.tasks import SOURCE_PATH
 import json
 
+class RevisionRejected(ValueError):
+    pass
+
 class Replacement(Action):
     model_config=ConfigDict(extra='forbid')
     before:str=Field(min_length=1,max_length=8192)
@@ -21,15 +24,15 @@ def apply_replacements(source,replacements):
     value=source
     for replacement in replacements:
         if value.count(replacement.before)!=1:
-            raise ValueError('each before text must occur exactly once in the current module')
+            raise RevisionRejected('each before text must occur exactly once in the current module')
         value=value.replace(replacement.before,replacement.after,1)
         if len(value)>8192:
-            raise ValueError('complete module length exceeds 8192')
+            raise RevisionRejected('complete module length exceeds 8192')
     return value
 
 class LocalizedReviewEnvironment(RequiredReviewEnvironment):
     def __init__(self,*,arm):
-        if arm not in ('full_module','local_patch'):raise ValueError('explicit arm required')
+        if arm not in ('full_module','local_patch'):raise RevisionRejected('explicit arm required')
         self.preference=arm
         super().__init__(arm='field_contract')
     def reset(self,*args,**kwargs):
@@ -38,8 +41,8 @@ class LocalizedReviewEnvironment(RequiredReviewEnvironment):
             'Both responses accept content or replacements, never both. The first response must supply a complete module in content. On the second response you may provide a complete module in content, or up to four literal replacements with before and after strings. Each before string must occur exactly once in the current proposed module. Replacements are validated sequentially and applied atomically; empty content and no replacements retain the proposal. There is no early-submit command.')
         return obs.model_copy(update={'prompt':text})
     def step(self,action:ProposalAction,**kwargs):
-        if action.content and action.replacements:raise ValueError('choose one representation')
-        if self._steps==0 and action.replacements:raise ValueError('first proposal requires complete content')
+        if action.content and action.replacements:raise RevisionRejected('choose one representation')
+        if self._steps==0 and action.replacements:raise RevisionRejected('first proposal requires complete content')
         content=action.content
         if action.replacements:
             content=apply_replacements(self._direct._files[SOURCE_PATH],action.replacements)
