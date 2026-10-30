@@ -1,0 +1,32 @@
+{
+  "source": "83d56ec56fef1e0932b7258766f86dda0c1b93a4",
+  "status": "closed_incomplete_provider_timeout_no_retry",
+  "assigned_per_arm": 4,
+  "recorded_per_arm": 2,
+  "uncalled_per_arm": 2,
+  "actual_calls": 7,
+  "known_replies": 6,
+  "unknown_usage_calls": 1,
+  "known_outcomes": {
+    "standard_review": {
+      "partial": 1,
+      "partial_reward": 0.55,
+      "provider_unknown": 1
+    },
+    "diagnostic_review": {
+      "full": 1,
+      "truncation": 1
+    }
+  },
+  "actual_diagnostic_exposures": 1,
+  "exposed_attempt_category": "truncation",
+  "full_attempt_had_diagnostic": false,
+  "all_known_replies_replayed": true,
+  "all_replies_verified": false,
+  "all_workers_stopped": true,
+  "confirmation_materialized": false,
+  "selection_passed": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "is_training": false
+}
