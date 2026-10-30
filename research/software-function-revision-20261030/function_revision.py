@@ -76,6 +76,7 @@ class FunctionRevisionEnvironment(DiagnosticEnvironment):
 
     def reset(self, *args, **kwargs):
         self._revision_error = False
+        self._applied_function_revision = False
         obs = super().reset(*args, **kwargs)
         guide = (' First propose a complete module using mode="module". For the final response, '
                  'mode="functions" may replace any named top-level functions and add new helpers; '
@@ -94,6 +95,7 @@ class FunctionRevisionEnvironment(DiagnosticEnvironment):
                     raise ValueError('function blocks require a preceding proposal')
                 original = self._direct._core._files[SOURCE_PATH]
                 content = replace_blocks(original, content, action.base_sha256)
+                self._applied_function_revision = True
             except (ValueError, SyntaxError, RecursionError, UnicodeError):
                 self._revision_error = True
                 self._steps += 1

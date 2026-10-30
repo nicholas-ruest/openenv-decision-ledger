@@ -54,6 +54,25 @@ class FunctionRevisionTests(unittest.TestCase):
         self.assertEqual(final.reward, 0)
         self.assertTrue(env._revision_error)
 
+    def test_one_helper_block_repairs_public_runtime_error_without_resending_module(self):
+        task = make_task('software_repair-ignore-d3', 3060000)
+        tree = ast.parse(task.reference_source)
+        entry = next(n for n in tree.body if n.name == task.entrypoint)
+        entry.body.insert(0, ast.parse('_unused = _probe([])').body[0])
+        tree.body += ast.parse('def _probe(items):\n return range(items)\n').body
+        proposed = ast.unparse(ast.fix_missing_locations(tree))
+        env = FunctionRevisionEnvironment(arm='function_review')
+        env.reset(task_id=task.task_id, seed=task.seed)
+        review = env.step(FunctionRevisionAction(content=proposed))
+        feedback = json.loads(review.feedback)
+        self.assertIn('source_diagnostic', feedback)
+        patch = 'def _probe(items):\n return len(items)\n'
+        final = env.step(FunctionRevisionAction(mode='functions', content=patch,
+            base_sha256=feedback['revision_base_sha256']))
+        self.assertEqual(final.reward, 1)
+        self.assertTrue(env._applied_function_revision)
+        self.assertLess(len(patch), len(proposed))
+
 
 if __name__ == '__main__':
     unittest.main()
