@@ -1,0 +1,20 @@
+{
+  "source": "0bcb0562020001677ca595072076bf475726a437",
+  "kind": "type_predicate",
+  "observed_at": "2026-10-30T13:20:19.105145+00:00",
+  "fresh_model_calls": 0,
+  "model_improvement": false,
+  "full_solves_before": 0,
+  "full_solves_after": 0,
+  "saved_final_attempts": 8,
+  "saved_underlying_cases": 1,
+  "log_sha256": {
+    "type-and-boundary-tests.log": "3a9ca98ae603d202d51bdf3f877d1c80eb85882102f5e13bdc283e413dd8fb25",
+    "saved-response-replay.json": "b2d32922ae9743e4651a5c3d3e46b213c9ea59b3eeb762283f9d77949044d436"
+  },
+  "selected_tests_passed": 58,
+  "deselected_tests": 124,
+  "subtests_passed": 8,
+  "all_saved_final_rewards_unchanged": true,
+  "post_predicate_public_error": "TypeError: object of type bool has no len"
+}
