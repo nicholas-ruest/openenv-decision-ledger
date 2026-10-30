@@ -70,6 +70,8 @@ class SharedProgramTests(unittest.TestCase):
    output=Path(tmp)/'live';b=Backend(self.counter,'truncate');bundle=p.bundle(0)
    rows=phase(bundle,p.digest(bundle),output,b,self.counter,time.monotonic()+90)
    self.assertEqual(len(b.calls),2);self.assertTrue(all(r['category']=='truncation' and r['paired_native'] is None for r in rows))
+   events=[json.loads(l) for l in (output/'events.jsonl').read_text().splitlines()]
+   verify_chunk(bundle,rows,events,self.counter)
  def test_all_four_assignments_and_no_lost_full_rule(self):
   rows=[]
   for i in range(2):

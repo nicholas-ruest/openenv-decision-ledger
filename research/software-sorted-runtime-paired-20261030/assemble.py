@@ -36,7 +36,8 @@ def verify_chunk(frozen,rows,events,counter):
             obs=counter.count(protocol.canonical(trial.native[-1])) if trial.native and len(trial.native)==turn+1 else 0
             observations+=obs;context=max(context,counter.context(trial.messages),usage['prompt_tokens']+usage['completion_tokens']+obs)
             category=value['category'];semantic=value.get('semantic_reward');reward=value['native_reward']
-        if replies and row['category'] not in ['provider','budget'] and row.get('paired_native')!=value.get('paired_native'):raise ValueError('paired Native replay changed')
+        if row['category']=='truncation' and row.get('paired_native') is not None:raise ValueError('truncated response has no Native grade')
+        if replies and row['category'] not in ['provider','budget','truncation'] and row.get('paired_native')!=value.get('paired_native'):raise ValueError('paired Native replay changed')
         if identities!=row['response_ids']:raise ValueError('response identities changed')
         if row['response_id']!=(hashlib.sha256(protocol.canonical(identities).encode()).hexdigest() if identities else None):raise ValueError('aggregate response identity changed')
         ids+=identities
