@@ -1,0 +1,36 @@
+import unittest
+from syntax_review import Replacement,ProposalAction,apply_replacements,SyntaxReviewEnvironment
+from repair_env.tasks import make_task
+class SyntaxReviewTests(unittest.TestCase):
+ def test_atomic_exact_transactions(self):
+  source='alpha beta'
+  self.assertEqual(apply_replacements(source,[Replacement(before='alpha',after='gamma'),Replacement(before='gamma',after='delta')]),'delta beta')
+  for before in ('missing','a'):
+   with self.assertRaises(ValueError):apply_replacements(source,[Replacement(before='alpha',after='gamma'),Replacement(before=before,after='x')])
+  self.assertEqual(source,'alpha beta')
+ def test_size_and_strict_schema(self):
+  with self.assertRaises(ValueError):apply_replacements('x',[Replacement(before='x',after='a'*8192),Replacement(before='a'*8192,after='a'*8192+'b')])
+  self.assertEqual(ProposalAction(content='',submit=True).content,'')
+ def test_native_full_fallback_and_patch_same_grade(self):
+  task=make_task('software_repair-ignore-d2',2880000)
+  initial=[]
+  for arm in ('standard_review','syntax_review'):
+   env=SyntaxReviewEnvironment(arm=arm);initial.append(env.reset(task_id=task.task_id,seed=2880000).model_dump())
+   review=env.step(ProposalAction(content=task.reference_source))
+   self.assertFalse(review.done);self.assertEqual(review.reward,0)
+   final=env.step(ProposalAction());self.assertTrue(final.done);self.assertEqual(final.reward,1)
+  self.assertEqual(initial[0],initial[1])
+ def test_first_patch_and_ambiguous_representation_rejected(self):
+  env=SyntaxReviewEnvironment(arm='syntax_review');env.reset(seed=2880000,task_id='software_repair-ignore-d2')
+  with self.assertRaises(ValueError):env.step(ProposalAction(replacements=[Replacement(before='x',after='y')]))
+  with self.assertRaises(ValueError):env.step(ProposalAction(content='x',replacements=[Replacement(before='x',after='y')]))
+
+ def test_native_literal_patch_repairs_only_selected_definition(self):
+  task=make_task('software_repair-ignore-d2',2880000)
+  good='def classify_ignore(';bad='def broken_classify_ignore('
+  self.assertEqual(task.reference_source.count(good),1)
+  proposal=task.reference_source.replace(good,bad)
+  env=SyntaxReviewEnvironment(arm='syntax_review');env.reset(task_id=task.task_id,seed=2880000)
+  review=env.step(ProposalAction(content=proposal));self.assertFalse(review.done);self.assertEqual(review.reward,0)
+  final=env.step(ProposalAction(replacements=[Replacement(before=bad,after=good)]))
+  self.assertTrue(final.done);self.assertEqual(final.reward,1)
