@@ -1,0 +1,31 @@
+{
+  "source": "04314bac418c0a81dff7a6270acdca49b76cef35",
+  "phase": "screen",
+  "task": "software_repair-ignore-d3",
+  "seed": 2960000,
+  "assigned_per_arm": 4,
+  "full": {
+    "standard_review": 3,
+    "retain_review": 2
+  },
+  "native_execution": {
+    "standard_review": 1,
+    "retain_review": 2
+  },
+  "actual_calls": 16,
+  "all_replies_verified": true,
+  "retention_advice_exposure": {
+    "standard_review": 0,
+    "retain_review": 1
+  },
+  "full_rate_delta": -0.25,
+  "semantic_mean_delta": -0.25,
+  "selection_passed": false,
+  "confirmation_materialized": false,
+  "promotion": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "max_context": 7815,
+  "max_generation_with_observations": 8107,
+  "all_workers_stopped": true
+}
