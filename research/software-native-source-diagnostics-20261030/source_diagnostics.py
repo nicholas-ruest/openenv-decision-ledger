@@ -1,5 +1,9 @@
 """Public submitted-source diagnostics; no task, hidden data or model access."""
 import ast
+from pathlib import Path
+import sys
+ROOT=Path(__file__).resolve().parents[2]
+sys.path.append(str(ROOT/'integrations/software-repair'))
 from repair_env.runner import Program,Rejected,MAX_SOURCE
 
 def diagnose(source):

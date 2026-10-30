@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 import sys
 ROOT=Path(__file__).resolve().parents[2]
-sys.path.insert(0,str(ROOT/'research/software-retain-public-passing-20261030'))
+sys.path.append(str(ROOT/'research/software-retain-public-passing-20261030'))
 from portable_environment import PortableReviewEnvironment
 from source_diagnostics import diagnose
 
