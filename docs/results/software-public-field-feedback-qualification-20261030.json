@@ -1,0 +1,15 @@
+{
+  "source": "6ecb82ccb9f853332b1f6de19e060ba1829f7ed5",
+  "native_tests": 17,
+  "financial_tests": 11,
+  "assessment_tests": 10,
+  "existing_accounting_tests": 61,
+  "paid_calls": 0,
+  "ledger_unchanged": true,
+  "logs": {
+    "native-tests.log": "637e0f5b93f118ad35f386cd6dbf72de9c1b4eb829be999f7e8ebd790f606658",
+    "gate-tests.log": "f70007bd494154654a200315bbef519a50fd5c93d26cd24bb73e5fd8dece240a",
+    "assessment-tests.log": "757b6e6d07d01b7b866855618e25daf7ed3a326173312d7183b7c1bd50fb7e0b",
+    "existing-accounting-tests.log": "7e4ad936877a4bef84716d764ab39da2bec101f11e548dce832c0a5c2d1cbe8d"
+  }
+}
