@@ -269,6 +269,21 @@ class Program:
                         raise Rejected("sequence multiplication limit")
         return bounded(fn(left, right))
 
+    def _type_tag(self, node, frame):
+        """Internal static type tags never become program values."""
+        self._tick()
+        tags = {"bool": bool, "int": int, "str": str, "list": list,
+                "tuple": tuple, "dict": dict, "set": set}
+        if isinstance(node, ast.Name):
+            if node.id in frame or node.id in self.functions or node.id not in tags:
+                raise Rejected("isinstance requires unshadowed supported type names")
+            return tags[node.id]
+        if isinstance(node, ast.Tuple):
+            if len(node.elts) > MAX_ITEMS:
+                raise Rejected("type tuple size limit")
+            return tuple(self._type_tag(item, frame) for item in node.elts)
+        raise Rejected("isinstance type must be a supported name or tuple of names")
+
     def _expr(self, node, frame, depth):
         self._tick()
         ev = lambda n: self._expr(n, frame, depth)
@@ -352,6 +367,14 @@ class Program:
                          ev(node.step) if node.step else None)
         if isinstance(node, ast.Subscript):
             return bounded(ev(node.value)[ev(node.slice)])
+        if (isinstance(node, ast.Call) and not node.keywords
+                and isinstance(node.func, ast.Name) and node.func.id == "isinstance"
+                and node.func.id not in self.functions):
+            if len(node.args) != 2:
+                raise Rejected("isinstance requires two arguments")
+            value = ev(node.args[0])
+            tag = self._type_tag(node.args[1], frame)
+            return isinstance(value, tag)
         if isinstance(node, ast.Call) and not node.keywords:
             args = [ev(n) for n in node.args]
             if isinstance(node.func, ast.Name):

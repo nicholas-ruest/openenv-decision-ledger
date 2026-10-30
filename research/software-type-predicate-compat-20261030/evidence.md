@@ -1,0 +1,9 @@
+# Separate type-predicate compatibility candidate, October 30
+
+The completed joint public-feedback screen produced no full solves in either arm. A bounded-interpreter trace of the third final execution failure on a supplied public example localized its rejection to an isinstance(value, tuple) call. The old language contract did not support isinstance or first-class type values. This is separate from the other two final failures involving list.sort(key=...).
+
+This candidate starts from e0c024f03e885bb98429274f6cee03dc3f42dd28, with baseline runner SHA256 fbb86c7e594ad50a45a7b3858d8108f4961f075f6795ecb3172fce3c50194764. It does not include the sort-key compatibility candidate. It adds only bounded isinstance predicates with unshadowed bool, int, str, list, tuple, dict and set tags, or nested tuples of those tags, in the second argument. Type objects are internal static tags and never become program values. No submitted source executes on the host. Existing source, AST, item, execution-step and function-depth limits and input-mutation protections remain.
+
+The public language description names that precise extension. Algorithms, generated task data, initial/reference source, reward weights, frozen v12, rollback v11 and runtime images are unchanged.
+
+Eight local trusted static CPython comparison/boundary tests pass, covering supported tags, bool/int semantics, nested/empty tuples, single evaluation of the value argument, rejection of dynamic/unknown/first-class tags, shadowing, step limits and input mutation. Native ruOS qualification and saved-response counterfactual replay remain pending. No fresh model call, improvement, training or leaderboard claim is made. Any later replay recovery will be posthoc compatibility evidence and will not justify promotion without fresh disjoint model confirmation and Arena held-out evaluation.
