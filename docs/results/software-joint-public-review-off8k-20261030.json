@@ -1,0 +1,47 @@
+{
+  "source": "96fbe8a40b22dbf44ffc652335c0e971cfa48a4a",
+  "assigned_attempts": 8,
+  "procedural_cases": 1,
+  "actual_calls": 16,
+  "auditable_replies": 16,
+  "unknown_usage_calls": 0,
+  "uncalled_assignments": 0,
+  "all_live_replies_independently_replayed": true,
+  "groups": [
+    {
+      "arm": "review_control",
+      "full": 0,
+      "partial_rewards": [
+        0.65,
+        0.7166666666666667
+      ],
+      "wrong": 1,
+      "execution": 1,
+      "metaharness_signal": 0,
+      "metaharness_eligible": 3
+    },
+    {
+      "arm": "public_check",
+      "full": 0,
+      "partial_rewards": [
+        0.7333333333333333,
+        0.8833333333333333
+      ],
+      "wrong": 0,
+      "execution": 2,
+      "metaharness_signal": 0,
+      "metaharness_eligible": 2
+    }
+  ],
+  "full_rate_delta": 0,
+  "assigned_mean_score_delta": 0.0625,
+  "max_accounted_context": 6481,
+  "max_completion_including_observations": 3426,
+  "selection_passed": false,
+  "confirmation_materialized": false,
+  "confirmed_improvement": false,
+  "leaderboard_gain": false,
+  "is_training": false,
+  "metaharness_pin": "b8c3d38de41203faf633ef6dceb8452a4727b0ea",
+  "closure_sha256": "be46ee3182ed9c23101162ab6653bde0adcedfba12f981a362ae4cea32033b7c"
+}
