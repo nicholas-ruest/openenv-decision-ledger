@@ -364,7 +364,7 @@ class Program:
                         raise Rejected("range size limit")
                     return list(result)
                 builtins = {"len": len, "min": min, "max": max, "sum": sum,
-                            "abs": abs, "sorted": sorted, "list": list, "set": set,
+                            "abs": abs, "bool": bool, "sorted": sorted, "list": list, "set": set,
                             "tuple": tuple, "dict": dict, "any": any, "all": all,
                             "enumerate": lambda *xs: list(enumerate(*xs)),
                             "zip": lambda *xs: list(zip(*xs))}
