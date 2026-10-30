@@ -1,0 +1,81 @@
+{
+  "execution_source": "6ecb82ccb9f853332b1f6de19e060ba1829f7ed5",
+  "assessment_source": "af3df7638e9e916e5980efee9918405971428317",
+  "assigned_attempts": 8,
+  "underlying_cases": 1,
+  "attempts_per_arm": 4,
+  "actual_calls": 16,
+  "auditable_replies": 16,
+  "groups": [
+    {
+      "arm": "public_check",
+      "full": 0,
+      "semantic_sum": 1.4500000000000002,
+      "native_categories": {
+        "full": 0,
+        "partial": 3,
+        "wrong": 1,
+        "format": 0,
+        "edit_rejection": 0,
+        "execution": 0,
+        "provider": 0,
+        "budget": 0,
+        "truncation": 0
+      },
+      "metaharness": {
+        "signal": 1,
+        "eligible": 4,
+        "solved": 0,
+        "partial": 3,
+        "reasoning": 1,
+        "format": 0,
+        "truncation": 0,
+        "infra": 0
+      }
+    },
+    {
+      "arm": "public_fields",
+      "full": 0,
+      "semantic_sum": 1.75,
+      "native_categories": {
+        "full": 0,
+        "partial": 2,
+        "wrong": 2,
+        "format": 0,
+        "edit_rejection": 0,
+        "execution": 0,
+        "provider": 0,
+        "budget": 0,
+        "truncation": 0
+      },
+      "metaharness": {
+        "signal": 1,
+        "eligible": 4,
+        "solved": 0,
+        "partial": 2,
+        "reasoning": 2,
+        "format": 0,
+        "truncation": 0,
+        "infra": 0
+      }
+    }
+  ],
+  "full_rate_delta": 0,
+  "semantic_mean_delta": 0.07499999999999996,
+  "selection_passed": false,
+  "confirmation_materialized": false,
+  "unknown_usage_attempts": 0,
+  "treatment_field_mismatch_exposure_by_sample": [
+    4,
+    3,
+    4,
+    4
+  ],
+  "max_completion_with_observations": 3664,
+  "max_context": 6712,
+  "metaharness_source": "b8c3d38de41203faf633ef6dceb8452a4727b0ea",
+  "actual_module": "fitness.mjs:scoreCell",
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "is_training": false
+}
