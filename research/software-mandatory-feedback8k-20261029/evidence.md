@@ -1,0 +1,15 @@
+# Required review before final grading: separate controlled candidate
+
+Preparation only; no model evidence or paid execution authority is supplied by these files. Native tests and whole-study admission must succeed on the exact pinned source before execution.
+
+The preceding optional-review pilot was stopped after two replies: both models set submit=true immediately, so neither received feedback. One solved; one failed execution. This revealed that optional review does not guarantee exposure to the intended intervention. That pilot remains incomplete with all eight assigned identities retained; it supplies no feedback-effect estimate. No failed answer is repaired posthoc and counted as a model solve.
+
+This new candidate requires a proposal/review/final sequence in both arms. Its content-only action has no early-submit command. Undeclared fields are ignored, so an obsolete submit flag cannot bypass the required review. The first valid proposal is written without hidden submission and receives reward zero. The second response is final and uses the unchanged Native full-contract grader. Empty second content retains the first module. The first prompts, schemas, contract, source and public examples match across arms. Only the intermediate public-example execution results versus neutral review differ. There is no helper-preservation intervention.
+
+Fresh screen case 2680000 and reserved unmaterialized confirmation case 2690000 are disjoint from the optional pilot. Eight assigned attempts, four per arm, are partitioned into four sequential two-attempt chunks; arm order alternates. No retries, resume, automatic confirmation, training, dataset replacement or Arena submission. Reviewed v12/v14 and rollback v11 remain unchanged.
+
+Both arms retain the tested Native-budget caller's 8192 total completion including post-reset observations, 24576 context, first generation maximum 6000, remaining-budget second generation with 96 terminal tokens reserved, 600-second attempt wall and unchanged 1200-second worker supervisor. Thinking is requested, not attested. These direct Native observations do not establish Arena wrapper equivalence. First-response truncation and insufficient revision space remain explicit failure outcomes.
+
+The existing amendment-bound financial controls are unchanged. Before a chunk opens its archive, all sixteen possible calls are conservatively quoted under the existing reconciled allocation and actual credit. Each actual call is reserved before execution. Unknown usage, provider/budget failure, incomplete prior chunks, reused archives and the Toronto stop fail closed. Every assigned attempt remains in the study denominator.
+
+The complete screen must have independently replayed Native grades, actual disjoint response identities and usage, positive full-solve delta and nonnegative semantic delta before selection can be frozen. Fresh disjoint confirmation is required for improvement claims; Arena held-out results are required for ranking claims. Applicable MetaHarness fitness runs through the unchanged pinned, hash-checked upstream adapter. No Darwin runner is used.
