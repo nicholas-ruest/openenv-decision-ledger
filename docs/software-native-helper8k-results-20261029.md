@@ -13,3 +13,10 @@ Two complete chunks returned eight distinct actual responses with known usage. E
 Exact source: `49e1a54341ccb853e34bd872282225093d81d3d5`. Frozen chunk input digests: `c8c66ae59574f9c1ad9700a10689b328f62d3e9be979f65ece188f33ae62cedd` and `09c53da6d641c42ebad32a76cfc21127eccb3e710ea109dae8e292415358ea46`. Private independent replay/futility proof SHA256: `4495a2f992da625c7d5fb0b7ef9c6185c1103b64073fe13a5124a648b6301358`. Source, frozen identities and complete-screen validator remain in `research/software-native-helper8k-20261029/`; source/tests were not rewritten to make the stopped study look complete.
 
 The comparison concerns local base-model inference, not training or Arena-held-out performance. The two procedural cases and four calls per arm observed so far do not establish general transfer. Separate computed-public-feedback preparation is documented in `docs/software-native-feedback8k-20261029.md`. Reviewed v12/v14, runtime images, rollback v11, HF data and Arena remain unchanged. Raw trajectories and financial records remain private.
+
+
+## Actual intervention exposure
+
+A follow-up audit of the four actual treatment replies found `mode="function"` in every reply, with zero module-mode fallbacks. The existing replacement code retained all supplied functions outside each declared target and rejected replacement of supplied helpers. Thus all four observed treatment attempts preserved the supplied working helpers; this was not a zero-exposure pilot. Two attempts added new helper definitions, which the existing interface permits. No public-example feedback was combined with this intervention.
+
+This clarifies exposure only. It adds no model calls, changes no outcomes and does not turn the posthoc incomplete screen into a complete effect estimate or a general claim that helper preservation cannot help.
