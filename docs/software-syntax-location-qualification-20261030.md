@@ -1,0 +1,13 @@
+# Source syntax location: qualification and frozen comparison
+
+Execution source `7ed888bfa18c41851ad6b94e22da0bb0cfc72c27` adds a separate source-only syntax diagnostic to the required review. Both arms use identical first prompts, accepted actions, native interpreter/grader, public-field feedback and parent-status reminder. Both prefer a complete revised module and accept literal edits. The only treatment difference is a bounded Python parser message, line and column after a public compiler rejection of the submitted module. No source text, hidden case, reference answer, filesystem or credentials enter that diagnostic. Valid and syntactically valid but unsupported programs receive no extra diagnostic. No language acceptance or token limit changes.
+
+The preceding localized-edit study observed two first proposals rejected for invalid Python syntax. The earlier unsupported-AST helper explicitly returned unchanged feedback for SyntaxError, so this tests a distinct missing mechanism. It does not reopen either interrupted thinking call or the earlier diagnostic confirmation.
+
+The exact source passed 28 native/protocol tests and 10 assessment tests. Native tests exercise actual parser positions, no source echo, public-only boundaries, unchanged valid/unsupported-source feedback, identical real native first prompts, treatment-only exposure, native recovery controls, caller replay/usage checks, failure denominators and scope. A copied assertion initially expected differing revision advice and two test imports lacked the real caller bootstrap; these were corrected before any model call. Earlier failed and time-limited logs are retained. The complete bounded rerun passed all 28 tests.
+
+Native log SHA256 `4521fa2d1ac6e3b6302cd5c1fb4bd752b4ec7a2c1be332669c3e2bd0ad557921`; assessment log SHA256 `ec87972ed0efafc4ac43805ef3784b467f6983138b3090bce388903360ae9d09`. The amendment-bound reservation gate remains `5e2f25daea0f59c248ab75e22a134b89259c6892d24335f3c9c4a1b807da7e8c`.
+
+Before model execution, all four paired input bundles and the selection rule were frozen. The screen source/examples are disjoint from 31 prior cases across 70 preserved input files. Selection requires all eight assigned attempts, known usage, no provider or budget failure, positive full-solve delta and nonnegative semantic delta. The reserved confirmation remains unmaterialized. Both requests disable thinking; total generation plus observations remains 8192 and context 24576, with no retries.
+
+These controls are qualification, not model performance or training. Actual results and whether syntax diagnostics were exposed must be reported separately. No Arena POST, HF replacement, production image qualification or leaderboard gain is claimed.
