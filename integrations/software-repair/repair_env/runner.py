@@ -91,7 +91,8 @@ class Program:
                ast.UAdd, ast.USub, ast.Not, ast.And, ast.Or, ast.Eq, ast.NotEq,
                ast.Lt, ast.LtE, ast.Gt, ast.GtE, ast.In, ast.NotIn, ast.Is, ast.IsNot,
                ast.Attribute, ast.Break, ast.Continue, ast.Set, ast.BitAnd, ast.BitOr,
-               ast.LShift, ast.Pow, ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp, ast.comprehension)
+               ast.LShift, ast.Pow, ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp, ast.comprehension,
+               ast.keyword, ast.Lambda)
 
     def __init__(self, source: str):
         if type(source) is not str or len(source.encode()) > MAX_SOURCE:
@@ -122,6 +123,21 @@ class Program:
             raise Rejected("one to sixteen functions required")
         parents = {id(child): parent for parent in nodes for child in ast.iter_child_nodes(parent)}
         for node in nodes:
+            if isinstance(node, ast.keyword):
+                call = parents[id(node)]
+                if (not isinstance(call, ast.Call) or call.args
+                        or not isinstance(call.func, ast.Attribute) or call.func.attr != "sort"
+                        or node.arg not in ("key", "reverse")
+                        or len({item.arg for item in call.keywords}) != len(call.keywords)):
+                    raise Rejected("only list.sort key/reverse keywords supported")
+            if isinstance(node, ast.Lambda):
+                parent = parents[id(node)]
+                args = node.args
+                if (not isinstance(parent, ast.keyword) or parent.arg != "key"
+                        or len(args.args) != 1 or args.args[0].arg.startswith("__")
+                        or args.posonlyargs or args.kwonlyargs or args.vararg or args.kwarg
+                        or args.defaults or args.kw_defaults or args.args[0].annotation):
+                    raise Rejected("lambda only supported as a one-argument sort key")
             if isinstance(node, (ast.Break, ast.Continue)):
                 child = node
                 parent = parents[id(child)]
@@ -269,6 +285,29 @@ class Program:
                         raise Rejected("sequence multiplication limit")
         return bounded(fn(left, right))
 
+    def _sort_key(self, node, frame, depth):
+        if isinstance(node, ast.Constant) and node.value is None:
+            return None
+        if isinstance(node, ast.Lambda):
+            argument = node.args.args[0].arg
+            def evaluate(item):
+                self._tick()
+                return bounded(self._expr(node.body, ChainMap({argument: item}, frame), depth))
+            return evaluate
+        if isinstance(node, ast.Name):
+            name = node.id
+            if name in self.functions:
+                def evaluate(item):
+                    return bounded(self._call(name, [item], depth))
+                return evaluate
+            if name in ("len", "abs"):
+                function = len if name == "len" else abs
+                def evaluate(item):
+                    self._tick()
+                    return bounded(function(item))
+                return evaluate
+        raise Rejected("sort key must be None, a supported named function or a lambda")
+
     def _expr(self, node, frame, depth):
         self._tick()
         ev = lambda n: self._expr(n, frame, depth)
@@ -352,6 +391,28 @@ class Program:
                          ev(node.step) if node.step else None)
         if isinstance(node, ast.Subscript):
             return bounded(ev(node.value)[ev(node.slice)])
+        if (isinstance(node, ast.Call) and node.keywords
+                and isinstance(node.func, ast.Attribute) and node.func.attr == "sort"):
+            value = ev(node.func.value)
+            if type(value) is not list or node.args:
+                raise Rejected("sort receiver/arguments unsupported")
+            key = None
+            reverse = False
+            for keyword in node.keywords:
+                if keyword.arg == "key":
+                    key = self._sort_key(keyword.value, frame, depth)
+                elif keyword.arg == "reverse":
+                    reverse = ev(keyword.value)
+                    if type(reverse) not in (bool, int):
+                        raise Rejected("sort reverse must be an integer or bool")
+                else:
+                    raise Rejected("sort keyword unsupported")
+            # CPython supplies stable ordering and one key evaluation per item.
+            # The callback remains in this interpreter, sharing its step/depth
+            # limits; no submitted source is executed by the host Python VM.
+            value.sort(key=key, reverse=reverse)
+            bounded(value)
+            return None
         if isinstance(node, ast.Call) and not node.keywords:
             args = [ev(n) for n in node.args]
             if isinstance(node.func, ast.Name):
