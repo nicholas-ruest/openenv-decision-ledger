@@ -76,9 +76,24 @@ def quote(opener, token, timeout=15):
 
 class DollarReservations:
     """Append-before-call reservations never refunded, even for provider failures."""
-    def __init__(self, receipt, *, amendment_sha256=None):
+    @staticmethod
+    def _reserved(raw):
+        if raw and not raw.endswith(b"\n"):
+            raise ValueError("incomplete reservation ledger")
+        rows = [json.loads(line) for line in raw.splitlines() if line.strip()]
+        amounts = [Decimal(str(row["usd"])) for row in rows]
+        labels = [row["label"] for row in rows]
+        if (any(not x.is_finite() or x <= 0 for x in amounts)
+                or any(not isinstance(x, str) or not x for x in labels)
+                or len(set(labels)) != len(labels)):
+            raise ValueError("invalid existing reservation ledger")
+        return sum(amounts, Decimal(0))
+
+    def __init__(self, receipt, *, amendment_sha256=None,
+                 receipt_sha256=None, ledger_sha256=None):
         self.path = Path(receipt)
-        value = json.loads(self.path.read_text())
+        raw = self.path.read_bytes()
+        value = json.loads(raw)
         if value.get("closed_for_new_calls") is True:
             raise ValueError("inference allocation is closed for new calls")
         checked = datetime.fromisoformat(value["checked_at"])
@@ -89,11 +104,37 @@ class DollarReservations:
         total = Decimal(str(value["total_authorized_usd"]))
         from allocation_amendment import verified_cap_ceiling
         ceiling = verified_cap_ceiling(self.path, value, amendment_sha256)
-        if not 0 <= age <= 7200 or not 0 < cap <= ceiling or prior + cap > total or cap > balance:
+        if (not all(x.is_finite() for x in (cap, prior, balance, total))
+                or not 0 <= age <= 7200 or not 0 < cap <= ceiling
+                or prior < 0 or balance < 0 or prior + cap > total):
+            raise ValueError("fresh reconciled existing inference allocation required")
+        self.ledger = self.path.with_suffix(".reservations.jsonl")
+        self.receipt_sha256 = None
+        self.ledger_prefix = None
+        self.credit_snapshot = None
+        self.used_snapshot = None
+        leased = receipt_sha256 is not None or ledger_sha256 is not None
+        if leased:
+            if (amendment_sha256 is None or receipt_sha256 is None or ledger_sha256 is None
+                    or hashlib.sha256(raw).hexdigest() != receipt_sha256):
+                raise ValueError("explicit amendment and reconciled file leases required")
+            with self.ledger.open("rb") as stream:
+                fcntl.flock(stream.fileno(), fcntl.LOCK_SH)
+                prefix = stream.read()
+                if hashlib.sha256(prefix).hexdigest() != ledger_sha256:
+                    raise ValueError("reconciled reservation ledger changed")
+                used = self._reserved(prefix)
+            # Only the unspent portion can cause FUTURE charges. Existing rows,
+            # including unknown-usage calls, continue consuming the same cap.
+            if not 0 <= used <= cap or cap - used > balance:
+                raise ValueError("remaining allocation exceeds fresh actual credit")
+            self.receipt_sha256, self.ledger_prefix = receipt_sha256, prefix
+            self.credit_snapshot, self.used_snapshot = balance, used
+        elif cap > balance:
+            # Legacy callers retain their original full-cap balance guard.
             raise ValueError("fresh reconciled existing inference allocation required")
         self.cap, self.local_lock = cap, threading.Lock()
         self.checked_at = checked
-        self.ledger = self.path.with_suffix(".reservations.jsonl")
 
     def reserve(self, label, prompt_bound, generated_bound, prices):
         amount = (Decimal(prompt_bound) * Decimal(str(prices["input"])) +
@@ -105,17 +146,30 @@ class DollarReservations:
             if not 0 <= age <= 7200:
                 raise ValueError("billing observation expired")
             stream.seek(0)
-            rows = [json.loads(line) for line in stream if line.strip()]
+            raw = stream.read().encode()
+            if self.receipt_sha256 is not None:
+                if (hashlib.sha256(self.path.read_bytes()).hexdigest() != self.receipt_sha256
+                        or not raw.startswith(self.ledger_prefix)):
+                    raise ValueError("reconciled receipt or retained reservations changed")
+            used = self._reserved(raw)
+            rows = [json.loads(line) for line in raw.splitlines() if line.strip()]
             if any(row["label"] == label for row in rows):
                 raise ValueError("duplicate call reservation")
-            used = sum((Decimal(row["usd"]) for row in rows), Decimal(0))
+            if (not amount.is_finite() or amount <= 0
+                    or prompt_bound < 0 or generated_bound < 0):
+                raise ValueError("invalid new reservation quote")
             if used + amount > self.cap:
                 raise ValueError("screen reservation cap exhausted")
+            if (self.credit_snapshot is not None
+                    and used - self.used_snapshot + amount > self.credit_snapshot):
+                raise ValueError("fresh credit snapshot exhausted")
             record = {"label": label, "usd": str(amount), "prompt_bound": prompt_bound,
                       "generation_bound": generated_bound}
             stream.write(json.dumps(record) + "\n")
             stream.flush()
             os.fsync(stream.fileno())
+            if self.ledger_prefix is not None:
+                self.ledger_prefix = raw + (json.dumps(record) + "\n").encode()
         return float(amount)
 
 
