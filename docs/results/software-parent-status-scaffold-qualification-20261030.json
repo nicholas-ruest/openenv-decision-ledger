@@ -1,0 +1,13 @@
+{
+  "source": "4da9525d129da89e48cc1fdb0ff05b1c6c7f05cf",
+  "native_tests": 17,
+  "assessment_tests": 10,
+  "gate_source_unchanged": true,
+  "gate_sha256": "5e2f25daea0f59c248ab75e22a134b89259c6892d24335f3c9c4a1b807da7e8c",
+  "log_sha256": {
+    "native-tests.log": "b5fa8d22168e86c9a3a532636dfb7dac485a5bdea5d8942df0551b245190c4a8",
+    "assessment-tests.log": "b2a4c293688c62d9ddd5857e5026e4a9830b6232a93da0e44b2e2094ddbc87b1"
+  },
+  "paid_calls": 0,
+  "model_improvement": false
+}
