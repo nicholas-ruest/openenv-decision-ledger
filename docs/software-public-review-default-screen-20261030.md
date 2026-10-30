@@ -1,0 +1,9 @@
+# Public-example review with provider-default sampling: completed screen
+
+Pinned source 33c0c708e823bd42ae9de8150c025c78d5c8fe5b. Existing software_repair-ignore-d3, one procedural case, four samples per arm; all eight assigned attempts retained. Public review: 3/4 full and one truncation. Neutral review: 0/4 full, three Native program-execution failures and one truncation. Full-rate and semantic-mean differences are both +0.75. All 16 calls returned and were independently replayed; all four worker closures were verified. Maximum accounted context 8038, generation plus observations 8096, within unchanged 24576/8192 caps.
+
+The arms share the first prompt, content-only action schema, parent-status reminder, review advice, provider route, static sampling and two-response budget. Only public review receives computed feedback from the six supplied examples. No thinking flags are supplied on either turn. Nonempty reasoning was actually returned on all 16 replies. This observes this provider route, not Arena's private trainer configuration. Public feedback on first proposals passed 0/6, 0/6, 6/6 and 5/6 respectively; the last three treatment outcomes were full.
+
+Frozen selection passed, but this is a small screen, not confirmation, training, transfer or a leaderboard result. The reserved disjoint seed remains unused until the exact screen inventory and unchanged-method admission gate pass. The confirmation adapter preserves the Trial, schedule, sampling, Native intervention and scorer; it adds admission and independent replay. Native execution failures remain failures in the denominator. Upstream pinned MetaHarness fitness reports zero signal in both groups; that is not a GRPO-productivity claim.
+
+No production image, frozen v12 request, dataset, submission or account setting changed.
