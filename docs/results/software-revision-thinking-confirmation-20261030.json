@@ -1,0 +1,30 @@
+{
+  "source": "71decb3434f8c7b6f7621271617809f2fe6a23e9",
+  "phase": "confirmation",
+  "seed": 2870000,
+  "status": "incomplete_machine_interruption",
+  "assigned_attempts": 8,
+  "recorded_terminal_attempts": 2,
+  "actual_calls": 6,
+  "usable_replies": 5,
+  "unknown_usage_calls": 1,
+  "assigned_but_uncalled": 5,
+  "known_terminal_categories": {
+    "thinking_off": {
+      "execution": 1
+    },
+    "revision_thinking": {
+      "full": 1
+    }
+  },
+  "all_assigned_attempts_in_denominator": true,
+  "reservations_retained": true,
+  "retries": 0,
+  "clean_shutdown": false,
+  "all_workers_stopped": true,
+  "confirmation_passed": false,
+  "fresh_confirmation_verified": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "is_training": false
+}
