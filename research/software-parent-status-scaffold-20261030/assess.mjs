@@ -44,7 +44,7 @@ export function assess(bundle,rows,phase='screen'){
   const assigned=new Map(),groups=new Map();
   for(const job of jobs){
     need(job.phase===phase&&arms.includes(job.arm)&&count(job.seed)&&count(job.sample)&&job.sample<4&&sha(job.attempt_id),'invalid assignment');
-    need(['software_repair-ignore-d2'].includes(job.task_id)&&[2760000].includes(job.seed),'frozen screen task/seed scope required');
+    need(['software_repair-ignore-d2'].includes(job.task_id)&&[2800000].includes(job.seed),'frozen screen task/seed scope required');
     need(typeof bundle.namespace==='string'&&bundle.namespace&&job.namespace===bundle.namespace,'single frozen namespace required');
     need(!assigned.has(job.attempt_id),'duplicate assigned identity');assigned.set(job.attempt_id,job);
     const key=JSON.stringify([job.task_id,job.seed,job.arm]);
