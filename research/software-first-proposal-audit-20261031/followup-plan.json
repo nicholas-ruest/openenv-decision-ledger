@@ -1,5 +1,5 @@
 {
-  "status": "offline_followup_plan_only",
+  "status": "offline_native_policy_prototype_qualified",
   "intervention": "public_pass_finalize",
   "diagnosis_source": "9ab273f7bde6c73be9fb62db40e2aba1c0acdfbe",
   "arms": [
@@ -39,5 +39,9 @@
   "arena_request_approved": false,
   "is_training": false,
   "model_improvement": false,
-  "leaderboard_gain": false
+  "leaderboard_gain": false,
+  "finalization_policy_written": true,
+  "native_policy_controls": 4,
+  "original_audit_controls_rechecked": 4,
+  "observation_delta_exposes_all_native_observations": true
 }
