@@ -262,13 +262,19 @@ def execute(deadline, args):
     return 0
 
 
-def main():
-    p = argparse.ArgumentParser(description=__doc__)
+def argument_parser():
+    p = argparse.ArgumentParser(description=__doc__, allow_abbrev=False)
     p.add_argument('--execute', action='store_true')
     p.add_argument('--prior',type=Path,nargs='*',default=[])
     for key in ('inputs', 'receipt', 'reconciliation', 'tokenizer', 'output', 'case_audit'):
-        p.add_argument('--'+key, type=Path)
+        options = ('--case-audit', '--case_audit') if key == 'case_audit' else ('--'+key,)
+        p.add_argument(*options, dest=key, type=Path)
     p.add_argument('--case-audit-sha256'); p.add_argument('--amendment-sha256'); p.add_argument('--inputs-sha256'); p.add_argument('--expected-source')
+    return p
+
+
+def main():
+    p = argument_parser()
     args = p.parse_args()
     if not args.execute:
         print(json.dumps(dict(assigned_screen_attempts=8, max_model_calls_per_chunk=4, retries=0, paid_calls=0, live_execution=False)))
