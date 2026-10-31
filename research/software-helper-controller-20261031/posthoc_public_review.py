@@ -74,6 +74,16 @@ def run(a):
             if original.messages != changed.messages:
                 raise ValueError('same original public problem required')
             text = choice['message']['content']
+            # An empty first action may finalize in the original environment.
+            # Exclude it BEFORE Native processing to keep this analysis public.
+            try:
+                action = original.action_type.model_validate_json(text, strict=True)
+            except ValueError:
+                action = None
+            if action is None or not action.content:
+                row['reason'] = 'no_nonempty_source_proposal'
+                rows.append(row)
+                continue
             before = original.consume(text)
             controller = policy.HelperPreservationPolicy(changed, arm='preserve_declared_helpers')
             after = controller.consume_model(text, finish_reason='stop')
