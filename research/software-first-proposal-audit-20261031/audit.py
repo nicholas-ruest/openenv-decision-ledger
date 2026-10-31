@@ -68,7 +68,10 @@ def run(args):
     sys.path.insert(0, str(protocol_dir))
     import caller
     protocol, Trial = caller.modules()
-    from replay import verify_chunk
+    # The older output-contract study exposes replay from assemble.py; load the
+    # exact study file so another historical module cannot shadow it.
+    verify_chunk = caller.load('first_proposal_original_assembly',
+                               protocol_dir / 'assemble.py').verify_chunk
     helper = caller.load('first_proposal_counter', root / 'integrations/openenv-arena/scripts/calibrate.py')
     counter = helper.load_counter(argparse.Namespace(accounting='arena', tokenizer_json=args.tokenizer,
                                                    tokenizer_sha256=TOKENIZER_SHA))
