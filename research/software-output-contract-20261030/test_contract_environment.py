@@ -39,6 +39,15 @@ class ContractParityTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             ContractEnvironment(arm='unbound')
 
+    def test_task_is_actual_native_d2_and_other_stages_are_rejected(self):
+        task = make_task('software_repair-ignore-d2', 42)
+        env = ContractEnvironment(arm='explicit_contract')
+        obs = env.reset(task_id=task.task_id, seed=task.seed)
+        self.assertEqual(env._direct._core._task, task)
+        self.assertEqual(obs.source, task.initial_source)
+        with self.assertRaises(ValueError):
+            env.reset(task_id='software_repair-ignore-d3', seed=42)
+
 
 if __name__ == '__main__':
     unittest.main()
