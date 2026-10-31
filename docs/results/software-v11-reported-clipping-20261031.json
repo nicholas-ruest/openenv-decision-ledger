@@ -1,0 +1,94 @@
+{
+  "run": "a3274296c46341a847407f97",
+  "raw_logs_sha256": "443f811e9b61b52f77f6b10425d2111941ab8851e22fb15bf6a2608f262b30b9",
+  "optimizer_steps": [
+    1,
+    148
+  ],
+  "aggregate": {
+    "recorded_updates": 148,
+    "zero_retry_updates": 146,
+    "reported_clipped_ratio_counts": {
+      "0.5": 3,
+      "0.75": 11,
+      "1.0": 134
+    },
+    "mean_reported_clipped_ratio": 0.9712837837837838,
+    "reported_max_completion_length_range": [
+      596.0,
+      4089.0
+    ],
+    "positive_reported_max_terminated_length_updates": 14,
+    "zero_retry_full_reported_clipping_updates": 132,
+    "zero_retry_saturated_updates": 10,
+    "zero_retry_saturated_and_full_reported_clipping_updates": 10,
+    "zero_retry_nonzero_std_and_gradient_updates": 121,
+    "zero_retry_nonzero_std_and_gradient_and_full_reported_clipping_updates": 109
+  },
+  "numeric_groups": {
+    "1": {
+      "recorded_updates": 50,
+      "zero_retry_updates": 50,
+      "reported_clipped_ratio_counts": {
+        "0.5": 3,
+        "0.75": 8,
+        "1.0": 39
+      },
+      "mean_reported_clipped_ratio": 0.93,
+      "reported_max_completion_length_range": [
+        1158.0,
+        3398.0
+      ],
+      "positive_reported_max_terminated_length_updates": 11,
+      "zero_retry_full_reported_clipping_updates": 39,
+      "zero_retry_saturated_updates": 0,
+      "zero_retry_saturated_and_full_reported_clipping_updates": 0,
+      "zero_retry_nonzero_std_and_gradient_updates": 38,
+      "zero_retry_nonzero_std_and_gradient_and_full_reported_clipping_updates": 29
+    },
+    "2": {
+      "recorded_updates": 49,
+      "zero_retry_updates": 48,
+      "reported_clipped_ratio_counts": {
+        "1.0": 49
+      },
+      "mean_reported_clipped_ratio": 1.0,
+      "reported_max_completion_length_range": [
+        596.0,
+        1032.0
+      ],
+      "positive_reported_max_terminated_length_updates": 0,
+      "zero_retry_full_reported_clipping_updates": 48,
+      "zero_retry_saturated_updates": 10,
+      "zero_retry_saturated_and_full_reported_clipping_updates": 10,
+      "zero_retry_nonzero_std_and_gradient_updates": 38,
+      "zero_retry_nonzero_std_and_gradient_and_full_reported_clipping_updates": 38
+    },
+    "3": {
+      "recorded_updates": 49,
+      "zero_retry_updates": 48,
+      "reported_clipped_ratio_counts": {
+        "0.75": 3,
+        "1.0": 46
+      },
+      "mean_reported_clipped_ratio": 0.9846938775510204,
+      "reported_max_completion_length_range": [
+        1391.0,
+        4089.0
+      ],
+      "positive_reported_max_terminated_length_updates": 3,
+      "zero_retry_full_reported_clipping_updates": 45,
+      "zero_retry_saturated_updates": 0,
+      "zero_retry_saturated_and_full_reported_clipping_updates": 0,
+      "zero_retry_nonzero_std_and_gradient_updates": 45,
+      "zero_retry_nonzero_std_and_gradient_and_full_reported_clipping_updates": 42
+    }
+  },
+  "task_names_attested": false,
+  "stop_reason_semantics_attested": false,
+  "actor_token_limit_attested": false,
+  "causal_explanation_established": false,
+  "new_model_calls": 0,
+  "new_training": false,
+  "leaderboard_gain": false
+}
