@@ -101,9 +101,14 @@ class ProtocolTests(unittest.TestCase):
             self.assertTrue(all(r['category']=='truncation' and not r['controller_actions'] for r in rows))
 
     def test_case_lease_remains_unsealed(self):
-        self.assertIsNone(caller.LIVE_CASE_AUDIT_SHA256)
-        with self.assertRaisesRegex(ValueError,'unsealed'):
-            caller.require_case_lease(Path('/nonexistent'),'0'*64)
+        with patch.object(caller,'LIVE_CASE_AUDIT_SHA256',None):
+            with self.assertRaisesRegex(ValueError,'unsealed'):
+                caller.require_case_lease(Path('/nonexistent'),'0'*64)
+
+    def test_wrong_sealed_case_digest_refused(self):
+        with patch.object(caller,'LIVE_CASE_AUDIT_SHA256','a'*64):
+            with self.assertRaisesRegex(ValueError,'sealed case audit differs'):
+                caller.require_case_lease(Path('/nonexistent'),'0'*64)
 
 
 if __name__=='__main__': unittest.main()
