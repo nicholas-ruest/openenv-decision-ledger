@@ -2,7 +2,7 @@
 
 A completed control attempt in the preceding study truncated its final rewrite inside the unchanged 8192-token generation-plus-observation budget. This separate candidate allows a final response to replace named functions instead of retransmitting a complete module. It has no fresh model result yet.
 
-**Final source:** `1bc4e39239066e206ff336331e57ae82e55aa217`.
+**Final source:** `8de6b520b342c1595dfae003cfe5e6d87114d8de`.
 
 ## Intervention and execution
 
@@ -10,13 +10,13 @@ Both arms use the same action schema, first prompt, source, public examples, pub
 
 A nonempty function revision supplies named top-level function definitions and the `revision_base_sha256` shown in the preceding feedback. The environment verifies that hash against the current public module, replaces only the named functions, and permits new helpers. Other code is retained. It consults neither reference implementations nor hidden cases while applying edits. Invalid hashes, ambiguous or malformed blocks and existing source-byte limits fail closed; an invalid edit never receives credit for a retained good proposal. Full-module replacement remains available, and empty content retains the current module.
 
-Model code continues to execute only in the bounded Native interpreter. The complete Native package is byte-identical in both arms to `bc9a7fab8392c17a6f1d4bf27a6aa50c92df9ebb`. The action guide was aligned with the new schema before any paid execution; an earlier unexecuted preparation is retained, and the planned case was not redrawn.
+Model code continues to execute only in the bounded Native interpreter. The complete Native package is byte-identical in both arms to `bc9a7fab8392c17a6f1d4bf27a6aa50c92df9ebb`. The action guide was aligned with the new schema before any paid execution. A cold-import check also caught an inherited module path that could resolve the wrong assessor; it was fixed and covered by a fresh-process test. Earlier unexecuted preparations are retained, and the planned case and input payloads were not redrawn.
 
 ## Qualification
 
-**21 Native/protocol/transport tests passed**, including a one-helper repair that recovers a public runtime error, unchanged unedited code, stale-hash rejection, no credit on invalid revisions, actual HTTP/WebSocket schema and function-block payloads, independent request/usage/Native replay, real exposure recomputation, unknown usage, truncation and financial denial. **10 assessment tests passed**; the final source was checked byte-for-byte against those tested assessment files.
+**22 Native/protocol/transport tests passed**, including a one-helper repair that recovers a public runtime error, unchanged unedited code, stale-hash rejection, no credit on invalid revisions, actual HTTP/WebSocket schema and function-block payloads, independent request/usage/Native replay, real exposure recomputation, unknown usage, truncation and financial denial. **10 assessment tests passed**; the final source was checked byte-for-byte against those tested assessment files.
 
-Native/protocol transcript SHA256: `be75ec096dfa261075cd7aed64f1fe0fd79b43edaa389b35c9575862afd4e967`.
+Native/protocol transcript SHA256: `42ff0ee64354a4d8337f7ce8166dfc6461e5a57613391850bb74875d0bd37629`.
 Assessment transcript SHA256: `bc14f2f61c5bdab0e2503ccb5f43d21d6d18cf4fbecea0d040194b2ffca71450`.
 Financial gate SHA256: `5e2f25daea0f59c248ab75e22a134b89259c6892d24335f3c9c4a1b807da7e8c`.
 
@@ -34,4 +34,4 @@ Screen seed 3060000 is disjoint by source/examples from 42 prior cases in 110 in
 
 Selection requires all eight assigned attempts, independent identity/request/usage/Native verification, no provider or budget failures, a positive full-solve delta, nonnegative semantic delta and at least one actually applied treatment function revision. Every failure remains in the original denominator. Fresh disjoint confirmation is required, with no redesign after selection.
 
-No model learning, Arena-managed GRPO, transfer or leaderboard gain is claimed. Frozen v12, its image and the dataset are unchanged. This prepared comparison is separate from the still-running public-runtime feedback study.
+No model learning, Arena-managed GRPO, transfer or leaderboard gain is claimed. Frozen v12, its image and the dataset are unchanged. This prepared comparison is separate from the completed public-runtime feedback study, whose selection failed because no diagnostic was exposed.
