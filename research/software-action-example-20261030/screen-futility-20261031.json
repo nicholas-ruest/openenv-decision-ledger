@@ -1,0 +1,36 @@
+{
+  "phase": "screen",
+  "status": "incomplete_posthoc_futility",
+  "source": "b033f54a92e6c151bcbdfe805bbdb247f516b848",
+  "assigned_attempts": 8,
+  "recorded_attempts": 6,
+  "assigned_but_uncalled": 2,
+  "underlying_cases": 1,
+  "actual_calls": 12,
+  "known_replies": 12,
+  "schema_only": {
+    "full": 1,
+    "truncation": 2,
+    "recorded": 3,
+    "uncalled": 1
+  },
+  "action_example": {
+    "full": 0,
+    "truncation": 3,
+    "recorded": 3,
+    "uncalled": 1
+  },
+  "positive_full_delta_still_possible": false,
+  "completed_negative_effect_estimate": false,
+  "full_phase_effect_estimate": null,
+  "confirmation_materialized": false,
+  "promotion": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "is_training": false,
+  "max_accounted_context": 8452,
+  "max_completion_with_observations": 8096,
+  "remote_storage_full": true,
+  "readonly_replay_verified": true,
+  "remote_state_sync_pending": true
+}
