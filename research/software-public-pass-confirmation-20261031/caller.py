@@ -213,7 +213,7 @@ class LiveBackend:
 # Intentionally unsealed until the confirmation case inventory is audited.
 # Digest binding changes require a separately audited immutable source revision.
 # No CLI flag, environment variable or reconciliation boolean can bypass it.
-LIVE_CASE_AUDIT_SHA256 = None
+LIVE_CASE_AUDIT_SHA256 = '8345b5cade73758e36bc164800ab650025cd165ef02a6113604cb13231fa9e5a'
 
 def require_case_lease(path, expected):
     import re
