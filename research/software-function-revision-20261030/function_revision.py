@@ -9,7 +9,7 @@ from pydantic import ConfigDict, Field
 from openenv.core.env_server.types import Action
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT/'research/software-public-runtime-diagnostics-20261030'))
+sys.path.append(str(ROOT/'research/software-public-runtime-diagnostics-20261030'))
 from diagnostic_environment import DiagnosticEnvironment
 from mandatory_environment import ProposalAction
 from joint_revision_environment import RevisionObservation

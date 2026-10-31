@@ -1,12 +1,23 @@
 import ast
 import json
+import subprocess
+import sys
 import unittest
+from pathlib import Path
 from function_revision import (replace_blocks, source_digest,
     FunctionRevisionEnvironment, FunctionRevisionAction)
 from repair_env.tasks import make_task
 
 
 class FunctionRevisionTests(unittest.TestCase):
+    def test_cold_protocol_import_keeps_its_own_assessment_module(self):
+        root=Path(__file__).resolve().parent
+        code=("import sys;from pathlib import Path;root=Path("+repr(str(root))+ ");"
+              "sys.path.insert(0,str(root));import caller;p,_=caller.modules();import assemble;"
+              "assert Path(p.__file__).resolve()==root/'feedback_protocol.py';"
+              "assert Path(assemble.__file__).resolve()==root/'assemble.py'")
+        subprocess.run([sys.executable,'-c',code],check=True,timeout=15,
+                       stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     def test_arbitrary_existing_helper_and_new_helper_preserve_others(self):
         before = 'def first(x):\n return x\n\n# retained comment\ndef second(x):\n return x+1\n'
         edits = 'def second(x):\n return third(x)\ndef third(x):\n return x+2\n'
