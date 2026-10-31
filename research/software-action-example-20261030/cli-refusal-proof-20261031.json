@@ -1,0 +1,14 @@
+{
+  "source": "b464b8a99c83419f57da014c743f37095e0e6bd0",
+  "shell_exit_code": 0,
+  "supervisor_status": "worker_failed",
+  "shutdown_verified": true,
+  "phase_archive_created": false,
+  "real_receipt_supplied": false,
+  "provider_credential_supplied": false,
+  "unsealed_source_refusal_observed": true,
+  "source_clean_after_test": true,
+  "ruos_accessed": false,
+  "model_calls": 0,
+  "actual_ledger_mutations": false
+}
