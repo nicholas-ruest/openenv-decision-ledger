@@ -1,0 +1,112 @@
+{
+  "screen_selection_passed": true,
+  "phase": "screen",
+  "attempts": 8,
+  "attempts_per_arm": 4,
+  "paired_groups": 1,
+  "procedural_seeds": 1,
+  "groups": [
+    {
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3120000,
+      "arm": "standard_revision",
+      "problem_sha256": "816e8fea938dd41ed05d6b7bf0d4f853f5084418db31cb7aba3c9c9b7c58aedd",
+      "attempts": 4,
+      "controller_finalized_attempts": 0,
+      "controller_finalized_full": 0,
+      "model_response_only_full": 0,
+      "full": 0,
+      "semantic_sum": 0,
+      "native_categories": {
+        "full": 0,
+        "partial": 0,
+        "wrong": 0,
+        "format": 0,
+        "edit_rejection": 0,
+        "execution": 0,
+        "provider": 0,
+        "budget": 0,
+        "truncation": 4
+      },
+      "unknown_generation_usage_attempts": 0,
+      "metaharness_unavailable_reason": null,
+      "metaharness": {
+        "signal": 0,
+        "eligible": 0,
+        "solved": 0,
+        "partial": 0,
+        "reasoning": 0,
+        "format": 0,
+        "truncation": 4,
+        "infra": 0
+      }
+    },
+    {
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3120000,
+      "arm": "public_pass_finalize",
+      "problem_sha256": "816e8fea938dd41ed05d6b7bf0d4f853f5084418db31cb7aba3c9c9b7c58aedd",
+      "attempts": 4,
+      "controller_finalized_attempts": 2,
+      "controller_finalized_full": 2,
+      "model_response_only_full": 0,
+      "full": 2,
+      "semantic_sum": 2,
+      "native_categories": {
+        "full": 2,
+        "partial": 0,
+        "wrong": 0,
+        "format": 0,
+        "edit_rejection": 0,
+        "execution": 0,
+        "provider": 0,
+        "budget": 0,
+        "truncation": 2
+      },
+      "unknown_generation_usage_attempts": 0,
+      "metaharness_unavailable_reason": null,
+      "metaharness": {
+        "signal": 0,
+        "eligible": 2,
+        "solved": 2,
+        "partial": 0,
+        "reasoning": 0,
+        "format": 0,
+        "truncation": 2,
+        "infra": 0
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3120000,
+      "full_rate_delta": 0.5,
+      "semantic_mean_delta": 0.5
+    }
+  ],
+  "full_rate_delta": 0.5,
+  "semantic_mean_delta": 0.5,
+  "outcome_scope": "model_plus_controller_system_attempts",
+  "metaharness_outcome_scope": "system_outcomes_not_model_only_solves",
+  "metaharness_source": "b8c3d38de41203faf633ef6dceb8452a4727b0ea",
+  "actual_module": "fitness.mjs:scoreCell",
+  "metaharness_groups_scored": 2,
+  "metaharness_complete": true,
+  "unknown_generation_usage_attempts": 0,
+  "all_assigned_attempts_in_denominator": true,
+  "provider_attestation_verified": false,
+  "fresh_confirmation_verified": false,
+  "model_improvement_claim": false,
+  "leaderboard_gain": false,
+  "promotion": false,
+  "is_training": false,
+  "identical_initial_prompts_verified": true,
+  "controller_provenance_verified": true,
+  "all_live_replies_verified": true,
+  "actual_calls": 14,
+  "selection_passed": true,
+  "max_accounted_context": 7930,
+  "max_completion_with_observations": 8096,
+  "model_improvement": false
+}
