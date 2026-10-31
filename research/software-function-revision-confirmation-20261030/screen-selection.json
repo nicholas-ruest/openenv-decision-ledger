@@ -1,0 +1,64 @@
+{
+  "source": "8de6b520b342c1595dfae003cfe5e6d87114d8de",
+  "screen_assessment_sha256": "c150435d990845610a2d491ab77d1777d6b29f6cb79c865210dddc713e3f1287",
+  "screen_source_inputs": [
+    "4473f8ab44055f86832fd42a74f54ec14ffe7bb7f633452f4f607423c78ca568",
+    "dafafe34dc4db27e6502265c66a7996168d901cc897fb6a6351ed0da107eb15d",
+    "22187259afd04b44f3536fcd6bcaeda706ba2af5714a07c36f16cf80ace0c845",
+    "b0496124910e5b140e5d37d0b20ed6e0ed816e1692afccdd430ee1fe9dd9215b"
+  ],
+  "phase": "screen",
+  "namespace": "function-revision-policy-20261030",
+  "selection_passed": true,
+  "actual_calls": 14,
+  "known_replies": 14,
+  "assigned_attempts": 8,
+  "all_live_replies_verified": true,
+  "all_workers_stopped": true,
+  "full_rate_delta": 0.25,
+  "semantic_mean_delta": 0.25,
+  "function_revision_exposure": {
+    "module_review": 2,
+    "function_review": 3
+  },
+  "max_accounted_context": 8243,
+  "max_completion_with_observations": 7958,
+  "total_generation_tokens": 50190,
+  "by_arm": {
+    "module_review": {
+      "categories": {
+        "full": 2,
+        "partial": 0,
+        "wrong": 1,
+        "format": 0,
+        "edit_rejection": 0,
+        "execution": 1,
+        "provider": 0,
+        "budget": 0,
+        "truncation": 0
+      },
+      "first_full": 2,
+      "revision_added_full": 1,
+      "lost_first_full": 1
+    },
+    "function_review": {
+      "categories": {
+        "full": 3,
+        "partial": 0,
+        "wrong": 1,
+        "format": 0,
+        "edit_rejection": 0,
+        "execution": 0,
+        "provider": 0,
+        "budget": 0,
+        "truncation": 0
+      },
+      "first_full": 2,
+      "revision_added_full": 1,
+      "lost_first_full": 0
+    }
+  },
+  "fresh_confirmation_verified": false,
+  "model_improvement": false,
+  "leaderboard_gain": false
+}

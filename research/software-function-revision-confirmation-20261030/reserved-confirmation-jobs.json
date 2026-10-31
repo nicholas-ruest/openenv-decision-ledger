@@ -1,0 +1,74 @@
+[
+  {
+    "namespace": "function-revision-policy-20261030",
+    "phase": "confirmation",
+    "task_id": "software_repair-ignore-d3",
+    "seed": 3070000,
+    "sample": 0,
+    "arm": "module_review",
+    "attempt_id": "1658bb3b14de426a1393eafb9c7c22d45cf319b2167b92ab8fa1594ac701cc62"
+  },
+  {
+    "namespace": "function-revision-policy-20261030",
+    "phase": "confirmation",
+    "task_id": "software_repair-ignore-d3",
+    "seed": 3070000,
+    "sample": 0,
+    "arm": "function_review",
+    "attempt_id": "843406e44d58a1e7f10ce75a64f3b5772e3c440ae83a4d658840b29f0f0f5dbf"
+  },
+  {
+    "namespace": "function-revision-policy-20261030",
+    "phase": "confirmation",
+    "task_id": "software_repair-ignore-d3",
+    "seed": 3070000,
+    "sample": 1,
+    "arm": "function_review",
+    "attempt_id": "b6204a3ec90047487cb11fadf80c697b724cd6c3e5c4f58a1157a856fa046da7"
+  },
+  {
+    "namespace": "function-revision-policy-20261030",
+    "phase": "confirmation",
+    "task_id": "software_repair-ignore-d3",
+    "seed": 3070000,
+    "sample": 1,
+    "arm": "module_review",
+    "attempt_id": "64f098a7e24c7cdf944ea0cc837e3b0dd93af768f4ce86c978cccadf286ea2cb"
+  },
+  {
+    "namespace": "function-revision-policy-20261030",
+    "phase": "confirmation",
+    "task_id": "software_repair-ignore-d3",
+    "seed": 3070000,
+    "sample": 2,
+    "arm": "module_review",
+    "attempt_id": "afcc8b47592fd63b1d15b0d7f9ac2fab19273a1bdacd8c5e0590cbf16ffeac59"
+  },
+  {
+    "namespace": "function-revision-policy-20261030",
+    "phase": "confirmation",
+    "task_id": "software_repair-ignore-d3",
+    "seed": 3070000,
+    "sample": 2,
+    "arm": "function_review",
+    "attempt_id": "477febc439328e3add4bdd42fb030265f2de48a873e734cca9396287a7cc5fd1"
+  },
+  {
+    "namespace": "function-revision-policy-20261030",
+    "phase": "confirmation",
+    "task_id": "software_repair-ignore-d3",
+    "seed": 3070000,
+    "sample": 3,
+    "arm": "function_review",
+    "attempt_id": "9c5c3bd0accb61075809dc712f39c5cfb1ea17686d04c1df013f9063f1d94657"
+  },
+  {
+    "namespace": "function-revision-policy-20261030",
+    "phase": "confirmation",
+    "task_id": "software_repair-ignore-d3",
+    "seed": 3070000,
+    "sample": 3,
+    "arm": "module_review",
+    "attempt_id": "07106283e1812d12e5bd310efc99dc9fe30c5c5bc4a5afc7093b42453c568210"
+  }
+]
