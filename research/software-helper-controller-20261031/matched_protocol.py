@@ -53,10 +53,9 @@ def plan():
         outcome_scope='model_plus_controller_system_attempts', is_training=False)
 
 
-def materialize(job):
-    # No environment variable, boolean, CLI option or qualification flag can
-    # turn planning identities into a live Native case in this source revision.
-    raise ValueError('unsealed live case lease; production materialization refused')
+def materialize(job,case_audit=None,case_sha256=None):
+    from screen_materializer import ScreenTrial
+    return ScreenTrial(job,case_audit,case_sha256)
 
 
 class QualificationTrial:

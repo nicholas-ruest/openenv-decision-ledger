@@ -48,7 +48,7 @@ def operating_seconds(now=None):
 def guarded_backend(args):
     # Order matters: no token lookup, route quote, backend or private artifact
     # inspection before the independently sealed live source/case requirement.
-    finite_caller.require_live_ready()
+    finite_caller.require_live_ready(getattr(args,'case_audit',None),getattr(args,'case_audit_sha256',None))
     verify_clean_source(args.expected_source)
     operating_seconds()
     verify_dependencies()

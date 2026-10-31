@@ -15,12 +15,12 @@ import matched_protocol as protocol
 LIVE_CASE_AUDIT_SHA256 = None
 
 
-def require_live_ready():
+def require_live_ready(case_audit=None,case_sha256=None):
     # Explicitly source-bound, not an environment/CLI permission or broad bypass.
     if LIVE_CASE_AUDIT_SHA256 is None:
         raise ValueError('unsealed live source/case admission; backend construction refused')
-    # Production materialization is independently blocked in this source too.
-    protocol.materialize(protocol.jobs('screen')[0])
+    from screen_materializer import verify_live_case
+    return verify_live_case(protocol.jobs('screen')[0],case_audit,case_sha256)
 
 
 def write(path, value):
@@ -32,7 +32,23 @@ def qualification_chunk(chunk, backend, counter, output, deadline):
     """Run two exact original assignments. Scripted qualification backend only."""
     if type(chunk) is not int or chunk not in range(4) or backend.scripted is not True:
         raise ValueError('qualification backend and original chunk required')
-    assigned = [j for j in protocol.jobs('qualification') if j['sample']==chunk]
+    return _chunk(chunk,backend,counter,output,deadline,protocol.jobs('qualification'),protocol.QualificationTrial,True,None)
+
+
+def screen_chunk(chunk,backend,counter,output,deadline,case_audit,case_sha256):
+    """Only the exact source-sealed screen; original financial backend required."""
+    if output.exists():raise ValueError('fresh archive required before financial admission')
+    proof=require_live_ready(case_audit,case_sha256)
+    if type(chunk) is not int or chunk not in range(4) or backend.scripted is not False:
+        raise ValueError('live screen backend and original chunk required')
+    # Full phase is quoted on every fresh chunk; current accounting may refuse.
+    backend.admit([28672]*16,8096,deadline)
+    return _chunk(chunk,backend,counter,output,deadline,protocol.jobs('screen'),
+        lambda job:protocol.materialize(job,case_audit,case_sha256),False,proof['case_audit_sha256'])
+
+
+def _chunk(chunk,backend,counter,output,deadline,all_jobs,factory,scripted,case_sha256):
+    assigned = [j for j in all_jobs if j['sample']==chunk]
     if output.exists() or deadline <= time.monotonic():
         raise ValueError('fresh archive and unexpired phase deadline required')
     output.mkdir(parents=True)
@@ -41,12 +57,15 @@ def qualification_chunk(chunk, backend, counter, output, deadline):
     for job in assigned:
         if stopped:break
         start=time.monotonic(); attempt_deadline=min(deadline,start+600)
-        trace=dict(job=copy.deepcopy(job),scripted=True,events=[])
+        trace=dict(job=copy.deepcopy(job),scripted=scripted,events=[])
+        if not scripted:
+            from screen_materializer import execution_hashes
+            trace.update(case_audit_sha256=case_sha256,execution_sha256=execution_hashes())
         row=dict(job=copy.deepcopy(job),category='budget',generation_tokens=0,
             native_observation_tokens=0,controller_observation_tokens=0,
             reservations=[],calls=[],response_ids=[],unknown_usage=False)
         try:
-            trial=protocol.QualificationTrial(job)
+            trial=factory(job)
         except Exception as exc:
             row['category']='execution';stopped=True
             write(events,dict(event='failure',attempt_id=job['attempt_id'],stage='native_initialization',error_type=type(exc).__name__,unknown_usage=False))
@@ -55,7 +74,7 @@ def qualification_chunk(chunk, backend, counter, output, deadline):
             spent=row['generation_tokens']+row['native_observation_tokens']+row['controller_observation_tokens']
             limit=6000 if turn==0 else 8192-spent-96
             remaining=attempt_deadline-time.monotonic()
-            if limit <= 0 or remaining <= 0 or counter.context(trial.messages)+limit>24576:
+            if limit <= 0 or remaining <= 0 or counter.context(trial.messages)+limit+96>24576:
                 stopped=True;break
             messages=trial.messages
             payload=dict(protocol.SAMPLING,messages=messages,max_tokens=limit)
@@ -122,9 +141,12 @@ def qualification_chunk(chunk, backend, counter, output, deadline):
                 model_response_only_full=row['category']=='full' and not row['controller_actions'],
                 controller_assisted_full=row['category']=='full' and bool(row['controller_actions']))
             (output/(job['attempt_id']+'.trace.json')).write_text(json.dumps(trace,indent=2)+'\n')
-    summary=dict(scripted=True,live_evidence=False,assigned_attempts=2,recorded_attempts=len(rows),
+    summary=dict(scripted=scripted,live_evidence=not scripted,assigned_attempts=2,recorded_attempts=len(rows),
         observed_calls=sum(len(r['calls']) for r in rows),stopped_on_failure=stopped,
         unknown_usage_calls=sum(r['unknown_usage'] for r in rows),uncalled_assignments=2-len(rows),retries=0)
+    if not scripted:
+        from screen_materializer import execution_hashes
+        summary.update(case_audit_sha256=case_sha256,execution_sha256=execution_hashes())
     (output/'complete.json').write_text(json.dumps(summary,indent=2)+'\n')
     return rows,summary
 

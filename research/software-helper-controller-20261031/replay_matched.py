@@ -1,4 +1,4 @@
-"""Independent qualification replay over original model replies and public source."""
+"""Independent Native/controller replay with distinct qualification and sealed-screen entries."""
 import copy
 from matched_protocol import QualificationTrial, canonical, digest, jobs
 
@@ -6,7 +6,20 @@ from matched_protocol import QualificationTrial, canonical, digest, jobs
 def verify(trace, counter):
     if trace.get('scripted') is not True or trace['job'] not in jobs('qualification'):
         raise ValueError('qualification replay is not live evidence')
-    trial = QualificationTrial(trace['job'])
+    return _verify(trace,counter,QualificationTrial(trace['job']),True)
+
+
+def verify_screen(trace,counter,case_audit,case_sha256):
+    from matched_protocol import materialize
+    from screen_materializer import execution_hashes
+    if (trace.get('scripted') is not False or trace['job'] not in jobs('screen')
+            or trace.get('case_audit_sha256')!=case_sha256 or trace.get('execution_sha256')!=execution_hashes()):
+        raise ValueError('exact sealed live screen trace required')
+    result=_verify(trace,counter,materialize(trace['job'],case_audit,case_sha256),False)
+    return dict(result,case_audit_sha256=case_sha256)
+
+
+def _verify(trace,counter,trial,scripted):
     events = trace['events']
     if not 1 <= len(events) <= 2:
         raise ValueError('original two-response schedule required')
@@ -20,7 +33,9 @@ def verify(trace, counter):
         limit = 6000 if turn == 0 else 8192-generated-native-receipts-96
         r = e['response']; u = r['usage']
         if (e['requested_max_tokens'] != limit or any(type(u.get(k)) is not int or u[k]<0 for k in ('prompt_tokens','completion_tokens'))
-                or not 0 < limit or u['completion_tokens'] > limit
+                or not 0 < limit or u['completion_tokens'] > limit or u['prompt_tokens']>28672
+                or counter.context(trial.messages)+limit+96>24576
+                or not isinstance(r.get('choices'),list) or len(r['choices'])!=1
                 or u['prompt_tokens']+u['completion_tokens'] > 24576):
             raise ValueError('original usage/budget differs')
         generated += u['completion_tokens']
@@ -55,6 +70,6 @@ def verify(trace, counter):
         raise ValueError('outcome or accounting differs from independent replay')
     reward=last_result.get('semantic_reward') if last_result and category in ('full','partial','wrong') else None
     terminal_reward=last_result.get('native_reward') if last_result and last_result['done'] else None
-    return dict(verified=True, scripted=True, live_evidence=False,
+    return dict(verified=True, scripted=scripted, live_evidence=not scripted,
         semantic_reward=reward, terminal_reward_observed=terminal_reward,
         finish_reason=events[-1]['response']['choices'][0]['finish_reason'], **expected)
