@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-31",
+  "intervention": "public_pass_finalize",
+  "scope": "model_plus_controller_system_attempts",
+  "source": {
+    "screen": "c1ceaa7a244e2425de86d37a3f611301b7b2e497",
+    "confirmation": "b4c07d4b13eef904806a8ea26ca41cee8d6478d0"
+  },
+  "screen": {
+    "procedural_cases": 1,
+    "attempts_per_arm": 4,
+    "actual_calls": 14,
+    "known_replies": 14,
+    "baseline": {
+      "full": 0,
+      "truncation": 4
+    },
+    "treatment": {
+      "full": 2,
+      "truncation": 2,
+      "controller_assisted_full": 2
+    },
+    "selected": true
+  },
+  "confirmation": {
+    "procedural_cases": 1,
+    "attempts_per_arm": 4,
+    "actual_calls": 16,
+    "known_replies": 16,
+    "baseline": {
+      "full": 0,
+      "truncation": 4
+    },
+    "treatment": {
+      "full": 0,
+      "truncation": 4,
+      "controller_assisted_full": 0
+    },
+    "max_accounted_context": 8353,
+    "max_completion_with_observations": 8096,
+    "passed": false,
+    "all_assigned_attempts_in_denominator": true,
+    "all_live_replies_verified": true,
+    "identical_initial_prompts_verified": true,
+    "controller_provenance_verified": true,
+    "case_disjointness_verified": true,
+    "same_method_and_sampler_verified": true
+  },
+  "metaharness": {
+    "source": "b8c3d38de41203faf633ef6dceb8452a4727b0ea",
+    "module": "fitness.mjs:scoreCell",
+    "confirmation_groups": 2,
+    "signals": [
+      0,
+      0
+    ],
+    "productive_training_group_evidence": false
+  },
+  "new_training": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "promotion": false,
+  "managed_arena_actor_equivalence_verified": false
+}

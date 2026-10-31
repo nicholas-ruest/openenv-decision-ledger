@@ -1,0 +1,30 @@
+{
+  "kind": "offline_scripted_native_qualification",
+  "base_source": "b4c07d4b13eef904806a8ea26ca41cee8d6478d0",
+  "tests_passed": 3,
+  "test_case": "software_repair-ignore-d2",
+  "existing_qualification_seed": 3100000,
+  "new_procedural_cases": 0,
+  "model_calls": 0,
+  "controller_actions_distinct_from_model_responses": true,
+  "public_pass_finalization_combined": false,
+  "matched_live_caller_ready": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "source_sha256": {
+    "test_helper_policy.py": "523f30796d43ecc24b1061f9827732441d7420589a0a0fc08ef25b95b3cc12a1",
+    "helper_policy.py": "0980ebd8a5aedf3bbb15b41d32c8f574964f4459d96e0351630acf7655f3f4c7"
+  },
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "packages": {
+    "tokenizers": "0.23.3",
+    "pydantic_core": "2.50.0",
+    "openenv": "0.6.1.dev0",
+    "openapi-pydantic": "0.6.0",
+    "pydantic": "2.14.0",
+    "pydantic-settings": "2.15.0"
+  },
+  "model_transcript_kept_actual": true,
+  "controller_receipts_separately_budgeted": true,
+  "test_log_sha256": "cd57be5bc6d9ee123c47d3ff9008a553d98cf7609f4b6d43d1c57d78b40b7e5b"
+}

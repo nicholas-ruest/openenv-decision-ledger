@@ -1,0 +1,30 @@
+{
+  "kind": "posthoc_public_source_helper_preservation",
+  "original_assigned": 8,
+  "original_first_replies": 8,
+  "eligible_complete_proposals": 8,
+  "transformed_proposals": 7,
+  "comparable_public_field_reviews": 6,
+  "public_field_review_unavailable": 2,
+  "review_kind_pairs": {
+    "candidate_rejected -> candidate_rejected": 2,
+    "public_field_check -> public_field_check": 6
+  },
+  "original_all_public_pass": 0,
+  "preserved_all_public_pass": 0,
+  "public_field_improved": 2,
+  "public_field_regressed": 0,
+  "skip_reasons": {},
+  "original_source": "b4c07d4b13eef904806a8ea26ca41cee8d6478d0",
+  "original_assessment_sha256": "b49882d1cfcd0a7d62a8809c12a7a47e88abba43435f3290ef3c2a4f560a4b5b",
+  "policy_sha256": "0980ebd8a5aedf3bbb15b41d32c8f574964f4459d96e0351630acf7655f3f4c7",
+  "analysis_sha256": "66071a0a6ba1ffe1c46ef01b2614688623d0c423cc03b9888e8b56b032a0d7d6",
+  "row_digest": "8cc10a8318a4a65b4fef4a452b3c5b8ae185d9b58c35a9bf2b4e3662ba4567d5",
+  "hidden_final_grades_consulted": false,
+  "controller_authored_counterfactual": true,
+  "new_model_calls": 0,
+  "new_procedural_cases": 0,
+  "candidate_measured": false,
+  "model_improvement": false,
+  "leaderboard_gain": false
+}
