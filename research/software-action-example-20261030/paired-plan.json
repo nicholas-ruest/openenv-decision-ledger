@@ -1,0 +1,179 @@
+{
+  "namespace": "action-instance-example-20261030",
+  "task_id": "software_repair-ignore-d2",
+  "arms": [
+    "schema_only",
+    "action_example"
+  ],
+  "screen_jobs": [
+    {
+      "namespace": "action-instance-example-20261030",
+      "phase": "screen",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3100000,
+      "sample": 0,
+      "arm": "schema_only",
+      "attempt_id": "cf6b29bf7ec53c5a10dbc43b1c20f9834cd1e72f66405a0a4dbfcaa6e7f45a71"
+    },
+    {
+      "namespace": "action-instance-example-20261030",
+      "phase": "screen",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3100000,
+      "sample": 0,
+      "arm": "action_example",
+      "attempt_id": "76006049a7e069c28e894c64d398eee002447ee3753d67b428b7e33a7569e757"
+    },
+    {
+      "namespace": "action-instance-example-20261030",
+      "phase": "screen",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3100000,
+      "sample": 1,
+      "arm": "action_example",
+      "attempt_id": "0ff3d67e59d2742cee155df85bd64bfdd2f338a8be9283ffbf89a47b228caebe"
+    },
+    {
+      "namespace": "action-instance-example-20261030",
+      "phase": "screen",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3100000,
+      "sample": 1,
+      "arm": "schema_only",
+      "attempt_id": "a1ca77041b2a55ab3d32edba2e668e7a2a3fb7ac4bbf3c3210e5a536ff5f0ae0"
+    },
+    {
+      "namespace": "action-instance-example-20261030",
+      "phase": "screen",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3100000,
+      "sample": 2,
+      "arm": "schema_only",
+      "attempt_id": "9412401eefaddce1b784ea638c17de015f5d40add9463f10f968803ce9e0b6ee"
+    },
+    {
+      "namespace": "action-instance-example-20261030",
+      "phase": "screen",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3100000,
+      "sample": 2,
+      "arm": "action_example",
+      "attempt_id": "b27a4618c827b7ca9ecc5fc4e21f5bf044c1e1f112649b5e2c364020d1d61ec8"
+    },
+    {
+      "namespace": "action-instance-example-20261030",
+      "phase": "screen",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3100000,
+      "sample": 3,
+      "arm": "action_example",
+      "attempt_id": "5f077d7788ba739949148de9d9d5b7ba47a5673b43ba0f1250cc9ef2c4ed6f3a"
+    },
+    {
+      "namespace": "action-instance-example-20261030",
+      "phase": "screen",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3100000,
+      "sample": 3,
+      "arm": "schema_only",
+      "attempt_id": "b0ccc4ca0844eaff5ee8c2f9f6903c77250f52c814f96448e98e5a1a1389822f"
+    }
+  ],
+  "confirmation_jobs": [
+    {
+      "namespace": "action-instance-example-20261030",
+      "phase": "confirmation",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3110000,
+      "sample": 0,
+      "arm": "schema_only",
+      "attempt_id": "c3602e149e94ce658854199cfafbb481d2ef36108e602685af29ad05efc5a378"
+    },
+    {
+      "namespace": "action-instance-example-20261030",
+      "phase": "confirmation",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3110000,
+      "sample": 0,
+      "arm": "action_example",
+      "attempt_id": "d08cbb58337737fe265693c40ac0e7a6e7cc11893767b877457260d2979bd77c"
+    },
+    {
+      "namespace": "action-instance-example-20261030",
+      "phase": "confirmation",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3110000,
+      "sample": 1,
+      "arm": "action_example",
+      "attempt_id": "f334d6bf290ce3e6e30815e925a1c9e1f62d8d9dd746312de8ed075afab57e4c"
+    },
+    {
+      "namespace": "action-instance-example-20261030",
+      "phase": "confirmation",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3110000,
+      "sample": 1,
+      "arm": "schema_only",
+      "attempt_id": "96c601f854ff6c63d4f7d0d90acec1fd64581d5216e28d76d333b86e0e1d878f"
+    },
+    {
+      "namespace": "action-instance-example-20261030",
+      "phase": "confirmation",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3110000,
+      "sample": 2,
+      "arm": "schema_only",
+      "attempt_id": "b89d8435d80689618343c1c29a6b43e9b411815d3297cbb1df20be3146ebee99"
+    },
+    {
+      "namespace": "action-instance-example-20261030",
+      "phase": "confirmation",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3110000,
+      "sample": 2,
+      "arm": "action_example",
+      "attempt_id": "c88f6625a9a9b40aa3d54e833be4502a14dc7c57e50d58bb01a0014596abed14"
+    },
+    {
+      "namespace": "action-instance-example-20261030",
+      "phase": "confirmation",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3110000,
+      "sample": 3,
+      "arm": "action_example",
+      "attempt_id": "6b14db70db67a8105867a023c27eab852806cc60b6b212774438d5e78faf3b9a"
+    },
+    {
+      "namespace": "action-instance-example-20261030",
+      "phase": "confirmation",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3110000,
+      "sample": 3,
+      "arm": "schema_only",
+      "attempt_id": "5cd0a79b071e45e6d29950ece1b85eef3d0b98472509139e37bfd4626a9dc640"
+    }
+  ],
+  "sampling": {
+    "model": "Qwen/Qwen3.8-27B:deepinfra",
+    "temperature": 0.7,
+    "response_format": {
+      "type": "json_object"
+    }
+  },
+  "max_attempts": 8,
+  "max_calls": 16,
+  "max_calls_per_chunk": 4,
+  "retries": 0,
+  "first_generation_limit": 6000,
+  "completion_with_observations": 8192,
+  "context": 24576,
+  "reserved_final_observation_tokens": 96,
+  "attempt_wall_seconds": 600,
+  "confirmation_observations_materialized": false,
+  "case_disjointness_verified": false,
+  "paid_execution_ready": false,
+  "selection": "Complete eight original assignments with independently verified usage, no provider or budget failure, positive treatment full-solve delta and nonnegative semantic delta. Preserve every failure in the denominator. Bind the exact treatment-only note before screen execution. Freeze selection before unchanged fresh disjoint confirmation.",
+  "is_training": false,
+  "model_improvement": false,
+  "leaderboard_gain": false
+}
