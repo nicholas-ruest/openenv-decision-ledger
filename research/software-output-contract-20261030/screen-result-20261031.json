@@ -1,0 +1,28 @@
+{
+  "source": "67d23ab24220fab022f2eb58bffc81d951b092c5",
+  "phase": "screen",
+  "assigned_attempts": 8,
+  "underlying_cases": 1,
+  "samples_per_arm": 4,
+  "actual_calls": 16,
+  "known_replies": 16,
+  "standard_contract": {
+    "full": 0,
+    "truncation": 4
+  },
+  "explicit_contract": {
+    "full": 0,
+    "truncation": 4
+  },
+  "full_rate_delta": 0,
+  "semantic_grade_available": false,
+  "selection_passed": false,
+  "confirmation_materialized": false,
+  "promotion": false,
+  "is_training": false,
+  "leaderboard_gain": false,
+  "max_accounted_context": 8082,
+  "max_completion_with_observations": 8096,
+  "assessment_sha256": "241bc3499484808b3b62349e47d1c2411a5d1bcf7090599c9c530c188502a2bc",
+  "private_prompts_published": false
+}
