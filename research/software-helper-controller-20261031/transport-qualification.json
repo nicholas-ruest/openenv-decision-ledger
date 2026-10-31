@@ -1,0 +1,24 @@
+{
+  "base_source": "ab4dd95565b1de80413f1cf93ebb157b00e88dd0",
+  "targeted_tests_passed": 6,
+  "scripted_worker_controls_only": true,
+  "real_provider_constructor_called": false,
+  "new_model_calls": 0,
+  "new_procedural_cases": 0,
+  "allocation_mutated": false,
+  "qualification_seed": 3100000,
+  "actual_local_supervisor_completion_verified": true,
+  "actual_local_supervisor_timeout_shutdown_verified": true,
+  "remote_provider_cancellation_attested": false,
+  "live_execution_ready": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "test_log_sha256": "e5966cc9e8197ef2689f5b4e172914884ba7c22b86d00026fb334e1bb362ef1e",
+  "source_sha256": {
+    "transport_bridge.py": "d62fd038efcfd662bc796148ac97308c9aab0c1afd0e3a29a2b94681a3f86df1",
+    "test_transport_bridge.py": "1c1bd4f9637a296baf8597026511b3dc605bbc9419e4d694897f6e00dc6fb02f",
+    "transport-source-pins.json": "e6f700cc44297daf836fd9d36fc533f6b322668cf48769dc099f38317d0adfd9",
+    "finite_caller.py": "3fd40e85282d8e8ee1a0139f652b2b2e6d407fc9d94bf2f09d9566d30a699639",
+    "matched_protocol.py": "fbc41e441fbdd12fc271ea3413980adcfebc8ea44edc052ee44b2c3ac872b500"
+  }
+}
