@@ -98,7 +98,8 @@ class HelperPreservationPolicy:
                 applied_before_native_step=True)
                 for a in self.controller_actions[controller_before:]]
             for obs in controller_observations:
-                self.trial.messages.append(dict(role='user', content=json.dumps(obs, sort_keys=True)))
+                self.trial.messages.append(dict(role='user', content=json.dumps(obs,
+                    sort_keys=True, separators=(',', ':'), allow_nan=False)))
         self.model_responses += 1
         return dict(result, model_responses=self.model_responses,
             controller_actions=copy.deepcopy(self.controller_actions),
