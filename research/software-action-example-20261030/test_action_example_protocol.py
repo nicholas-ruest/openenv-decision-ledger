@@ -1,5 +1,6 @@
 """Offline assignment tests only. These fixtures are not Native/model results."""
 import copy
+import json
 import unittest
 from unittest.mock import patch
 import action_example_protocol as protocol
@@ -68,6 +69,7 @@ class PlanTests(unittest.TestCase):
         self.assertEqual([j for b in bundles for j in b['screen_jobs']], protocol.schedule('screen'))
         self.assertTrue(all(len(b['screen_jobs']) == 2 for b in bundles))
         self.assertTrue(all(not b['case_disjointness_verified'] for b in bundles))
+        self.assertTrue(all(json.loads(json.dumps(b)) == b for b in bundles))
 
 
 if __name__ == '__main__': unittest.main()

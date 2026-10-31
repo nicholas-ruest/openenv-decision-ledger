@@ -113,7 +113,7 @@ def capture(job):
 
 
 def plan():
-    return dict(namespace=NAMESPACE, task_id=TASK, arms=ARMS,
+    return dict(namespace=NAMESPACE, task_id=TASK, arms=list(ARMS),
                 screen_jobs=schedule('screen'), confirmation_jobs=schedule('confirmation'),
                 sampling=copy.deepcopy(SAMPLING), max_attempts=8, max_calls=16,
                 max_calls_per_chunk=4, retries=0, first_generation_limit=6000,
