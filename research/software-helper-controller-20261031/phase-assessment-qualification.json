@@ -1,0 +1,28 @@
+{
+  "base_source": "23c653b2af9b0e2fd791996930614107b695c8ed",
+  "targeted_tests_passed": 7,
+  "scripted_controls_only": true,
+  "qualification_seed": 3100000,
+  "assigned_in_complete_control": 8,
+  "scripted_chunks_in_complete_control": 4,
+  "actual_metaharness_module": "fitness.mjs:scoreCell",
+  "metaharness_source": "b8c3d38de41203faf633ef6dceb8452a4727b0ea",
+  "model_outcomes_measured": false,
+  "new_model_calls": 0,
+  "new_procedural_cases": 0,
+  "allocation_mutated": false,
+  "live_evidence_supported": false,
+  "production_materialization_refused": true,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "test_log_sha256": "fbe7f2cfb48bda66ec200764dfa56a7006b43491b4572b49e71bf3f714a0f20c",
+  "source_sha256": {
+    "assemble_phase.py": "c7932dd71ba72c853686626d2f8c249dd5777d436fb23e8159796c6a700b8723",
+    "assess_qualification.mjs": "daf56bb181bdd5babffb4d7bf07fcfaef80436210729efcc5008457b4df8b4c0",
+    "test_phase_assessment.py": "844087014d45334dca9d32afe5a302d67858fb855ef320a8048abe5e84e9d400",
+    "replay_matched.py": "a91d00821ae1e48b7a54132077c511bdd44e88b69aeed6603de86023b3378357",
+    "finite_caller.py": "3fd40e85282d8e8ee1a0139f652b2b2e6d407fc9d94bf2f09d9566d30a699639",
+    "matched_protocol.py": "fbc41e441fbdd12fc271ea3413980adcfebc8ea44edc052ee44b2c3ac872b500",
+    "helper_policy.py": "1b2b025271be342769c549b8858118e75ccb756cbb380551b97173432e6c7638"
+  }
+}

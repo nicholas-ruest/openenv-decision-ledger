@@ -13,6 +13,7 @@ def verify(trace, counter):
     generated = native = receipts = 0
     category = None
     terminal = False
+    last_result = None
     for turn, e in enumerate(events):
         if terminal or e['prompt_sha256'] != digest(trial.messages):
             raise ValueError('actual model transcript changed or resumed')
@@ -32,6 +33,7 @@ def verify(trace, counter):
         if choice['finish_reason'] != 'stop':
             raise ValueError('unsupported provider outcome')
         result = trial.consume(choice['message']['content'])
+        last_result = result
         if (e['native_observations'] != result['new_observations']
                 or e['controller_observations'] != result['controller_observations']
                 or e['controller_actions'] != result['controller_actions']):
@@ -51,4 +53,8 @@ def verify(trace, counter):
         controller_assisted_full=category=='full' and bool(trial.policy.controller_actions))
     if trace['record'] != expected:
         raise ValueError('outcome or accounting differs from independent replay')
-    return dict(verified=True, scripted=True, live_evidence=False, **expected)
+    reward=last_result.get('semantic_reward') if last_result and category in ('full','partial','wrong') else None
+    terminal_reward=last_result.get('native_reward') if last_result and last_result['done'] else None
+    return dict(verified=True, scripted=True, live_evidence=False,
+        semantic_reward=reward, terminal_reward_observed=terminal_reward,
+        finish_reason=events[-1]['response']['choices'][0]['finish_reason'], **expected)
