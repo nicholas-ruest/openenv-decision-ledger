@@ -1,0 +1,33 @@
+{
+  "status": "offline_native_qualified_prototype",
+  "base_source": "67d23ab24220fab022f2eb58bffc81d951b092c5",
+  "method": "Fixed action-instance example in initial reset prompt only",
+  "task_id": "software_repair-ignore-d2",
+  "arms": [
+    "schema_only",
+    "action_example"
+  ],
+  "native_tests_passed": 7,
+  "native_test_seconds": 3.301,
+  "native_test_log_sha256": "f1a0f32182b7a5e32e4471eb5d7150810470f6b02426b67322ac8af546113241",
+  "native_python_files_unchanged": 17,
+  "files": {
+    "action_example_environment.py": "2b7e8d2320748e3c8ce0226e966399ee2dbe11335806f349db07a612dbec174f",
+    "test_action_example_environment.py": "f0259cf9588e551337ba2236af6ba900f6cbf409f5ae899d432fd14f0707f1e4"
+  },
+  "model_calls": 0,
+  "is_training": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "paid_execution_ready": false,
+  "paired_protocol_frozen": false,
+  "screen_inputs_materialized": false,
+  "confirmation_inputs_materialized": false,
+  "image_built": false,
+  "arena_actor_equivalence_attested": false,
+  "remaining": [
+    "Bind separate paired protocol, source and budgets; verify original-problem identity and treatment-only prompt difference.",
+    "Admit only after fresh account/receipt reconciliation and writable durable reservation/response storage.",
+    "Require positive complete screen under frozen gate, then fresh disjoint confirmation without redesign. Original output-contract study remains independent and first in queue."
+  ]
+}
