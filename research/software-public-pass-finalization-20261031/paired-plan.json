@@ -1,0 +1,179 @@
+{
+  "namespace": "public-pass-finalize-20261031",
+  "task_id": "software_repair-ignore-d2",
+  "arms": [
+    "standard_revision",
+    "public_pass_finalize"
+  ],
+  "screen_jobs": [
+    {
+      "namespace": "public-pass-finalize-20261031",
+      "phase": "screen",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3120000,
+      "sample": 0,
+      "arm": "standard_revision",
+      "attempt_id": "e86dd035f349dfe221e3b882b5e71dc0443dddccbb91414a73bbb4cd09a8dcb2"
+    },
+    {
+      "namespace": "public-pass-finalize-20261031",
+      "phase": "screen",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3120000,
+      "sample": 0,
+      "arm": "public_pass_finalize",
+      "attempt_id": "7647fdb6b36dddbafbd0cd1b43ff38f124d41444e442a91cdd4625c68a069c73"
+    },
+    {
+      "namespace": "public-pass-finalize-20261031",
+      "phase": "screen",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3120000,
+      "sample": 1,
+      "arm": "public_pass_finalize",
+      "attempt_id": "27c6a2b45c564d5fd52b64eaf3a40287f0d6409400dfe5128b1ab56601818dcf"
+    },
+    {
+      "namespace": "public-pass-finalize-20261031",
+      "phase": "screen",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3120000,
+      "sample": 1,
+      "arm": "standard_revision",
+      "attempt_id": "68b146129a0000aa99a0bf444a668c7a8fd6b8c568f04c04b34c3c31efdf86ec"
+    },
+    {
+      "namespace": "public-pass-finalize-20261031",
+      "phase": "screen",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3120000,
+      "sample": 2,
+      "arm": "standard_revision",
+      "attempt_id": "96092ac37844f8de375b1762a677f79b8cf813ba85c1932ad20c45df9db47bdd"
+    },
+    {
+      "namespace": "public-pass-finalize-20261031",
+      "phase": "screen",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3120000,
+      "sample": 2,
+      "arm": "public_pass_finalize",
+      "attempt_id": "d3043767db9c6b2648b1fc8c0db0c43bfe9ffff322b549877f087b1ea357b5f1"
+    },
+    {
+      "namespace": "public-pass-finalize-20261031",
+      "phase": "screen",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3120000,
+      "sample": 3,
+      "arm": "public_pass_finalize",
+      "attempt_id": "04fa37a8bb834dde1a11a59a20eecc4b92f7af988017151b9b9c2359cc869a26"
+    },
+    {
+      "namespace": "public-pass-finalize-20261031",
+      "phase": "screen",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3120000,
+      "sample": 3,
+      "arm": "standard_revision",
+      "attempt_id": "ca82554c5796bb3581b83102f24a53b334996d41b966a8cbd3a8dad54ad5c119"
+    }
+  ],
+  "confirmation_jobs": [
+    {
+      "namespace": "public-pass-finalize-20261031",
+      "phase": "confirmation",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3130000,
+      "sample": 0,
+      "arm": "standard_revision",
+      "attempt_id": "041b7458340474905f0ac9c6ce5b1ac59c8d306b74e55a85608aa9b85c517a6b"
+    },
+    {
+      "namespace": "public-pass-finalize-20261031",
+      "phase": "confirmation",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3130000,
+      "sample": 0,
+      "arm": "public_pass_finalize",
+      "attempt_id": "8769eed2c403aa803d070351a1a88204e0f2b5bea24042bc93c23d3645b03156"
+    },
+    {
+      "namespace": "public-pass-finalize-20261031",
+      "phase": "confirmation",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3130000,
+      "sample": 1,
+      "arm": "public_pass_finalize",
+      "attempt_id": "862615c30847c64895a226be1dc71a62c9304e9c08503896f2dbb12df084532c"
+    },
+    {
+      "namespace": "public-pass-finalize-20261031",
+      "phase": "confirmation",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3130000,
+      "sample": 1,
+      "arm": "standard_revision",
+      "attempt_id": "7a359a20cf1f901c356698f114ffa2aea319f0cc6daec8ea31c4e4baf66bcf9d"
+    },
+    {
+      "namespace": "public-pass-finalize-20261031",
+      "phase": "confirmation",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3130000,
+      "sample": 2,
+      "arm": "standard_revision",
+      "attempt_id": "7cec41e33e20a329cad79d05576bcf0273b7747d45d588e05312a541038fc23c"
+    },
+    {
+      "namespace": "public-pass-finalize-20261031",
+      "phase": "confirmation",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3130000,
+      "sample": 2,
+      "arm": "public_pass_finalize",
+      "attempt_id": "27e044bf6685b5916a5e974832d44ef2b1005615ec6706583d6d4b3df3f6e7ef"
+    },
+    {
+      "namespace": "public-pass-finalize-20261031",
+      "phase": "confirmation",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3130000,
+      "sample": 3,
+      "arm": "public_pass_finalize",
+      "attempt_id": "c389513e21f08cab7ef20a3099b5bcfdb209a843a83c61667131af17d322538f"
+    },
+    {
+      "namespace": "public-pass-finalize-20261031",
+      "phase": "confirmation",
+      "task_id": "software_repair-ignore-d2",
+      "seed": 3130000,
+      "sample": 3,
+      "arm": "standard_revision",
+      "attempt_id": "4d874c37b3a450a5561b74a826504c88ecb10c38b0c5aaa8ad573b3b6b3f5b27"
+    }
+  ],
+  "sampling": {
+    "model": "Qwen/Qwen3.8-27B:deepinfra",
+    "temperature": 0.7,
+    "response_format": {
+      "type": "json_object"
+    }
+  },
+  "max_attempts": 8,
+  "max_calls": 16,
+  "max_calls_per_chunk": 4,
+  "retries": 0,
+  "first_generation_limit": 6000,
+  "completion_with_observations": 8192,
+  "context": 24576,
+  "reserved_final_observation_tokens": 96,
+  "attempt_wall_seconds": 600,
+  "confirmation_observations_materialized": false,
+  "case_disjointness_verified": false,
+  "paid_execution_ready": false,
+  "selection": "Complete eight original assignments with independently verified usage, no provider or budget failure, positive treatment full-solve delta and nonnegative semantic delta. Preserve every failure in the denominator. Bind the public-only controller decision before screen execution. Freeze selection before unchanged fresh disjoint confirmation.",
+  "is_training": false,
+  "model_improvement": false,
+  "leaderboard_gain": false
+}
