@@ -87,8 +87,18 @@ class FiniteCallerTests(unittest.TestCase):
             inputs=Path(t)/'inputs.json';inputs.write_text(json.dumps(self.bundle))
             args=SimpleNamespace(inputs=inputs,inputs_sha256=self.protocol.digest(self.bundle),prior=[],
                 case_audit=Path(t)/'missing-audit',case_audit_sha256='0'*64)
-            with patch.object(caller,'LiveBackend') as backend:
+            with patch.object(caller,'LIVE_CASE_AUDIT_SHA256',None), patch.object(caller,'LiveBackend') as backend:
                 with self.assertRaisesRegex(ValueError,'unsealed'):
+                    caller.execute(time.monotonic()+90,args)
+                backend.assert_not_called()
+
+    def test_execute_refuses_wrong_sealed_inventory_before_backend_or_route(self):
+        with tempfile.TemporaryDirectory() as t:
+            inputs=Path(t)/'inputs.json';inputs.write_text(json.dumps(self.bundle))
+            args=SimpleNamespace(inputs=inputs,inputs_sha256=self.protocol.digest(self.bundle),prior=[],
+                case_audit=Path(t)/'missing-audit',case_audit_sha256='0'*64)
+            with patch.object(caller,'LIVE_CASE_AUDIT_SHA256','a'*64), patch.object(caller,'LiveBackend') as backend:
+                with self.assertRaisesRegex(ValueError,'sealed case audit differs'):
                     caller.execute(time.monotonic()+90,args)
                 backend.assert_not_called()
 
