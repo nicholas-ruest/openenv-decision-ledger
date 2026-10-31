@@ -5,7 +5,7 @@ from diagnostic_app import app,ProposalAction,RevisionObservation
 from repair_env.direct_environment import DirectRepairEnvironment
 from repair_env.environment import RepairAction
 from repair_env.tasks import make_task
-TASK='software_repair-ignore-d3'
+TASK='software_repair-ignore-d2'
 SEED=3080000
 
 def exchange(ws,kind,data):

@@ -11,14 +11,14 @@ class ContractParityTests(unittest.TestCase):
         for seed in (42, 710, 4022):
             a = ContractEnvironment(arm='standard_contract')
             b = ContractEnvironment(arm='explicit_contract')
-            one = a.reset(task_id='software_repair-ignore-d3', seed=seed).model_dump()
-            two = b.reset(task_id='software_repair-ignore-d3', seed=seed).model_dump()
+            one = a.reset(task_id='software_repair-ignore-d2', seed=seed).model_dump()
+            two = b.reset(task_id='software_repair-ignore-d2', seed=seed).model_dump()
             self.assertEqual(two.pop('prompt'), one.pop('prompt') + CONTRACT_NOTE)
             self.assertEqual(one, two)
             self.assertEqual(a._direct._core._task, b._direct._core._task)
 
     def test_equal_proposals_have_equal_public_feedback_and_native_grades(self):
-        task = make_task('software_repair-ignore-d3', 42)
+        task = make_task('software_repair-ignore-d2', 42)
         for source in (task.initial_source, task.reference_source):
             a = ContractEnvironment(arm='standard_contract')
             b = ContractEnvironment(arm='explicit_contract')

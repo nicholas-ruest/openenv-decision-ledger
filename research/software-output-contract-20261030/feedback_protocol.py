@@ -51,7 +51,7 @@ def schedule(phase):
     rows=[]
     for sample in range(4):
         for arm in ARMS if sample%2==0 else reversed(ARMS):
-            job=dict(namespace=NAMESPACE,phase=phase,task_id='software_repair-ignore-d3',
+            job=dict(namespace=NAMESPACE,phase=phase,task_id='software_repair-ignore-d2',
                 seed=SEEDS[phase],sample=sample,arm=arm)
             rows.append(dict(job,attempt_id=digest(job)))
     return rows
