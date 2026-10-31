@@ -1,0 +1,39 @@
+{
+  "status": "posthoc_futility_stop",
+  "phase": "confirmation",
+  "source": "e3ed902b693cc1669397d7b090d96205c870aa82",
+  "assigned_attempts": 8,
+  "recorded_attempts": 6,
+  "uncalled_assignments": 2,
+  "posthoc_stop_not_preregistered": true,
+  "reason": "Even a treatment win and control failure on the remaining pair can only tie 2/4; the required strict positive full-solve delta is impossible.",
+  "outcomes": {
+    "module_review": {
+      "assigned": 4,
+      "full": 2,
+      "wrong": 1,
+      "uncalled": 1
+    },
+    "function_review": {
+      "assigned": 4,
+      "full": 1,
+      "partial": 1,
+      "execution": 1,
+      "uncalled": 1
+    }
+  },
+  "actual_calls": 11,
+  "known_replies": 11,
+  "generation_tokens": 38869,
+  "all_called_replies_verified": true,
+  "all_assigned_phase_complete": false,
+  "fresh_disjoint_case_verified": true,
+  "fresh_confirmation_verified": false,
+  "selection_passed": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "promotion": false,
+  "metaharness_scoring_performed": false,
+  "metaharness_unavailable_reason": "Incomplete four-sample groups; uncalled records were not fabricated.",
+  "case_audit_sha256": "7a3db3a2a480aa809c6cfbed4133bd21c2c2212fb237727221db444c818a4abe"
+}
