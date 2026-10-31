@@ -1,0 +1,48 @@
+{
+  "tested_base_source": "484fa11b6192f6ecea831041342f85d494e7e919",
+  "qualification": "actual_native_trial_and_source_sdk_transport",
+  "sdk_revision": "86a180ede21e044f7929b9a7783ad83aa67d83a3",
+  "sdk_version": "0.6.1.dev0",
+  "requirements_lock_sha256": "3fbed6fc6af3931cdacd290353a02ba1740222974c91a022145ec4e6a5f3a347",
+  "broken_requirements": false,
+  "tests": {
+    "environment_native": 7,
+    "trial_native": 5,
+    "http_websocket_native": 3,
+    "offline_protocol": 5,
+    "total": 20
+  },
+  "logs": {
+    "native_and_protocol": {
+      "sha256": "168deec3293ba30e68d6644f16d848b9f64354dbd8e035c00ff0ebc3d7002381",
+      "tests": 17,
+      "seconds": 4.813
+    },
+    "sdk": {
+      "sha256": "9c1d5137ada887a54fde08d76b0b04d6140c5c709fb148885bb917e18e02c137",
+      "tests": 3,
+      "seconds": 1.123
+    }
+  },
+  "native_files_unchanged_from": "bc9a7fab8392c17a6f1d4bf27a6aa50c92df9ebb",
+  "native_file_count": 17,
+  "screen_case_materialized_for_native_controls": true,
+  "screen_inputs_frozen": false,
+  "confirmation_materialized": false,
+  "case_disjointness_verified": false,
+  "actual_model_calls": 0,
+  "is_training": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "paid_execution_ready": false,
+  "image_built": false,
+  "arena_actor_equivalence_attested": false,
+  "ruos_accessed": false,
+  "financial_counters_modified": false,
+  "pending": [
+    "Independent overlap audit against every earlier materialized case before input freezing",
+    "Separate live assessment and independently verified trace replay",
+    "Finite caller/source/admission binding and fresh complete financial reconciliation",
+    "Writable durable ruOS reservation and response storage within operating hours"
+  ]
+}
