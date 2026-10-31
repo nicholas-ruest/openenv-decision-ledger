@@ -1,0 +1,140 @@
+{
+  "analysis_source": "9ab273f7bde6c73be9fb62db40e2aba1c0acdfbe",
+  "source_sha256": "2979a1126e5b4e932d9825dd61426ae1423eb27382fe83e7f83662bbc67344b6",
+  "studies": [
+    {
+      "analysis": "posthoc_public_triggered_first_proposal_retention",
+      "archive_digests": [
+        {
+          "chunk": 0,
+          "events_sha256": "9776cdf4e5e45e7d460b3d7a0c186a330de77b3495c3489fd0d6fc1bdcece7e9",
+          "records_sha256": "b004d84730f00f8792f0df859a5ca2b378383fd6c7650203929aaae4eb286752"
+        },
+        {
+          "chunk": 1,
+          "events_sha256": "ccf026a68c84c4e3dceda74ab70372e38482fa2c30bbb9de7f9dd1757ecbe493",
+          "records_sha256": "1e2f7e1ee040b449b3081c51fad89228f086c7ca8832cacb3f7f8eef66877410"
+        },
+        {
+          "chunk": 2,
+          "events_sha256": "c7fa97a3a498b0f26c338b6874421de9701dfe73032300eb12946d9c6ee5e67c",
+          "records_sha256": "1d3dd20442b4ad7cff864243924eceef32f1399fa7d5454f6033a3779ba7f098"
+        },
+        {
+          "chunk": 3,
+          "events_sha256": "482a4d253686ae9405e41c4c530a5765c89442833ac7543318f239bd0fc3a20f",
+          "records_sha256": "3493dc57c978199d92ead26fd6a39986410ccaf349ef43438d3475b8a14824d0"
+        }
+      ],
+      "candidate_measured": false,
+      "controller_authored_counterfactual": true,
+      "fresh_cases": 0,
+      "groups": {
+        "explicit_contract": {
+          "actual_categories": {
+            "truncation": 4
+          },
+          "eligible": 0,
+          "eligible_actual_categories": {},
+          "recorded": 4,
+          "retained_categories": {},
+          "truncations_with_full_first_proposal": 0
+        },
+        "standard_contract": {
+          "actual_categories": {
+            "truncation": 4
+          },
+          "eligible": 2,
+          "eligible_actual_categories": {
+            "truncation": 2
+          },
+          "recorded": 4,
+          "retained_categories": {
+            "full": 2
+          },
+          "truncations_with_full_first_proposal": 2
+        }
+      },
+      "is_training": false,
+      "leaderboard_gain": false,
+      "model_improvement": false,
+      "new_model_calls": 0,
+      "original_assigned": 8,
+      "original_calls": 16,
+      "original_known_replies": 16,
+      "original_recorded": 8,
+      "protocol": "output_contract",
+      "row_digest": "02b1d8209d3fbbe186853c46c4e90713d4d61013fa8f61f9d38040eb76f5ba54",
+      "source": "67d23ab24220fab022f2eb58bffc81d951b092c5",
+      "trigger_uses_hidden_grade": false
+    },
+    {
+      "analysis": "posthoc_public_triggered_first_proposal_retention",
+      "archive_digests": [
+        {
+          "chunk": 0,
+          "events_sha256": "ca6622ebc08410069cfb34f603691c8666b6d7baebda37ccd8d0118a86f1f4ba",
+          "records_sha256": "bc3908072826389d8f233cca6a70fc3873cbadced61f78849e59d3b2c2d2f2e0"
+        },
+        {
+          "chunk": 1,
+          "events_sha256": "0daf39c517685da0198bb6d517f69cc4a4942993cbbd2b98ae80f07900e7cdd3",
+          "records_sha256": "2e983b17a41aa396f4a5b63fa2f129d8f10f0b69979803be62e598a9b5206bf2"
+        },
+        {
+          "chunk": 2,
+          "events_sha256": "d4bd75188dc3f6e3b1614cf10f02c03dabf4d428c8bcc8ca75ebfa1faab16121",
+          "records_sha256": "4baa5e6e51ba03f7b0c596f41dd2c34cd14d63ff2b3ac90946d0b1049688f751"
+        }
+      ],
+      "candidate_measured": false,
+      "controller_authored_counterfactual": true,
+      "fresh_cases": 0,
+      "groups": {
+        "action_example": {
+          "actual_categories": {
+            "truncation": 3
+          },
+          "eligible": 0,
+          "eligible_actual_categories": {},
+          "recorded": 3,
+          "retained_categories": {},
+          "truncations_with_full_first_proposal": 0
+        },
+        "schema_only": {
+          "actual_categories": {
+            "full": 1,
+            "truncation": 2
+          },
+          "eligible": 2,
+          "eligible_actual_categories": {
+            "full": 1,
+            "truncation": 1
+          },
+          "recorded": 3,
+          "retained_categories": {
+            "full": 2
+          },
+          "truncations_with_full_first_proposal": 1
+        }
+      },
+      "is_training": false,
+      "leaderboard_gain": false,
+      "model_improvement": false,
+      "new_model_calls": 0,
+      "original_assigned": 8,
+      "original_calls": 12,
+      "original_known_replies": 12,
+      "original_recorded": 6,
+      "protocol": "action_example",
+      "row_digest": "218150cd1b54cda042ca1577e8b8c46367c3c319e8cfa0018ac1ac8bc6d4c76d",
+      "source": "b033f54a92e6c151bcbdfe805bbdb247f516b848",
+      "trigger_uses_hidden_grade": false
+    }
+  ],
+  "new_model_calls": 0,
+  "cases_are_fresh": false,
+  "candidate_measured": false,
+  "model_improvement": false,
+  "leaderboard_gain": false
+}
