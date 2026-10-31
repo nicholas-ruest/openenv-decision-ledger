@@ -1,0 +1,46 @@
+{
+  "source": "5cf4137e24b4c12610c0094f6b8426e4781a40f8",
+  "native_package": "bc9a7fab8392c17a6f1d4bf27a6aa50c92df9ebb",
+  "assigned_attempts": 8,
+  "attempts_per_arm": 4,
+  "actual_model_calls": 16,
+  "known_replies": 16,
+  "all_requests_identities_usage_native_grades_verified": true,
+  "results": {
+    "standard_review": {
+      "full": 2,
+      "wrong": 1,
+      "truncation": 1,
+      "semantic_mean": 0.5,
+      "generation_tokens": 30896
+    },
+    "diagnostic_review": {
+      "full": 3,
+      "partial": 1,
+      "semantic_mean": 0.9875,
+      "generation_tokens": 30726
+    }
+  },
+  "actual_runtime_diagnostic_exposures": {
+    "standard_review": 0,
+    "diagnostic_review": 0
+  },
+  "nominal_full_rate_delta": 0.25,
+  "nominal_semantic_delta": 0.4875,
+  "selection_passed": false,
+  "selection_failure": "No treatment runtime diagnostic was actually exposed. Nominal between-group differences are not attributable to this intervention.",
+  "confirmation_materialized": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "is_training": false,
+  "all_workers_stopped": true,
+  "max_context": 7845,
+  "max_generation_plus_observations": 8105,
+  "actual_generation_tokens": 61622,
+  "limits": {
+    "generation_plus_observations": 8192,
+    "context": 24576,
+    "first_generation": 6000
+  },
+  "metaharness_pin": "b8c3d38de41203faf633ef6dceb8452a4727b0ea"
+}
