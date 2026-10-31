@@ -1,0 +1,27 @@
+{
+  "base_source": "ebb49401be85b557edb6637b31943973b3db8152",
+  "targeted_tests_passed": 6,
+  "scripted_controls_only": true,
+  "full_scripted_chunks": 4,
+  "full_scripted_assignments": 8,
+  "scripted_backend_calls_in_full_control": 16,
+  "qualification_seed": 3100000,
+  "new_model_calls": 0,
+  "new_procedural_cases": 0,
+  "financial_reservations_mutated": false,
+  "live_execution_ready": false,
+  "live_provider_transport_implemented": false,
+  "production_materialization_refused": true,
+  "supervisor_equivalence": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "test_log_sha256": "093c03a90110bf31ccd17785205198345aac54c8a87257742b786b5057b68bb4",
+  "source_sha256": {
+    "finite_caller.py": "3fd40e85282d8e8ee1a0139f652b2b2e6d407fc9d94bf2f09d9566d30a699639",
+    "test_finite_caller.py": "631bdae4d90f50df32a002ded6ba364b2106f117f46ee82560e2aa9029536340",
+    "helper_policy.py": "1b2b025271be342769c549b8858118e75ccb756cbb380551b97173432e6c7638",
+    "matched_protocol.py": "fbc41e441fbdd12fc271ea3413980adcfebc8ea44edc052ee44b2c3ac872b500",
+    "replay_matched.py": "83ec97f9bfbda9e4d3edc6761ac9565f7a7e7ea33fce9afec28f6b672efbbe66"
+  },
+  "deadline_after_reservation_and_native_checked": true
+}
