@@ -207,10 +207,10 @@ class LiveBackend:
             raise ValueError('invalid provider message')
 
 
-# Intentionally unsealed. Only a separately audited source revision may set
-# this immutable digest after the complete private case inventory is available.
+# Sealed to the independently reproduced complete private case inventory.
+# Digest binding changes require a separately audited immutable source revision.
 # No CLI flag, environment variable or reconciliation boolean can bypass it.
-LIVE_CASE_AUDIT_SHA256 = None
+LIVE_CASE_AUDIT_SHA256 = '4298e075d16eed9ccc38185dd32cc6cfa9c7a57257335e3c8225e102b7ec5cf3'
 
 def require_case_lease(path, expected):
     import re
