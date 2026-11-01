@@ -60,7 +60,7 @@
     "model_calls_during_recovery": 0,
     "new_cases_during_recovery": 0,
     "financial_admission": false,
-    "private_state_sync_pending": true,
+    "private_state_sync_pending": false,
     "new_automation_or_subagents": false,
     "routine_public_messages": false,
     "frozen_v12_changed_or_approved": false,
@@ -115,6 +115,8 @@
     "transport": "research/software-preserve-first-action-20261101/guarded_transport.py",
     "archive_assembly": "research/software-preserve-first-action-20261101/assemble_qualification.py",
     "transport_local_tests_passed": 24,
-    "transport_ruos_tests_pending": true
+    "transport_ruos_tests_pending": false,
+    "transport_ruos_tests_passed": 24,
+    "transport_ruos_source": "41f8726342ed6c72a37fdaa0fe5d7bc10432322e"
   }
 }
