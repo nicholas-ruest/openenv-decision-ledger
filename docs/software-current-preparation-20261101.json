@@ -50,7 +50,7 @@
   ],
   "next_steps": [
     "Do not resume, redraw or relabel a closed study; verify canonical private state and actual worker argv before any launch.",
-    "Qualify the separately prepared preserve-supplied helper guidance in the initial prompt under original Native one-action grading. The earlier initial public-example self-check failed disjoint confirmation and must not be reopened. First-prompt guidance differs from the closed forced helper-restoration controller; no self-check instruction is bundled.",
+    "Finish guarded live backend/supervisor delegation, immutable private source/case sealing and independent failure-archive replay for the frozen one-action initial helper-guidance schedule. Matched replay, actual pinned fitness qualification and scripted finite caller are implemented. No self-check or restoration is bundled; closed studies stay closed.",
     "Audit fresh disjoint cases against the complete latest inventory, including the closed advice case. Reconcile actual fresh credit, every receipt/parent/reservation and independent historical carried spending; preserve all unknown-usage reservations.",
     "Require original complete screen evidence and positive predeclared selection before unchanged fresh disjoint confirmation. No Arena POST or HF replacement is approved; frozen v12 remains unchanged."
   ],
@@ -60,7 +60,7 @@
     "model_calls_during_recovery": 0,
     "new_cases_during_recovery": 0,
     "financial_admission": false,
-    "private_state_sync_pending": false,
+    "private_state_sync_pending": true,
     "new_automation_or_subagents": false,
     "routine_public_messages": false,
     "frozen_v12_changed_or_approved": false,
@@ -105,6 +105,10 @@
     "qualification_tests_passed": 6,
     "qualification_location": "Actual Native runtime in Codex and ruOS",
     "ruos_qualified_source": "f4059008d176213df8ad1b9f9ecdefb93e0a70f1",
-    "ruos_tests_exit": 0
+    "ruos_tests_exit": 0,
+    "matched_protocol": "research/software-preserve-first-action-20261101/matched_protocol.py",
+    "finite_qualification": "research/software-preserve-first-action-20261101/finite_qualification.py",
+    "local_combined_tests_passed": 17,
+    "matched_ruos_tests_pending": true
   }
 }

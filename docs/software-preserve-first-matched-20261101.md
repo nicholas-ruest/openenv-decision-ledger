@@ -1,0 +1,15 @@
+# Initial helper guidance: matched protocol and finite qualification
+
+This extends the separately prepared initial helper-preservation instruction with a counterbalanced eight-assignment schedule, independent Native replay, and finite reserve-before-call qualification. Four samples per arm share one procedural case per phase. Only the first prompt's fixed guidance suffix differs. There is one model response per attempt, no restoration controller and no public-example self-check bundled into the treatment.
+
+`matched_protocol.py` freezes the original route, JSON mode, temperature, generation/context limits and disjoint planning seeds. Generating the plan does not reset an environment or materialize screen/confirmation observations. Qualification uses only the already-seen case from the preceding adapter. Live materialization and live backends remain explicitly refused.
+
+Independent replay reconstructs actual request/prompt identities, original replies, terminal Native observations, semantic classifications and tokenizer charges. It rejects missing/reordered assignments, reused response IDs, unknown usage, edited observations/costs/grades and scripted traces relabelled as live evidence. Length, format, provider and execution failures remain separate from valid wrong/partial/full outcomes. The full original denominator is mandatory.
+
+`finite_qualification.py` admits the whole phase before reserving each request, records calling and response events durably, shares one original phase deadline, and stops on provider/execution/budget failure. An unacknowledged request retains its reservation and unknown usage; there is no refund or replacement attempt. An incomplete phase cannot produce a complete qualification report. This finite caller is scripted-only: actual financial/backend delegation, case/source sealing, Linux supervision, process guard and failure-archive assembly must be integrated and tested before execution. Its eight-request quote dimensions are not yet an admitted live financial backend contract; they do not relax any existing gate or spending cap.
+
+The actual pinned MIT MetaHarness `fitness.mjs:scoreCell` at `b8c3d38de41203faf633ef6dceb8452a4727b0ea` executes on independently replayed scripted qualification. It cannot select or promote that evidence. Scripted reference controls and injected failures are not model performance or managed training.
+
+For a future live study, selection requires all eight original assignments independently replayed, known usage, a positive treatment full-outcome count difference and a nonnegative mean semantic difference, with no provider/execution/budget failures. A selected screen still requires unchanged fresh disjoint confirmation; selected screen and confirmation must not be pooled. Neither phase is currently admitted. All reservations, unknown requests, fixed operating-hours guards and frozen v12 remain preserved. No Arena POST, HF replacement or new allocation is approved.
+
+All 17 local scripted/Native/tokenizer checks passed, including the six original adapter checks. These counts describe qualification only; ruOS replay of the added matched/caller code is pending.
