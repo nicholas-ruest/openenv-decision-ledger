@@ -60,7 +60,7 @@
     "model_calls_during_recovery": 0,
     "new_cases_during_recovery": 0,
     "financial_admission": false,
-    "private_state_sync_pending": true,
+    "private_state_sync_pending": false,
     "new_automation_or_subagents": false,
     "routine_public_messages": false,
     "frozen_v12_changed_or_approved": false,
@@ -109,6 +109,8 @@
     "matched_protocol": "research/software-preserve-first-action-20261101/matched_protocol.py",
     "finite_qualification": "research/software-preserve-first-action-20261101/finite_qualification.py",
     "local_combined_tests_passed": 17,
-    "matched_ruos_tests_pending": true
+    "matched_ruos_tests_pending": false,
+    "matched_ruos_tests_passed": 17,
+    "matched_ruos_source": "1f1293c14daf997efdd611bcdf4765397934d797"
   }
 }

@@ -12,4 +12,4 @@ The actual pinned MIT MetaHarness `fitness.mjs:scoreCell` at `b8c3d38de41203faf6
 
 For a future live study, selection requires all eight original assignments independently replayed, known usage, a positive treatment full-outcome count difference and a nonnegative mean semantic difference, with no provider/execution/budget failures. A selected screen still requires unchanged fresh disjoint confirmation; selected screen and confirmation must not be pooled. Neither phase is currently admitted. All reservations, unknown requests, fixed operating-hours guards and frozen v12 remain preserved. No Arena POST, HF replacement or new allocation is approved.
 
-All 17 local scripted/Native/tokenizer checks passed, including the six original adapter checks. These counts describe qualification only; ruOS replay of the added matched/caller code is pending.
+All 17 scripted/Native/tokenizer checks passed both locally and on ruOS, including the six original adapter checks. The clean immutable ruOS source was `1f1293c14daf997efdd611bcdf4765397934d797`; its suite completed in 82.398 seconds with exit zero. These counts describe qualification only.
