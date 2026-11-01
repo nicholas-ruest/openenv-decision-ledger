@@ -1,0 +1,15 @@
+# Matched public-failure advice qualification
+
+The failure-only advice candidate now has a distinct matched schedule, two-response Native adapter, original-reply replay and complete qualification assessment. Both arms use identical first prompts, content-only action schema, public reviews and default sampling on both responses. The treatment adds only the already-qualified environment advice after failed public examples; it never rewrites a candidate or finalizes it automatically.
+
+Qualification constructs only the already-used Native case. Planning declares separate screen and reserved confirmation identities but never constructs their observations. Production materialization refuses. No source seal, financial gate, worker, token source or provider entry point is added by this change.
+
+Replay creates a fresh Native instance and reconstructs each actual prompt, Native observation, environment-advice receipt, semantic outcome and token charge from the original replies. It rejects altered advice exposure, prompts, observation costs, grades, duplicate reply identities, missing assignments and qualification-to-live relabelling. Unknown usage and incomplete attempts are refused as complete qualification evidence; live failure accounting and retention still require a finite caller. No unknown usage is treated as zero.
+
+The original 6000 first-response, 8192 generation-plus-observations, 24576 context and 96 final-observation reserve remain fixed. Every emitted advice receipt is serialized canonically and charged alongside Native observations. No sampler flags differ across arms or responses. The schedule remains four interleaved draws per arm, at most two responses per attempt, with no retry or redraw.
+
+The assessment invokes the existing hash-checked MIT MetaHarness `fitness.mjs:scoreCell` at `b8c3d38de41203faf633ef6dceb8452a4727b0ea`. It accepts only eight independently replayed scripted qualification assignments, checks exact identity, cost, terminal reward and advice exposure, and always refuses live selection or promotion. Scripted reference controls are never model outcomes.
+
+Eleven local tests passed across the prototype and matched adapter/assessment. Controls include actual Native grading, the pinned tokenizer, unchanged first prompts and sampling, full eight-assignment reconstruction, cross-attempt reply reuse, advice-cost tampering, no recovery of truncated text and actual MetaHarness execution. These are qualification results, not trained-weight or ranking gains.
+
+A finite reservation-before-call worker, raw event/archive assembly for failures, a separately audited private case lease, fresh credit/all-parent reconciliation and final live exposure-aware selection remain pending. Confirmation may be materialized only after a positive independently verified screen, with the same method on disjoint cases. Existing closed studies and frozen unapproved v12 remain unchanged. No new procedural cases, paid calls, spending changes, training, Arena POST or HF replacement occurred.
