@@ -1,0 +1,18 @@
+{
+  "kind": "entry_order_live_path_qualification",
+  "source": "cc271c6b9873fc3d8bc0f0095abdb52cf02a77ee",
+  "local_combined_controls": 25,
+  "additional_constructor_controls": 1,
+  "ruos_controls": 26,
+  "ruos_seconds": 247.233,
+  "original_supervisor_worker_identity_bound": true,
+  "private_case_guard_precedes_artifact_or_backend_reads": true,
+  "latest_closed_case_anchor_retained": true,
+  "live_backend_arguments_forwarded_unchanged": true,
+  "constructor_test_uses_stub": true,
+  "actual_metaharness_evidence": "scripted qualification only",
+  "new_model_calls_in_controls": 0,
+  "new_cases_in_controls": 0,
+  "model_improvement": false,
+  "leaderboard_gain": false
+}
