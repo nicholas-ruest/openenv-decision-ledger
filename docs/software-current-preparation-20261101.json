@@ -1,7 +1,7 @@
 {
   "kind": "software_preparation_resume_pointer",
   "recorded_on": "2026-11-01",
-  "status": "entry_order_screen_closed_selection_failed_output_domain_diagnostic_offline",
+  "status": "final_turn_output_domain_cue_native_wrapper_qualified_offline",
   "latest_model_evidence": {
     "result_path": "docs/software-entry-order-screen-results-20261101.json",
     "public_runtime_source": "cc271c6b9873fc3d8bc0f0095abdb52cf02a77ee",
@@ -88,10 +88,10 @@
     }
   ],
   "next_steps": [
-    "Read canonical private state and actual process argv; preserve every closed study and reservation.",
-    "Investigate the verified final-revision output-domain regression offline. The shape-check prototype is not a selected or admitted live intervention; checking an initially full proposal alone would miss the later defect.",
-    "Do not repeat the closed screen or previously failed preservation/public-pass interventions. Any distinct comparison requires an unchanged resource scope, immutable source/case lease and fresh complete financial admission.",
-    "Keep continuation enabled and frozen v12 unchanged; no Arena POST, HF replacement, new cap, automation, subagents or routine public messages."
+    "Preserve every closed study, including the failed entry-order feedback study; no redraw or repeat of failed preservation/public-pass interventions.",
+    "Qualify the separate final-turn domain reminder matched protocol with exact original raw request/reply, all-observation tokenizer accounting and applicable pinned MetaHarness assessment on already-seen qualification inputs. No live case selection or backend execution is authorized by Native wrapper controls.",
+    "Before a genuinely new model comparison, require immutable source/case lease, fresh actual credit and complete parent/root/ledger reconciliation, unchanged resource limits and whole conservative financial admission. Independently check whether both screen and conditional confirmation can fit existing allocation; never assume allocation is credit or reduce limits to fit.",
+    "Keep continuation enabled, v12 unchanged and unapproved. No new cap, purchases, Arena POST, HF replacement, automations, subagents or routine public messages."
   ],
   "guards": {
     "fixed_stop": "23:00 America/Toronto",
@@ -103,24 +103,28 @@
   },
   "limits": "Sanitized source and outcome pointer only; never execution authority. Canonical private guards remain required.",
   "next_candidate": {
-    "kind": "software_output_domain_diagnostic_preparation",
-    "recorded_on": "2026-11-01",
-    "status": "offline_diagnostic_only",
-    "source_path": "research/software-output-domain-review-20261101/domain_diagnostic.py",
-    "local_controls": 4,
-    "local_seconds": 4.105,
-    "ruos_controls_run": false,
+    "kind": "final_domain_cue_native_qualification",
+    "source": "f4f8869941a089d2b71304922e07e5112360a7eb",
+    "local_tests": 6,
+    "local_seconds": 16.819,
+    "ruos_tests": 6,
+    "ruos_seconds": 29.334,
+    "actual_native_wrapper_executed": true,
     "already_seen_qualification_fixture_only": true,
-    "expected_answers_used": false,
-    "hidden_answers_used": false,
-    "unchanged_bounded_native_interpreter": true,
-    "synthetic_module_failures_are_not_model_solves": true,
+    "first_prompts_identical": true,
+    "only_review_reminder_field_differs": true,
+    "no_controller_source_or_output_edits": true,
+    "original_terminal_rewards_retained": true,
+    "new_cases": 0,
     "new_model_calls": 0,
-    "new_native_cases": 0,
-    "live_intervention_selected": false,
+    "matched_protocol_qualified": false,
     "live_execution_ready": false,
     "model_improvement": false,
-    "leaderboard_gain": false,
-    "limitation": "The observed regressed attempt's first proposal was already full and order-invariant. A check applied only to that proposal would not detect the later introduced output-domain defect. Do not assume the prototype prevents final revisions, reuse the closed screen or repeat previously failed preservation/public-pass interventions."
+    "is_training": false,
+    "hypothesis": "Explicit output-domain reminder only on final review turn",
+    "code_path": "research/software-final-domain-cue-20261101/revision_environment.py",
+    "evidence_path": "docs/software-final-domain-cue-qualification-20261101.json",
+    "screen_case_selected": false,
+    "confirmation_case_selected": false
   }
 }

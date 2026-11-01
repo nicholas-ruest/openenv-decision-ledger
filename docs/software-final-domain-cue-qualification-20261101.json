@@ -1,0 +1,20 @@
+{
+  "kind": "final_domain_cue_native_qualification",
+  "source": "f4f8869941a089d2b71304922e07e5112360a7eb",
+  "local_tests": 6,
+  "local_seconds": 16.819,
+  "ruos_tests": 6,
+  "ruos_seconds": 29.334,
+  "actual_native_wrapper_executed": true,
+  "already_seen_qualification_fixture_only": true,
+  "first_prompts_identical": true,
+  "only_review_reminder_field_differs": true,
+  "no_controller_source_or_output_edits": true,
+  "original_terminal_rewards_retained": true,
+  "new_cases": 0,
+  "new_model_calls": 0,
+  "matched_protocol_qualified": false,
+  "live_execution_ready": false,
+  "model_improvement": false,
+  "is_training": false
+}
