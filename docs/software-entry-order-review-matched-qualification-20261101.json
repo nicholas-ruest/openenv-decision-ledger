@@ -1,0 +1,20 @@
+{
+  "kind": "entry_order_matched_qualification",
+  "source": "1276e03580f69b07bc5c38f5d1371a1586b764eb",
+  "local_controls_passed": 13,
+  "ruos_controls_passed": 13,
+  "local_seconds": 27.996,
+  "ruos_seconds": 41.673,
+  "actual_pinned_metaharness_module": "fitness.mjs:scoreCell",
+  "metaharness_evidence": "scripted qualification only",
+  "first_prompts_identical": true,
+  "program_unavailability_information_common_to_both_arms": true,
+  "only_treatment_difference": "computed public entry-order relation result exposure",
+  "all_review_and_terminal_observations_counted": true,
+  "new_cases": 0,
+  "new_model_calls": 0,
+  "live_execution_ready": false,
+  "selection_passed": false,
+  "model_improvement": false,
+  "leaderboard_gain": false
+}

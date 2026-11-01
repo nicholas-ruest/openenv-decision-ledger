@@ -1,7 +1,7 @@
 {
   "kind": "software_preparation_resume_pointer",
   "recorded_on": "2026-11-01",
-  "status": "entry_order_relation_review_qualified_offline",
+  "status": "entry_order_relation_matched_protocol_qualified_offline",
   "latest_model_evidence": {
     "result_path": "docs/software-top-level-note-results-20261101.json",
     "public_runtime_source": "7838312d402f0940841d2888b6fe1d89fe180f10",
@@ -77,7 +77,7 @@
   ],
   "next_steps": [
     "Read canonical private state and actual process argv before any launch; never resume, redraw or relabel a closed study.",
-    "Freeze and independently qualify the new relation-feedback matched protocol, raw replay, all-observation token accounting and exact feedback-exposure assessment. Keep public case construction and live execution sealed. Do not repeat the earlier parent-status reminder or other closed studies.",
+    "Qualify the finite supervised caller and original archive assembly for the frozen two-response relation-feedback protocol. Preserve all review/terminal token costs, exact diagnostic exposure and fail-closed Native/MetaHarness assessment. Keep public case construction and live execution sealed; do not repeat closed studies.",
     "Require complete original screen evidence and positive predeclared selection before unchanged fresh disjoint confirmation. No model or leaderboard improvement is established.",
     "Keep frozen v12 unchanged. No Arena POST or HF replacement is approved. Preserve the existing execution guards; no new automation, subagents or routine public messages."
   ],
@@ -102,6 +102,12 @@
     "treatment_difference": "computed reference-free public entry-order counterexample exposure on review turn",
     "live_execution_ready": false,
     "new_model_calls": 0,
-    "new_cases": 0
+    "new_cases": 0,
+    "matched_source": "1276e03580f69b07bc5c38f5d1371a1586b764eb",
+    "matched_protocol": "research/software-entry-order-review-20261101/matched_protocol.py",
+    "matched_qualification_assessor": "research/software-entry-order-review-20261101/assess_qualification.mjs",
+    "matched_local_and_ruos_controls": 13,
+    "matched_evidence_path": "docs/software-entry-order-review-matched-qualification-20261101.json",
+    "program_unavailability_common_to_both_arms": true
   }
 }
