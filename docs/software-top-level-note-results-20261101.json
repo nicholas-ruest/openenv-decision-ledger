@@ -1,0 +1,52 @@
+{
+  "kind": "top_level_note_screen_sanitized_result",
+  "date": "2026-11-01",
+  "public_runtime_source": "7838312d402f0940841d2888b6fe1d89fe180f10",
+  "private_execution_delta": "case-seal constant only; method unchanged",
+  "status": "closed_inconclusive_provider_timeout",
+  "assigned": 8,
+  "samples_per_arm": 4,
+  "actual_calls": 2,
+  "known_replies": 1,
+  "unknown_usage_calls": 1,
+  "uncalled_assignments": 6,
+  "outcomes": {
+    "baseline": {
+      "full": 0,
+      "partial": 1,
+      "provider_unknown": 0,
+      "uncalled": 3
+    },
+    "top_level_only": {
+      "full": 0,
+      "partial": 0,
+      "provider_unknown": 1,
+      "uncalled": 3
+    }
+  },
+  "known_baseline_native_reward": 0.95,
+  "known_baseline_supplied_helpers_preserved": true,
+  "known_baseline_public_examples_all_passed": false,
+  "known_reply_original_request_native_and_token_replay_verified": true,
+  "provider_failure": {
+    "stage": "provider",
+    "error_type": "TimeoutError",
+    "usage_unknown": true
+  },
+  "supervisor": {
+    "status": "worker_failed",
+    "worker_exitcode": 1,
+    "shutdown_verified": true,
+    "finished_before_deadline": true,
+    "elapsed_seconds": 380.017134425,
+    "whole_phase_limit_seconds": 1200
+  },
+  "all_assigned_complete": false,
+  "fitness_computed": false,
+  "selection_passed": false,
+  "confirmation_materialized": false,
+  "retry_or_redraw_permitted": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "interpretation": "The single known baseline partial and an unknown treatment outcome do not estimate the syntax note's effect. The unknown request is not a wrong answer. Closed studies remain closed."
+}

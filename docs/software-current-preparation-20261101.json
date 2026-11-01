@@ -1,18 +1,24 @@
 {
   "kind": "software_preparation_resume_pointer",
   "recorded_on": "2026-11-01",
-  "status": "top_level_note_paired_caller_qualification",
-  "advice_candidate_source": "36e658565ffd67e982bf50b1ca2cc7db18e441a3",
-  "latest_analysis_source": "1d06273a853f18f2d4c05f9f500b5e07f76a32bc",
-  "candidate_code_changed_by_later_analysis": false,
-  "prior_qualification": {
-    "advice_tests": 32,
-    "completion_metric_audit_tests": 3,
-    "tests_rerun_during_recovery": false
+  "status": "top_level_note_closed_inconclusive_provider_timeout",
+  "latest_model_evidence": {
+    "result_path": "docs/software-top-level-note-results-20261101.json",
+    "public_runtime_source": "7838312d402f0940841d2888b6fe1d89fe180f10",
+    "assigned": 8,
+    "known_replies": 1,
+    "unknown_provider_outcomes": 1,
+    "uncalled_assignments": 6,
+    "selection_passed": false,
+    "confirmation_permitted": false,
+    "retry_redraw_permitted": false
   },
-  "byte_recovery": {
-    "published_artifacts_and_candidate_files_match_exact_git_source": true,
-    "live_materializer_remains_unsealed": true
+  "latest_qualification": {
+    "source": "7838312d402f0940841d2888b6fe1d89fe180f10",
+    "controls_passed_locally_and_ruos": 24,
+    "evidence_path": "docs/software-top-level-live-verification-20261101.md",
+    "controls_are_not_model_solves": true,
+    "public_case_seal_unset": true
   },
   "closed_studies": [
     {
@@ -53,124 +59,28 @@
       "evidence_path": "docs/software-preserve-first-screen-results-20261101.json",
       "selection_passed": false,
       "retries_or_confirmation_permitted": false
+    },
+    {
+      "study": "top_level_function_initial_note",
+      "status": "closed_inconclusive_provider_timeout",
+      "evidence_path": "docs/software-top-level-note-results-20261101.json",
+      "selection_passed": false,
+      "retries_or_confirmation_permitted": false
     }
   ],
   "next_steps": [
-    "Do not resume, redraw or relabel a closed study; verify canonical private state and actual worker argv before any launch.",
-    "Qualify the top-level-note live paired path on ruOS, then bind its exact private source and audited disjoint case lease. Preserve the original whole-phase supervisor/global study lock, at most two in-flight original requests, eight unique assignments, fixed resource limits and conservative admission. All current public live guards remain unsealed. New cases and paid requests require immutable private audit and fresh actual credit, all parents/reservations and historical root-carry admission.",
-    "Audit fresh disjoint cases against the complete latest inventory, including the closed advice case. Reconcile actual fresh credit, every receipt/parent/reservation and independent historical carried spending; preserve all unknown-usage reservations.",
-    "Require original complete screen evidence and positive predeclared selection before unchanged fresh disjoint confirmation. No Arena POST or HF replacement is approved; frozen v12 remains unchanged."
+    "Read canonical private state and actual process argv before any launch; never resume, redraw or relabel a closed study.",
+    "Continue offline diagnosis of the known baseline failure on supplied public examples. It preserved reusable helpers. Any new hypothesis must be distinct from the closed helper guidance, public-example self-check and syntax-note studies, frozen before new model evidence.",
+    "Require complete original screen evidence and positive predeclared selection before unchanged fresh disjoint confirmation. No model or leaderboard improvement is established.",
+    "Keep frozen v12 unchanged. No Arena POST or HF replacement is approved. Preserve the existing execution guards; no new automation, subagents or routine public messages."
   ],
   "guards": {
     "fixed_stop": "23:00 America/Toronto",
-    "ruos_access_during_overnight_recovery": false,
-    "model_calls_during_recovery": 0,
-    "new_cases_during_recovery": 0,
-    "financial_admission": false,
-    "private_state_sync_pending": true,
     "new_automation_or_subagents": false,
     "routine_public_messages": false,
     "frozen_v12_changed_or_approved": false,
-    "arena_post_or_hf_replacement_approved": false
+    "arena_post_or_hf_replacement_approved": false,
+    "unknown_provider_outcome_is_wrong_answer": false
   },
-  "limits": "This is a public source/preparation pointer, never an execution, financial, process, case-disjointness or current-credit attestation.",
-  "whole_phase_worker_fix": {
-    "runtime_source": "this commit",
-    "one_supervisor_for_all_four_chunks": true,
-    "one_absolute_deadline": true,
-    "discrete_live_chunk_cli_refused": true,
-    "provider_or_budget_or_execution_prefix_stops_phase": true,
-    "focused_tests_passed": 4,
-    "full_suite_pending": false,
-    "private_execution_source_must_be_rebound": false,
-    "model_calls": 0,
-    "full_suite_tests_passed": 36,
-    "private_execution_was_bound_and_qualified": true
-  },
-  "latest_model_evidence": {
-    "result_path": "docs/software-preserve-first-screen-results-20261101.json",
-    "runtime_source": "68b5e1fadd864b26384931c3ae4c5cf975a063b3",
-    "status": "inconclusive_predeclared_execution_failure_stop",
-    "selection_passed": false,
-    "confirmation_permitted": false,
-    "retry_redraw_permitted": false
-  },
-  "source_review_correction": {
-    "previous_next_step": "initial public-example self-check",
-    "reason": "Already executed October29; selected screen did not survive fresh disjoint confirmation. Do not repeat under a new name or resource profile.",
-    "reviewed_evidence": "https://github.com/nicholas-ruest/openenv-decision-ledger/blob/0e9b6f1e0008c34e9330c8219873c90ba1865c32/docs/software-selfcheck8-results-20261029.md"
-  },
-  "next_candidate": {
-    "kind": "top_level_function_initial_note",
-    "prototype": "research/software-top-level-note-20261101/top_level_note.py",
-    "matched_protocol": "research/software-top-level-note-20261101/matched_note.py",
-    "local_tests_passed": 10,
-    "ruos_tests_pending": false,
-    "live_execution_ready": false,
-    "new_model_calls": 0,
-    "new_cases": 0,
-    "continuation_policy_frozen": true,
-    "syntax_note_only": true,
-    "ruos_tests_passed": 10,
-    "ruos_qualified_source": "f2ecb376d423817fb26aaaa6a33c1be36a027c96",
-    "paired_caller": "research/software-top-level-note-20261101/paired_caller.py",
-    "paired_transport": "research/software-top-level-note-20261101/paired_transport.py",
-    "paired_local_tests_passed": 19,
-    "paired_ruos_tests_pending": false,
-    "max_inflight_requests": 2,
-    "paired_prior_ruos_tests_passed": 18,
-    "paired_ruos_tests_passed": 19,
-    "paired_ruos_qualified_source": "e86ff3c7b4fd4239059ca437c29829c40bbf3e31",
-    "live_case_materializer": "research/software-top-level-note-20261101/sealed_case.py",
-    "live_worker": "research/software-top-level-note-20261101/live_pairs.py",
-    "archive_assessor": "research/software-top-level-note-20261101/assess_pairs.py",
-    "live_path_local_tests_passed": 24,
-    "live_path_ruos_tests_pending": true
-  },
-  "active_screen": {
-    "kind": "initial_helper_guidance",
-    "status": "closed_inconclusive_model_compile_rejection",
-    "runtime_source": "68b5e1fadd864b26384931c3ae4c5cf975a063b3",
-    "private_source_case_lease_qualified": true,
-    "whole_phase_seconds": 1200,
-    "confirmation_materialized": false,
-    "results_available": true,
-    "results_path": "docs/software-preserve-first-screen-results-20261101.json",
-    "selection_passed": false,
-    "retry_or_confirmation_permitted": false
-  },
-  "previous_candidate": {
-    "kind": "qualification_only_initial_helper_guidance",
-    "path": "research/software-preserve-first-action-20261101/preserve_first.py",
-    "prior_instruction_source": "scripts/software-helper-policy.py",
-    "native_interface": "original DirectRepairAction full module",
-    "intervention": "prompt suffix only; original reply unchanged; no restoration controller",
-    "new_model_calls": 0,
-    "new_cases_materialized": 0,
-    "live_execution_ready": false,
-    "qualification_tests_passed": 6,
-    "qualification_location": "Actual Native runtime in Codex and ruOS",
-    "ruos_qualified_source": "f4059008d176213df8ad1b9f9ecdefb93e0a70f1",
-    "ruos_tests_exit": 0,
-    "matched_protocol": "research/software-preserve-first-action-20261101/matched_protocol.py",
-    "finite_qualification": "research/software-preserve-first-action-20261101/finite_qualification.py",
-    "local_combined_tests_passed": 17,
-    "matched_ruos_tests_pending": false,
-    "matched_ruos_tests_passed": 17,
-    "matched_ruos_source": "1f1293c14daf997efdd611bcdf4765397934d797",
-    "transport": "research/software-preserve-first-action-20261101/guarded_transport.py",
-    "archive_assembly": "research/software-preserve-first-action-20261101/assemble_qualification.py",
-    "transport_local_tests_passed": 24,
-    "transport_ruos_tests_pending": false,
-    "transport_ruos_tests_passed": 24,
-    "transport_ruos_source": "41f8726342ed6c72a37fdaa0fe5d7bc10432322e",
-    "case_materializer": "research/software-preserve-first-action-20261101/case_materializer.py",
-    "live_worker": "research/software-preserve-first-action-20261101/live_screen.py",
-    "supervisor_bound_assessment": "research/software-preserve-first-action-20261101/assess_archive.py",
-    "live_path_local_tests_passed": 30,
-    "live_path_ruos_tests_pending": false,
-    "live_path_ruos_tests_passed": 30,
-    "live_path_ruos_source": "68b5e1fadd864b26384931c3ae4c5cf975a063b3",
-    "public_source_live_execution_ready": false
-  }
+  "limits": "Sanitized source and outcome pointer only; never execution authority. Canonical private guards remain required."
 }
