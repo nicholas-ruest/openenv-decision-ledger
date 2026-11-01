@@ -1,7 +1,7 @@
 {
   "kind": "software_preparation_resume_pointer",
   "recorded_on": "2026-11-01",
-  "status": "initial_helper_guidance_original_screen_running",
+  "status": "initial_helper_guidance_screen_closed_inconclusive",
   "advice_candidate_source": "36e658565ffd67e982bf50b1ca2cc7db18e441a3",
   "latest_analysis_source": "1d06273a853f18f2d4c05f9f500b5e07f76a32bc",
   "candidate_code_changed_by_later_analysis": false,
@@ -46,11 +46,18 @@
       ],
       "status": "confirmation_failed",
       "retries_or_redraw_permitted": false
+    },
+    {
+      "study": "initial_helper_guidance",
+      "status": "inconclusive_predeclared_execution_failure_stop",
+      "evidence_path": "docs/software-preserve-first-screen-results-20261101.json",
+      "selection_passed": false,
+      "retries_or_confirmation_permitted": false
     }
   ],
   "next_steps": [
     "Do not resume, redraw or relabel a closed study; verify canonical private state and actual worker argv before any launch.",
-    "Read original supervisor and private state; do not duplicate, resume or redraw. Independently replay original raw screen evidence after termination; only a complete positive predeclared selection can permit separately qualified fresh disjoint confirmation. No current-credit or reusable admission attestation is supplied by this pointer.",
+    "Review the model-program nested-function rejection as a distinct syntax-compliance hypothesis. Do not resume/redraw/relabel the closed helper-guidance study. Any future outcome taxonomy must distinguish verified model-code rejection from Native infrastructure exceptions before freezing the protocol. Preserve the Native grader and original model/resource limits; require fresh case/source audit and complete financial admission before any new phase.",
     "Audit fresh disjoint cases against the complete latest inventory, including the closed advice case. Reconcile actual fresh credit, every receipt/parent/reservation and independent historical carried spending; preserve all unknown-usage reservations.",
     "Require original complete screen evidence and positive predeclared selection before unchanged fresh disjoint confirmation. No Arena POST or HF replacement is approved; frozen v12 remains unchanged."
   ],
@@ -81,9 +88,9 @@
     "private_execution_was_bound_and_qualified": true
   },
   "latest_model_evidence": {
-    "result_path": "docs/software-failure-advice-screen-results-20261101.json",
-    "runtime_source": "e3d7537cb73bc0aed69880a903a772bfefb7085b",
-    "status": "inconclusive_phase_deadline",
+    "result_path": "docs/software-preserve-first-screen-results-20261101.json",
+    "runtime_source": "68b5e1fadd864b26384931c3ae4c5cf975a063b3",
+    "status": "inconclusive_predeclared_execution_failure_stop",
     "selection_passed": false,
     "confirmation_permitted": false,
     "retry_redraw_permitted": false
@@ -129,11 +136,14 @@
   },
   "active_screen": {
     "kind": "initial_helper_guidance",
-    "status": "running_original_phase",
+    "status": "closed_inconclusive_model_compile_rejection",
     "runtime_source": "68b5e1fadd864b26384931c3ae4c5cf975a063b3",
     "private_source_case_lease_qualified": true,
     "whole_phase_seconds": 1200,
     "confirmation_materialized": false,
-    "results_available": false
+    "results_available": true,
+    "results_path": "docs/software-preserve-first-screen-results-20261101.json",
+    "selection_passed": false,
+    "retry_or_confirmation_permitted": false
   }
 }

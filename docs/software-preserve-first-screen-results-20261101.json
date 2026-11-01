@@ -1,0 +1,44 @@
+{
+  "kind": "initial_helper_guidance_screen_results",
+  "date": "2026-11-01",
+  "runtime_source": "68b5e1fadd864b26384931c3ae4c5cf975a063b3",
+  "status": "inconclusive_predeclared_execution_failure_stop",
+  "assigned": 8,
+  "actual_requests": 3,
+  "known_replies": 3,
+  "all_called_independently_replayed": 3,
+  "new_unknown_usage_calls": 0,
+  "uncalled_assignments": 5,
+  "groups": [
+    {"arm": "baseline", "assigned": 4, "called": 1, "full": 1, "model_code_compile_rejection": 0, "uncalled": 3},
+    {"arm": "preserve_supplied", "assigned": 4, "called": 2, "full": 1, "model_code_compile_rejection": 1, "uncalled": 2}
+  ],
+  "generation_tokens": 14226,
+  "terminal_observation_tokens": 99,
+  "posthoc_behavior": {
+    "all_called_modules_preserved_supplied_helpers_ast": true,
+    "rejected_program_used_nested_function": true,
+    "nested_functions_explicitly_disallowed_by_public_contract": true,
+    "selection_rule_changed": false,
+    "grading_changed": false
+  },
+  "supervision": {
+    "status": "worker_failed",
+    "worker_exitcode": 1,
+    "shutdown_verified": true,
+    "finished_before_deadline": true,
+    "elapsed_seconds": 742.5615093429999,
+    "whole_phase_limit_seconds": 1200
+  },
+  "effect_estimate_admissible": false,
+  "fitness_computed": false,
+  "selection_passed": false,
+  "confirmation_materialized": false,
+  "retry_or_redraw_permitted": false,
+  "model_improvement": false,
+  "is_training": false,
+  "software_transfer_established": false,
+  "leaderboard_gain": false,
+  "frozen_v12_changed_or_approved": false,
+  "arena_post_or_hf_replacement_approved": false
+}
