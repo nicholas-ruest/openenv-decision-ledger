@@ -25,6 +25,9 @@ class RevisionEnvironment(Environment[DirectRepairAction,Observation,State]):
     def reset(self,seed=None,episode_id=None,**kwargs):
         if kwargs!={'task_id':'software_repair-ignore-d3'} or seed!=QUALIFICATION_SEED:
             raise ValueError('already-seen qualification input only; live cases unsealed')
+        return self._initialize(seed,episode_id,kwargs)
+
+    def _initialize(self,seed,episode_id,kwargs):
         native=self._direct.reset(seed=seed,episode_id=episode_id,**kwargs)
         self._visible={'task_id':native.task_id,'examples':native.examples};self._steps=0;self._terminal=None;self._write_error=''
         marker='\nRepair the supplied source. Reply once'

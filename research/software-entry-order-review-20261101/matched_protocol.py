@@ -32,7 +32,10 @@ def jobs(phase):
 class Trial:
     def __init__(self,job):
         if job not in jobs('qualification'):raise ValueError('already-seen qualification only; no live trial')
-        self.job=copy.deepcopy(job);self.env=RevisionEnvironment(arm=job['arm'])
+        self._initialize(job,RevisionEnvironment(arm=job['arm']))
+
+    def _initialize(self,job,env):
+        self.job=copy.deepcopy(job);self.env=env
         initial=self.env.reset(seed=job['seed'],task_id=job['task_id']).model_dump()
         self.problem_sha256=digest({k:v for k,v in initial.items() if k!='prompt'})
         self.messages=[dict(role='system',content='Return exactly one JSON action instance matching this schema. No markdown, diff or tool command. '+d.canonical(DirectRepairAction.model_json_schema())),dict(role='user',content=d.canonical(initial))]
@@ -59,8 +62,12 @@ class Trial:
 
 
 def observe(job,responses,counter):
+    return _observe(job,responses,counter,Trial(job),True,{})
+
+
+def _observe(job,responses,counter,trial,scripted,metadata):
     if not isinstance(responses,list) or not 1<=len(responses)<=2:raise ValueError('one or two original known replies required')
-    trial=Trial(job);initial=copy.deepcopy(trial.messages);generated=observed=0;requests=[];ids=set();steps=[];feedback=None
+    initial=copy.deepcopy(trial.messages);generated=observed=0;requests=[];ids=set();steps=[];feedback=None
     for response in responses:
         if trial.finished:raise ValueError('reply after original terminal outcome')
         limit=min(6000 if trial.turn==0 else 8096,8192-generated-observed-96)
@@ -90,7 +97,7 @@ def observe(job,responses,counter):
         model_responses=len(responses),finish_reason=responses[-1]['choices'][0].get('finish_reason'),controller_actions=[],
         computed_relation_exposed=bool(diagnostic and diagnostic.get('kind')=='public_entry_order_relation'),
         usable_relation_counterexample_exposed=bool(diagnostic and diagnostic.get('kind')=='public_entry_order_relation' and diagnostic.get('first_counterexample') is not None))
-    return dict(job=copy.deepcopy(job),scripted=True,live_evidence=False,prompt_sha256=digest(initial),problem_sha256=trial.problem_sha256,
+    return dict(job=copy.deepcopy(job),scripted=scripted,live_evidence=not scripted,**metadata,prompt_sha256=digest(initial),problem_sha256=trial.problem_sha256,
         requests=requests,responses=copy.deepcopy(responses),steps=steps,messages=trial.messages,record=record)
 
 
@@ -118,5 +125,33 @@ def verify_phase(traces,counter):
 def plan():
     value=environment_plan();value.update(namespace=NAMESPACE,sampling=copy.deepcopy(SAMPLING),screen_jobs=jobs('screen'),confirmation_jobs=jobs('confirmation'),
         required_next_step='Qualify finite caller, source/case materializer, original archive replay and actual pinned MetaHarness assessment; live inputs and paid calls stay unsealed.',
-        selection='Complete original screen with known usage and raw Native/token/exposure replay, positive full-repair difference and nonnegative all-assignment semantic mean difference, no provider/budget/unverified Native failures; then require unchanged fresh disjoint confirmation. No pooled selected screen/confirmation estimate.')
+        selection='Complete original screen with known usage and raw Native/token/exposure replay, at least one actual computed-relation exposure, positive full-repair difference and nonnegative all-assignment semantic mean difference, no provider/budget/unverified Native failures; then require unchanged fresh disjoint confirmation. No pooled selected screen/confirmation estimate.')
     return value
+
+
+def observe_screen(job,responses,counter,path,expected):
+    from entry_case import materialize,execution_hashes
+    return _observe(job,responses,counter,materialize(job,path,expected),False,
+        dict(case_audit_sha256=expected,execution_sha256=execution_hashes()))
+
+
+def verify_screen(trace,counter,path,expected):
+    if trace.get('scripted') is not False or trace.get('live_evidence') is not True:
+        raise ValueError('original live trace required')
+    value=observe_screen(trace['job'],trace['responses'],counter,path,expected)
+    if value!=trace:raise ValueError('source, case, request, reply, Native or observation cost differs')
+    return dict(job=trace['job'],verified=True,scripted=False,live_evidence=True,**value['record'])
+
+
+def verify_screen_phase(traces,counter,path,expected):
+    if len(traces)!=8 or [t['job'] for t in traces]!=jobs('screen'):
+        raise ValueError('complete ordered original screen required')
+    ids=[r['id'] for t in traces for r in t['responses']]
+    if len(set(ids))!=len(ids):raise ValueError('reused original reply')
+    rows=[verify_screen(t,counter,path,expected) for t in traces]
+    if len({t['prompt_sha256'] for t in traces})!=1 or len({t['problem_sha256'] for t in traces})!=1:
+        raise ValueError('identical original first prompt and matched case required')
+    if any(r['computed_relation_exposed'] for r in rows if r['job']['arm']=='relation_only'):
+        raise ValueError('control exposed to computed relation')
+    return dict(kind='entry_order_review_screen',scripted=False,live_evidence=True,assigned=8,
+        all_assigned_in_denominator=True,rows=rows,selection_passed=False,model_improvement=False)

@@ -40,12 +40,16 @@ def event(path,value):
 
 
 
-def attempt(job,backend,counter,path,deadline,stop,seen,seen_lock):
+def attempt(job,backend,counter,path,deadline,stop,seen,seen_lock,case_audit=None,case_audit_sha256=None):
     path.mkdir(mode=0o700);events=path/'events.jsonl';responses=[];requests=[]
     row=dict(job=job,category='budget',failure_origin='budget_failure',semantic_reward=None,reservations=[],calls=[],response_ids=[],unknown_usage=False,generation_tokens=0,known_generation_tokens=0)
     attempt_deadline=min(deadline,time.monotonic()+600);stage='native_initialization';called=known=False
     try:
-        trial=p.Trial(job);generated=observed=0
+        if job in p.jobs('qualification'):trial=p.Trial(job)
+        else:
+            from entry_case import materialize
+            trial=materialize(job,case_audit,case_audit_sha256)
+        generated=observed=0
         for turn in range(2):
             called=known=False;stage='accounting'
             limit=min(6000 if turn==0 else 8096,8192-generated-observed-96)
@@ -78,7 +82,11 @@ def attempt(job,backend,counter,path,deadline,stop,seen,seen_lock):
             if generated+observed>8192 or usage['prompt_tokens']+usage['completion_tokens']+sum(counter.count(p.d.canonical(x)) for x in result['new_observations'])>24576 or counter.context(trial.messages)>24576:raise ValueError('all observations must fit original budgets')
             if time.monotonic()>=attempt_deadline:stop.set();break
             if trial.finished:
-                stage='native_replay';trace=p.observe(job,responses,counter);verified=p.verify(trace,counter)
+                stage='native_replay'
+                if job in p.jobs('qualification'):trace=p.observe(job,responses,counter);verified=p.verify(trace,counter)
+                else:
+                    trace=p.observe_screen(job,responses,counter,case_audit,case_audit_sha256)
+                    verified=p.verify_screen(trace,counter,case_audit,case_audit_sha256)
                 if trace['requests']!=requests:raise ValueError('original requests changed')
                 row.update(verified)
                 if time.monotonic()>=attempt_deadline:
@@ -99,23 +107,44 @@ def attempt(job,backend,counter,path,deadline,stop,seen,seen_lock):
 
 def run(backend,counter,output,deadline):
     if backend.scripted is not True:raise ValueError('scripted qualification only; live source/case unsealed')
+    return _run(backend,counter,output,deadline,'qualification',None,None)
+
+
+def run_screen(backend,counter,output,deadline,path,expected):
+    if backend.scripted is not False:raise ValueError('actual live backend required')
+    from entry_case import verify_case
+    verify_case(p.jobs('screen')[0],path,expected)
+    return _run(backend,counter,output,deadline,'screen',path,expected)
+
+
+def _run(backend,counter,output,deadline,phase,case_audit,case_audit_sha256):
+    scripted=phase=='qualification'
+    if phase not in ('qualification','screen') or backend.scripted is not scripted:raise ValueError('original backend/phase required')
+    if not scripted:
+        from entry_case import verify_case
+        verify_case(p.jobs('screen')[0],case_audit,case_audit_sha256)
     output=Path(output)
     if output.exists() or type(deadline) not in (float,int) or not math.isfinite(deadline) or not 0<deadline-time.monotonic()<=1200:raise ValueError('fresh archive and original phase deadline required')
     backend.admit([28672]*16,8096,deadline);output.mkdir(mode=0o700,parents=True)
-    assigned=p.jobs('qualification');write(output/'assignments.json',assigned)
+    assigned=p.jobs(phase);write(output/'assignments.json',assigned)
     stop=threading.Event();seen=set();lock=threading.Lock();rows=[]
     with ThreadPoolExecutor(max_workers=2) as pool:
         for pair in range(4):
             if stop.is_set() or time.monotonic()>=deadline:break
-            futures=[pool.submit(attempt,j,backend,counter,output/j['attempt_id'],deadline,stop,seen,lock) for j in assigned[2*pair:2*pair+2]]
+            futures=[pool.submit(attempt,j,backend,counter,output/j['attempt_id'],deadline,stop,seen,lock,case_audit,case_audit_sha256) for j in assigned[2*pair:2*pair+2]]
             rows.extend(f.result() for f in futures)
-    report=assemble(output,counter)
-    summary=dict(scripted=True,live_evidence=False,assigned=8,recorded=len(rows),calls=sum(len(r['calls']) for r in rows),unknown_usage_calls=sum(r['unknown_usage'] for r in rows),complete=report['complete'] and not stop.is_set() and time.monotonic()<deadline,max_inflight_requests=2,retries=0,selection_passed=False)
+    report=assemble(output,counter,phase,case_audit,case_audit_sha256)
+    summary=dict(scripted=scripted,live_evidence=not scripted,assigned=8,recorded=len(rows),calls=sum(len(r['calls']) for r in rows),unknown_usage_calls=sum(r['unknown_usage'] for r in rows),complete=report['complete'] and not stop.is_set() and time.monotonic()<deadline,max_inflight_requests=2,retries=0,selection_passed=False)
     write(output/'complete.json',summary);return rows,summary
 
 
-def assemble(output,counter):
-    output=Path(output);assigned=p.jobs('qualification')
+def assemble(output,counter,phase='qualification',case_audit=None,case_audit_sha256=None):
+    if phase not in ('qualification','screen'):raise ValueError('original phase required')
+    scripted=phase=='qualification'
+    if not scripted:
+        from entry_case import verify_case
+        verify_case(p.jobs('screen')[0],case_audit,case_audit_sha256)
+    output=Path(output);assigned=p.jobs(phase)
     if json.loads((output/'assignments.json').read_text())!=assigned:raise ValueError('original assignment manifest changed')
     rows=[];traces=[];ids=set()
     for job in assigned:
@@ -141,7 +170,7 @@ def assemble(output,counter):
             known_cost+=response['usage']['completion_tokens']
         if known_cost!=row['known_generation_tokens'] or (not row['unknown_usage'] and known_cost!=row['generation_tokens']):raise ValueError('known usage prefix changed')
         if (path/'trace.json').exists():
-            trace=json.loads((path/'trace.json').read_text());verified=p.verify(trace,counter)
+            trace=json.loads((path/'trace.json').read_text());verified=p.verify(trace,counter) if scripted else p.verify_screen(trace,counter,case_audit,case_audit_sha256)
             if any(row.get(k)!=v for k,v in verified.items()) or trace['job']!=job or len(calls)!=len(trace['responses']):raise ValueError('record differs from independent replay')
             for turn,(request,response) in enumerate(zip(trace['requests'],trace['responses'])):
                 if (json.loads((path/('request-'+str(turn)+'.json')).read_text())!=request or json.loads((path/('response-'+str(turn)+'.json')).read_text())!=response or calls[turn]['request_sha256']!=p.digest(request) or calls[turn]['generation_limit']!=request['max_tokens'] or response['id'] in ids):raise ValueError('original request/reply differs or reused')
@@ -152,4 +181,4 @@ def assemble(output,counter):
             if row['unknown_usage'] and (len(row['calls'])<=len(row['response_ids']) or row['generation_tokens'] is not None):raise ValueError('unknown usage cannot be zeroed')
         rows.append(dict(row,recorded=True))
     complete=len(traces)==8 and all(not stops_phase(t['record']) for t in traces)
-    return dict(kind='entry_order_finite_qualification_archive',scripted=True,live_evidence=False,assigned=8,rows=rows,independently_replayed=len(traces),complete=complete,evidence=p.verify_phase(traces,counter) if complete else None,selection_passed=False)
+    return dict(kind='entry_order_finite_qualification_archive' if scripted else 'entry_order_screen_archive',scripted=scripted,live_evidence=not scripted,case_audit_sha256=case_audit_sha256,assigned=8,rows=rows,independently_replayed=len(traces),complete=complete,evidence=(p.verify_phase(traces,counter) if scripted else p.verify_screen_phase(traces,counter,case_audit,case_audit_sha256)) if complete else None,selection_passed=False)
