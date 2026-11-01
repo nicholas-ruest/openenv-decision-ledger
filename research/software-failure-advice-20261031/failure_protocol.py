@@ -54,6 +54,9 @@ def plan():
         is_training=False,model_improvement=False,leaderboard_gain=False)
 
 
+class ObservationBudgetExceeded(ValueError):pass
+
+
 def _process(trial,response,turn,counter,generated,native,advice):
     limit=6000 if turn==0 else 8192-generated-native-advice-96
     usage=response.get('usage',{});choices=response.get('choices')
@@ -74,7 +77,7 @@ def _process(trial,response,turn,counter,generated,native,advice):
         advice+=sum(counter.count(canonical(x)) for x in result['advice_observations'])
         category=result['category'];done=result['done'];reward=result.get('semantic_reward');terminal_reward=result.get('native_reward') if done else None
     else:raise ValueError('provider failure requires finite caller handling')
-    if generated+native+advice>8192 or counter.context(trial.messages)>24576:raise ValueError('all actual observations consume original limits')
+    if generated+native+advice>8192 or counter.context(trial.messages)>24576:raise ObservationBudgetExceeded('all actual observations consume original limits')
     return e,generated,native,advice,category,done,reward,terminal_reward
 
 
