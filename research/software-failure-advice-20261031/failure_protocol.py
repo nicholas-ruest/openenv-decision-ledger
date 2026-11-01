@@ -41,8 +41,9 @@ class QualificationTrial(FailureAdviceTrial):
         super().__init__(Trial(schedule('screen')[0]),arm=job['arm'])
 
 
-def materialize(*args,**kwargs):
-    raise ValueError('source/case and financial admission remain unsealed')
+def materialize(job,case_audit=None,case_sha256=None):
+    from failure_materializer import materialize as construct
+    return construct(job,case_audit,case_sha256)
 
 
 def plan():
@@ -82,10 +83,17 @@ def _process(trial,response,turn,counter,generated,native,advice):
 
 
 def observe_scripted(job,responses,counter):
-    trial=QualificationTrial(job);events=[];generated=native=advice=0;done=False;ids=set()
+    return _observe(job,responses,counter,QualificationTrial(job),True,{})
+
+
+def _observe(job,responses,counter,trial,scripted,metadata):
+    events=[];requests=[];generated=native=advice=0;done=False;ids=set()
     for turn,response in enumerate(responses):
         if turn>=2 or done or response.get('id') in ids:raise ValueError('no replay, duplicate reply or extra response')
         ids.add(response.get('id'))
+        limit=6000 if turn==0 else 8192-generated-native-advice-96
+        payload=dict(sampling_for(job,turn),messages=trial.messages,max_tokens=limit)
+        requests.append(dict(request_sha256=digest(payload),prompt_sha256=digest(trial.messages),requested_max_tokens=limit))
         e,generated,native,advice,category,done,reward,terminal_reward=_process(trial,response,turn,counter,generated,native,advice)
         events.append(e)
     if not done:raise ValueError('incomplete assigned attempt is not a semantic outcome')
@@ -93,7 +101,9 @@ def observe_scripted(job,responses,counter):
         completion_with_observations=generated+native+advice,model_responses=len(events),
         advice_deliveries=sum(e['advice_delivered'] for e in events),semantic_reward=reward,terminal_reward_observed=terminal_reward,
         finish_reason=events[-1]['response']['choices'][0]['finish_reason'])
-    return dict(job=copy.deepcopy(job),scripted=True,live_evidence=False,events=events,record=record)
+    result=dict(job=copy.deepcopy(job),scripted=scripted,live_evidence=not scripted,events=events,record=record)
+    if not scripted:result.update(metadata,requests=requests)
+    return result
 
 
 def verify(trace,counter):
@@ -113,3 +123,15 @@ def verify_phase(traces,counter):
     rows=[dict(job=t['job'],**verify(t,counter)) for t in traces]
     return dict(kind='failure_advice_qualification',scripted=True,live_evidence=False,assigned=8,rows=rows,
         all_assigned_in_denominator=True,selection_passed=False,model_improvement=False,leaderboard_gain=False)
+
+
+def verify_screen(trace,counter,case_audit,case_sha256):
+    from failure_materializer import execution_hashes
+    metadata=dict(case_audit_sha256=case_sha256,execution_sha256=execution_hashes())
+    if (trace.get('scripted') is not False or trace.get('live_evidence') is not True
+        or trace['job'] not in jobs('screen') or any(trace.get(k)!=v for k,v in metadata.items())):
+        raise ValueError('exact sealed original screen trace required')
+    expected=_observe(trace['job'],[e['response'] for e in trace['events']],counter,
+        materialize(trace['job'],case_audit,case_sha256),False,metadata)
+    if trace!=expected:raise ValueError('request, advice, Native outcome, source or accounting changed')
+    return dict(verified=True,scripted=False,live_evidence=True,**expected['record'])

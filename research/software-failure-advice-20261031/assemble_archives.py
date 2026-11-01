@@ -1,4 +1,4 @@
-"""Independently assemble all eight scripted assignments and raw failure events."""
+"""Independent eight-assignment qualification and sealed-screen archive replay."""
 import json
 from pathlib import Path
 import failure_protocol as p
@@ -8,6 +8,14 @@ from failure_protocol import verify
 def assemble(chunks,counter):
     if len(chunks)!=4:raise ValueError('four ordered original chunk paths required')
     return _assemble(chunks,counter,'qualification',verify,None)
+
+
+
+def assemble_screen(chunks,counter,case_audit,case_sha256):
+    from finite_qualification import require_live_ready
+    from failure_protocol import verify_screen
+    require_live_ready(case_audit,case_sha256)
+    return _assemble(chunks,counter,'screen',lambda t,c:verify_screen(t,c,case_audit,case_sha256),case_sha256)
 
 
 def _assemble(chunks,counter,phase,replay,case_sha256):
@@ -23,7 +31,7 @@ def _assemble(chunks,counter,phase,replay,case_sha256):
         events=[json.loads(l) for l in (path/'events.jsonl').read_text().splitlines()]
         jobs=[j for j in assigned if j['sample']==i]
         if (done.get('scripted') is not scripted or done.get('live_evidence') is not (not scripted)
-                
+                or (not scripted and (done.get('case_audit_sha256')!=case_sha256 or done.get('execution_sha256')!=__import__('failure_materializer').execution_hashes()))
                 or done.get('assigned_attempts')!=2 or done.get('recorded_attempts')!=len(rows)
                 or not 0<len(rows)<=2 or [r['job'] for r in rows]!=jobs[:len(rows)]
                 or done.get('uncalled_assignments')!=2-len(rows)):
@@ -57,6 +65,9 @@ def _assemble(chunks,counter,phase,replay,case_sha256):
                 if trace['job']!=job or [e['response'] for e in trace['events']]!=replies:
                     raise ValueError('trace/raw response identity differs')
                 proof=replay(trace,counter)
+                if not scripted:
+                    actual=[{k:e[k] for k in ('request_sha256','prompt_sha256','requested_max_tokens')} for e in es if e['event']=='calling']
+                    if actual!=trace['requests']:raise ValueError('raw request identity differs from independently replayed transcript')
                 for k in ['category','generation_tokens','native_observation_tokens','advice_observation_tokens','advice_deliveries']:
                     if row.get(k)!=proof[k]:raise ValueError('record differs from independent Native replay')
                 observed[identity]=dict(job=job,recorded=True,replayed=True,**proof);verified+=1
@@ -82,4 +93,5 @@ def _assemble(chunks,counter,phase,replay,case_sha256):
 
     if scripted:result.update(actual_scripted_calls=len(calls),known_scripted_replies=len(responses))
 
+    if not scripted:result.update(case_audit_sha256=case_sha256,execution_sha256=__import__('failure_materializer').execution_hashes(),new_model_calls=len(calls))
     return result

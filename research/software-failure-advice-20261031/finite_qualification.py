@@ -1,4 +1,4 @@
-"""Bounded reserve-before-call orchestration; scripted qualification only."""
+"""Bounded reserve-before-call qualification and source-sealed screen orchestration."""
 import copy
 import json
 import os
@@ -7,8 +7,9 @@ import time
 import failure_protocol as p
 
 
-def require_live_ready():
-    raise ValueError('live source/case, transport and financial admission remain unsealed')
+def require_live_ready(case_audit=None,case_sha256=None):
+    from failure_materializer import verify_case
+    return verify_case(p.jobs('screen')[0],case_audit,case_sha256)
 
 
 def write(path,value):
@@ -18,17 +19,34 @@ def write(path,value):
 def run_chunk(chunk,backend,counter,output,deadline):
     if type(chunk) is not int or chunk not in range(4) or backend.scripted is not True:
         raise ValueError('original scripted qualification chunk required')
+    return _run_chunk(chunk,backend,counter,output,deadline,p.jobs('qualification'),p.QualificationTrial,True,{})
+
+
+def run_screen_chunk(chunk,backend,counter,output,deadline,case_audit,case_sha256):
+    proof=require_live_ready(case_audit,case_sha256)
+    if type(chunk) is not int or chunk not in range(4) or backend.scripted is not False:
+        raise ValueError('original screen chunk and financial backend required')
+    if Path(output).exists():raise ValueError('fresh archive required before financial admission')
+    backend.admit([28672]*16,8096,deadline)
+    from failure_materializer import execution_hashes
+    metadata=dict(case_audit_sha256=proof['case_audit_sha256'],execution_sha256=execution_hashes())
+    return _run_chunk(chunk,backend,counter,output,deadline,p.jobs('screen'),
+        lambda job:p.materialize(job,case_audit,case_sha256),False,metadata)
+
+
+def _run_chunk(chunk,backend,counter,output,deadline,assignments,factory,scripted,metadata):
     output=Path(output)
     if output.exists() or deadline<=time.monotonic():raise ValueError('fresh archive and phase deadline required')
     output.mkdir(mode=0o700,parents=True);events=output/'events.jsonl';records=output/'records.jsonl'
-    jobs=[j for j in p.jobs('qualification') if j['sample']==chunk];rows=[];stopped=False
+    jobs=[j for j in assignments if j['sample']==chunk];rows=[];stopped=False
     for job in jobs:
         if stopped:break
         attempt=min(deadline,time.monotonic()+600)
         row=dict(job=copy.deepcopy(job),category='budget',generation_tokens=0,native_observation_tokens=0,
             advice_observation_tokens=0,advice_deliveries=0,reservations=[],calls=[],response_ids=[],unknown_usage=False)
-        trace=dict(job=copy.deepcopy(job),scripted=True,live_evidence=False,events=[])
-        try:trial=p.QualificationTrial(job)
+        trace=dict(job=copy.deepcopy(job),scripted=scripted,live_evidence=not scripted,events=[])
+        if not scripted:trace.update(metadata,requests=[])
+        try:trial=factory(job)
         except Exception as exc:
             row['category']='execution';stopped=True
             write(events,dict(event='failure',attempt_id=job['attempt_id'],stage='native_initialization',error_type=type(exc).__name__,unknown_usage=False))
@@ -45,7 +63,9 @@ def run_chunk(chunk,backend,counter,output,deadline):
                 write(events,dict(event='reserved',attempt_id=job['attempt_id'],turn=turn,label=label))
                 if time.monotonic()>=attempt:row['category']='budget';stopped=True;break
                 stage='provider';called=True;row['calls'].append(label)
-                write(events,dict(event='calling',attempt_id=job['attempt_id'],turn=turn,label=label))
+                request=dict(request_sha256=p.digest(payload),prompt_sha256=p.digest(messages),requested_max_tokens=limit)
+                write(events,dict(event='calling',attempt_id=job['attempt_id'],turn=turn,label=label,**request))
+                if not scripted:trace['requests'].append(request)
                 response=backend.call(payload,min(360,attempt-time.monotonic()),job)
                 stage='response_validation';backend.check_reply(response)
                 usage=response.get('usage',{});identity=response.get('id');choices=response.get('choices')
@@ -82,8 +102,9 @@ def run_chunk(chunk,backend,counter,output,deadline):
                 model_responses=len(trace['events']),advice_deliveries=row['advice_deliveries'],semantic_reward=reward,
                 terminal_reward_observed=terminal_reward,finish_reason=trace['events'][-1]['response']['choices'][0]['finish_reason'])
             with (output/(job['attempt_id']+'.trace.json')).open('x') as f:json.dump(trace,f,indent=2)
-    summary=dict(scripted=True,live_evidence=False,assigned_attempts=2,recorded_attempts=len(rows),uncalled_assignments=2-len(rows),
+    summary=dict(scripted=scripted,live_evidence=not scripted,assigned_attempts=2,recorded_attempts=len(rows),uncalled_assignments=2-len(rows),
         observed_calls=sum(len(r['calls']) for r in rows),unknown_usage_calls=sum(r['unknown_usage'] for r in rows),stopped_on_failure=stopped,retries=0)
+    summary.update(metadata)
     with (output/'complete.json').open('x') as f:json.dump(summary,f,indent=2)
     return rows,summary
 

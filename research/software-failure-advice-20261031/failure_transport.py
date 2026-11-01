@@ -48,7 +48,7 @@ def operating_seconds(now=None):
 def guarded_backend(args):
     # Order matters: no token lookup, route quote, backend or private artifact
     # inspection before the independently sealed live source/case requirement.
-    finite_caller.require_live_ready()
+    finite_caller.require_live_ready(getattr(args,'case_audit',None),getattr(args,'case_audit_sha256',None))
     verify_clean_source(args.expected_source)
     operating_seconds()
     verify_dependencies()
@@ -74,13 +74,12 @@ def supervise_qualification(chunk,backend,counter,output,seconds,*,now=None):
     return dict(result,scripted=True,live_evidence=False,remote_cancellation_attested=False)
 
 
-def require_live_supervision(expected_source,output):
-    # This preflight cannot construct a worker or approve a future case. The
-    # actual failure-advice live worker/case mapping and evidence path remain pending.
-    finite_caller.require_live_ready()
+def require_live_supervision(expected_source,output,case_audit=None,case_sha256=None):
+    # Validate the immutable case lease before source inspection or any worker.
+    finite_caller.require_live_ready(case_audit,case_sha256)
     verify_clean_source(expected_source)
     seconds=operating_seconds()
     verify_dependencies()
     if Path(output).exists() or Path(output).with_suffix('.supervision.jsonl').exists():
         raise ValueError('fresh live archive required')
-    raise ValueError('failure-advice live materialization/evidence path remains unsealed')
+    return seconds

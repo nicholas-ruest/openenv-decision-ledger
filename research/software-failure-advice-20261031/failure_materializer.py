@@ -78,3 +78,10 @@ def construct_existing(job):
 def materialize(job,path=None,expected=None):
     verify_case(job,path,expected)
     return construct_existing(job)
+
+
+def execution_hashes():
+    names=('failure_advice.py','failure_protocol.py','finite_qualification.py','assemble_archives.py',
+        'assess_qualification.mjs','assess_archives.mjs','failure_transport.py','failure_materializer.py',
+        'transport-source-pins.json','live_advice_screen.py')
+    return {name:sha(Path(__file__).with_name(name)) for name in names}
