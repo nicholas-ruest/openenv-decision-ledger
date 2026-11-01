@@ -51,7 +51,8 @@ class AtomicDelegation:
 
 
 def require_live_ready(*args):
-    raise ValueError('paired source/case materializer unsealed; no private reads or live backend')
+    from sealed_case import verify_case
+    return verify_case(caller.p.jobs('screen')[0],*args)
 
 
 def guarded_backend(args):

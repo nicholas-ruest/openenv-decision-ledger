@@ -57,7 +57,7 @@
   ],
   "next_steps": [
     "Do not resume, redraw or relabel a closed study; verify canonical private state and actual worker argv before any launch.",
-    "Qualify the frozen top-level-note paired caller on ruOS, then finish its source-bound live case materializer and original live request/archive/supervisor binding. Keep one supervisor/globalstudylock, at most2inflight original requests and8unique assignments under existing resources and conservative admission. Verified model-code failures remain zero-reward/non-semantic; infrastructure/provider/unknown/budget faults stop new pairs. New cases and paid requests require immutable private audit and fresh actualcredit/allparent/reservation admission; closed studies stay closed.",
+    "Qualify the top-level-note live paired path on ruOS, then bind its exact private source and audited disjoint case lease. Preserve the original whole-phase supervisor/global study lock, at most two in-flight original requests, eight unique assignments, fixed resource limits and conservative admission. All current public live guards remain unsealed. New cases and paid requests require immutable private audit and fresh actual credit, all parents/reservations and historical root-carry admission.",
     "Audit fresh disjoint cases against the complete latest inventory, including the closed advice case. Reconcile actual fresh credit, every receipt/parent/reservation and independent historical carried spending; preserve all unknown-usage reservations.",
     "Require original complete screen evidence and positive predeclared selection before unchanged fresh disjoint confirmation. No Arena POST or HF replacement is approved; frozen v12 remains unchanged."
   ],
@@ -120,7 +120,12 @@
     "max_inflight_requests": 2,
     "paired_prior_ruos_tests_passed": 18,
     "paired_ruos_tests_passed": 19,
-    "paired_ruos_qualified_source": "e86ff3c7b4fd4239059ca437c29829c40bbf3e31"
+    "paired_ruos_qualified_source": "e86ff3c7b4fd4239059ca437c29829c40bbf3e31",
+    "live_case_materializer": "research/software-top-level-note-20261101/sealed_case.py",
+    "live_worker": "research/software-top-level-note-20261101/live_pairs.py",
+    "archive_assessor": "research/software-top-level-note-20261101/assess_pairs.py",
+    "live_path_local_tests_passed": 24,
+    "live_path_ruos_tests_pending": true
   },
   "active_screen": {
     "kind": "initial_helper_guidance",

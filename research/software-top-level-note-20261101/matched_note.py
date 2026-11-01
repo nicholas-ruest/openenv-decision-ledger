@@ -55,3 +55,40 @@ def plan():
         live_continuation_policy_frozen=False,
         required_next_step='Freeze future caller handling of verified model-code failures separately from provider/Native infrastructure failures, retaining zero reward and full denominator; no live caller/admission is supplied here.')
     return copy.deepcopy(value)
+
+
+def observe_screen(job,response,counter,path,expected):
+    from sealed_case import materialize,execution_hashes
+    trial=materialize(job,path,expected)
+    trace=base._observe(job,response,counter,trial,False,
+        dict(case_audit_sha256=expected,execution_sha256=execution_hashes()))
+    trace['record'].update(failure_origin=trial.last_outcome['failure_origin'],
+        native_compile_rejected=trial.last_outcome.get('compile_rejected') is True,
+        native_runtime_error_observed=trial.last_outcome.get('hidden_execution_errors',0)>0)
+    return trace
+
+
+def verify_screen(trace,counter,path,expected):
+    if trace.get('scripted') is not False or trace.get('live_evidence') is not True:
+        raise ValueError('original live screen only; qualification is not model evidence')
+    replay=observe_screen(trace['job'],trace['response'],counter,path,expected)
+    if replay!=trace:raise ValueError('source, case, request, Native outcome or token accounting differs')
+    return dict(job=trace['job'],verified=True,scripted=False,live_evidence=True,**replay['record'])
+
+
+def verify_screen_phase(traces,counter,path,expected):
+    if len(traces)!=8 or [x['job'] for x in traces]!=jobs('screen'):
+        raise ValueError('complete original ordered screen required')
+    if len({x['response']['id'] for x in traces})!=8:
+        raise ValueError('cross-attempt reply reuse')
+    rows=[verify_screen(t,counter,path,expected) for t in traces]
+    if len({x['problem_sha256'] for x in traces})!=1:
+        raise ValueError('original matched Native case required')
+    for arm in n.ARMS:
+        if len({x['prompt_sha256'] for x in traces if x['job']['arm']==arm})!=1:
+            raise ValueError('fixed original arm prompt required')
+    if traces[0]['prompt_sha256']==traces[1]['prompt_sha256']:
+        raise ValueError('syntax-note contrast missing')
+    return dict(kind='top_level_note_screen',scripted=False,live_evidence=True,
+        assigned=8,all_assigned_in_denominator=True,rows=rows,selection_passed=False,
+        model_improvement=False,is_training=False)

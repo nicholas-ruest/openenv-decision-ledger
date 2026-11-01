@@ -1,4 +1,4 @@
-"""Qualification-only two-slot paired caller; no live materializer or provider."""
+"""Two-slot paired caller; live screen requires the immutable private case seal."""
 from concurrent.futures import ThreadPoolExecutor
 import json
 import math
@@ -49,14 +49,28 @@ def event(path,value):
         stream.write(p.n.original.canonical(value)+'\n');stream.flush();os.fsync(stream.fileno())
 
 
-def attempt(job,backend,counter,path,deadline,stop,seen,seen_lock):
+def trial_for(job,case_audit=None,case_audit_sha256=None):
+    if job in p.jobs('qualification'):
+        return p.n.QualificationTrial(p.n.job(job['arm']))
+    from sealed_case import materialize
+    return materialize(job,case_audit,case_audit_sha256)
+
+
+def replay_for(job,response,counter,case_audit=None,case_audit_sha256=None):
+    if job in p.jobs('qualification'):
+        trace=p.observe(job,response,counter);return trace,p.verify(trace,counter)
+    trace=p.observe_screen(job,response,counter,case_audit,case_audit_sha256)
+    return trace,p.verify_screen(trace,counter,case_audit,case_audit_sha256)
+
+
+def attempt(job,backend,counter,path,deadline,stop,seen,seen_lock,case_audit=None,case_audit_sha256=None):
     path.mkdir(mode=0o700);events=path/'events.jsonl'
     row=dict(job=job,category='budget',failure_origin='budget_failure',reservations=[],calls=[],
              response_ids=[],unknown_usage=False,generation_tokens=0)
     attempt_deadline=min(deadline,time.monotonic()+600)
     stage='native_initialization';called=known=False
     try:
-        trial=p.n.QualificationTrial(p.n.job(job['arm']))
+        trial=trial_for(job,case_audit,case_audit_sha256)
         payload=dict(p.n.original.SAMPLING,messages=trial.messages,max_tokens=6000)
         if stop.is_set() or time.monotonic()>=attempt_deadline or counter.context(trial.messages)+6096>24576:
             stop.set()
@@ -86,7 +100,7 @@ def attempt(job,backend,counter,path,deadline,stop,seen,seen_lock):
                     or usage['prompt_tokens']+usage['completion_tokens']>24576):raise ValueError('actual token/context overrun')
                 if time.monotonic()>=attempt_deadline:stop.set()
                 else:
-                    stage='native_replay';trace=p.observe(job,response,counter);verified=p.verify(trace,counter)
+                    stage='native_replay';trace,verified=replay_for(job,response,counter,case_audit,case_audit_sha256)
                     if trace['request_sha256']!=p.n.original.digest(payload):raise ValueError('original request changed')
                     row.update(verified)
                     if time.monotonic()>=attempt_deadline:
@@ -107,12 +121,28 @@ def attempt(job,backend,counter,path,deadline,stop,seen,seen_lock):
 
 def run(backend,counter,output,deadline):
     if backend.scripted is not True:raise ValueError('qualification only; live execution unsealed')
+    return _run(backend,counter,output,deadline,'qualification',None,None)
+
+
+def run_screen(backend,counter,output,deadline,case_audit,case_audit_sha256):
+    if backend.scripted is not False:raise ValueError('actual admitted live backend required')
+    from sealed_case import verify_case
+    verify_case(p.jobs('screen')[0],case_audit,case_audit_sha256)
+    return _run(backend,counter,output,deadline,'screen',case_audit,case_audit_sha256)
+
+
+def _run(backend,counter,output,deadline,phase,case_audit,case_audit_sha256):
+    scripted=phase=='qualification'
+    if phase not in ('qualification','screen') or backend.scripted is not scripted:raise ValueError('original phase/backend required')
+    if not scripted:
+        from sealed_case import verify_case
+        verify_case(p.jobs('screen')[0],case_audit,case_audit_sha256)
     output=Path(output)
     if (output.exists() or type(deadline) not in (int,float) or not math.isfinite(deadline)
         or not 0<deadline-time.monotonic()<=1200):raise ValueError('fresh archive and original deadline required')
     backend.admit([28672]*8,6000,deadline)
     output.mkdir(mode=0o700,parents=True)
-    assigned=p.jobs('qualification');write(output/'assignments.json',assigned)
+    assigned=p.jobs(phase);write(output/'assignments.json',assigned)
     stop=threading.Event();seen=set();seen_lock=threading.Lock();rows=[]
     # Four sequential pairs, at most two in-flight requests, one supervised
     # process. This launches no agents, services, timers or duplicate studies.
@@ -120,11 +150,11 @@ def run(backend,counter,output,deadline):
         for pair in range(4):
             if stop.is_set() or time.monotonic()>=deadline:break
             current=assigned[2*pair:2*pair+2]
-            futures=[pool.submit(attempt,j,backend,counter,output/j['attempt_id'],deadline,stop,seen,seen_lock) for j in current]
+            futures=[pool.submit(attempt,j,backend,counter,output/j['attempt_id'],deadline,stop,seen,seen_lock,case_audit,case_audit_sha256) for j in current]
             rows.extend(f.result() for f in futures)
-    report=assemble(output,counter)
+    report=assemble(output,counter,phase,case_audit,case_audit_sha256)
     if time.monotonic()>=deadline:stop.set()
-    summary=dict(scripted=True,live_evidence=False,assigned=8,recorded=len(rows),complete=report['complete'],
+    summary=dict(scripted=scripted,live_evidence=not scripted,assigned=8,recorded=len(rows),complete=report['complete'],
         calls=sum(len(r['calls']) for r in rows),unknown_usage_calls=sum(r['unknown_usage'] for r in rows),
         max_inflight_requests=2,stopped_on_infrastructure_or_budget=stop.is_set(),retries=0,selection_passed=False)
     summary['complete']=summary['complete'] and not stop.is_set()
@@ -132,8 +162,13 @@ def run(backend,counter,output,deadline):
     return rows,summary
 
 
-def assemble(output,counter):
-    output=Path(output);assigned=p.jobs('qualification')
+def assemble(output,counter,phase='qualification',case_audit=None,case_audit_sha256=None):
+    if phase not in ('qualification','screen'):raise ValueError('original finite phase required')
+    scripted=phase=='qualification'
+    if not scripted:
+        from sealed_case import verify_case
+        verify_case(p.jobs('screen')[0],case_audit,case_audit_sha256)
+    output=Path(output);assigned=p.jobs(phase)
     if json.loads((output/'assignments.json').read_text())!=assigned:raise ValueError('original assignment manifest changed')
     rows=[];traces=[];ids=set()
     for job in assigned:
@@ -147,7 +182,7 @@ def assemble(output,counter):
         if reserved not in ([],[job['attempt_id']+':0']) or row['reservations']!=reserved or row['calls']!=[e['label'] for e in called] or len(called)>len(reserved):
             raise ValueError('one original reserve-before-call required')
         if (path/'trace.json').exists():
-            trace=json.loads((path/'trace.json').read_text());verified=p.verify(trace,counter)
+            trace=json.loads((path/'trace.json').read_text());verified=p.verify(trace,counter) if scripted else p.verify_screen(trace,counter,case_audit,case_audit_sha256)
             if any(row.get(k)!=v for k,v in verified.items()):raise ValueError('record differs from independent Native replay')
             request=json.loads((path/'request.json').read_text());response=json.loads((path/'response.json').read_text())
             if (len(called)!=1 or called[0]['request_sha256']!=trace['request_sha256']
@@ -159,6 +194,6 @@ def assemble(output,counter):
             if row['unknown_usage'] and (not called or row['generation_tokens'] is not None):raise ValueError('unknown usage cannot be zeroed')
         rows.append(dict(row,recorded=True))
     complete=len(traces)==8 and all(not stops_phase(t['record']) for t in traces)
-    evidence=p.verify_phase(traces,counter) if complete else None
-    return dict(kind='top_level_paired_qualification_archive',scripted=True,live_evidence=False,assigned=8,rows=rows,
+    evidence=(p.verify_phase(traces,counter) if scripted else p.verify_screen_phase(traces,counter,case_audit,case_audit_sha256)) if complete else None
+    return dict(kind='top_level_paired_qualification_archive' if scripted else 'top_level_paired_screen_archive',scripted=scripted,live_evidence=not scripted,assigned=8,rows=rows,case_audit_sha256=case_audit_sha256,
         independently_replayed=len(traces),complete=complete,fitness_eligible=complete,evidence=evidence,selection_passed=False)
