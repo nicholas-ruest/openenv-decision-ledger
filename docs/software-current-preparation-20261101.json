@@ -1,0 +1,49 @@
+{
+  "kind": "software_preparation_resume_pointer",
+  "recorded_on": "2026-11-01",
+  "status": "prepared_unsealed_not_admitted",
+  "advice_candidate_source": "36e658565ffd67e982bf50b1ca2cc7db18e441a3",
+  "latest_analysis_source": "1d06273a853f18f2d4c05f9f500b5e07f76a32bc",
+  "candidate_code_changed_by_later_analysis": false,
+  "prior_qualification": {
+    "advice_tests": 32,
+    "completion_metric_audit_tests": 3,
+    "tests_rerun_during_recovery": false
+  },
+  "byte_recovery": {
+    "published_artifacts_and_candidate_files_match_exact_git_source": true,
+    "live_materializer_remains_unsealed": true
+  },
+  "closed_studies": [
+    {
+      "study": "helper_preservation",
+      "results_source": "d9815f3106f834e2eb54acb380c692fcce3f8bcb",
+      "screen_selection_passed": false,
+      "retries_or_confirmation_permitted": false
+    },
+    {
+      "study": "public_pass_finalization",
+      "status": "confirmation_failed",
+      "retries_or_redraw_permitted": false
+    }
+  ],
+  "next_steps": [
+    "Treat a restored local cursor claiming an older screen is running as stale; verify canonical private state and actual worker argv before any launch.",
+    "During permitted access, sync current source and cursor; independently audit the proposed case against the complete latest case inventory and qualify an immutable private source/case lease.",
+    "Reconcile fresh actual credit and usage, every reservation and receipt/parent, and independently attested historical carried spending. Existing amendment-bound whole-phase admission remains mandatory.",
+    "Run the prepared frozen screen only after admission; require fresh unchanged disjoint confirmation after positive selection. Never reopen closed studies."
+  ],
+  "guards": {
+    "fixed_stop": "23:00 America/Toronto",
+    "ruos_access_during_overnight_recovery": false,
+    "model_calls_during_recovery": 0,
+    "new_cases_during_recovery": 0,
+    "financial_admission": false,
+    "private_state_sync_pending": true,
+    "new_automation_or_subagents": false,
+    "routine_public_messages": false,
+    "frozen_v12_changed_or_approved": false,
+    "arena_post_or_hf_replacement_approved": false
+  },
+  "limits": "This is a public source/preparation pointer, never an execution, financial, process, case-disjointness or current-credit attestation."
+}
