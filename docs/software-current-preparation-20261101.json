@@ -16,7 +16,7 @@
   },
   "closed_studies": [
     {
-      "study": "helper_preservation",
+      "study": "post_proposal_forced_helper_restoration",
       "results_source": "d9815f3106f834e2eb54acb380c692fcce3f8bcb",
       "screen_selection_passed": false,
       "retries_or_confirmation_permitted": false
@@ -32,11 +32,25 @@
       "evidence_path": "docs/software-failure-advice-screen-results-20261101.json",
       "selection_passed": false,
       "retries_or_confirmation_permitted": false
+    },
+    {
+      "study": "initial_public_example_self_tracing",
+      "results_source": "0e9b6f1e0008c34e9330c8219873c90ba1865c32",
+      "screen_full_repairs": [
+        0,
+        2
+      ],
+      "disjoint_confirmation_full_repairs": [
+        1,
+        1
+      ],
+      "status": "confirmation_failed",
+      "retries_or_redraw_permitted": false
     }
   ],
   "next_steps": [
     "Do not resume, redraw or relabel a closed study; verify canonical private state and actual worker argv before any launch.",
-    "Prepare a distinct initial public-example self-check instruction with original Native one-action terminal grading. Preserve the existing model, route, token/context limits and single whole-phase deadline; separately freeze and qualify both matched arms before spending.",
+    "Qualify the separately prepared preserve-supplied helper guidance in the initial prompt under original Native one-action grading. The earlier initial public-example self-check failed disjoint confirmation and must not be reopened. First-prompt guidance differs from the closed forced helper-restoration controller; no self-check instruction is bundled.",
     "Audit fresh disjoint cases against the complete latest inventory, including the closed advice case. Reconcile actual fresh credit, every receipt/parent/reservation and independent historical carried spending; preserve all unknown-usage reservations.",
     "Require original complete screen evidence and positive predeclared selection before unchanged fresh disjoint confirmation. No Arena POST or HF replacement is approved; frozen v12 remains unchanged."
   ],
@@ -73,5 +87,22 @@
     "selection_passed": false,
     "confirmation_permitted": false,
     "retry_redraw_permitted": false
+  },
+  "source_review_correction": {
+    "previous_next_step": "initial public-example self-check",
+    "reason": "Already executed October29; selected screen did not survive fresh disjoint confirmation. Do not repeat under a new name or resource profile.",
+    "reviewed_evidence": "https://github.com/nicholas-ruest/openenv-decision-ledger/blob/0e9b6f1e0008c34e9330c8219873c90ba1865c32/docs/software-selfcheck8-results-20261029.md"
+  },
+  "next_candidate": {
+    "kind": "qualification_only_initial_helper_guidance",
+    "path": "research/software-preserve-first-action-20261101/preserve_first.py",
+    "prior_instruction_source": "scripts/software-helper-policy.py",
+    "native_interface": "original DirectRepairAction full module",
+    "intervention": "prompt suffix only; original reply unchanged; no restoration controller",
+    "new_model_calls": 0,
+    "new_cases_materialized": 0,
+    "live_execution_ready": false,
+    "qualification_tests_passed": 6,
+    "qualification_location": "Codex local Native runtime; ruOS replay pending"
   }
 }
