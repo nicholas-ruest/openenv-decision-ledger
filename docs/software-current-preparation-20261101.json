@@ -57,7 +57,7 @@
   ],
   "next_steps": [
     "Do not resume, redraw or relabel a closed study; verify canonical private state and actual worker argv before any launch.",
-    "Qualify the distinct top-level function note and matched replay on ruOS. Freeze a future failure policy that distinguishes verified model-program errors from Native/provider/unknown-usage failures while retaining zero reward and the full denominator. Qualify finite scheduling within the unchanged 1200-second cap before new source/case and financial admission. Never resume/redraw/relabel the closed helper-guidance screen.",
+    "Freeze and qualify future caller/failure handling and finite scheduling within the unchanged 1200-second cap. The separate top-level syntax note and matched qualification passed10checks locally/onruOS; no new cases or model calls occurred. Keep Native rewards and the complete denominator; never project model-program errors as reasoning or resume/relabel the closed helper study. Require new immutable case/source audit and fresh actualcredit/allparent admission before execution.",
     "Audit fresh disjoint cases against the complete latest inventory, including the closed advice case. Reconcile actual fresh credit, every receipt/parent/reservation and independent historical carried spending; preserve all unknown-usage reservations.",
     "Require original complete screen evidence and positive predeclared selection before unchanged fresh disjoint confirmation. No Arena POST or HF replacement is approved; frozen v12 remains unchanged."
   ],
@@ -67,7 +67,7 @@
     "model_calls_during_recovery": 0,
     "new_cases_during_recovery": 0,
     "financial_admission": false,
-    "private_state_sync_pending": true,
+    "private_state_sync_pending": false,
     "new_automation_or_subagents": false,
     "routine_public_messages": false,
     "frozen_v12_changed_or_approved": false,
@@ -105,12 +105,14 @@
     "prototype": "research/software-top-level-note-20261101/top_level_note.py",
     "matched_protocol": "research/software-top-level-note-20261101/matched_note.py",
     "local_tests_passed": 10,
-    "ruos_tests_pending": true,
+    "ruos_tests_pending": false,
     "live_execution_ready": false,
     "new_model_calls": 0,
     "new_cases": 0,
     "continuation_policy_frozen": false,
-    "syntax_note_only": true
+    "syntax_note_only": true,
+    "ruos_tests_passed": 10,
+    "ruos_qualified_source": "f2ecb376d423817fb26aaaa6a33c1be36a027c96"
   },
   "active_screen": {
     "kind": "initial_helper_guidance",
