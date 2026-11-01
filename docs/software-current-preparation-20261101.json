@@ -1,7 +1,7 @@
 {
   "kind": "software_preparation_resume_pointer",
   "recorded_on": "2026-11-01",
-  "status": "entry_order_relation_matched_protocol_qualified_offline",
+  "status": "entry_order_finite_caller_qualified_offline",
   "latest_model_evidence": {
     "result_path": "docs/software-top-level-note-results-20261101.json",
     "public_runtime_source": "7838312d402f0940841d2888b6fe1d89fe180f10",
@@ -77,7 +77,7 @@
   ],
   "next_steps": [
     "Read canonical private state and actual process argv before any launch; never resume, redraw or relabel a closed study.",
-    "Qualify the finite supervised caller and original archive assembly for the frozen two-response relation-feedback protocol. Preserve all review/terminal token costs, exact diagnostic exposure and fail-closed Native/MetaHarness assessment. Keep public case construction and live execution sealed; do not repeat closed studies.",
+    "Qualify the private source-bound case materializer, original live backend delegation and supervisor-bound original assessment for the frozen relation-feedback protocol. Keep future cases and live execution sealed until those guards pass. No closed study is resumed or redrawn.",
     "Require complete original screen evidence and positive predeclared selection before unchanged fresh disjoint confirmation. No model or leaderboard improvement is established.",
     "Keep frozen v12 unchanged. No Arena POST or HF replacement is approved. Preserve the existing execution guards; no new automation, subagents or routine public messages."
   ],
@@ -108,6 +108,11 @@
     "matched_qualification_assessor": "research/software-entry-order-review-20261101/assess_qualification.mjs",
     "matched_local_and_ruos_controls": 13,
     "matched_evidence_path": "docs/software-entry-order-review-matched-qualification-20261101.json",
-    "program_unavailability_common_to_both_arms": true
+    "program_unavailability_common_to_both_arms": true,
+    "finite_source": "a1a85df96e4fd3672e9edcc06190272ea73a0bf3",
+    "finite_caller": "research/software-entry-order-review-20261101/finite_caller.py",
+    "guarded_transport": "research/software-entry-order-review-20261101/guarded_transport.py",
+    "finite_local_and_ruos_controls": 20,
+    "finite_evidence_path": "docs/software-entry-order-finite-qualification-20261101.json"
   }
 }

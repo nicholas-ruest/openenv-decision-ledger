@@ -1,0 +1,21 @@
+{
+  "kind": "entry_order_finite_caller_qualification",
+  "source": "a1a85df96e4fd3672e9edcc06190272ea73a0bf3",
+  "local_tests_passed": 20,
+  "ruos_tests_passed": 20,
+  "local_seconds": 88.377,
+  "ruos_seconds": 152.789,
+  "max_inflight_requests": 2,
+  "original_assignments": 8,
+  "max_original_calls": 16,
+  "unknown_second_turn_retains_known_usage_prefix": true,
+  "all_review_and_terminal_tokens_counted": true,
+  "original_supervisor_completion_and_timeout_tested": true,
+  "actual_metaharness_evidence": "scripted qualification only",
+  "live_execution_ready": false,
+  "new_cases": 0,
+  "new_model_calls": 0,
+  "selection_passed": false,
+  "model_improvement": false,
+  "leaderboard_gain": false
+}
