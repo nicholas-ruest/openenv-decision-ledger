@@ -15,9 +15,9 @@ import preserve_first as p
 
 
 def require_live_ready(*args):
-    # Deliberately no CLI/env switch, artifact read or Native reset here. A real
-    # independent private inventory/source materializer is still required.
-    raise ValueError('private source/case materializer unsealed; live execution refused')
+    from case_materializer import verify_case
+    import matched_protocol as protocol
+    return verify_case(protocol.jobs('screen')[0],*args)
 
 
 def verify_dependencies():

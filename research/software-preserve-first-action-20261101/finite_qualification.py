@@ -14,6 +14,21 @@ def write(path, value):
 def run(backend, counter, output, deadline):
     if backend.scripted is not True:
         raise ValueError('live caller not admitted or enabled')
+    return _run(backend,counter,output,deadline,p.jobs('qualification'),
+        lambda job:p.native.QualificationTrial(p.native.qualification_job(job['arm'])),
+        p.observe_scripted,p.verify,True)
+
+
+def run_screen(backend,counter,output,deadline,path,expected):
+    from case_materializer import verify_case,materialize
+    verify_case(p.jobs('screen')[0],path,expected)
+    if backend.scripted is not False:raise ValueError('guarded financial backend required')
+    return _run(backend,counter,output,deadline,p.jobs('screen'),lambda job:materialize(job,path,expected),
+        lambda job,response,c:p.observe_live(job,response,c,path,expected),
+        lambda trace,c:p.verify_live(trace,c,path,expected),False)
+
+
+def _run(backend,counter,output,deadline,assignments,factory,observe,verify,scripted):
     output = Path(output)
     if output.exists() or deadline <= time.monotonic():
         raise ValueError('fresh archive and one original phase deadline required')
@@ -22,14 +37,14 @@ def run(backend, counter, output, deadline):
     output.mkdir(mode=0o700, parents=True)
     events = output/'events.jsonl';records = output/'records.jsonl'
     rows = [];traces = [];stop = False
-    for job in p.jobs('qualification'):
+    for job in assignments:
         if stop: break
         attempt = min(deadline, time.monotonic()+600)
         row = dict(job=job, category='budget', reservations=[], calls=[],
                    response_ids=[], unknown_usage=False, generation_tokens=0)
         stage = 'native_initialization';called = known = False
         try:
-            trial = p.native.QualificationTrial(p.native.qualification_job(job['arm']))
+            trial = factory(job)
             payload = dict(p.native.SAMPLING, messages=trial.messages, max_tokens=6000)
             if time.monotonic() >= attempt or counter.context(trial.messages)+6000+96 > 24576:
                 stop = True
@@ -65,8 +80,10 @@ def run(backend, counter, output, deadline):
                         stop = True
                     else:
                         stage = 'native_replay'
-                        trace = p.observe_scripted(job, response, counter)
-                        verified = p.verify(trace, counter)
+                        trace = observe(job, response, counter)
+                        verified = verify(trace, counter)
+                        if trace['request_sha256']!=p.native.digest(payload):
+                            raise ValueError('actual original request differs from replay')
                         row.update(verified)
                         if time.monotonic() >= attempt:
                             row['category'] = 'budget';stop = True
@@ -86,10 +103,10 @@ def run(backend, counter, output, deadline):
                               attempt_id=job['attempt_id'], unknown_usage=row['unknown_usage']))
         write(records, row);rows.append(row)
     complete = len(traces)==8 and not stop and time.monotonic()<deadline
-    if complete:
+    if complete and scripted:
         report = p.verify_phase(traces, counter)
         with (output/'qualification-evidence.json').open('x') as stream: json.dump(report, stream, indent=2)
-    summary = dict(scripted=True, live_evidence=False, assigned=8, recorded=len(rows),
+    summary = dict(scripted=scripted, live_evidence=not scripted, assigned=8, recorded=len(rows),
         uncalled_assignments=8-len(rows), observed_calls=sum(len(r['calls']) for r in rows),
         unknown_usage_calls=sum(r['unknown_usage'] for r in rows), complete=complete,
         selection_passed=False, retries=0, stopped_on_failure=stop)

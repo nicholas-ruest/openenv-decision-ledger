@@ -50,7 +50,7 @@
   ],
   "next_steps": [
     "Do not resume, redraw or relabel a closed study; verify canonical private state and actual worker argv before any launch.",
-    "Complete source-bound private case materializer and live request/archive/supervisor evidence integration. Guarded delegation to unchanged financial backend, conservative whole-phase admission and scripted archive assembly are implemented; no live materializer or caller bypass is enabled.",
+    "Qualify exact source on ruOS; privately audit the new screen against complete latest inventory, bind immutable private case/source lease and qualify it. Live worker, request/archive/supervisor evidence and study lock are implemented but unadmitted. Refresh actual credit and complete all-parent/reservation reconciliation before paid requests. Confirmation remains unmaterialized.",
     "Audit fresh disjoint cases against the complete latest inventory, including the closed advice case. Reconcile actual fresh credit, every receipt/parent/reservation and independent historical carried spending; preserve all unknown-usage reservations.",
     "Require original complete screen evidence and positive predeclared selection before unchanged fresh disjoint confirmation. No Arena POST or HF replacement is approved; frozen v12 remains unchanged."
   ],
@@ -60,7 +60,7 @@
     "model_calls_during_recovery": 0,
     "new_cases_during_recovery": 0,
     "financial_admission": false,
-    "private_state_sync_pending": false,
+    "private_state_sync_pending": true,
     "new_automation_or_subagents": false,
     "routine_public_messages": false,
     "frozen_v12_changed_or_approved": false,
@@ -117,6 +117,11 @@
     "transport_local_tests_passed": 24,
     "transport_ruos_tests_pending": false,
     "transport_ruos_tests_passed": 24,
-    "transport_ruos_source": "41f8726342ed6c72a37fdaa0fe5d7bc10432322e"
+    "transport_ruos_source": "41f8726342ed6c72a37fdaa0fe5d7bc10432322e",
+    "case_materializer": "research/software-preserve-first-action-20261101/case_materializer.py",
+    "live_worker": "research/software-preserve-first-action-20261101/live_screen.py",
+    "supervisor_bound_assessment": "research/software-preserve-first-action-20261101/assess_archive.py",
+    "live_path_local_tests_passed": 30,
+    "live_path_ruos_tests_pending": true
   }
 }

@@ -32,6 +32,10 @@ def observe_scripted(job, response, counter):
     if job not in jobs('qualification'):
         raise ValueError('already-seen qualification assignments only')
     trial = native.QualificationTrial(native.qualification_job(job['arm']))
+    return _observe(job,response,counter,trial,True,{})
+
+
+def _observe(job,response,counter,trial,scripted,metadata):
     initial = copy.deepcopy(trial.messages)
     payload = dict(copy.deepcopy(native.SAMPLING), messages=initial, max_tokens=6000)
     usage = response.get('usage', {})
@@ -51,16 +55,17 @@ def observe_scripted(job, response, counter):
     observations = result['new_observations']
     tokens = sum(counter.count(native.canonical(x)) for x in observations)
     if (usage['completion_tokens'] + tokens > 8192
+        or usage['prompt_tokens'] + usage['completion_tokens'] + tokens > 24576
         or counter.context(trial.messages) > 24576):
         raise ValueError('actual observations exceed original budget')
     record = dict(category=result['category'], semantic_reward=result['semantic_reward'],
         terminal_reward_observed=result['native_reward'], generation_tokens=usage['completion_tokens'],
         native_observation_tokens=tokens, completion_with_observations=usage['completion_tokens'] + tokens,
         model_responses=1, finish_reason=choice.get('finish_reason'), controller_actions=[])
-    return dict(job=copy.deepcopy(job), scripted=True, live_evidence=False,
+    return dict(job=copy.deepcopy(job), scripted=scripted, live_evidence=not scripted,
         request_sha256=native.digest(payload), prompt_sha256=native.digest(initial),
         problem_sha256=trial.binding.problem_sha256, response=copy.deepcopy(response),
-        observations=observations, messages=trial.messages, record=record)
+        observations=observations, messages=trial.messages, record=record,**metadata)
 
 
 def verify(trace, counter):
@@ -90,3 +95,17 @@ def verify_phase(traces, counter):
     return dict(kind='preserve_first_qualification', scripted=True, live_evidence=False,
         assigned=8, all_assigned_in_denominator=True, rows=rows,
         selection_passed=False, model_improvement=False, leaderboard_gain=False)
+
+
+def observe_live(job,response,counter,path,expected):
+    from case_materializer import materialize,execution_hashes
+    return _observe(job,response,counter,materialize(job,path,expected),False,
+        dict(case_audit_sha256=expected,execution_sha256=execution_hashes()))
+
+
+def verify_live(trace,counter,path,expected):
+    if trace.get('scripted') is not False or trace.get('live_evidence') is not True:
+        raise ValueError('original sealed live screen trace required')
+    reconstructed=observe_live(trace['job'],trace['response'],counter,path,expected)
+    if trace!=reconstructed:raise ValueError('source, request, reply, Native outcome or observation costs differ')
+    return dict(job=trace['job'],verified=True,scripted=False,live_evidence=True,**reconstructed['record'])

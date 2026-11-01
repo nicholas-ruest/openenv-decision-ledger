@@ -12,7 +12,11 @@ def lines(path):
 
 
 def assemble(output,counter):
-    output=Path(output);assigned=p.jobs('qualification')
+    return _assemble(output,counter,p.jobs('qualification'),p.verify,True)
+
+
+def _assemble(output,counter,assigned,verify,scripted):
+    output=Path(output)
     records=lines(output/'records.jsonl');events=lines(output/'events.jsonl')
     if len(records)>8 or [r['job'] for r in records]!=assigned[:len(records)]:
         raise ValueError('original ordered assignment prefix required')
@@ -39,7 +43,7 @@ def assemble(output,counter):
         if record['reservations']!=reserved or record['calls']!=called:
             raise ValueError('durable request/reservation identity changed')
         if trace_path.exists():
-            trace=json.loads(trace_path.read_text());verified=p.verify(trace,counter)
+            trace=json.loads(trace_path.read_text());verified=verify(trace,counter)
             if trace['job']!=job or replies!=[trace['response']]:raise ValueError('original reply/assignment differs')
             call=next(e for e in ev if e['event']=='calling')
             if call['request_sha256']!=trace['request_sha256'] or call['requested_max_tokens']!=6000:
@@ -57,10 +61,18 @@ def assemble(output,counter):
     summary_path=output/'complete.json'
     summary=json.loads(summary_path.read_text()) if summary_path.exists() else None
     complete=len(traces)==8 and summary is not None and summary.get('complete') is True
-    if summary and (summary.get('scripted') is not True or summary.get('live_evidence') is not False
+    if summary and (summary.get('scripted') is not scripted or summary.get('live_evidence') is not (not scripted)
         or summary.get('recorded')!=len(records) or summary.get('observed_calls')!=sum(r['observed_calls'] for r in rows)):
         raise ValueError('original scripted phase summary differs')
-    evidence=p.verify_phase(traces,counter) if complete else None
-    return dict(kind='preserve_first_qualification_archive',scripted=True,live_evidence=False,
+    evidence=p.verify_phase(traces,counter) if complete and scripted else None
+    return dict(kind='preserve_first_qualification_archive' if scripted else 'preserve_first_screen_archive',scripted=scripted,live_evidence=not scripted,
         assigned=8,recorded=len(records),independently_replayed=len(traces),rows=rows,
-        complete=complete,fitness_eligible=complete,selection_passed=False,evidence=evidence)
+        complete=complete,fitness_eligible=complete and scripted,selection_passed=False,evidence=evidence)
+
+
+def assemble_screen(output,counter,path,expected):
+    from case_materializer import verify_case
+    verify_case(p.jobs('screen')[0],path,expected)
+    report=_assemble(output,counter,p.jobs('screen'),lambda t,c:p.verify_live(t,c,path,expected),False)
+    report['case_audit_sha256']=expected
+    return report

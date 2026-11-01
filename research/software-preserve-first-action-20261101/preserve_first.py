@@ -52,18 +52,21 @@ class QualificationBinding:
     def __init__(self, job):
         if job != qualification_job(job.get('arm')):
             raise ValueError('only the already-seen qualification input is enabled')
+        self._reset(TASK, QUALIFICATION_SEED, job['arm'])
+
+    def _reset(self, task_id, seed, arm):
         sys.path[:0] = [str(ROOT / 'integrations/software-repair'),
                        str(ROOT / 'research/software-terminal-audit-20261028')]
         from repair_env.direct_environment import DirectRepairEnvironment, DirectRepairAction
         from terminal_audit import classify
         self.env = DirectRepairEnvironment()
         self.action_type = DirectRepairAction
-        reset = self.env.reset(task_id=TASK, seed=QUALIFICATION_SEED)
+        reset = self.env.reset(task_id=task_id, seed=seed)
         raw = reset.model_dump()
-        changed = policy.transform(reset, job['arm']).model_dump()
+        changed = policy.transform(reset, arm).model_dump()
         restored = copy.deepcopy(changed)
-        if job['arm'] == 'preserve_supplied':
-            suffix = policy.guidance(TASK)
+        if arm == 'preserve_supplied':
+            suffix = policy.guidance(task_id)
             if not restored['prompt'].endswith(suffix):
                 raise ValueError('original guidance missing')
             restored['prompt'] = restored['prompt'][:-len(suffix)]
