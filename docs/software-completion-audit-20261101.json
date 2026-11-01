@@ -1,0 +1,97 @@
+{
+  "kind": "recorded_training_completion_metric_audit",
+  "run": "a3274296c46341a847407f97",
+  "project": "GlobalBusinessAdvisors",
+  "selected_numeric_records_sha256": "f4993dd4a4df74d2bd14d7032d4526014242a972150ca51dae01c5e3f7bbf638",
+  "all_updates": {
+    "updates": 148,
+    "clipped_ratio_histogram": {
+      "0.5": 3,
+      "0.75": 11,
+      "1.0": 134
+    },
+    "mean_of_update_clipped_ratios": 0.9712837837837838,
+    "clip_one_updates": 134,
+    "clip_one_with_positive_reward": 121,
+    "clip_one_with_reward_one": 10,
+    "clip_one_with_all_terminated_lengths_zero": 134,
+    "minimum_recorded_completion_length": 525.0,
+    "maximum_recorded_completion_length": 4089.0,
+    "mean_of_update_mean_lengths": 1162.4847972972973
+  },
+  "zero_retry_updates": {
+    "updates": 146,
+    "clipped_ratio_histogram": {
+      "0.5": 3,
+      "0.75": 11,
+      "1.0": 132
+    },
+    "mean_of_update_clipped_ratios": 0.9708904109589042,
+    "clip_one_updates": 132,
+    "clip_one_with_positive_reward": 119,
+    "clip_one_with_reward_one": 10,
+    "clip_one_with_all_terminated_lengths_zero": 132,
+    "minimum_recorded_completion_length": 525.0,
+    "maximum_recorded_completion_length": 4089.0,
+    "mean_of_update_mean_lengths": 1163.7945205479452
+  },
+  "numeric_groups": {
+    "1": {
+      "task_name": null,
+      "updates": 50,
+      "clipped_ratio_histogram": {
+        "0.5": 3,
+        "0.75": 8,
+        "1.0": 39
+      },
+      "mean_of_update_clipped_ratios": 0.93,
+      "clip_one_updates": 39,
+      "clip_one_with_positive_reward": 29,
+      "clip_one_with_reward_one": 0,
+      "clip_one_with_all_terminated_lengths_zero": 39,
+      "minimum_recorded_completion_length": 525.0,
+      "maximum_recorded_completion_length": 3398.0,
+      "mean_of_update_mean_lengths": 1308.39
+    },
+    "2": {
+      "task_name": null,
+      "updates": 49,
+      "clipped_ratio_histogram": {
+        "1.0": 49
+      },
+      "mean_of_update_clipped_ratios": 1.0,
+      "clip_one_updates": 49,
+      "clip_one_with_positive_reward": 49,
+      "clip_one_with_reward_one": 10,
+      "clip_one_with_all_terminated_lengths_zero": 49,
+      "minimum_recorded_completion_length": 528.0,
+      "maximum_recorded_completion_length": 1032.0,
+      "mean_of_update_mean_lengths": 657.4438775510204
+    },
+    "3": {
+      "task_name": null,
+      "updates": 49,
+      "clipped_ratio_histogram": {
+        "0.75": 3,
+        "1.0": 46
+      },
+      "mean_of_update_clipped_ratios": 0.9846938775510204,
+      "clip_one_updates": 46,
+      "clip_one_with_positive_reward": 43,
+      "clip_one_with_reward_one": 0,
+      "clip_one_with_all_terminated_lengths_zero": 46,
+      "minimum_recorded_completion_length": 1009.0,
+      "maximum_recorded_completion_length": 4089.0,
+      "mean_of_update_mean_lengths": 1518.642857142857
+    }
+  },
+  "actual_trainer_revision_attested": false,
+  "provider_finish_reasons_available": false,
+  "total_rollout_count_inferred": false,
+  "clipped_metric_treated_as_semantic_failure": false,
+  "mapping_inferred_from_rotation": false,
+  "model_calls": 0,
+  "new_cases": 0,
+  "model_improvement": false,
+  "leaderboard_gain": false
+}
