@@ -4,6 +4,7 @@ import fcntl
 import json
 import os
 from pathlib import Path
+import time
 
 import failure_protocol as p
 import finite_qualification as c
@@ -41,15 +42,24 @@ def prior_chunks(args,counter):
             raise ValueError('incomplete/failed prior chunk; phase stays inconclusive')
 
 
-def execute(deadline,args):
+def execute_phase(deadline,args):
+    """All original chunks share this one supervisor's absolute deadline."""
     b.verify_clean_source(args.expected_source);b.operating_seconds();b.verify_dependencies()
     c.require_live_ready(args.case_audit,args.case_audit_sha256)
-    base=b.load('failure_advice_prior_counter',p.ROOT/'scripts/repair-signal-screen.py')
-    counter=base.helper.load_counter(argparse.Namespace(accounting='arena',tokenizer_json=args.tokenizer,tokenizer_sha256=base.TOKENIZER_SHA))
-    prior_chunks(args,counter)
     backend=b.guarded_backend(args)
-    c.run_screen_chunk(args.chunk,backend,backend.counter,args.output,deadline,args.case_audit,args.case_audit_sha256)
-    return 0
+    backend.admit([28672]*16,8096,deadline)
+    paths=[args.output/('chunk-'+str(i)) for i in range(4)]
+    report=None
+    for chunk,path in enumerate(paths):
+        if time.monotonic()>=deadline:break
+        c.run_screen_chunk(chunk,backend,backend.counter,path,deadline,args.case_audit,args.case_audit_sha256)
+        report=assemble_screen(paths,backend.counter,args.case_audit,args.case_audit_sha256)
+        if (report['recorded']!=2*(chunk+1) or report['independently_replayed']!=2*(chunk+1)
+            or any(row['recorded'] and row['category'] in ('provider','budget','execution') for row in report['rows'])):break
+    if report is None:return 1
+    # This is evidence, not a chunk shutdown receipt or a fitness/promotion claim.
+    with (args.output/'phase-evidence.json').open('x') as stream:json.dump(report,stream,indent=2)
+    return 0 if report['complete'] and time.monotonic()<deadline else 1
 
 
 def parser():
@@ -64,7 +74,9 @@ def parser():
 def main():
     args=parser().parse_args()
     if not args.execute:print(json.dumps(p.plan()));return
-    if any(v is None for k,v in vars(args).items() if k not in ('execute','prior')):
+    if args.chunk is not None or args.prior:
+        raise ValueError('separate live chunks cannot restart the whole-phase clock; execute one complete phase')
+    if any(v is None for k,v in vars(args).items() if k not in ('execute','prior','chunk')):
         raise ValueError('explicit original source/case/audit and fresh archive required')
     seconds=b.require_live_supervision(args.expected_source,args.output,args.case_audit,args.case_audit_sha256)
     no_other_workers();os.umask(0o077)
@@ -72,7 +84,7 @@ def main():
     with open('/home/ruv/arena-inference-study.lock','a') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         supervisor=b.load('failure_advice_live_supervisor',p.ROOT/'integrations/software-repair/scripts/screen_deadline.py')
-        result=supervisor.run_bounded(execute,(args,),seconds,args.output.with_suffix('.supervision.jsonl'))
+        result=supervisor.run_bounded(execute_phase,(args,),seconds,args.output.with_suffix('.supervision.jsonl'))
         print(json.dumps(dict(result,remote_cancellation_attested=False)))
 
 
