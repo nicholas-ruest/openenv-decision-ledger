@@ -1,7 +1,7 @@
 {
   "kind": "software_preparation_resume_pointer",
   "recorded_on": "2026-11-01",
-  "status": "top_level_note_offline_preparation",
+  "status": "top_level_note_paired_caller_qualification",
   "advice_candidate_source": "36e658565ffd67e982bf50b1ca2cc7db18e441a3",
   "latest_analysis_source": "1d06273a853f18f2d4c05f9f500b5e07f76a32bc",
   "candidate_code_changed_by_later_analysis": false,
@@ -57,7 +57,7 @@
   ],
   "next_steps": [
     "Do not resume, redraw or relabel a closed study; verify canonical private state and actual worker argv before any launch.",
-    "Freeze and qualify future caller/failure handling and finite scheduling within the unchanged 1200-second cap. The separate top-level syntax note and matched qualification passed10checks locally/onruOS; no new cases or model calls occurred. Keep Native rewards and the complete denominator; never project model-program errors as reasoning or resume/relabel the closed helper study. Require new immutable case/source audit and fresh actualcredit/allparent admission before execution.",
+    "Qualify the frozen top-level-note paired caller on ruOS, then finish its source-bound live case materializer and original live request/archive/supervisor binding. Keep one supervisor/globalstudylock, at most2inflight original requests and8unique assignments under existing resources and conservative admission. Verified model-code failures remain zero-reward/non-semantic; infrastructure/provider/unknown/budget faults stop new pairs. New cases and paid requests require immutable private audit and fresh actualcredit/allparent/reservation admission; closed studies stay closed.",
     "Audit fresh disjoint cases against the complete latest inventory, including the closed advice case. Reconcile actual fresh credit, every receipt/parent/reservation and independent historical carried spending; preserve all unknown-usage reservations.",
     "Require original complete screen evidence and positive predeclared selection before unchanged fresh disjoint confirmation. No Arena POST or HF replacement is approved; frozen v12 remains unchanged."
   ],
@@ -67,7 +67,7 @@
     "model_calls_during_recovery": 0,
     "new_cases_during_recovery": 0,
     "financial_admission": false,
-    "private_state_sync_pending": false,
+    "private_state_sync_pending": true,
     "new_automation_or_subagents": false,
     "routine_public_messages": false,
     "frozen_v12_changed_or_approved": false,
@@ -109,10 +109,15 @@
     "live_execution_ready": false,
     "new_model_calls": 0,
     "new_cases": 0,
-    "continuation_policy_frozen": false,
+    "continuation_policy_frozen": true,
     "syntax_note_only": true,
     "ruos_tests_passed": 10,
-    "ruos_qualified_source": "f2ecb376d423817fb26aaaa6a33c1be36a027c96"
+    "ruos_qualified_source": "f2ecb376d423817fb26aaaa6a33c1be36a027c96",
+    "paired_caller": "research/software-top-level-note-20261101/paired_caller.py",
+    "paired_transport": "research/software-top-level-note-20261101/paired_transport.py",
+    "paired_local_tests_passed": 18,
+    "paired_ruos_tests_pending": true,
+    "max_inflight_requests": 2
   },
   "active_screen": {
     "kind": "initial_helper_guidance",
