@@ -50,7 +50,7 @@
   ],
   "next_steps": [
     "Do not resume, redraw or relabel a closed study; verify canonical private state and actual worker argv before any launch.",
-    "Finish guarded live backend/supervisor delegation, immutable private source/case sealing and independent failure-archive replay for the frozen one-action initial helper-guidance schedule. Matched replay, actual pinned fitness qualification and scripted finite caller are implemented. No self-check or restoration is bundled; closed studies stay closed.",
+    "Complete source-bound private case materializer and live request/archive/supervisor evidence integration. Guarded delegation to unchanged financial backend, conservative whole-phase admission and scripted archive assembly are implemented; no live materializer or caller bypass is enabled.",
     "Audit fresh disjoint cases against the complete latest inventory, including the closed advice case. Reconcile actual fresh credit, every receipt/parent/reservation and independent historical carried spending; preserve all unknown-usage reservations.",
     "Require original complete screen evidence and positive predeclared selection before unchanged fresh disjoint confirmation. No Arena POST or HF replacement is approved; frozen v12 remains unchanged."
   ],
@@ -60,7 +60,7 @@
     "model_calls_during_recovery": 0,
     "new_cases_during_recovery": 0,
     "financial_admission": false,
-    "private_state_sync_pending": false,
+    "private_state_sync_pending": true,
     "new_automation_or_subagents": false,
     "routine_public_messages": false,
     "frozen_v12_changed_or_approved": false,
@@ -111,6 +111,10 @@
     "local_combined_tests_passed": 17,
     "matched_ruos_tests_pending": false,
     "matched_ruos_tests_passed": 17,
-    "matched_ruos_source": "1f1293c14daf997efdd611bcdf4765397934d797"
+    "matched_ruos_source": "1f1293c14daf997efdd611bcdf4765397934d797",
+    "transport": "research/software-preserve-first-action-20261101/guarded_transport.py",
+    "archive_assembly": "research/software-preserve-first-action-20261101/assemble_qualification.py",
+    "transport_local_tests_passed": 24,
+    "transport_ruos_tests_pending": true
   }
 }

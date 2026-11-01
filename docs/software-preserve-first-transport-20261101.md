@@ -1,0 +1,15 @@
+# Initial helper guidance: guarded transport and archive qualification
+
+The one-action helper-guidance protocol now has a source-pinned bridge to the existing amendment-bound financial/provider backend and the existing Linux deadline supervisor. No receipt, cap, reservation implementation, credential source or provider route is replaced. The public bridge rejects live admission before inspecting private artifacts, importing the backend or constructing a Native case. It has no CLI/environment bypass.
+
+The original backend requires a conservative 16-request quote with an 8096-token generation ceiling. The bridge retains that entire admission contract while allowing only the eight predeclared screen requests, each with at most 6000 generated tokens. Duplicate reservations, unreserved calls and retries after unknown usage are rejected. This spends no money during qualification and does not establish current account credit or financial admission.
+
+Scripted qualification runs the entire eight-assignment phase under one absolute deadline using the existing supervisor. The fixed 23:00 Toronto stop and 1200-second maximum remain unchanged. Timeout is distinct from success and never attests remote provider cancellation. Live process locking and the real source/case materializer still need integration before a model launch.
+
+`assemble_qualification.py` independently reads original raw records, calling/reservation/response events and Native traces, including incomplete and unknown-usage archives. It rejects changed requests, replies, outcomes, observation costs or assignment identities. Missing terminal records remain unrecorded, including an interrupted called assignment; they do not become semantic outcomes. An incomplete phase cannot receive fitness eligibility or selection. This assembler is scripted-only; live source/case evidence and supervisor-terminal binding remain required.
+
+Qualification covers unchanged backend argument delegation and conservative quote dimensions, finite reservation/call identity, unknown-usage retention, dependency hashes, Toronto cutoff, actual whole-phase supervisor completion and timeout, independent archive replay and tamper rejection. Reference controls and synthetic provider failures remain qualification evidence, not model solves or managed training.
+
+Before paid execution: finish the private immutable case/source materializer anchored to the complete latest inventory; bind live request/reply/archive replay and the verified supervisor terminal receipt; inspect actual worker argv and acquire the existing study lock; privately reconcile current credit, every receipt/parent/reservation and independently attested historical carry; then admit the complete original phase. No Arena POST, HF replacement or allocation amendment is authorized by this preparation. Frozen v12 and all existing reservations remain preserved.
+
+All 24 local scripted/Native/tokenizer/transport checks passed, including real local supervisor completion and timeout. ruOS verification of this added transport is pending. No new cases, model requests or performance gains occurred.
