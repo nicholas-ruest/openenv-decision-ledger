@@ -116,9 +116,11 @@
     "paired_caller": "research/software-top-level-note-20261101/paired_caller.py",
     "paired_transport": "research/software-top-level-note-20261101/paired_transport.py",
     "paired_local_tests_passed": 19,
-    "paired_ruos_tests_pending": true,
+    "paired_ruos_tests_pending": false,
     "max_inflight_requests": 2,
-    "paired_prior_ruos_tests_passed": 18
+    "paired_prior_ruos_tests_passed": 18,
+    "paired_ruos_tests_passed": 19,
+    "paired_ruos_qualified_source": "e86ff3c7b4fd4239059ca437c29829c40bbf3e31"
   },
   "active_screen": {
     "kind": "initial_helper_guidance",
