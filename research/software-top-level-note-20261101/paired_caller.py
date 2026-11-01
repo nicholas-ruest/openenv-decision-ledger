@@ -90,7 +90,7 @@ def attempt(job,backend,counter,path,deadline,stop,seen,seen_lock):
                     if trace['request_sha256']!=p.n.original.digest(payload):raise ValueError('original request changed')
                     row.update(verified)
                     if time.monotonic()>=attempt_deadline:
-                        row.update(category='budget',failure_origin='budget_failure');stop.set()
+                        row.update(category='budget',failure_origin='budget_failure',semantic_reward=None);stop.set()
                     else:
                         write(path/'trace.json',trace)
                         if stops_phase(verified):stop.set()
@@ -98,7 +98,7 @@ def attempt(job,backend,counter,path,deadline,stop,seen,seen_lock):
         row['unknown_usage']=called and not known
         if row['unknown_usage']:row['generation_tokens']=None
         category='budget' if stage in ('reservation','accounting') else 'provider' if stage in ('provider','response_validation') else 'execution'
-        row.update(category=category,failure_origin=category+'_failure' if category!='execution' else 'native_execution_unverified')
+        row.update(category=category,failure_origin=category+'_failure' if category!='execution' else 'native_execution_unverified',semantic_reward=None)
         event(events,dict(event='failure',stage=stage,error_type=type(exc).__name__,unknown_usage=row['unknown_usage']))
         stop.set()
     write(path/'record.json',row)

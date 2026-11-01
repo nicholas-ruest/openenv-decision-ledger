@@ -109,6 +109,25 @@ class PairedTests(unittest.TestCase):
         self.assertEqual(rows[0]['generation_tokens'],6001)
         self.assertFalse(c.assemble(out,self.counter)['fitness_eligible'])
 
+    def test_deadline_after_native_grading_retains_raw_reward_without_counting_solve(self):
+        original=OriginalBackend(self.counter,self.responses,barrier=False)
+        backend=b.AtomicDelegation(original);now=time.monotonic();deadline=now+1200
+        backend.admit([28672]*8,6000,deadline)
+        clock=time.monotonic;verify=c.p.verify;expired=False
+        def observed_clock():return clock()+(2000 if expired else 0)
+        def replay_then_expire(*args):
+            nonlocal expired
+            result=verify(*args);expired=True;return result
+        with tempfile.TemporaryDirectory() as tmp:
+            out=Path(tmp);c.write(out/'assignments.json',c.p.jobs('qualification'))
+            job=c.p.jobs('qualification')[0];stop=threading.Event()
+            with patch.object(c.time,'monotonic',side_effect=observed_clock),patch.object(c.p,'verify',side_effect=replay_then_expire):
+                row=c.attempt(job,backend,self.counter,out/job['attempt_id'],deadline,stop,set(),threading.Lock())
+            self.assertEqual(row['category'],'budget');self.assertIsNone(row['semantic_reward'])
+            self.assertEqual(row['terminal_reward_observed'],1);self.assertTrue(stop.is_set())
+            self.assertFalse(c.assemble(out,self.counter)['fitness_eligible'])
+            self.assertEqual(len(original.reservations),1)
+
     def test_duplicate_reserve_and_call_are_atomic_and_failed_calls_consumed(self):
         original=OriginalBackend(self.counter,self.responses,barrier=False,fault='unknown')
         backend=b.AtomicDelegation(original);deadline=time.monotonic()+1200
