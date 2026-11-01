@@ -1,24 +1,29 @@
 {
   "kind": "software_preparation_resume_pointer",
   "recorded_on": "2026-11-01",
-  "status": "entry_order_live_path_qualified_private_lease_prepared",
+  "status": "entry_order_screen_closed_selection_failed_output_domain_diagnostic_offline",
   "latest_model_evidence": {
-    "result_path": "docs/software-top-level-note-results-20261101.json",
-    "public_runtime_source": "7838312d402f0940841d2888b6fe1d89fe180f10",
+    "result_path": "docs/software-entry-order-screen-results-20261101.json",
+    "public_runtime_source": "cc271c6b9873fc3d8bc0f0095abdb52cf02a77ee",
     "assigned": 8,
-    "known_replies": 1,
-    "unknown_provider_outcomes": 1,
-    "uncalled_assignments": 6,
+    "observed_calls": 16,
+    "known_replies": 16,
+    "unknown_provider_outcomes": 0,
+    "uncalled_assignments": 0,
+    "full_repairs": [
+      4,
+      3
+    ],
+    "all_original_assignments_independently_verified": true,
     "selection_passed": false,
     "confirmation_permitted": false,
     "retry_redraw_permitted": false
   },
   "latest_qualification": {
-    "source": "7838312d402f0940841d2888b6fe1d89fe180f10",
-    "controls_passed_locally_and_ruos": 24,
-    "evidence_path": "docs/software-top-level-live-verification-20261101.md",
-    "controls_are_not_model_solves": true,
-    "public_case_seal_unset": true
+    "source": "cc271c6b9873fc3d8bc0f0095abdb52cf02a77ee",
+    "controls_passed_locally_and_ruos": 26,
+    "evidence_path": "docs/software-entry-order-live-qualification-20261101.json",
+    "controls_are_not_model_solves": true
   },
   "closed_studies": [
     {
@@ -73,13 +78,20 @@
       "source": "935fec447c75fd9e763517caee0c3008ebe5a113",
       "evidence_commit": "d361a126f341280c47c10fca738652ae746ff72d",
       "retries_or_confirmation_permitted": false
+    },
+    {
+      "study": "computed_entry_order_relation_feedback",
+      "status": "complete_selection_failed",
+      "evidence_path": "docs/software-entry-order-screen-results-20261101.json",
+      "selection_passed": false,
+      "retries_or_confirmation_permitted": false
     }
   ],
   "next_steps": [
-    "Read canonical private state and actual process argv before any launch; never resume, redraw or relabel a closed study.",
-    "Finish private source qualification and all original execution guards before the prepared original screen. Use only its immutable case/source lease and fresh archive. Do not infer a model outcome from preparation or resume a closed study.",
-    "Require complete original screen evidence and positive predeclared selection before unchanged fresh disjoint confirmation. No model or leaderboard improvement is established.",
-    "Keep frozen v12 unchanged. No Arena POST or HF replacement is approved. Preserve the existing execution guards; no new automation, subagents or routine public messages."
+    "Read canonical private state and actual process argv; preserve every closed study and reservation.",
+    "Investigate the verified final-revision output-domain regression offline. The shape-check prototype is not a selected or admitted live intervention; checking an initially full proposal alone would miss the later defect.",
+    "Do not repeat the closed screen or previously failed preservation/public-pass interventions. Any distinct comparison requires an unchanged resource scope, immutable source/case lease and fresh complete financial admission.",
+    "Keep continuation enabled and frozen v12 unchanged; no Arena POST, HF replacement, new cap, automation, subagents or routine public messages."
   ],
   "guards": {
     "fixed_stop": "23:00 America/Toronto",
@@ -91,36 +103,24 @@
   },
   "limits": "Sanitized source and outcome pointer only; never execution authority. Canonical private guards remain required.",
   "next_candidate": {
-    "kind": "public_entry_order_relation_review",
-    "source": "4482a48b276f4f76eb7018c2060a45f9822a1894",
-    "diagnostic": "research/software-entry-order-review-20261101/order_diagnostic.py",
-    "qualification_environment": "research/software-entry-order-review-20261101/revision_environment.py",
-    "local_and_ruos_controls": 8,
-    "evidence_path": "docs/software-entry-order-review-qualification-20261101.json",
-    "first_prompts_identical": true,
-    "relation_reminder_common_to_both_arms": true,
-    "treatment_difference": "computed reference-free public entry-order counterexample exposure on review turn",
-    "live_execution_ready": false,
+    "kind": "software_output_domain_diagnostic_preparation",
+    "recorded_on": "2026-11-01",
+    "status": "offline_diagnostic_only",
+    "source_path": "research/software-output-domain-review-20261101/domain_diagnostic.py",
+    "local_controls": 4,
+    "local_seconds": 4.105,
+    "ruos_controls_run": false,
+    "already_seen_qualification_fixture_only": true,
+    "expected_answers_used": false,
+    "hidden_answers_used": false,
+    "unchanged_bounded_native_interpreter": true,
+    "synthetic_module_failures_are_not_model_solves": true,
     "new_model_calls": 0,
-    "new_cases": 0,
-    "matched_source": "1276e03580f69b07bc5c38f5d1371a1586b764eb",
-    "matched_protocol": "research/software-entry-order-review-20261101/matched_protocol.py",
-    "matched_qualification_assessor": "research/software-entry-order-review-20261101/assess_qualification.mjs",
-    "matched_local_and_ruos_controls": 13,
-    "matched_evidence_path": "docs/software-entry-order-review-matched-qualification-20261101.json",
-    "program_unavailability_common_to_both_arms": true,
-    "finite_source": "a1a85df96e4fd3672e9edcc06190272ea73a0bf3",
-    "finite_caller": "research/software-entry-order-review-20261101/finite_caller.py",
-    "guarded_transport": "research/software-entry-order-review-20261101/guarded_transport.py",
-    "finite_local_and_ruos_controls": 20,
-    "finite_evidence_path": "docs/software-entry-order-finite-qualification-20261101.json",
-    "live_source": "cc271c6b9873fc3d8bc0f0095abdb52cf02a77ee",
-    "case_materializer": "research/software-entry-order-review-20261101/entry_case.py",
-    "live_worker": "research/software-entry-order-review-20261101/live_screen.py",
-    "archive_assessor": "research/software-entry-order-review-20261101/assess_screen.py",
-    "live_local_and_ruos_controls": 26,
-    "live_evidence_path": "docs/software-entry-order-live-qualification-20261101.json",
-    "private_case_lease_prepared": true,
-    "private_source_qualification_pending": true
+    "new_native_cases": 0,
+    "live_intervention_selected": false,
+    "live_execution_ready": false,
+    "model_improvement": false,
+    "leaderboard_gain": false,
+    "limitation": "The observed regressed attempt's first proposal was already full and order-invariant. A check applied only to that proposal would not detect the later introduced output-domain defect. Do not assume the prototype prevents final revisions, reuse the closed screen or repeat previously failed preservation/public-pass interventions."
   }
 }

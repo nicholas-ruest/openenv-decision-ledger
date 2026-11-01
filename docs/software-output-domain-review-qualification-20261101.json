@@ -1,0 +1,21 @@
+{
+  "kind": "software_output_domain_diagnostic_preparation",
+  "recorded_on": "2026-11-01",
+  "status": "offline_diagnostic_only",
+  "source_path": "research/software-output-domain-review-20261101/domain_diagnostic.py",
+  "local_controls": 4,
+  "local_seconds": 4.105,
+  "ruos_controls_run": false,
+  "already_seen_qualification_fixture_only": true,
+  "expected_answers_used": false,
+  "hidden_answers_used": false,
+  "unchanged_bounded_native_interpreter": true,
+  "synthetic_module_failures_are_not_model_solves": true,
+  "new_model_calls": 0,
+  "new_native_cases": 0,
+  "live_intervention_selected": false,
+  "live_execution_ready": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "limitation": "The observed regressed attempt's first proposal was already full and order-invariant. A check applied only to that proposal would not detect the later introduced output-domain defect. Do not assume the prototype prevents final revisions, reuse the closed screen or repeat previously failed preservation/public-pass interventions."
+}

@@ -1,0 +1,108 @@
+{
+  "kind": "software_entry_order_review_screen_results",
+  "recorded_on": "2026-11-01",
+  "public_runtime_source": "cc271c6b9873fc3d8bc0f0095abdb52cf02a77ee",
+  "assigned": 8,
+  "observed_model_calls": 16,
+  "known_replies": 16,
+  "unknown_usage_calls": 0,
+  "all_original_assignments_independently_verified": true,
+  "original_supervisor": {
+    "status": "completed",
+    "elapsed_seconds": 1129.798218324,
+    "shutdown_verified": true,
+    "finished_before_deadline": true
+  },
+  "groups": [
+    {
+      "arm": "relation_only",
+      "assigned": 4,
+      "mean_semantic": 1,
+      "full": 4,
+      "computed_relation_exposures": 0,
+      "usable_counterexample_exposures": 0,
+      "signal": 0,
+      "eligible": 4,
+      "infra": 0,
+      "reasoning": 0
+    },
+    {
+      "arm": "computed_relation",
+      "assigned": 4,
+      "mean_semantic": 0.9875,
+      "full": 3,
+      "computed_relation_exposures": 3,
+      "usable_counterexample_exposures": 0,
+      "signal": 1,
+      "eligible": 4,
+      "infra": 0,
+      "reasoning": 0
+    }
+  ],
+  "actual_metaharness": {
+    "source": "b8c3d38de41203faf633ef6dceb8452a4727b0ea",
+    "module": "fitness.mjs:scoreCell",
+    "scripted": false,
+    "is_training": false
+  },
+  "effect": {
+    "full_repair_rate_difference": -0.25,
+    "all_assignment_mean_difference": -0.0125
+  },
+  "selection_passed": false,
+  "confirmation_permitted": false,
+  "confirmation_materialized": false,
+  "retry_redraw_permitted": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "posthoc_investigator_diagnosis": {
+    "not_new_model_outcomes": true,
+    "first_proposal_groups": [
+      {
+        "arm": "relation_only",
+        "first_proposal_posthoc_categories": {
+          "execution": 1,
+          "full": 3
+        },
+        "final_public_example_pass_counts": {
+          "6": 4
+        },
+        "first_modules_preserved": 1,
+        "supplied_helpers_preserved_first": 2,
+        "supplied_helpers_preserved_final": 3,
+        "order_sensitive_first_proposals": 0,
+        "order_sensitive_final_modules": 0
+      },
+      {
+        "arm": "computed_relation",
+        "first_proposal_posthoc_categories": {
+          "full": 3,
+          "execution": 1
+        },
+        "final_public_example_pass_counts": {
+          "1": 1,
+          "6": 3
+        },
+        "first_modules_preserved": 0,
+        "supplied_helpers_preserved_first": 3,
+        "supplied_helpers_preserved_final": 4,
+        "order_sensitive_first_proposals": 0,
+        "order_sensitive_final_modules": 0
+      }
+    ],
+    "one_treatment_full_proposal_regressed_to_partial": true,
+    "regressed_final_passed_supplied_examples": 1,
+    "supplied_examples": 6,
+    "all_supplied_helpers_ast_preserved_in_regressed_attempt": true,
+    "output_domain_counterfactual": {
+      "original_native_reward": 0.95,
+      "posthoc_native_reward": 1,
+      "only_output_iteration_changed": true,
+      "all_other_functions_ast_unchanged": true,
+      "not_model_solve": true
+    },
+    "first_to_final_existing_functions_changed": 1,
+    "first_to_final_functions_added": 1
+  },
+  "limits": "Four draws per arm on one original Native case. No disjoint confirmation or Arena held-out evidence. Raw cases, trajectories and private accounting remain private."
+}
