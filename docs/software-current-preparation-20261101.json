@@ -1,7 +1,7 @@
 {
   "kind": "software_preparation_resume_pointer",
   "recorded_on": "2026-11-01",
-  "status": "initial_helper_guidance_screen_closed_inconclusive",
+  "status": "top_level_note_offline_preparation",
   "advice_candidate_source": "36e658565ffd67e982bf50b1ca2cc7db18e441a3",
   "latest_analysis_source": "1d06273a853f18f2d4c05f9f500b5e07f76a32bc",
   "candidate_code_changed_by_later_analysis": false,
@@ -57,7 +57,7 @@
   ],
   "next_steps": [
     "Do not resume, redraw or relabel a closed study; verify canonical private state and actual worker argv before any launch.",
-    "Review the model-program nested-function rejection as a distinct syntax-compliance hypothesis. Do not resume/redraw/relabel the closed helper-guidance study. Any future outcome taxonomy must distinguish verified model-code rejection from Native infrastructure exceptions before freezing the protocol. Preserve the Native grader and original model/resource limits; require fresh case/source audit and complete financial admission before any new phase.",
+    "Qualify the distinct top-level function note and matched replay on ruOS. Freeze a future failure policy that distinguishes verified model-program errors from Native/provider/unknown-usage failures while retaining zero reward and the full denominator. Qualify finite scheduling within the unchanged 1200-second cap before new source/case and financial admission. Never resume/redraw/relabel the closed helper-guidance screen.",
     "Audit fresh disjoint cases against the complete latest inventory, including the closed advice case. Reconcile actual fresh credit, every receipt/parent/reservation and independent historical carried spending; preserve all unknown-usage reservations.",
     "Require original complete screen evidence and positive predeclared selection before unchanged fresh disjoint confirmation. No Arena POST or HF replacement is approved; frozen v12 remains unchanged."
   ],
@@ -67,7 +67,7 @@
     "model_calls_during_recovery": 0,
     "new_cases_during_recovery": 0,
     "financial_admission": false,
-    "private_state_sync_pending": false,
+    "private_state_sync_pending": true,
     "new_automation_or_subagents": false,
     "routine_public_messages": false,
     "frozen_v12_changed_or_approved": false,
@@ -101,6 +101,30 @@
     "reviewed_evidence": "https://github.com/nicholas-ruest/openenv-decision-ledger/blob/0e9b6f1e0008c34e9330c8219873c90ba1865c32/docs/software-selfcheck8-results-20261029.md"
   },
   "next_candidate": {
+    "kind": "top_level_function_initial_note",
+    "prototype": "research/software-top-level-note-20261101/top_level_note.py",
+    "matched_protocol": "research/software-top-level-note-20261101/matched_note.py",
+    "local_tests_passed": 10,
+    "ruos_tests_pending": true,
+    "live_execution_ready": false,
+    "new_model_calls": 0,
+    "new_cases": 0,
+    "continuation_policy_frozen": false,
+    "syntax_note_only": true
+  },
+  "active_screen": {
+    "kind": "initial_helper_guidance",
+    "status": "closed_inconclusive_model_compile_rejection",
+    "runtime_source": "68b5e1fadd864b26384931c3ae4c5cf975a063b3",
+    "private_source_case_lease_qualified": true,
+    "whole_phase_seconds": 1200,
+    "confirmation_materialized": false,
+    "results_available": true,
+    "results_path": "docs/software-preserve-first-screen-results-20261101.json",
+    "selection_passed": false,
+    "retry_or_confirmation_permitted": false
+  },
+  "previous_candidate": {
     "kind": "qualification_only_initial_helper_guidance",
     "path": "research/software-preserve-first-action-20261101/preserve_first.py",
     "prior_instruction_source": "scripts/software-helper-policy.py",
@@ -133,17 +157,5 @@
     "live_path_ruos_tests_passed": 30,
     "live_path_ruos_source": "68b5e1fadd864b26384931c3ae4c5cf975a063b3",
     "public_source_live_execution_ready": false
-  },
-  "active_screen": {
-    "kind": "initial_helper_guidance",
-    "status": "closed_inconclusive_model_compile_rejection",
-    "runtime_source": "68b5e1fadd864b26384931c3ae4c5cf975a063b3",
-    "private_source_case_lease_qualified": true,
-    "whole_phase_seconds": 1200,
-    "confirmation_materialized": false,
-    "results_available": true,
-    "results_path": "docs/software-preserve-first-screen-results-20261101.json",
-    "selection_passed": false,
-    "retry_or_confirmation_permitted": false
   }
 }
