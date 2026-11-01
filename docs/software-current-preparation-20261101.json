@@ -60,7 +60,7 @@
     "model_calls_during_recovery": 0,
     "new_cases_during_recovery": 0,
     "financial_admission": false,
-    "private_state_sync_pending": true,
+    "private_state_sync_pending": false,
     "new_automation_or_subagents": false,
     "routine_public_messages": false,
     "frozen_v12_changed_or_approved": false,
@@ -103,6 +103,8 @@
     "new_cases_materialized": 0,
     "live_execution_ready": false,
     "qualification_tests_passed": 6,
-    "qualification_location": "Codex local Native runtime; ruOS replay pending"
+    "qualification_location": "Actual Native runtime in Codex and ruOS",
+    "ruos_qualified_source": "f4059008d176213df8ad1b9f9ecdefb93e0a70f1",
+    "ruos_tests_exit": 0
   }
 }
