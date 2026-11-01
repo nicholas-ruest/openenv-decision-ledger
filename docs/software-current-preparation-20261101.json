@@ -1,7 +1,7 @@
 {
   "kind": "software_preparation_resume_pointer",
   "recorded_on": "2026-11-01",
-  "status": "final_turn_output_domain_cue_native_wrapper_qualified_offline",
+  "status": "final_turn_output_domain_cue_matched_qualification_complete_no_live_admission",
   "latest_model_evidence": {
     "result_path": "docs/software-entry-order-screen-results-20261101.json",
     "public_runtime_source": "cc271c6b9873fc3d8bc0f0095abdb52cf02a77ee",
@@ -88,10 +88,10 @@
     }
   ],
   "next_steps": [
-    "Preserve every closed study, including the failed entry-order feedback study; no redraw or repeat of failed preservation/public-pass interventions.",
-    "Qualify the separate final-turn domain reminder matched protocol with exact original raw request/reply, all-observation tokenizer accounting and applicable pinned MetaHarness assessment on already-seen qualification inputs. No live case selection or backend execution is authorized by Native wrapper controls.",
-    "Before a genuinely new model comparison, require immutable source/case lease, fresh actual credit and complete parent/root/ledger reconciliation, unchanged resource limits and whole conservative financial admission. Independently check whether both screen and conditional confirmation can fit existing allocation; never assume allocation is credit or reduce limits to fit.",
-    "Keep continuation enabled, v12 unchanged and unapproved. No new cap, purchases, Arena POST, HF replacement, automations, subagents or routine public messages."
+    "Preserve closed studies and all existing reservations; no redraw or retry of failed interventions.",
+    "Qualify the distinct candidate finite caller, failure archives and original supervisor binding without live cases or provider access. Keep source/case materialization unsealed until all guards pass.",
+    "Do not infer model benefit from qualification. Paid comparison requires fresh full financial reconciliation and conservative admission for the planned screen plus conditional disjoint confirmation under unchanged resource bounds and existing authorization. Continue useful offline work if the allocation cannot cover it; no cap changes or counter refunds.",
+    "Keep continuation enabled and v12 unchanged/unapproved; no Arena POST, HF replacement, purchases, new automations, subagents or routine public messages."
   ],
   "guards": {
     "fixed_stop": "23:00 America/Toronto",
@@ -117,7 +117,7 @@
     "original_terminal_rewards_retained": true,
     "new_cases": 0,
     "new_model_calls": 0,
-    "matched_protocol_qualified": false,
+    "matched_protocol_qualified": true,
     "live_execution_ready": false,
     "model_improvement": false,
     "is_training": false,
@@ -125,6 +125,9 @@
     "code_path": "research/software-final-domain-cue-20261101/revision_environment.py",
     "evidence_path": "docs/software-final-domain-cue-qualification-20261101.json",
     "screen_case_selected": false,
-    "confirmation_case_selected": false
+    "confirmation_case_selected": false,
+    "matched_source": "11eec047ee67750fc3c512a9f66f663ed573151a",
+    "matched_local_and_ruos_controls": 11,
+    "matched_evidence_path": "docs/software-final-domain-cue-matched-qualification-20261101.json"
   }
 }

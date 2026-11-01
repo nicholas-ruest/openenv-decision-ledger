@@ -1,0 +1,22 @@
+{
+  "kind": "final_domain_cue_matched_qualification",
+  "source": "11eec047ee67750fc3c512a9f66f663ed573151a",
+  "local_combined_tests": 11,
+  "local_seconds": 119.408,
+  "ruos_combined_tests": 11,
+  "ruos_seconds": 209.329,
+  "first_prompts_identical": true,
+  "original_raw_request_reply_replay": true,
+  "all_review_and_terminal_observations_counted": true,
+  "actual_reminder_exposure_verified": true,
+  "original_native_rewards_unchanged": true,
+  "metaharness_source": "b8c3d38de41203faf633ef6dceb8452a4727b0ea",
+  "actual_module": "fitness.mjs:scoreCell",
+  "metaharness_evidence": "scripted qualification only",
+  "new_cases": 0,
+  "new_model_calls": 0,
+  "live_execution_ready": false,
+  "selection_passed": false,
+  "model_improvement": false,
+  "is_training": false
+}
