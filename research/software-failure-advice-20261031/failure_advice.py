@@ -4,12 +4,9 @@ import json
 
 ARMS=('standard_revision','focused_failure_advice')
 NOTE=(
-    'Use the public counterexamples to identify a specific violation of the original contract. '
-    'Limit changes to what that violation requires and reuse unaffected code. '
-    'Prioritize returning one complete final JSON action containing the repaired Python module; '
-    'do not spend the revision restating the task or reviewing alternatives. '
-    'Public tests are incomplete: preserve the entire original contract. '
-    'The action schema and complete-module requirement are unchanged.'
+    'Fix the specific contract violation exposed by the public examples; reuse unaffected code. '
+    'Prioritize one complete repaired module in a final JSON action; avoid task restatement and alternatives. '
+    'Preserve contract requirements beyond these examples.'
 )
 
 
