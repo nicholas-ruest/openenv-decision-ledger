@@ -1,0 +1,20 @@
+{
+  "kind": "public_entry_order_review_qualification",
+  "source": "4482a48b276f4f76eb7018c2060a45f9822a1894",
+  "local_controls_passed": 8,
+  "ruos_controls_passed": 8,
+  "diagnostic_detected_known_baseline_order_dependence": true,
+  "posthoc_order_control_invariant": true,
+  "expected_answers_used_by_diagnostic": false,
+  "posthoc_native_rewards": {
+    "original": 0.95,
+    "ordering_control": 1.0
+  },
+  "posthoc_control_is_model_solve": false,
+  "original_closed_study_unchanged": true,
+  "new_model_calls": 0,
+  "new_cases": 0,
+  "live_execution_ready": false,
+  "model_improvement": false,
+  "leaderboard_gain": false
+}

@@ -1,7 +1,7 @@
 {
   "kind": "software_preparation_resume_pointer",
   "recorded_on": "2026-11-01",
-  "status": "top_level_note_closed_inconclusive_provider_timeout",
+  "status": "entry_order_relation_review_qualified_offline",
   "latest_model_evidence": {
     "result_path": "docs/software-top-level-note-results-20261101.json",
     "public_runtime_source": "7838312d402f0940841d2888b6fe1d89fe180f10",
@@ -66,11 +66,18 @@
       "evidence_path": "docs/software-top-level-note-results-20261101.json",
       "selection_passed": false,
       "retries_or_confirmation_permitted": false
+    },
+    {
+      "study": "parent_status_contract_reminder",
+      "status": "complete_selection_failed",
+      "source": "935fec447c75fd9e763517caee0c3008ebe5a113",
+      "evidence_commit": "d361a126f341280c47c10fca738652ae746ff72d",
+      "retries_or_confirmation_permitted": false
     }
   ],
   "next_steps": [
     "Read canonical private state and actual process argv before any launch; never resume, redraw or relabel a closed study.",
-    "Continue offline diagnosis of the known baseline failure on supplied public examples. It preserved reusable helpers. Any new hypothesis must be distinct from the closed helper guidance, public-example self-check and syntax-note studies, frozen before new model evidence.",
+    "Freeze and independently qualify the new relation-feedback matched protocol, raw replay, all-observation token accounting and exact feedback-exposure assessment. Keep public case construction and live execution sealed. Do not repeat the earlier parent-status reminder or other closed studies.",
     "Require complete original screen evidence and positive predeclared selection before unchanged fresh disjoint confirmation. No model or leaderboard improvement is established.",
     "Keep frozen v12 unchanged. No Arena POST or HF replacement is approved. Preserve the existing execution guards; no new automation, subagents or routine public messages."
   ],
@@ -82,5 +89,19 @@
     "arena_post_or_hf_replacement_approved": false,
     "unknown_provider_outcome_is_wrong_answer": false
   },
-  "limits": "Sanitized source and outcome pointer only; never execution authority. Canonical private guards remain required."
+  "limits": "Sanitized source and outcome pointer only; never execution authority. Canonical private guards remain required.",
+  "next_candidate": {
+    "kind": "public_entry_order_relation_review",
+    "source": "4482a48b276f4f76eb7018c2060a45f9822a1894",
+    "diagnostic": "research/software-entry-order-review-20261101/order_diagnostic.py",
+    "qualification_environment": "research/software-entry-order-review-20261101/revision_environment.py",
+    "local_and_ruos_controls": 8,
+    "evidence_path": "docs/software-entry-order-review-qualification-20261101.json",
+    "first_prompts_identical": true,
+    "relation_reminder_common_to_both_arms": true,
+    "treatment_difference": "computed reference-free public entry-order counterexample exposure on review turn",
+    "live_execution_ready": false,
+    "new_model_calls": 0,
+    "new_cases": 0
+  }
 }
