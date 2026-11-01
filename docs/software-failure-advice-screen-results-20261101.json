@@ -1,0 +1,59 @@
+{
+  "kind": "software_failure_advice_screen_inconclusive",
+  "date": "2026-11-01",
+  "public_source": "e3d7537cb73bc0aed69880a903a772bfefb7085b",
+  "model": "Qwen/Qwen3.8-27B:deepinfra",
+  "assigned_attempts": 8,
+  "completed_independently_replayed": 6,
+  "actual_requests": 13,
+  "known_replies": 12,
+  "unknown_usage_requests": 1,
+  "never_called_assignments": 1,
+  "unfinished_called_assignments": 1,
+  "global_supervision": {
+    "configured_wall_seconds": 1200,
+    "status": "timed_out",
+    "elapsed_seconds": 1200.01840071,
+    "worker_exitcode": -9,
+    "local_shutdown_verified": true,
+    "remote_cancellation_attested": false
+  },
+  "arms": {
+    "standard_revision": {
+      "assigned": 4,
+      "completed_replayed": 3,
+      "full": 0,
+      "wrong": 1,
+      "truncation": 2,
+      "unfinished_called": 0,
+      "never_called": 1
+    },
+    "focused_failure_advice": {
+      "assigned": 4,
+      "completed_replayed": 3,
+      "full": 1,
+      "wrong": 0,
+      "truncation": 2,
+      "unfinished_called": 1,
+      "never_called": 0
+    }
+  },
+  "advice_exposure": {
+    "completed_treatment_attempts_receiving_advice": 1,
+    "full_repairs_receiving_advice": 0,
+    "full_treatment_repair_received_advice": false
+  },
+  "all_assigned_outcomes_retained": true,
+  "all_reservations_retained": true,
+  "full_phase_effect_estimate_admissible": false,
+  "actual_metaharness_fitness_executed": false,
+  "fitness_suppressed_reason": "original_whole_phase_timed_out_and_two_assignments_incomplete",
+  "selection_passed": false,
+  "confirmation_materialized": false,
+  "retries_or_redraw": false,
+  "is_training": false,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "private_case_seal_or_inputs_published": false,
+  "raw_trajectories_published": false
+}
