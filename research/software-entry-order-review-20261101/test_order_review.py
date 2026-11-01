@@ -97,6 +97,11 @@ class OrderTests(unittest.TestCase):
                 observation=env.step(DirectRepairAction(content=self.order_bug))
             self.assertFalse(observation.done);self.assertNotIn('PRIVATE_HIDDEN_CANARY',observation.feedback)
 
+    def test_unavailable_program_diagnostic_is_common_to_both_arms(self):
+        for code in ('invalid python','def classify_ignore(lines, entries): return 1 // 0'):
+            a=d.review(self.native,code,d.ARMS[0]);b=d.review(self.native,code,d.ARMS[1])
+            self.assertEqual(a,b);self.assertEqual(a['diagnostic']['kind'],'program_unavailable')
+
     def test_visible_scope_and_future_cases_stay_closed(self):
         for seed in (3220000,3230000,None):
             with self.assertRaises(ValueError):r.RevisionEnvironment(arm=d.ARMS[0]).reset(seed=seed,task_id=self.task.task_id)

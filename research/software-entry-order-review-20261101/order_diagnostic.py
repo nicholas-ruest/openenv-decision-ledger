@@ -75,6 +75,8 @@ def review(observation,code,arm):
     if arm not in ARMS:raise ValueError('explicit original feedback arm required')
     # Both arms perform identical bounded local work. Only exposure differs.
     diagnostic=diagnose(observation,code)
-    visible=diagnostic if arm=='computed_relation' else dict(kind='computed_result_withheld',public_only=True)
+    # Availability is common to both arms: compiler/runtime information is
+    # not an additional treatment. Only relation results are withheld.
+    visible=diagnostic if arm=='computed_relation' or diagnostic['kind']=='program_unavailable' else dict(kind='computed_result_withheld',public_only=True)
     return dict(relation=RELATION,diagnostic=visible,
         instruction='Review the previous module against the original contract. Return the final complete module; a consistent result can still be semantically wrong.')
