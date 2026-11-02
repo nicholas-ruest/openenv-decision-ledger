@@ -148,5 +148,13 @@
     "bridge_ruos_seconds": 0.028,
     "original_amendment_controls": 3,
     "bridge_ruos_qualification_pending": false
+  },
+  "offline_uncertainty_analysis": {
+    "result_path": "docs/software-small-screen-uncertainty-20261101.json",
+    "explanation_path": "docs/software-small-screen-uncertainty-20261101.md",
+    "new_model_evidence": false,
+    "actual_protocol_false_positive_rate_estimated": false,
+    "selection_rules_changed": false,
+    "task_mapping_attested": false
   }
 }
