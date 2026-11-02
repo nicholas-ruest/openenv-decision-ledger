@@ -1,7 +1,7 @@
 {
   "kind": "software_preparation_resume_pointer",
   "recorded_on": "2026-11-01",
-  "status": "late_domain_fresh_parent_scripted_supervision_qualified_live_case_financial_gates_closed",
+  "status": "late_domain_offline_case_financial_bridge_controls_passed_remote_and_live_gates_closed",
   "latest_model_evidence": {
     "result_path": "docs/software-entry-order-screen-results-20261101.json",
     "public_runtime_source": "cc271c6b9873fc3d8bc0f0095abdb52cf02a77ee",
@@ -88,10 +88,10 @@
     }
   ],
   "next_steps": [
-    "Preserve all closed studies and case inventories. Scripted Native supervision is not a model result or authority to redraw a failed study.",
-    "Prepare a source-bound live-case guard and original financial/provider bridge without materializing new cases or reading credentials before the guard. Retain the qualified fresh-parent initialization order and original supervisor/worker evidence requirements.",
-    "Before any paid comparison, independently attest actual credit, root carried spending, all parent receipts and every retained reservation, then require immutable applicable source/case binding and conservative admission for the complete plan under unchanged cap/resources. Continue useful offline work if admission is unavailable.",
-    "Keep continuation enabled and v12 unchanged/unapproved. No Arena POST, HF replacement, purchases, new automations, subagents or routine public messages."
+    "Resume permitted ruOS access with an actual canonical state/accounting/worker read before any mutation or launch; remote bridge qualification is pending.",
+    "Preserve the complete closed-study chain and immutable case seals. No private case was generated or independently validated by the offline controls.",
+    "Do not launch paid inference unless fresh actual credit, independently attested root/parents/all retained reservations and the complete screen-plus-conditional-confirmation plan fit unchanged authorizations. If admission fails, preserve the candidate and state the concrete limitation.",
+    "Keep continuation enabled, preserve worker-only initialization and exact bounded supervision, and leave frozen v12 unapproved and unchanged. No Arena POST, HF replacement, purchases, new automations, subagents or routine public messages."
   ],
   "guards": {
     "fixed_stop": "23:00 America/Toronto",
@@ -139,6 +139,11 @@
     "scripted_native_supervisor_binding_qualified": true,
     "parent_initialization_order_qualified": true,
     "fresh_parent_fork_warning_observed": false,
-    "live_financial_bridge_qualified": false
+    "live_financial_bridge_qualified": false,
+    "bridge_source": "d754abc7443e59b134a6b757497b87f597609ca1",
+    "bridge_evidence_path": "docs/software-final-domain-cue-bridge-qualification-20261101.json",
+    "bridge_local_tests": 14,
+    "bridge_ruos_tests": null,
+    "actual_case_inventory_independently_verified": false
   }
 }

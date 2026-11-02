@@ -1,0 +1,33 @@
+{
+  "kind": "final_domain_case_guard_financial_bridge_offline_controls",
+  "source": "d754abc7443e59b134a6b757497b87f597609ca1",
+  "recorded_at": "2026-11-02T02:32:00Z",
+  "local_tests": 14,
+  "local_seconds": 0.019,
+  "local_exit_code": 0,
+  "command": "python -B -m unittest discover -s research/software-final-domain-cue-20261101 -p test_financial_bridge.py -v",
+  "ruos_tests": null,
+  "ruos_qualification_pending": true,
+  "constructor_test_uses_stub": true,
+  "inventory_chain_test_uses_synthetic_metadata_and_stub_regeneration": true,
+  "actual_case_inventory_independently_verified": false,
+  "original_financial_files_pinned_and_unchanged": true,
+  "amendment_forwarded_unchanged": true,
+  "new_cases": 0,
+  "new_model_calls": 0,
+  "new_reservations": 0,
+  "public_live_case_seal_present": false,
+  "confirmation_gate_open": false,
+  "live_worker_binding_qualified": false,
+  "live_financial_bridge_qualified": false,
+  "live_execution_ready": false,
+  "model_improvement": false,
+  "is_training": false,
+  "leaderboard_gain": false,
+  "limitations": [
+    "Original constructor delegation and pure complete-plan quote tested offline only. No actual billing audit or credential access occurred.",
+    "Public source refuses before private I/O because both immutable case seals remain unset. No CLI or environment override exists.",
+    "Current finite caller and atomic delegation remain scripted-only; no real execution runner was added.",
+    "Actual fresh credit, independent root/parent/reservation reconciliation, private case/source seals, complete-plan admission, original worker binding and bounded supervision remain necessary."
+  ]
+}
