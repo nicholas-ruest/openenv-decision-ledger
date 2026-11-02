@@ -1,0 +1,11 @@
+# Case-bound phase archive reconstruction
+
+The prepared final-output-domain reminder now has a read-only phase assembler for complete and interrupted archives. All eight original assignments remain in the denominator. Missing records remain missing; known usage prefixes are retained, unknown total usage stays null, and interrupted attempts receive no reconstructed terminal reward.
+
+The assembler first requires the existing sealed source/case gate, then checks the exact ordered manifest, local reserve-before-call-before-reply sequence, saved request/reply files, strict integer usage, original accounting record and unique response identities. Complete attempts must match independent Native reconstruction. Partial attempts use the existing shared prefix verifier. A phase reconstruction is returned only when every original assignment has a verified terminal trace. This is an archive completeness check, not selection, provider provenance or spending admission.
+
+The four targeted controls cover a complete actual Native replay with synthetic replies; a missing-record/unknown-call prefix plus seven uncalled assignments; reordered manifests, local event tampering and duplicate replies; and unsealed refusal before archive access. They reuse the already-seen qualification fixture with a mocked private case gate. No new cases or model calls are involved. These controls do not attest actual private inventory or any live provider.
+
+Source: [5825282](https://github.com/nicholas-ruest/openenv-decision-ledger/commit/5825282fec0c77dd91cd27dcc5401965c8accd80). Run `python -B -m unittest test_case_archive -v` from the research module with the original Native dependencies and the previously pinned tokenizer supplied through `HELPER_TEST_TOKENIZER`. Machine-readable qualification evidence records the final local and ruOS results separately.
+
+The finite live caller remains unwired. Public source/case seals remain unset. No new live worker/supervisor binding has been qualified by this change. No MetaHarness execution, training, improvement, confirmation, or Arena gain is claimed. Previously closed studies, the proposed intervention, original limits and frozen review requests remain unchanged.

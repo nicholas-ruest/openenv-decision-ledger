@@ -1,0 +1,30 @@
+{
+  "kind": "case_bound_phase_archive_qualification",
+  "source": "5825282fec0c77dd91cd27dcc5401965c8accd80",
+  "local": {
+    "tests": 4,
+    "exit_code": 0,
+    "seconds": 113.062
+  },
+  "ruos": {
+    "tests": 4,
+    "exit_code": 0,
+    "seconds": 202.718273619,
+    "source_clean": true,
+    "qualification_processes_stopped": true
+  },
+  "already_seen_native_fixture_only": true,
+  "synthetic_provider_only": true,
+  "private_case_gate_mocked": true,
+  "actual_private_inventory_verified": false,
+  "provider_provenance_attested": false,
+  "live_finite_caller_wired": false,
+  "new_live_worker_binding_qualified": false,
+  "selection_passed": false,
+  "execution_authorized": false,
+  "actual_metaharness_executed": false,
+  "new_cases": 0,
+  "new_model_calls": 0,
+  "model_improvement": false,
+  "is_training": false
+}
