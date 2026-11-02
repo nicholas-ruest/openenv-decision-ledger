@@ -1,0 +1,33 @@
+{
+  "kind": "local_archive_custody_component_qualification",
+  "source": "ef5c016415dcc4b46c717c175f0766bfead2551a",
+  "source_tree": "d97e30dd87d7123f272ecb3d144f4d68c185c371",
+  "local": {
+    "custody_checks": 7,
+    "reconstruction_checks": 8,
+    "exit_code": 0
+  },
+  "ruos": {
+    "custody_checks": 7,
+    "reconstruction_checks": 8,
+    "exit_code": 0,
+    "source_clean": true,
+    "related_workers": 0
+  },
+  "synthetic_artifacts_only": true,
+  "actual_reservations_used": false,
+  "native_execution_in_new_checks": false,
+  "pinned_metaharness_fitness_executed": true,
+  "original_provider_constructed": false,
+  "new_cases": 0,
+  "new_model_calls": 0,
+  "provider_provenance_attested": false,
+  "actual_credit_verified": false,
+  "root_current_spending_attested": false,
+  "selection_passed": false,
+  "confirmation_authorized": false,
+  "model_improvement": false,
+  "is_training": false,
+  "revised_worker_supervisor_qualification_pending": true,
+  "all_public_seals_unset": true
+}
