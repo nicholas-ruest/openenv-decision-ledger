@@ -1,7 +1,7 @@
 {
   "kind": "software_preparation_resume_pointer",
   "recorded_on": "2026-11-01",
-  "status": "late_domain_bridge_controls_qualified_locally_and_ruos_actual_admission_closed",
+  "status": "case_binding_replay_controls_qualified_locally_and_ruos_actual_admission_closed",
   "latest_model_evidence": {
     "result_path": "docs/software-entry-order-screen-results-20261101.json",
     "public_runtime_source": "cc271c6b9873fc3d8bc0f0095abdb52cf02a77ee",
@@ -88,10 +88,9 @@
     }
   ],
   "next_steps": [
-    "Remote bridge controls are qualified. Actual credit/root/parent/reservation reconciliation and complete-plan funding remain pending; do not repeat synthetic controls as a substitute for financial admission.",
-    "Preserve the complete closed-study chain and immutable case seals. No private case was generated or independently validated by the offline controls.",
-    "Do not launch paid inference unless fresh actual credit, independently attested root/parents/all retained reservations and the complete screen-plus-conditional-confirmation plan fit unchanged authorizations. If admission fails, preserve the candidate and state the concrete limitation.",
-    "Keep continuation enabled, preserve worker-only initialization and exact bounded supervision, and leave frozen v12 unapproved and unchanged. No Arena POST, HF replacement, purchases, new automations, subagents or routine public messages."
+    "Binding, complete replay and interrupted-prefix controls are qualified on ruOS. Live finite caller/atomic original backend/supervisor integration remains incomplete; no new live worker binding is qualified. Do not repeat passing controls as progress.",
+    "Actual fresh credit, independent root/parent/all-reservation reconciliation, exact private source/case inventory validation and complete-plan funding remain required before paid work. No conservative reservation may be reset or refunded to fit.",
+    "Preserve all closed studies, small-screen uncertainty limits, worker-only Native/tokenizer initialization and fixed23Toronto stop. Keep continuation enabled and frozenv12/v13 unchanged/unapproved. No Arena POST, HF replacement, purchases, new automations, subagents or routine public messages."
   ],
   "guards": {
     "fixed_stop": "23:00 America/Toronto",
@@ -154,8 +153,10 @@
       "local_controls": 5,
       "case_gate_mocked_in_controls": true,
       "actual_private_case_inventory_verified": false,
-      "ruos_qualification_pending": true,
-      "live_finite_caller_wired": false
+      "ruos_qualification_pending": false,
+      "live_finite_caller_wired": false,
+      "ruos_qualified_source": "ca3945480b7dd8094fde4ac139e40247f8559dd9",
+      "ruos_evidence_path": "docs/software-final-domain-cue-remote-qualification-20261102.json"
     },
     "case_bound_raw_reconstruction": {
       "code_path": "research/software-final-domain-cue-20261101/case_replay.py",
@@ -164,8 +165,10 @@
       "synthetic_assignments": 8,
       "case_gate_mocked": true,
       "provider_provenance_attested": false,
-      "ruos_qualification_pending": true,
-      "live_finite_caller_wired": false
+      "ruos_qualification_pending": false,
+      "live_finite_caller_wired": false,
+      "ruos_qualified_source": "ca3945480b7dd8094fde4ac139e40247f8559dd9",
+      "ruos_evidence_path": "docs/software-final-domain-cue-remote-qualification-20261102.json"
     },
     "case_bound_prefix_reconstruction": {
       "code_path": "research/software-final-domain-cue-20261101/case_replay.py",
@@ -175,9 +178,12 @@
       "finite_regressions": 8,
       "financial_regressions": 14,
       "private_case_gate_mocked": true,
-      "ruos_qualification_pending": true,
-      "live_finite_caller_wired": false
-    }
+      "ruos_qualification_pending": false,
+      "live_finite_caller_wired": false,
+      "ruos_qualified_source": "ca3945480b7dd8094fde4ac139e40247f8559dd9",
+      "ruos_evidence_path": "docs/software-final-domain-cue-remote-qualification-20261102.json"
+    },
+    "latest_remote_qualification": "docs/software-final-domain-cue-remote-qualification-20261102.json"
   },
   "offline_uncertainty_analysis": {
     "result_path": "docs/software-small-screen-uncertainty-20261101.json",

@@ -1,0 +1,53 @@
+{
+  "kind": "late_domain_case_binding_replay_ruos_qualification",
+  "observed_at": "2026-11-02T12:18:02.043033+00:00",
+  "source": "ca3945480b7dd8094fde4ac139e40247f8559dd9",
+  "checks": [
+    {
+      "module": "case_binding",
+      "tests": 5,
+      "wall_seconds": 16.945095076
+    },
+    {
+      "module": "case_replay",
+      "tests": 4,
+      "wall_seconds": 176.056464257
+    },
+    {
+      "module": "case_prefix",
+      "tests": 6,
+      "wall_seconds": 19.395029519
+    },
+    {
+      "module": "finite_caller",
+      "tests": 8,
+      "wall_seconds": 73.50814158
+    },
+    {
+      "module": "financial_bridge",
+      "tests": 14,
+      "wall_seconds": 0.170918328
+    }
+  ],
+  "all_exit_codes_zero": true,
+  "total_checks": 37,
+  "qualified_source_clean": true,
+  "primary_user_changes_preserved": true,
+  "owned_qualification_processes_stopped": true,
+  "case_gate_mocked_in_native_controls": true,
+  "already_seen_native_fixture_only": true,
+  "synthetic_provider_only": true,
+  "actual_private_inventory_verified": false,
+  "provider_provenance_attested": false,
+  "live_finite_caller_wired": false,
+  "new_live_worker_binding_qualified": false,
+  "full_new_supervised_phase_executed": false,
+  "legacy_supervisor_completion_control_uses_stub": true,
+  "execution_authorized": false,
+  "live_execution_ready": false,
+  "new_cases": 0,
+  "new_model_calls": 0,
+  "actual_metaharness_executed_this_step": false,
+  "model_improvement": false,
+  "is_training": false
+}
