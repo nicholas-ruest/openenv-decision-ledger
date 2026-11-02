@@ -1,7 +1,7 @@
 {
   "kind": "software_preparation_resume_pointer",
   "recorded_on": "2026-11-01",
-  "status": "late_domain_offline_case_financial_bridge_controls_passed_remote_and_live_gates_closed",
+  "status": "late_domain_bridge_controls_qualified_locally_and_ruos_actual_admission_closed",
   "latest_model_evidence": {
     "result_path": "docs/software-entry-order-screen-results-20261101.json",
     "public_runtime_source": "cc271c6b9873fc3d8bc0f0095abdb52cf02a77ee",
@@ -88,7 +88,7 @@
     }
   ],
   "next_steps": [
-    "Resume permitted ruOS access with an actual canonical state/accounting/worker read before any mutation or launch; remote bridge qualification is pending.",
+    "Remote bridge controls are qualified. Actual credit/root/parent/reservation reconciliation and complete-plan funding remain pending; do not repeat synthetic controls as a substitute for financial admission.",
     "Preserve the complete closed-study chain and immutable case seals. No private case was generated or independently validated by the offline controls.",
     "Do not launch paid inference unless fresh actual credit, independently attested root/parents/all retained reservations and the complete screen-plus-conditional-confirmation plan fit unchanged authorizations. If admission fails, preserve the candidate and state the concrete limitation.",
     "Keep continuation enabled, preserve worker-only initialization and exact bounded supervision, and leave frozen v12 unapproved and unchanged. No Arena POST, HF replacement, purchases, new automations, subagents or routine public messages."
@@ -143,7 +143,10 @@
     "bridge_source": "d754abc7443e59b134a6b757497b87f597609ca1",
     "bridge_evidence_path": "docs/software-final-domain-cue-bridge-qualification-20261101.json",
     "bridge_local_tests": 14,
-    "bridge_ruos_tests": null,
-    "actual_case_inventory_independently_verified": false
+    "bridge_ruos_tests": 14,
+    "actual_case_inventory_independently_verified": false,
+    "bridge_ruos_seconds": 0.028,
+    "original_amendment_controls": 3,
+    "bridge_ruos_qualification_pending": false
   }
 }

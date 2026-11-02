@@ -6,8 +6,8 @@
   "local_seconds": 0.019,
   "local_exit_code": 0,
   "command": "python -B -m unittest discover -s research/software-final-domain-cue-20261101 -p test_financial_bridge.py -v",
-  "ruos_tests": null,
-  "ruos_qualification_pending": true,
+  "ruos_tests": 14,
+  "ruos_qualification_pending": false,
   "constructor_test_uses_stub": true,
   "inventory_chain_test_uses_synthetic_metadata_and_stub_regeneration": true,
   "actual_case_inventory_independently_verified": false,
@@ -29,5 +29,15 @@
     "Public source refuses before private I/O because both immutable case seals remain unset. No CLI or environment override exists.",
     "Current finite caller and atomic delegation remain scripted-only; no real execution runner was added.",
     "Actual fresh credit, independent root/parent/reservation reconciliation, private case/source seals, complete-plan admission, original worker binding and bounded supervision remain necessary."
-  ]
+  ],
+  "ruos_seconds": 0.028,
+  "ruos_exit_code": 0,
+  "ruos_qualified_source": "483bb2ac9026704c0aa679aaeffaf4cee7ec54e1",
+  "ruos_observed_at": "2026-11-02T03:11:58.189078+00:00",
+  "original_amendment_controls": 3,
+  "original_amendment_seconds": 0.024,
+  "original_amendment_exit_code": 0,
+  "initial_amendment_test_import_error": true,
+  "amendment_import_correction": "Original scripts directory supplied on PYTHONPATH; no source changes",
+  "primary_user_changes_preserved": true
 }
