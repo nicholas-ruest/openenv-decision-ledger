@@ -1,0 +1,44 @@
+{
+  "kind": "prepared_case_bound_finite_integration_qualification",
+  "source": "f0c0cca483cea5b87557140c60daa78ed3645e78",
+  "local": {
+    "native_integration_controls": 3,
+    "native_seconds": 225.057,
+    "transport_financial_regressions": 21,
+    "regression_seconds": 0.031,
+    "exit_code": 0
+  },
+  "ruos": {
+    "tests": 24,
+    "wall_seconds": 382.869691398,
+    "exit_code": 0,
+    "source_clean": true,
+    "qualification_processes_stopped": true
+  },
+  "fresh_parent_import_check": {
+    "local_only": true,
+    "native_modules": [],
+    "python_threads": 1,
+    "os_threads": 1,
+    "public_entry_closed": true
+  },
+  "scripted_complete_phase_calls": 16,
+  "scripted_interrupted_phase_calls": 4,
+  "prepared_finite_components_connected": true,
+  "public_entry_closed": true,
+  "private_case_gate_mocked": true,
+  "whole_plan_preflight_mocked_in_native_controls": true,
+  "already_seen_native_fixture_only": true,
+  "synthetic_provider_only": true,
+  "actual_backend_constructed": false,
+  "actual_private_inventory_verified": false,
+  "provider_provenance_attested": false,
+  "live_supervisor_binding_qualified": false,
+  "selection_passed": false,
+  "execution_authorized": false,
+  "model_improvement": false,
+  "actual_metaharness_executed": false,
+  "is_training": false,
+  "new_cases": 0,
+  "new_model_calls": 0
+}
