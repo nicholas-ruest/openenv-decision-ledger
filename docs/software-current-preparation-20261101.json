@@ -1,7 +1,7 @@
 {
   "kind": "software_preparation_resume_pointer",
   "recorded_on": "2026-11-01",
-  "status": "late_domain_finite_scripted_qualification_complete_live_binding_and_admission_pending",
+  "status": "late_domain_fresh_parent_scripted_supervision_qualified_live_case_financial_gates_closed",
   "latest_model_evidence": {
     "result_path": "docs/software-entry-order-screen-results-20261101.json",
     "public_runtime_source": "cc271c6b9873fc3d8bc0f0095abdb52cf02a77ee",
@@ -88,10 +88,10 @@
     }
   ],
   "next_steps": [
-    "Preserve closed studies and all actual reservations. Never redraw a failed study or treat scripted fixture outcomes as model improvement.",
-    "Qualify original supervisor/worker binding and original financial/provider backend integration offline before any live case construction. Keep the qualification-only backend closed to real requests. Preserve the original worker initialization topology; unit supervisor completion used a stub and emitted a fork-with-threads warning.",
-    "No paid comparison without fresh credit, independently attested root/parent accounting and every reservation reconciled, immutable applicable case/source lease and conservative admission under unchanged limits. If the complete planned phases do not fit existing allocation, continue useful offline work without cap changes or refunds.",
-    "Keep continuation enabled and v12 unchanged/unapproved; no Arena POST, HF replacement, purchases, new automations, subagents or routine public messages."
+    "Preserve all closed studies and case inventories. Scripted Native supervision is not a model result or authority to redraw a failed study.",
+    "Prepare a source-bound live-case guard and original financial/provider bridge without materializing new cases or reading credentials before the guard. Retain the qualified fresh-parent initialization order and original supervisor/worker evidence requirements.",
+    "Before any paid comparison, independently attest actual credit, root carried spending, all parent receipts and every retained reservation, then require immutable applicable source/case binding and conservative admission for the complete plan under unchanged cap/resources. Continue useful offline work if admission is unavailable.",
+    "Keep continuation enabled and v12 unchanged/unapproved. No Arena POST, HF replacement, purchases, new automations, subagents or routine public messages."
   ],
   "guards": {
     "fixed_stop": "23:00 America/Toronto",
@@ -133,6 +133,12 @@
     "finite_local_and_ruos_controls": 8,
     "finite_evidence_path": "docs/software-final-domain-cue-finite-qualification-20261101.json",
     "finite_scripted_qualified": true,
-    "live_worker_binding_qualified": false
+    "live_worker_binding_qualified": false,
+    "supervised_qualification_source": "ab23087da46be9dd08f73ddce50a5410a5a51580",
+    "supervised_qualification_evidence": "docs/software-final-domain-cue-supervised-qualification-20261101.json",
+    "scripted_native_supervisor_binding_qualified": true,
+    "parent_initialization_order_qualified": true,
+    "fresh_parent_fork_warning_observed": false,
+    "live_financial_bridge_qualified": false
   }
 }
