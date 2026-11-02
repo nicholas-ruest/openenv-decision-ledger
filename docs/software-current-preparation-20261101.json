@@ -156,6 +156,16 @@
       "actual_private_case_inventory_verified": false,
       "ruos_qualification_pending": true,
       "live_finite_caller_wired": false
+    },
+    "case_bound_raw_reconstruction": {
+      "code_path": "research/software-final-domain-cue-20261101/case_replay.py",
+      "evidence_path": "docs/software-final-domain-cue-case-replay-20261102.json",
+      "local_native_checks": 4,
+      "synthetic_assignments": 8,
+      "case_gate_mocked": true,
+      "provider_provenance_attested": false,
+      "ruos_qualification_pending": true,
+      "live_finite_caller_wired": false
     }
   },
   "offline_uncertainty_analysis": {
