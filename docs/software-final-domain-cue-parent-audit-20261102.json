@@ -1,0 +1,35 @@
+{
+  "kind": "leased_parent_audit_component_qualification",
+  "source": "557326920ccdbc50eac441ef6866d18b88ecedf2",
+  "source_tree": "942933f537a0d6e76cc94324816f48bbd4ad710b",
+  "local": {
+    "parent_audit_checks": 6,
+    "custody_checks": 7,
+    "assessment_checks": 8,
+    "exit_code": 0
+  },
+  "ruos": {
+    "parent_audit_checks": 6,
+    "custody_checks": 7,
+    "assessment_checks": 8,
+    "exit_code": 0,
+    "source_clean": true,
+    "related_workers": 0
+  },
+  "synthetic_leased_artifacts_only": true,
+  "native_reconstruction_mocked": true,
+  "pinned_metaharness_fitness_executed": true,
+  "protected_original_financial_provider_sources_unchanged": 6,
+  "all_public_seals_unset": true,
+  "full_combined_source_supervisor_qualification_pending": true,
+  "provider_provenance_attested": false,
+  "actual_credit_verified": false,
+  "root_current_spending_attested": false,
+  "execution_authorized": false,
+  "selection_passed": false,
+  "confirmation_authorized": false,
+  "model_improvement": false,
+  "is_training": false,
+  "new_cases": 0,
+  "new_model_calls": 0
+}
