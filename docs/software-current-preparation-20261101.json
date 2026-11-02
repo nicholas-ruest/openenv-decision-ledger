@@ -1,7 +1,7 @@
 {
   "kind": "software_preparation_resume_pointer",
   "recorded_on": "2026-11-01",
-  "status": "final_turn_output_domain_cue_matched_qualification_complete_no_live_admission",
+  "status": "late_domain_finite_scripted_qualification_complete_live_binding_and_admission_pending",
   "latest_model_evidence": {
     "result_path": "docs/software-entry-order-screen-results-20261101.json",
     "public_runtime_source": "cc271c6b9873fc3d8bc0f0095abdb52cf02a77ee",
@@ -88,9 +88,9 @@
     }
   ],
   "next_steps": [
-    "Preserve closed studies and all existing reservations; no redraw or retry of failed interventions.",
-    "Qualify the distinct candidate finite caller, failure archives and original supervisor binding without live cases or provider access. Keep source/case materialization unsealed until all guards pass.",
-    "Do not infer model benefit from qualification. Paid comparison requires fresh full financial reconciliation and conservative admission for the planned screen plus conditional disjoint confirmation under unchanged resource bounds and existing authorization. Continue useful offline work if the allocation cannot cover it; no cap changes or counter refunds.",
+    "Preserve closed studies and all actual reservations. Never redraw a failed study or treat scripted fixture outcomes as model improvement.",
+    "Qualify original supervisor/worker binding and original financial/provider backend integration offline before any live case construction. Keep the qualification-only backend closed to real requests. Preserve the original worker initialization topology; unit supervisor completion used a stub and emitted a fork-with-threads warning.",
+    "No paid comparison without fresh credit, independently attested root/parent accounting and every reservation reconciled, immutable applicable case/source lease and conservative admission under unchanged limits. If the complete planned phases do not fit existing allocation, continue useful offline work without cap changes or refunds.",
     "Keep continuation enabled and v12 unchanged/unapproved; no Arena POST, HF replacement, purchases, new automations, subagents or routine public messages."
   ],
   "guards": {
@@ -128,6 +128,11 @@
     "confirmation_case_selected": false,
     "matched_source": "11eec047ee67750fc3c512a9f66f663ed573151a",
     "matched_local_and_ruos_controls": 11,
-    "matched_evidence_path": "docs/software-final-domain-cue-matched-qualification-20261101.json"
+    "matched_evidence_path": "docs/software-final-domain-cue-matched-qualification-20261101.json",
+    "finite_source": "9aa1d8003fae717fd771a2e2346709d9858d94a2",
+    "finite_local_and_ruos_controls": 8,
+    "finite_evidence_path": "docs/software-final-domain-cue-finite-qualification-20261101.json",
+    "finite_scripted_qualified": true,
+    "live_worker_binding_qualified": false
   }
 }
