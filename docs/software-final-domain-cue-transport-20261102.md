@@ -1,0 +1,11 @@
+# Case-bound original transport adapter
+
+The prepared candidate now has a separate adapter for the original backend's three-argument `call(payload, timeout, job)` interface. The existing scripted qualification transport takes an additional turn argument and remains unchanged. This closes an interface gap before any real caller integration.
+
+The adapter accepts only the exact eight source/case assignments, delegates whole-plan and original per-phase admission to the existing financial bridge, serializes reservations, and limits provider calls to two in flight. It enforces original generation/time bounds, exact sampling, sequential turns, single-use labels and no retries. A provider timeout retains the reservation and burns the call label. An exception during reservation also burns the local reservation intent because the ledger may already have committed; it does not retry, reset or refund accounting.
+
+The existing source/case method inventory now includes both the archive assembler and this adapter. Public seals remain unset. The six protected financial/provider sources are unchanged. This is a prepared integration component, with no worker entry point; the finite caller still rejects a live backend. Full worker/supervisor integration and actual private admission remain pending.
+
+Seven transport checks and 14 financial-bridge regressions passed locally and on ruOS. Transport checks used synthetic case metadata and an inert original-backend stand-in with mocked whole-plan preflight. The actual pinned backend signature was inspected through its source AST, and original financial hashes were verified. No real credential-bearing backend was constructed. The unchanged bridge regressions separately exercise conservative quote and accounting-lease refusal using synthetic files. No Native task generation, model calls, training, MetaHarness execution or performance evidence is claimed.
+
+Source: [0cd7def](https://github.com/nicholas-ruest/openenv-decision-ledger/commit/0cd7def406bcbe5899c5c99201a31e74b6b1f487). Reproduce with `python -B -m unittest test_case_transport test_financial_bridge -v` from the research directory. Qualification details and limits are in the accompanying JSON. Frozen requests and previously closed studies are unchanged.

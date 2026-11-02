@@ -1,0 +1,34 @@
+{
+  "kind": "case_bound_original_transport_qualification",
+  "source": "0cd7def406bcbe5899c5c99201a31e74b6b1f487",
+  "local": {
+    "new_transport_controls": 7,
+    "financial_regressions": 14,
+    "exit_code": 0,
+    "unittest_seconds": 0.025
+  },
+  "ruos": {
+    "new_transport_controls": 7,
+    "financial_regressions": 14,
+    "exit_code": 0,
+    "wall_seconds": 0.2736741729999892,
+    "source_clean": true
+  },
+  "synthetic_original_backend_only": true,
+  "case_metadata_synthetic": true,
+  "whole_plan_preflight_mocked_in_transport_controls": true,
+  "real_original_call_signature_ast_checked": true,
+  "protected_financial_provider_files_unchanged": 6,
+  "actual_private_case_inventory_verified": false,
+  "actual_backend_constructed": false,
+  "credentials_accessed": false,
+  "live_finite_caller_wired": false,
+  "new_live_worker_binding_qualified": false,
+  "execution_authorized": false,
+  "selection_passed": false,
+  "model_improvement": false,
+  "is_training": false,
+  "actual_metaharness_executed": false,
+  "new_cases": 0,
+  "new_model_calls": 0
+}
