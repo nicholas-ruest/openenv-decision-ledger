@@ -1,0 +1,76 @@
+{
+  "kind": "closed_first_proposal_public_runtime_audit",
+  "rows": [
+    {
+      "arm": "relation_only",
+      "public_examples": 6,
+      "first": {
+        "public_passes": 2,
+        "runtime_errors": 4,
+        "runtime_error_types": [
+          "TypeError"
+        ]
+      },
+      "restored_helper_control": {
+        "public_passes": 6,
+        "runtime_errors": 0,
+        "runtime_error_types": []
+      },
+      "saved_final": {
+        "public_passes": 6,
+        "runtime_errors": 0,
+        "runtime_error_types": []
+      },
+      "only_supplied_helper_restored": true,
+      "all_other_module_statements_ast_unchanged": true
+    },
+    {
+      "arm": "computed_relation",
+      "public_examples": 6,
+      "first": {
+        "public_passes": 2,
+        "runtime_errors": 4,
+        "runtime_error_types": [
+          "TypeError"
+        ]
+      },
+      "restored_helper_control": {
+        "public_passes": 6,
+        "runtime_errors": 0,
+        "runtime_error_types": []
+      },
+      "saved_final": {
+        "public_passes": 6,
+        "runtime_errors": 0,
+        "runtime_error_types": []
+      },
+      "only_supplied_helper_restored": true,
+      "all_other_module_statements_ast_unchanged": true
+    }
+  ],
+  "distinct_first_modules": 2,
+  "distinct_failing_helper_asts": 1,
+  "original_files_unchanged_during_replay": true,
+  "native_source_pins": {
+    "runner.py": "fcb0f8b5cb5321ae998f71a38502125a595cc39d6b6331eedd659ba9ceed65a6",
+    "environment.py": "248b3fc62b36b49f6a23ab694674c5fe1e0397528b55f039cf6064462a6c9e85"
+  },
+  "public_examples_only": true,
+  "hidden_cases_replayed": false,
+  "posthoc_investigator_control": true,
+  "new_model_calls": 0,
+  "new_cases": 0,
+  "selection_decision_changed": false,
+  "closed_preservation_studies_reopened": false,
+  "model_improvement": false,
+  "is_training": false,
+  "source_commit": "b973e7b75ca794ffc1ae0645cf5d900dfa1348ac",
+  "qualification": {
+    "ruos_completed": true,
+    "exit_code": 0,
+    "stderr_empty": true,
+    "underlying_cases": 1,
+    "source_clean": true,
+    "actual_metaharness_executed": false
+  }
+}
