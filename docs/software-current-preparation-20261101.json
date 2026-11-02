@@ -166,6 +166,17 @@
       "provider_provenance_attested": false,
       "ruos_qualification_pending": true,
       "live_finite_caller_wired": false
+    },
+    "case_bound_prefix_reconstruction": {
+      "code_path": "research/software-final-domain-cue-20261101/case_replay.py",
+      "shared_core": "research/software-final-domain-cue-20261101/prefix_replay.py",
+      "evidence_path": "docs/software-final-domain-cue-prefix-20261102.json",
+      "local_prefix_checks": 6,
+      "finite_regressions": 8,
+      "financial_regressions": 14,
+      "private_case_gate_mocked": true,
+      "ruos_qualification_pending": true,
+      "live_finite_caller_wired": false
     }
   },
   "offline_uncertainty_analysis": {

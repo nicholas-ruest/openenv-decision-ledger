@@ -1,5 +1,5 @@
 """Source/case-bound raw Native reconstruction, never provider or spend attestation."""
-import json
+import json,importlib.util
 from pathlib import Path
 import case_binding as binding
 if Path(binding.__file__).resolve()!=Path(__file__).with_name('case_binding.py').resolve():raise ValueError('exact sibling Native binding required')
@@ -47,3 +47,46 @@ def verify_phase(traces,counter,args):
     return dict(kind='case_bound_phase_reconstruction',assigned=8,all_assigned_in_denominator=True,
         rows=rows,replay_only=True,provider_provenance_attested=False,execution_authorized=False,
         selection_passed=False,model_improvement=False)
+
+
+def reconstruct_failure_prefix(job,path,events,row,counter,args,seen):
+    trial=binding.materialize(job,args)
+    runtime=binding._runtime();path=Path(path)
+    reserved=[(i,e) for i,e in enumerate(events) if e['event']=='reserved']
+    calls=[(i,e) for i,e in enumerate(events) if e['event']=='calling']
+    replies=[(i,e) for i,e in enumerate(events) if e['event']=='response_received']
+    labels=[job['attempt_id']+':'+str(i) for i in range(len(reserved))]
+    if (len(reserved)>2 or len(calls)>len(reserved) or len(replies)>len(calls)
+        or [e['label'] for _,e in reserved]!=labels or [e['label'] for _,e in calls]!=labels[:len(calls)]
+        or any(reserved[i][0]>=n for i,(n,_) in enumerate(calls))
+        or any(calls[i][0]>=n for i,(n,_) in enumerate(replies))
+        or (len(reserved)==2 and (not replies or replies[0][0]>=reserved[1][0]))):
+        raise ValueError('original reserve/call/reply order required')
+    if (binding.gate.digest(row['job'])!=binding.gate.digest(job) or row['reservations']!=labels or row['calls']!=labels[:len(calls)]
+        or row['response_ids']!=[e['response_id'] for _,e in replies]
+        or row['category'] not in ('provider','budget','execution')
+        or type(row['unknown_usage']) is not bool or type(row['known_generation_tokens']) is not int
+        or (not row['unknown_usage'] and type(row['generation_tokens']) is not int)
+        or row.get('semantic_reward') is not None or row['unknown_usage']!=(len(replies)<len(calls))
+        or (row['unknown_usage'] and row['generation_tokens'] is not None)):
+        raise ValueError('unknown usage and original record must remain unrewarded')
+    known=0
+    if any((path/('response-'+str(turn)+'.json')).exists()!=(turn<len(replies)) for turn in range(len(calls))):
+        raise ValueError('saved replies must match original received events')
+    for turn,(_,event) in enumerate(replies):
+        response=json.loads((path/('response-'+str(turn)+'.json')).read_text())
+        if response.get('id')!=event['response_id']:raise ValueError('original known reply differs')
+        usage=response.get('usage',{}).get('completion_tokens')
+        if type(usage) is not int or usage<0:raise ValueError('actual known prefix usage required')
+        known+=usage
+    if known!=row['known_generation_tokens'] or (not row['unknown_usage'] and known!=row['generation_tokens']):raise ValueError('known prefix usage changed')
+    # The same pure core is used by the existing scripted finite archive verifier.
+    spec=importlib.util.spec_from_file_location('late_domain_bound_prefix',Path(__file__).with_name('prefix_replay.py'))
+    helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+    result=helper.verify_known_prefix(job,path,events,row,counter,seen,trial=trial,
+        sampling=runtime.SAMPLING,canonical=runtime.p.d.canonical,digest=runtime.p.digest)
+    return dict(result,case_audit_sha256=trial.case_audit_sha256,source=args.expected_source,
+        known_generation_tokens=known,unknown_usage=row['unknown_usage'],
+        total_generation_tokens=None if row['unknown_usage'] else known,
+        reconstructed_terminal_reward=None,provider_provenance_attested=False,
+        execution_authorized=False,selection_passed=False)
