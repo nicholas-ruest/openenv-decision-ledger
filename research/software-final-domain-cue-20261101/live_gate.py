@@ -9,7 +9,7 @@ LATEST_CLOSED_AUDIT_SHA256=None
 WORKER_QUALIFICATION_SHA256=None
 SAMPLING=dict(model='Qwen/Qwen3.8-27B:deepinfra',temperature=.7,response_format={'type':'json_object'})
 LIMITS=dict(first_generation=6000,completion_plus_all_observations=8192,context=24576,terminal_reserve=96,request_seconds=360,attempt_seconds=600,whole_phase_seconds=1200)
-FILES=tuple('research/software-final-domain-cue-20261101/'+n for n in ('revision_environment.py','matched_protocol.py','finite_caller.py','guarded_transport.py','qualification_supervisor.py','case_qualification_supervisor.py','assess_qualification.mjs','financial_bridge.py','case_binding.py','case_replay.py','case_archive.py','case_caller.py','case_worker.py','case_transport.py','prefix_replay.py','financial-source-pins.json','closed-method-manifest.json'))
+FILES=tuple('research/software-final-domain-cue-20261101/'+n for n in ('revision_environment.py','matched_protocol.py','finite_caller.py','guarded_transport.py','qualification_supervisor.py','case_qualification_supervisor.py','assess_qualification.mjs','assess_reconstruction.mjs','assess_archive.py','financial_bridge.py','case_binding.py','case_replay.py','case_archive.py','case_caller.py','case_worker.py','case_transport.py','prefix_replay.py','financial-source-pins.json','closed-method-manifest.json'))
 
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def digest(value):return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest()
