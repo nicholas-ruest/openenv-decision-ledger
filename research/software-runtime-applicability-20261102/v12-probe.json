@@ -1,0 +1,43 @@
+{
+  "already_seen_seed": 2560000,
+  "container_executed": false,
+  "elapsed_seconds": 0.021494628002983518,
+  "is_training": false,
+  "kind": "offline_runtime_applicability_probe",
+  "mode": "direct",
+  "model_calls": 0,
+  "model_improvement": false,
+  "native_interpreter_executed": true,
+  "new_cases": 0,
+  "observed": {
+    "action_properties": [
+      "content",
+      "metadata"
+    ],
+    "first_done": true,
+    "first_has_review": false,
+    "first_reward": 0.0,
+    "first_stage": null,
+    "reset_observation_properties": [
+      "done",
+      "error",
+      "examples",
+      "metadata",
+      "prompt",
+      "reward",
+      "source",
+      "task_id"
+    ]
+  },
+  "runtime_file_sha256": {
+    "integrations/software-repair/repair_env/direct_app.py": "16320040a3c67273cac7c3c6aa1247f1fd3918603f2288196105c721fd2fa18d",
+    "integrations/software-repair/repair_env/direct_environment.py": "d7a1ec3b04a488d051ff09b9362d33d0290db1d4b5eae6b00aaf3bb26694e61d",
+    "integrations/software-repair/repair_env/environment.py": "248b3fc62b36b49f6a23ab694674c5fe1e0397528b55f039cf6064462a6c9e85",
+    "integrations/software-repair/repair_env/ignore_repair.py": "0fec10e0e2deb6efded9a50c9ab63e0d474b617c0895fad2c3163a7eb168418e",
+    "integrations/software-repair/repair_env/runner.py": "865f84584e84d432d0a9fc4929be8bb6032f549e7f56eb02ebec267bce2ed314",
+    "integrations/software-repair/repair_env/tasks.py": "6763c7770573c48ef09540c23bed945f66a105bb2cd81963eaa560d737d762b7"
+  },
+  "source": "0b8ccc3ca70a67fed5fc5837b69022261cc60497",
+  "synthetic_action": "compile-rejected import; empty retention only",
+  "task_id": "software_repair-ignore-d3"
+}
