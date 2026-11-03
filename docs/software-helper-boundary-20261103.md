@@ -1,0 +1,17 @@
+# Helper input-boundary reminder: offline candidate
+
+The closed semantic diagnosis found one saved program normalizing rule text, discarding its metadata, then passing that stripped text to a helper expecting original rule syntax. Preserving the input representation improved that investigator counterfactual from 3/6 to 5/6 public examples; other parent-handling defects remained. The second saved program already preserved original rule text. This is a narrow hypothesis from posthoc evidence, not a measured prospective prompt benefit.
+
+This separate candidate adds one review-turn field:
+
+> When calling a supplied helper, pass arguments in the representation its contract expects. If you preprocess an argument, preserve all contract-relevant information at the call boundary. In particular, do not pass a stripped rule pattern to a helper that expects original rule syntax; retain its negation, anchoring and directory markers in the value passed to that helper.
+
+The baseline is the existing common relation review, with computed diagnostics withheld. Both arms inherit that same relation reminder and original first prompt. The treatment does not add working-helper body preservation, public-example self-checking, the previous output-domain cue or parent-status advice. It does not rewrite model code, restore helpers or inject a reference implementation.
+
+Three local checks passed against the real Native/OpenEnv wrapper on the already-seen qualification fixture 2560000: identical initial observations and a review observation differing only by the reminder; the actual incorrect proposal remains incorrect after empty finalization with the same Native grade; invalid final code is not rescued; terminal behavior is idempotent; unseen input is refused before Native reset and the live factory remains closed. These assertions are grouped into three tests. The fixture was reconstructed for controls; no new unique task case or model response was generated. Independently authored wrong modules were used, not private model programs.
+
+The inherited numeric bounds remain first generation 6000, total generation plus all observations 8192, context 24576, terminal reserve 96, request 360s, attempt 600s and phase 1200s. Planning retains four samples per arm, eight assignments and at most 16 requests per phase. No sampler or live caller was added. The extra feedback must receive exact token accounting under those unchanged bounds; its own complete screen-plus-confirmation quote and financial admission are still required.
+
+**This prototype is not an execution-ready comparison or a trained/runtime image.** Screen and fresh disjoint confirmation cases are unselected; applicable Trial/replay binding, exposure/accounting verification, whole-protocol qualification, container/runtime applicability and actual admission remain pending. No claim is made that the reminder improves model outcomes or that existing images serve it. No MetaHarness module ran in these wrapper checks.
+
+Source is isolated under `research/software-helper-boundary-20261103`. Frozen v12/v13/v14 requests, prepared final-domain methods, datasets, receipts and ledgers were not edited. ruOS and account APIs were not accessed overnight. The current public guide hash matches the previously reviewed guide; the board lookup failed and no message was sent. Local cursor sync is complete after publication; private canonical sync remains pending permitted hours. No new model call, purchase, allocation amendment, HF replacement or Arena POST occurred.

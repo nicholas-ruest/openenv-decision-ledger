@@ -1,0 +1,37 @@
+{
+  "kind": "helper_input_boundary_offline_candidate",
+  "motivation_evidence": "2904faf6ed6263cb673d3c5bade06a5fd39ef5e4",
+  "qualification_fixture_seed": 2560000,
+  "new_unique_cases": 0,
+  "new_model_calls": 0,
+  "local_native_checks": 3,
+  "tests_passed": true,
+  "first_observations_identical": true,
+  "review_difference_one_reminder_field": true,
+  "controller_repairs_code": false,
+  "original_native_grade_preserved": true,
+  "working_helper_preservation_intervention_bundled": false,
+  "public_selfcheck_intervention_bundled": false,
+  "previous_final_domain_cue_bundled": false,
+  "screen_case_selected": false,
+  "confirmation_case_selected": false,
+  "comparison_protocol_qualified": false,
+  "token_accounting_qualified": false,
+  "live_execution_ready": false,
+  "container_qualified": false,
+  "model_improvement": false,
+  "actual_metaharness_executed": false,
+  "ruos_accessed": false,
+  "accounting_accessed_or_mutated": false,
+  "canonical_sync_pending": true,
+  "source_files": [
+    {
+      "path": "research/software-helper-boundary-20261103/revision_environment.py",
+      "sha256": "f5e285eb25a20bf0ddc33d0c6266fdff8f4c7f62873db08ab23c737eb7353037"
+    },
+    {
+      "path": "research/software-helper-boundary-20261103/test_revision.py",
+      "sha256": "36a9aede5e1c14690ccaa6c2bec9ed20012a5b50b0c1678be8ba748b2b5b98a9"
+    }
+  ]
+}
