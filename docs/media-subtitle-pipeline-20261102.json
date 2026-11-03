@@ -1,0 +1,33 @@
+{
+  "kind": "public_media_subtitle_pipeline_review",
+  "upstream_head": "4e03298a433a359bb45e943048f2adcea1ff6b41",
+  "earlier_pin": "958198e55299eb18ad812f438a6b2ca6abaa7f5c",
+  "verified_files_unchanged": [
+    "qe_arena/skills/media.py",
+    "qe_arena/skills/subtitles.py",
+    "tests/test_skills_media.py",
+    "LICENSE"
+  ],
+  "script_sha256": "3204a4a7c04afded0b64775a332179d54dcb0f2fc3cdb4ab960523716566e2fe",
+  "fixture": "hand-authored two-cue SRT; not a generated task",
+  "literal_output_matches": true,
+  "wrong_methods_rejected": [
+    "wrong_sign",
+    "no_sort",
+    "no_rate",
+    "inverted_rate",
+    "shift_first",
+    "no_gap"
+  ],
+  "media_d1_has_subtitles": false,
+  "media_d2_has_subtitles": true,
+  "generated_task_cases": 0,
+  "new_model_calls": 0,
+  "reference_defect_found": false,
+  "model_improvement": false,
+  "actual_metaharness_executed": false,
+  "runtime_or_request_changed": false,
+  "ruos_accessed": false,
+  "accounting_accessed_or_mutated": false,
+  "canonical_private_sync_pending": true
+}
