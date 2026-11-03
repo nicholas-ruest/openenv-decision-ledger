@@ -1,0 +1,46 @@
+{
+  "kind": "helper_boundary_scripted_accounting_qualification",
+  "qualification_seed": 2560000,
+  "local_checks_total": 6,
+  "new_checks": 3,
+  "checks_passed": true,
+  "scripted_assignments": 8,
+  "synthetic_replies": 16,
+  "all_assigned_in_denominator": true,
+  "unchanged_first_prompt_and_problem": true,
+  "actual_feedback_tokens_counted": true,
+  "second_generation_limit_reduced_by_observations": true,
+  "incomplete_or_tampered_evidence_refused": true,
+  "actual_metaharness_executed": true,
+  "metaharness_source": "b8c3d38de41203faf633ef6dceb8452a4727b0ea",
+  "actual_module": "fitness.mjs:scoreCell",
+  "selection_passed": false,
+  "live_evidence": false,
+  "provider_constructed": false,
+  "screen_case_selected": false,
+  "confirmation_case_selected": false,
+  "live_execution_ready": false,
+  "new_model_calls": 0,
+  "new_unique_cases": 0,
+  "model_improvement": false,
+  "ruos_accessed": false,
+  "accounting_accessed_or_mutated": false,
+  "canonical_sync_pending": true,
+  "initial_command_missing_saved_interpreter": true,
+  "saved_packages_loaded_with_current_python": true,
+  "packages_installed": false,
+  "source_files": [
+    {
+      "path": "research/software-helper-boundary-20261103/matched_protocol.py",
+      "sha256": "b56687f8a9c789168730530c53bfc809a790c237d95f84eb843584fae4ed2bb8"
+    },
+    {
+      "path": "research/software-helper-boundary-20261103/assess_qualification.mjs",
+      "sha256": "6c5f51c7193a44cb98821799989602fda5b01614a1d88571a733349f41f3354a"
+    },
+    {
+      "path": "research/software-helper-boundary-20261103/test_matched.py",
+      "sha256": "6af0986e5b04f8c7db49e82bce6acc27fb4b3d0cc83ff3f46f4b776fe42f8efe"
+    }
+  ]
+}
