@@ -1,0 +1,44 @@
+{
+  "kind": "retained_semantic_case_diagnostic_closure",
+  "source": "592481f02ca51c34774a81b959fca44c813bf5fc",
+  "script_sha256": "cc22d582edd471b39ed45c43f20f905ea5c6140315d961394ac1e724d820ae23",
+  "original_native_source": "4d69e68c55715d32699f155f068b38a77b8d6d8f",
+  "programs_replayed_this_run": 2,
+  "remaining_public_passes": [
+    5,
+    5
+  ],
+  "remaining_failed_public_examples": [
+    [
+      1
+    ],
+    [
+      1
+    ]
+  ],
+  "compile_accepted": [
+    true,
+    true
+  ],
+  "runtime_errors": 0,
+  "semantic_partials_across_diagnoses": 4,
+  "underlying_cases": 1,
+  "all_original_partial_public_passes": [
+    3,
+    5,
+    5,
+    5
+  ],
+  "saved_public_examples_per_program": 6,
+  "additional_counterfactual_edits_this_run": false,
+  "static_directory_typing_pattern_recurs": true,
+  "new_distinct_failure_mechanism_identified": false,
+  "diagnostic_case_closed": true,
+  "original_classifications_or_selection_changed": false,
+  "managed_process_completed": true,
+  "saved_archives_unchanged": true,
+  "new_model_calls": 0,
+  "new_cases": 0,
+  "model_improvement": false,
+  "actual_metaharness_executed": false
+}
