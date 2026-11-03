@@ -1,0 +1,44 @@
+{
+  "kind": "retained_semantic_recurrence",
+  "source": "b1cd5479f6a8a3c71e1488ef5117f2bdc7f8ceb8",
+  "script_sha256": "796700175e3e33f9ca6619aec5aea80cb73092818d48ad531b6fac8bf697969a",
+  "original_native_source": "4d69e68c55715d32699f155f068b38a77b8d6d8f",
+  "retained_programs_this_replay": 1,
+  "programs_across_both_diagnoses": 2,
+  "underlying_cases_across_both": 1,
+  "saved_public_examples": 6,
+  "original_rule_text_already_preserved": true,
+  "variants": [
+    {
+      "directory_typing": false,
+      "parent_block": false,
+      "passes": 5
+    },
+    {
+      "directory_typing": false,
+      "parent_block": true,
+      "passes": 5
+    },
+    {
+      "directory_typing": true,
+      "parent_block": false,
+      "passes": 5
+    },
+    {
+      "directory_typing": true,
+      "parent_block": true,
+      "passes": 6
+    }
+  ],
+  "runtime_errors": 0,
+  "helper_asts_changed": false,
+  "posthoc": true,
+  "original_classification_changed": false,
+  "counterfactual_promoted": false,
+  "new_model_calls": 0,
+  "new_cases": 0,
+  "model_improvement": false,
+  "hidden_access": false,
+  "actual_metaharness_executed": false,
+  "managed_process_completed": true
+}
