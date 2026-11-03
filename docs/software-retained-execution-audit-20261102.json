@@ -1,0 +1,79 @@
+{
+  "kind": "retained_final_execution_diagnosis",
+  "analyzer_source": "641b2a64f79dae16c7288bac747651e370dca5b9",
+  "original_runtime_source": "4d69e68c55715d32699f155f068b38a77b8d6d8f",
+  "current_runtime_source": "641b2a64f79dae16c7288bac747651e370dca5b9",
+  "isolated_depth_candidate_source": "8a1fec2dd9aac9cd518f89a04dd46698fc25d782",
+  "retained_programs": 2,
+  "underlying_cases": 1,
+  "original_public_examples_per_program": 6,
+  "public_examples_only": true,
+  "hidden_cases_replayed": false,
+  "programs": [
+    {
+      "label": "A",
+      "original": {
+        "compile_accepted": false,
+        "public_passes": null
+      },
+      "current": {
+        "compile_accepted": true,
+        "public_passes": 6,
+        "runtime_errors": 0
+      },
+      "depth_candidate": {
+        "compile_accepted": true,
+        "public_passes": 6,
+        "runtime_errors": 0
+      },
+      "original_compile_limitation": "list.sort key keyword syntax"
+    },
+    {
+      "label": "B",
+      "original": {
+        "compile_accepted": true,
+        "public_passes": 0,
+        "runtime_errors": 5,
+        "wrong": 1,
+        "error": "value nesting limit"
+      },
+      "current": {
+        "compile_accepted": true,
+        "public_passes": 0,
+        "runtime_errors": 5,
+        "wrong": 1,
+        "error": "value nesting limit"
+      },
+      "depth_candidate": {
+        "compile_accepted": true,
+        "public_passes": 0,
+        "runtime_errors": 2,
+        "wrong": 4,
+        "error": "execution step limit"
+      }
+    }
+  ],
+  "rejected_value_trace": {
+    "acyclic": true,
+    "unique_containers": 6,
+    "max_container_items": 2,
+    "identity_deduplicated_observed_depth": 5,
+    "truncated": false,
+    "original_guard_exception_preserved": true,
+    "initial_instrumentation_timed_out": true,
+    "later_bounded_trace_completed": true
+  },
+  "candidate_controls_local": 4,
+  "candidate_controls_ruos": 4,
+  "candidate_resource_constants_changed": false,
+  "serving_interpreter_changed": false,
+  "posthoc_investigator_control": true,
+  "depth_candidate_selected_for_performance_integration": false,
+  "original_classifications_or_selection_changed": false,
+  "new_model_calls": 0,
+  "new_cases": 0,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "is_training": false,
+  "actual_metaharness_executed": false
+}
