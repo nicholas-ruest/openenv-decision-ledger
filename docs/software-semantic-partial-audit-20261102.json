@@ -1,0 +1,74 @@
+{
+  "kind": "retained_semantic_partial_factorial",
+  "analyzer_source": "1bfe9f73e9adf9777f08559bf27647951d238610",
+  "analyzer_sha256": "ffd37f40ddea0881fa49225531f8e53435ecea0d0f4b0a66cb8cfe7988562e17",
+  "original_native_source": "4d69e68c55715d32699f155f068b38a77b8d6d8f",
+  "retained_programs": 1,
+  "underlying_cases": 1,
+  "saved_public_examples": 6,
+  "variants": [
+    {
+      "retain_rule_text": false,
+      "implicit_directory": false,
+      "parent_block": false,
+      "passes": 3
+    },
+    {
+      "retain_rule_text": false,
+      "implicit_directory": false,
+      "parent_block": true,
+      "passes": 3
+    },
+    {
+      "retain_rule_text": false,
+      "implicit_directory": true,
+      "parent_block": false,
+      "passes": 3
+    },
+    {
+      "retain_rule_text": false,
+      "implicit_directory": true,
+      "parent_block": true,
+      "passes": 3
+    },
+    {
+      "retain_rule_text": true,
+      "implicit_directory": false,
+      "parent_block": false,
+      "passes": 5
+    },
+    {
+      "retain_rule_text": true,
+      "implicit_directory": false,
+      "parent_block": true,
+      "passes": 5
+    },
+    {
+      "retain_rule_text": true,
+      "implicit_directory": true,
+      "parent_block": false,
+      "passes": 5
+    },
+    {
+      "retain_rule_text": true,
+      "implicit_directory": true,
+      "parent_block": true,
+      "passes": 6
+    }
+  ],
+  "runtime_errors": 0,
+  "helper_asts_changed_between_variants": false,
+  "no_counterfactual_promoted": true,
+  "original_classification_changed": false,
+  "serving_interpreter_changed": false,
+  "hidden_cases_evaluated": false,
+  "posthoc": true,
+  "managed_process_completed": true,
+  "new_model_calls": 0,
+  "new_cases": 0,
+  "model_improvement": false,
+  "leaderboard_improvement": false,
+  "is_training": false,
+  "actual_metaharness_executed": false,
+  "live_comparison_admitted": false
+}
