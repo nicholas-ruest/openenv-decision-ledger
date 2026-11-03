@@ -1,0 +1,39 @@
+{
+  "container_built": false,
+  "container_executed": false,
+  "copy_entries": [
+    {
+      "source": "integrations/software-repair/repair_env",
+      "target": "/app/repair_env"
+    },
+    {
+      "source": "research/software-final-domain-cue-20261101/revision_environment.py",
+      "target": "/app/research/software-final-domain-cue-20261101/revision_environment.py"
+    },
+    {
+      "source": "research/software-entry-order-review-20261101/revision_environment.py",
+      "target": "/app/research/software-entry-order-review-20261101/revision_environment.py"
+    },
+    {
+      "source": "research/software-entry-order-review-20261101/order_diagnostic.py",
+      "target": "/app/research/software-entry-order-review-20261101/order_diagnostic.py"
+    },
+    {
+      "source": "research/software-domain-runtime-20261102/runtime_environment.py",
+      "target": "/app/research/software-domain-runtime-20261102/runtime_environment.py"
+    },
+    {
+      "source": "research/software-domain-runtime-20261102/runtime_app.py",
+      "target": "/app/runtime_app.py"
+    }
+  ],
+  "exit_code": 0,
+  "image_published": false,
+  "imports_confined_to_copy_tree": true,
+  "is_training": false,
+  "kind": "docker_copy_tree_smoke",
+  "model_improvement": false,
+  "native_sdk_checks": 5,
+  "new_cases": 0,
+  "new_model_calls": 0
+}

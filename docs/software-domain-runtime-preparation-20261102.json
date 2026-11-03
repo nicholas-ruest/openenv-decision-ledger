@@ -1,0 +1,38 @@
+{
+  "kind": "separate_final_domain_runtime_preparation",
+  "source": "e062986e92cf4b3eeb9225c6ba2e2a7d8c01f57b",
+  "source_tree": "75d1ab23395ff477da4e9fe9c3b40d96bcc6456d",
+  "runtime_app_separate": true,
+  "reviewed_requests_unchanged": true,
+  "frozen_comparison_methods_unchanged": true,
+  "task_id": "software_repair-ignore-d3",
+  "only_control_seed": 2560000,
+  "local_native_sdk_checks": 5,
+  "ruos_native_sdk_checks": 5,
+  "local_copy_tree_native_sdk_checks": 5,
+  "same_checks_repeated_across_contexts": true,
+  "copy_tree_imports_confined": true,
+  "ruos_composite_command_failed_after_successful_tests": "Docker executable missing",
+  "docker_available_in_checked_ruos": false,
+  "container_built": false,
+  "container_executed": false,
+  "image_published": false,
+  "finish_action": {
+    "content": "",
+    "metadata": {
+      "decision_ledger_finalize": true
+    }
+  },
+  "finish_action_first_turn_terminal_zero": true,
+  "finish_action_after_reference_terminal_full": true,
+  "reference_is_oracle_control_not_model_solve": true,
+  "action_schema_adds_submit": false,
+  "new_cases": 0,
+  "new_model_calls": 0,
+  "model_improvement": false,
+  "leaderboard_gain": false,
+  "is_training": false,
+  "new_request_prepared": false,
+  "approved": false,
+  "submitted": false
+}
